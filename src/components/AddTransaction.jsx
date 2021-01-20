@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(1),
     },
-    display:'flex',
+    display: 'flex',
     alignItems: 'center'
   },
 }));
@@ -35,16 +35,16 @@ export default function AddTransaction() {
     const transaction = {
       heading,
       amount,
-      date:new Date(),
+      date: new Date(),
     };
     const result = addTransactionToDatabase(transaction);
     console.log(result)
-    setHeading('');setAmount('');
+    setHeading(''); setAmount('');
     setLoadingState(false);
   }
   async function addTransactionToDatabase(transaction) {
     const devuri = `http://localhost:8080/api/add_transaction`;
-    const produri = 'https://warm-eyrie-65343.herokuapp.com/api/add_transaction';
+    const produri = 'https://moneytrackerbackend.herokuapp.com/api/add_transaction';
     const result = await fetch(produri, {
       method: 'POST',
       headers: {

@@ -3,7 +3,7 @@ import TransactionCard from './TransactionCardv1';
 
 export default function Transactions() {
   const devuri = `http://localhost:8080/api/get_transactions`;
-  const produri = 'https://warm-eyrie-65343.herokuapp.com/api/get_transactions';
+  const produri = 'https://moneytrackerbackend.herokuapp.com/api/get_transactions';
 
   const [transactions, setTransactions] = React.useState([]);
   const loadTransactions = useCallback(

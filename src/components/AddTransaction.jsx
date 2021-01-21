@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
@@ -8,6 +9,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
+import {createAddTransactionAction} from '../actions/actionCreator'
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -19,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AddTransaction() {
+  const dispatch = useDispatch();
   const [heading, setHeading] = React.useState('');
   const [amount, setAmount] = React.useState('');
   const [loadingState, setLoadingState] = React.useState(false);
@@ -30,19 +33,32 @@ export default function AddTransaction() {
   function handleAmountChange(event) {
     setAmount(event.target.value);
   };
+  
   function handleTransactionSubmit() {
-    // setLoadingState(true);
     const transaction = {
       heading,
       amount,
       date: new Date(),
     };
     const result = addTransactionToDatabase(transaction);
-    console.log(result)
+    console.log(result);
+    // dispatch(createAddTransactionAction(transaction));
+    result
+    .then(
+      function () {
+        console.log('success')
+        dispatch(createAddTransactionAction(transaction));
+      },
+      function () {
+        console.log('Failed to add transaction ', transaction);
+      }
+    );
+    
     setHeading(''); setAmount('');
-    setLoadingState(false);
   }
   async function addTransactionToDatabase(transaction) {
+    // setLoadingState(true);
+
     const devuri = `http://localhost:8080/api/add_transaction`;
     const produri = 'https://moneytrackerbackend.herokuapp.com/api/add_transaction';
     const result = await fetch(produri, {
@@ -52,7 +68,8 @@ export default function AddTransaction() {
       },
       body: JSON.stringify(transaction),
     });
-    // console.log(result);
+    // setLoadingState(false);
+    console.log(result)
     return result;
   }
   return (

@@ -67,3 +67,10 @@ ul {
   margin: 0px 10px;
   padding: 5px;
 }
+
+.loader-position {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

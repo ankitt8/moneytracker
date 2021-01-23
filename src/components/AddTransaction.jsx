@@ -61,9 +61,6 @@ export default function AddTransaction() {
   }
   async function addTransactionToDatabase(transaction) {
     setLoadingState(true);
-
-    // const devuri = `http://localhost:8080/api/add_transaction`;
-    // const produri = 'https://moneytrackerbackend.herokuapp.com/api/add_transaction';
     const res = await fetch(url.API_URL_ADD_TRANSACTION, {
       method: 'POST',
       headers: {
@@ -72,13 +69,13 @@ export default function AddTransaction() {
       body: JSON.stringify(transaction),
     });
     const result = await res.json();
-    console.log(result)
+    // console.log(result)
     return result;
   }
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <FormControl>
-        <InputLabel htmlFor="heading">Name</InputLabel>
+        <InputLabel htmlFor="heading">Title</InputLabel>
         <Input id="heading" value={heading} onChange={handleheadingChange} />
       </FormControl>
       <FormControl>

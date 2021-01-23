@@ -1,15 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
-import { createAddTransactionAction } from '../actions/actionCreator'
+import { addTransactionAction } from '../actions/actionCreator'
+import { url } from '../Constants';
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -44,12 +42,12 @@ export default function AddTransaction() {
     const result = addTransactionToDatabase(transaction);
     result
       .then(
-        function () {
-          console.log('success')
-          dispatch(createAddTransactionAction(transaction));
+        function (res) {
+          // console.log(res)
+          dispatch(addTransactionAction(res));
         },
         function () {
-          console.log('Failed to add transaction ', transaction);
+          console.log('Failed to add transaction', transaction);
         }
 
       )
@@ -64,26 +62,28 @@ export default function AddTransaction() {
   async function addTransactionToDatabase(transaction) {
     setLoadingState(true);
 
-    const devuri = `http://localhost:8080/api/add_transaction`;
-    const produri = 'https://moneytrackerbackend.herokuapp.com/api/add_transaction';
-    const result = await fetch(produri, {
+    // const devuri = `http://localhost:8080/api/add_transaction`;
+    // const produri = 'https://moneytrackerbackend.herokuapp.com/api/add_transaction';
+    const res = await fetch(url.API_URL_ADD_TRANSACTION, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(transaction),
     });
+    const result = await res.json();
+    console.log(result)
     return result;
   }
   return (
     <form className={classes.root} noValidate autoComplete="off">
       <FormControl>
-        <InputLabel htmlFor="component-simple">Name</InputLabel>
-        <Input id="component-simple" value={heading} onChange={handleheadingChange} />
+        <InputLabel htmlFor="heading">Name</InputLabel>
+        <Input id="heading" value={heading} onChange={handleheadingChange} />
       </FormControl>
       <FormControl>
-        <InputLabel htmlFor="component-simple">Amount</InputLabel>
-        <Input id="component-simple" value={amount} onChange={handleAmountChange} />
+        <InputLabel htmlFor="amount">Amount</InputLabel>
+        <Input id="amount" value={amount} onChange={handleAmountChange} />
       </FormControl>
       {loadingState ? <CircularIndeterminate /> : <AddOutlinedIcon
         fontSize="large"

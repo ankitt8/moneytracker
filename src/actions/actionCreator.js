@@ -1,8 +1,8 @@
 import {
-  ADDTRANSACTION, GETTRANSACTIONS, NEW_TRANSACTION_ADDED
+  ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION
 } from './actionTypes';
 
-export function createStatusAction({
+export function StatusAction({
   type, started = false, successful = false, failed = false,
 }) {
   return {
@@ -14,22 +14,21 @@ export function createStatusAction({
     },
   };
 }
-export function createAddTransactionAction(transaction) {
+export function addTransactionAction(transaction) {
   return {
-    type: ADDTRANSACTION,
+    type: ADD_TRANSACTION,
     transaction,
   };
 }
-export function createGetTransactionsAction(transactions) {
+export function getTransactionsAction(transactions) {
   return {
-    type: GETTRANSACTIONS,
+    type: GET_TRANSACTIONS,
     transactions
   };
 }
-export function createNewTransactionAddedAction(newTransaction) {
+export function editTransactionAction(_id, updatedTransaction) {
   return {
-    type: NEW_TRANSACTION_ADDED,
-    newTransaction,
-  };
+    type: EDIT_TRANSACTION,
+    payload: {_id, updatedTransaction}
+  }
 }
-

@@ -2,12 +2,13 @@ import React, { useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import TransactionCard from './TransactionCardv1';
 import { useDispatch } from 'react-redux'
-import { createGetTransactionsAction } from '../actions/actionCreator'
+import { getTransactionsAction } from '../actions/actionCreator'
 import Loader from './Loader';
+import { url } from '../Constants';
 
 export default function Transactions() {
-  const devuri = `http://localhost:8080/api/get_transactions`;
-  const produri = 'https://moneytrackerbackend.herokuapp.com/api/get_transactions';
+  // const devuri = `http://localhost:8080/api/get_transactions`;
+  // const produri = 'https://moneytrackerbackend.herokuapp.com/api/get_transactions';
   const dispatch = useDispatch();
   const storeTransactions = useSelector(state => state.transactions.transactions);
   const [loader, setLoader] = React.useState(true);
@@ -18,13 +19,13 @@ export default function Transactions() {
   // when the component is rendered first time the useEffect will bring the transactions
   const loadTransactions = useCallback(
     async () => {
-      const response = await fetch(produri);
+      const response = await fetch(url.API_URL_GET_TRANSACTIONS);
       const data = await response.json();
       // setTransactions(data);
-      dispatch(createGetTransactionsAction(data));
+      dispatch(getTransactionsAction(data));
       setLoader(false);
     },
-    [produri, dispatch, setLoader],
+    [dispatch, setLoader],
     
   );
 
@@ -37,9 +38,8 @@ export default function Transactions() {
     return db - da;
   }
   const transactionsList = transactions.sort((sortTransactionsByDate)).map((transaction) => {
-    const { heading, amount } = transaction;
-    return <li key={transaction['date']}>
-      <TransactionCard heading={heading} amount={amount} />
+    return <li key={transaction._id}>
+      <TransactionCard transaction={transaction} />
     </li>
   })
 

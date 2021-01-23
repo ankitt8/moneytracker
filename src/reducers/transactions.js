@@ -1,6 +1,7 @@
 import {
-  GETTRANSACTIONS,
-  ADDTRANSACTION
+  GET_TRANSACTIONS,
+  ADD_TRANSACTION,
+  EDIT_TRANSACTION,
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -8,16 +9,26 @@ const initialState = {
 };
 const transactions = (state = initialState, action) => {
   switch (action.type) {
-    case ADDTRANSACTION: {
+    case ADD_TRANSACTION: {
       return {
         ...state,
         transactions: [...state.transactions, action.transaction],
       };
     }
-    case GETTRANSACTIONS: {
+    case GET_TRANSACTIONS: {
       return {
         ...state,
         transactions: [...action.transactions]
+      }
+    }
+    case EDIT_TRANSACTION: {
+      const transactions = state.transactions;
+      console.log(transactions);
+      const editTransactionId = transactions.findIndex((transaction) => transaction._id === action.payload._id);
+      transactions[editTransactionId] = action.payload.updatedTransaction;
+      return {
+        ...state,
+        transactions: [...transactions]
       }
     }
     default: {

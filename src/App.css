@@ -79,18 +79,22 @@ ul {
   display: flex;
   justify-content: space-between;
 }
+
 .edit-field-input {
   width: 50%;
   border: none;
   padding-right: 10px;
-  font-size: 16px;
+  font-size: 18px;
 }
+
 .transaction-card-text {
-  font-size: 16px;
+  font-size: 18px;
 }
+
 .edit-field-input-amt {
   text-align: end;
 }
+
 .edit-field input:focus {
   outline: none;
 }

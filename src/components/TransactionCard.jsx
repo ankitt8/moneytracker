@@ -46,8 +46,8 @@ export default function TransactionCard({ transaction }) {
         <CheckCircleRoundedIcon onClick={handleEditSubmit} />
       </div> :
       (<div className="transaction-card" onClick={() => setEditFieldVisibilty(true)}>
-        <p>{heading}</p>
-        <p>{amount}</p>
+        <p className="transaction-card-text">{heading}</p>
+        <p className="transaction-card-text">{amount}</p>
       </div>)
   );
 }

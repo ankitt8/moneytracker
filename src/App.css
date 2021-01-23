@@ -74,3 +74,18 @@ ul {
   justify-content: center;
   align-items: center;
 }
+
+.edit-field {
+  display: flex;
+  justify-content: space-between;
+}
+.edit-field-input {
+  width: 50%;
+  border: none;
+}
+.edit-field-input-amt {
+  text-align: end;
+}
+.edit-field input:focus {
+  outline: none;
+}

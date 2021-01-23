@@ -82,6 +82,11 @@ ul {
 .edit-field-input {
   width: 50%;
   border: none;
+  padding-right: 10px;
+  font-size: 16px;
+}
+.transaction-card-text {
+  font-size: 16px;
 }
 .edit-field-input-amt {
   text-align: end;

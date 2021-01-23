@@ -1,22 +1,18 @@
 import React, { useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux';
-import TransactionCard from './TransactionCardv1';
+import TransactionCard from './TransactionCard';
 import { useDispatch } from 'react-redux'
 import { getTransactionsAction } from '../actions/actionCreator'
 import Loader from './Loader';
 import { url } from '../Constants';
 
 export default function Transactions() {
-  // const devuri = `http://localhost:8080/api/get_transactions`;
-  // const produri = 'https://moneytrackerbackend.herokuapp.com/api/get_transactions';
   const dispatch = useDispatch();
   const storeTransactions = useSelector(state => state.transactions.transactions);
   const [loader, setLoader] = React.useState(true);
   const [transactions, setTransactions] = React.useState(storeTransactions);
-  // setTransactions([...storeTransactions]);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
   
-  // when the component is rendered first time the useEffect will bring the transactions
   const loadTransactions = useCallback(
     async () => {
       const response = await fetch(url.API_URL_GET_TRANSACTIONS);
@@ -26,7 +22,6 @@ export default function Transactions() {
       setLoader(false);
     },
     [dispatch, setLoader],
-    
   );
 
   useEffect(() => {

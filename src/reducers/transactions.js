@@ -23,7 +23,6 @@ const transactions = (state = initialState, action) => {
     }
     case EDIT_TRANSACTION: {
       const transactions = state.transactions;
-      console.log(transactions);
       const editTransactionId = transactions.findIndex((transaction) => transaction._id === action.payload._id);
       transactions[editTransactionId] = action.payload.updatedTransaction;
       return {

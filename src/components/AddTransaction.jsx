@@ -6,7 +6,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
-import { addTransactionAction } from '../actions/actionCreator'
+import { addTransactionAction, editAvailableBalAction, editExpenditureAction } from '../actions/actionCreator'
 import { url } from '../Constants';
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +46,8 @@ export default function AddTransaction() {
         function (res) {
           // console.log(res)
           dispatch(addTransactionAction(res));
+          dispatch(editExpenditureAction(parseInt(amount)));
+          dispatch(editAvailableBalAction(-1*parseInt(amount)));
         },
         function () {
           console.log('Failed to add transaction', transaction);

@@ -1,5 +1,6 @@
 import {
-  ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION
+  ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION, EDIT_TRANSACTION_SUMMARY,
+  EDIT_EXPENDITURE, EDIT_AVAILABLE_BAL 
 } from './actionTypes';
 
 export function StatusAction({
@@ -29,6 +30,24 @@ export function getTransactionsAction(transactions) {
 export function editTransactionAction(_id, updatedTransaction) {
   return {
     type: EDIT_TRANSACTION,
-    payload: {_id, updatedTransaction}
+    payload: { _id, updatedTransaction }
+  }
+}
+export function editTransactionSummary(updatedTransactionSummary) {
+  return {
+    type: EDIT_TRANSACTION_SUMMARY,
+    updatedTransactionSummary
+  }
+}
+export function editExpenditureAction(amount) {
+  return {
+    type: EDIT_EXPENDITURE,
+    amount
+  }
+}
+export function editAvailableBalAction(amount) {
+  return {
+    type: EDIT_AVAILABLE_BAL,
+    amount
   }
 }

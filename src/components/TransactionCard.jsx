@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
-import { editTransactionAction } from '../actions/actionCreator'
+import {
+  editTransactionAction, editExpenditureAction, editAvailableBalAction
+} from '../actions/actionCreator'
 import { url } from '../Constants';
 import { useDispatch } from 'react-redux';
 export default function TransactionCard({ transaction }) {
@@ -23,6 +25,9 @@ export default function TransactionCard({ transaction }) {
         () => {
           // console.log('Edited successfully');
           dispatch(editTransactionAction(_id, updatedTransaction));
+          const changeAmt = parseInt(amt) - parseInt(amount);
+          dispatch(editExpenditureAction(changeAmt));
+          dispatch(editAvailableBalAction(-1*changeAmt))
         },
         () => { console.log('Failed To edit') }
       )

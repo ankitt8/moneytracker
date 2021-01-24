@@ -14,6 +14,10 @@ export default function TransactionCard({ transaction }) {
   function handleEditSubmit() {
     // const produri = 'https://moneytrackerbackend.herokuapp.com/api/edit_transaction';
     const updatedTransaction = { ...transaction, heading: head, amount: amt };
+    if(amt === '' || amt < 0) {
+      setEditFieldVisibilty(false);
+      return;
+    };
     fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${_id}`, {
       method: 'POST',
       headers: {
@@ -44,7 +48,7 @@ export default function TransactionCard({ transaction }) {
         />
         <input
           className="edit-field-input edit-field-input-amt"
-          type="text"
+          type="number"
           value={amt}
           onChange={(e) => setAmt(e.target.value)}
         />

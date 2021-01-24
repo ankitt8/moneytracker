@@ -34,6 +34,12 @@ export default function AddTransaction() {
   };
 
   function handleTransactionSubmit() {
+    if (amount === '' || amount < 0) {
+      setLoadingState(false);
+      setHeading('');
+      setAmount('');
+      return;
+    }
     setLoadingState(true)
     const transaction = {
       heading,
@@ -83,7 +89,7 @@ export default function AddTransaction() {
       </FormControl>
       <FormControl>
         <InputLabel htmlFor="amount">Amount</InputLabel>
-        <Input id="amount" value={amount} onChange={handleAmountChange} />
+        <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
       </FormControl>
       {loadingState ? <CircularIndeterminate /> : <AddOutlinedIcon
         fontSize="large"

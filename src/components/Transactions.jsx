@@ -41,17 +41,12 @@ export default function Transactions() {
     dateFirstDay.setDate(dateFirstDay.getDate() + 1);
   }
   let totalAmountPerDay = new Array(noOfDays);
-  console.log(noOfDays);
   for(let i=0;i < noOfDays; ++i) {
     monthlyTransactions[i] = [];
   }
   for (let i=0;i < transactions.length; ++i) {
     monthlyTransactions[new Date(transactions[i].date).getDate()].push(transactions[i]);
   }
-  console.log(monthlyTransactions);
-  console.log(totalAmountPerDay);
-
-
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
@@ -69,7 +64,6 @@ export default function Transactions() {
         totalAmount={totalAmountPerDay[i]}/>
       </li>
     ))
-    
   }
   return (
     loader ? <Loader/> : 

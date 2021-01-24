@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: 5
   },
 }));
 

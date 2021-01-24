@@ -8,6 +8,11 @@ import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
 import { addTransactionAction, editAvailableBalAction, editExpenditureAction } from '../actions/actionCreator'
 import { url } from '../Constants';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -23,21 +28,33 @@ export default function AddTransaction() {
   const dispatch = useDispatch();
   const [heading, setHeading] = React.useState('');
   const [amount, setAmount] = React.useState('');
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [msg, setMsg] = React.useState('');
+  const [severity, setSeverity] = React.useState('');
   const [loadingState, setLoadingState] = React.useState(false);
   const classes = useStyles();
-
   function handleheadingChange(event) {
     setHeading(event.target.value);
   };
   function handleAmountChange(event) {
     setAmount(event.target.value);
   };
+  function handleClose(event, reason)  {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
 
   function handleTransactionSubmit() {
-    if (amount === '' || amount < 0) {
+    if (amount === '' || amount <= 0 || heading === '') {
       setLoadingState(false);
       setHeading('');
       setAmount('');
+      setSnackbarOpen(true);
+      const msg = heading === '' ? 'Please Enter Title!' : 'Please Enter Valid Amount';
+      setMsg(msg);
+      setSeverity('warning');
       return;
     }
     setLoadingState(true)
@@ -54,9 +71,14 @@ export default function AddTransaction() {
           dispatch(addTransactionAction(res));
           dispatch(editExpenditureAction(parseInt(amount)));
           dispatch(editAvailableBalAction(-1*parseInt(amount)));
+          setMsg('Transaction Added Successfully!');
+          setSeverity('success');
         },
         function () {
           console.log('Failed to add transaction', transaction);
+          // setSnackbarOpen(true);
+          setMsg('Transaction Addition Failed!');
+          setSeverity('error');
         }
 
       )
@@ -64,12 +86,12 @@ export default function AddTransaction() {
         setLoadingState(false);
         setHeading('');
         setAmount('');
+        setSnackbarOpen(true);
       })
 
 
   }
   async function addTransactionToDatabase(transaction) {
-    setLoadingState(true);
     const res = await fetch(url.API_URL_ADD_TRANSACTION, {
       method: 'POST',
       headers: {
@@ -82,6 +104,7 @@ export default function AddTransaction() {
     return result;
   }
   return (
+    <>
     <form className={classes.root} noValidate autoComplete="off">
       <FormControl>
         <InputLabel htmlFor="heading">Title</InputLabel>
@@ -96,5 +119,12 @@ export default function AddTransaction() {
         onClick={handleTransactionSubmit}
       />}
     </form>
+    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity}>
+          {msg}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
+

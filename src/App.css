@@ -46,6 +46,11 @@ ul {
   padding: 0px;
 }
 
+.monthly-transaction-card {
+  border: 2px solid grey;
+  border-radius: 2px;
+}
+
 .transaction-card {
   height: 40px;
   margin-bottom: 5px;

@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { getTransactionsAction } from '../actions/actionCreator'
 import Loader from './Loader';
 import { url } from '../Constants';
+import DayTransactionsCard from './DayTransactionsCard';
 
 export default function Transactions() {
   const dispatch = useDispatch();
@@ -12,7 +13,11 @@ export default function Transactions() {
   const [loader, setLoader] = React.useState(true);
   const [transactions, setTransactions] = React.useState(storeTransactions);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
-  
+  function sortTransactionsByDate(a, b) {
+    const da = new Date(a.date);
+    const db = new Date(b.date);
+    return db - da;
+  }
   const loadTransactions = useCallback(
     async () => {
       const response = await fetch(url.API_URL_GET_TRANSACTIONS);
@@ -23,28 +28,51 @@ export default function Transactions() {
     },
     [dispatch, setLoader],
   );
+  transactions.sort(sortTransactionsByDate);
+  
+  let monthlyTransactions = [];
+  let noOfDays = 0;
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const dateFirstDay = new Date(year, month, 1);
+  while (dateFirstDay.getMonth() === month) {
+    noOfDays += 1;
+    dateFirstDay.setDate(dateFirstDay.getDate() + 1);
+  }
+  let totalAmountPerDay = new Array(noOfDays);
+  console.log(noOfDays);
+  for(let i=0;i < noOfDays; ++i) {
+    monthlyTransactions[i] = [];
+  }
+  for (let i=0;i < transactions.length; ++i) {
+    monthlyTransactions[new Date(transactions[i].date).getDate()].push(transactions[i]);
+  }
+  console.log(monthlyTransactions);
+  console.log(totalAmountPerDay);
+
 
   useEffect(() => {
     loadTransactions();
   }, [loadTransactions]);
-  function sortTransactionsByDate(a, b) {
-    const da = new Date(a.date);
-    const db = new Date(b.date);
-    return db - da;
-  }
-  const transactionsList = transactions.sort((sortTransactionsByDate)).map((transaction) => {
-    return <li key={transaction._id}>
-      <TransactionCard transaction={transaction} />
-    </li>
-  })
+  
+  const todayDate = date.getDate();
 
+  const monthlyTransactionsList = [];
+  for(let i=todayDate; i >= 1; --i) {
+    totalAmountPerDay[i] = monthlyTransactions[i].reduce((acc, curr) => acc + parseInt(curr.amount),0);
+    monthlyTransactionsList.push((
+      <li key={i}>
+        <DayTransactionsCard 
+        date= {new Date(year, month, i).toDateString()}
+        transactions={monthlyTransactions[i]} 
+        totalAmount={totalAmountPerDay[i]}/>
+      </li>
+    ))
+    
+  }
   return (
-    loader ? <Loader/> : <div>
-      <div className="transactions-heading">
-        <h2>Title</h2>
-        <h2>Amount</h2>
-      </div>
-      <ul className="list">{transactionsList}</ul>
-    </div>
+    loader ? <Loader/> : 
+    <ul className="list">{monthlyTransactionsList}</ul>
   )
 }

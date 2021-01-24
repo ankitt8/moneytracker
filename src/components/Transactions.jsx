@@ -1,6 +1,5 @@
 import React, { useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux';
-import TransactionCard from './TransactionCard';
 import { useDispatch } from 'react-redux'
 import { getTransactionsAction } from '../actions/actionCreator'
 import Loader from './Loader';

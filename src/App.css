@@ -46,10 +46,7 @@ ul {
   padding: 0px;
 }
 
-.monthly-transaction-card {
-  border: 2px solid grey;
-  border-radius: 2px;
-}
+
 
 .transaction-card {
   height: 40px;
@@ -100,4 +97,10 @@ ul {
 
 .edit-field input:focus {
   outline: none;
+}
+
+.no-transaction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

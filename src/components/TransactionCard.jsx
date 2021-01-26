@@ -10,6 +10,7 @@ export default function TransactionCard({ transaction }) {
   const dispatch = useDispatch();
   const [editFieldVisible, setEditFieldVisibilty] = useState(false);
   const { heading, amount, _id } = transaction;
+
   const [head, setHead] = useState(heading);
   const [amt, setAmt] = useState(amount);
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
@@ -23,10 +24,17 @@ export default function TransactionCard({ transaction }) {
   };
   function handleEditSubmit() {
     const updatedTransaction = { ...transaction, heading: head, amount: amt };
-    if (amt === '' || amt <= 0 || heading === '') {
+    if (amt === '' || amt <= 0 || head === '') {
       setEditFieldVisibilty(false);
       setSnackbarOpen(true);
-      const msg = heading === '' ? 'Please Enter Title!' : 'Please Enter Valid Amount'
+      let msg;
+      if (head === '') {
+        msg = 'Pleae Enter Title;'
+        setHead(heading);
+      } else {
+        msg = 'Please Enter Valid Amount';
+        setAmt(amount);
+      }
       setMsg(msg);
       setSeverity('warning');
       return;

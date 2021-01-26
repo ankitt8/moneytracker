@@ -8,11 +8,8 @@ import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
 import { addTransactionAction, editAvailableBalAction, editExpenditureAction } from '../actions/actionCreator'
 import { url } from '../Constants';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
+import SnackBarFeedback from './SnackBarFeedback';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
@@ -88,20 +85,6 @@ export default function AddTransaction() {
         setAmount('');
         setSnackbarOpen(true);
       })
-
-
-  }
-  async function addTransactionToDatabase(transaction) {
-    const res = await fetch(url.API_URL_ADD_TRANSACTION, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(transaction),
-    });
-    const result = await res.json();
-    // console.log(result)
-    return result;
   }
   return (
     <>
@@ -119,12 +102,20 @@ export default function AddTransaction() {
         onClick={handleTransactionSubmit}
       />}
     </form>
-    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
-          {msg}
-        </Alert>
-      </Snackbar>
+    <SnackBarFeedback open={snackbarOpen} handleClose={handleClose} severity={severity} msg={msg}/>
     </>
+
   );
 }
-
+async function addTransactionToDatabase(transaction) {
+  const res = await fetch(url.API_URL_ADD_TRANSACTION, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(transaction),
+  });
+  const result = await res.json();
+  // console.log(result)
+  return result;
+}

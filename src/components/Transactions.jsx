@@ -12,7 +12,6 @@ import DayTransactionsCard from './DayTransactionsCard';
 export default function Transactions() {
   const dispatch = useDispatch();
   const storeTransactions = useSelector(state => state.transactions.transactions);
-  const { moneyCredited } = useSelector(state => state.transactions.transactionSummary);
   const [loader, setLoader] = React.useState(true);
   const [transactions, setTransactions] = React.useState(storeTransactions);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
@@ -41,7 +40,7 @@ export default function Transactions() {
   const year = date.getFullYear();
   const month = date.getMonth();
   const noOfDays = getNoOfDays(year, month);
-  
+
   let totalAmountPerDay = new Array(noOfDays);
   for (let i = 0; i < noOfDays; ++i) {
     monthlyTransactions[i] = [];

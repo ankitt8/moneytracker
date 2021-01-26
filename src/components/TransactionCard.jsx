@@ -5,17 +5,30 @@ import {
 } from '../actions/actionCreator'
 import { url } from '../Constants';
 import { useDispatch } from 'react-redux';
+import SnackBarFeedback from './SnackBarFeedback';
 export default function TransactionCard({ transaction }) {
   const dispatch = useDispatch();
   const [editFieldVisible, setEditFieldVisibilty] = useState(false);
   const { heading, amount, _id } = transaction;
   const [head, setHead] = useState(heading);
   const [amt, setAmt] = useState(amount);
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [msg, setMsg] = React.useState('');
+  const [severity, setSeverity] = React.useState('');
+  function handleClose(event, reason) {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
   function handleEditSubmit() {
-    // const produri = 'https://moneytrackerbackend.herokuapp.com/api/edit_transaction';
     const updatedTransaction = { ...transaction, heading: head, amount: amt };
-    if(amt === '' || amt < 0) {
+    if (amt === '' || amt <= 0 || heading === '') {
       setEditFieldVisibilty(false);
+      setSnackbarOpen(true);
+      const msg = heading === '' ? 'Please Enter Title!' : 'Please Enter Valid Amount'
+      setMsg(msg);
+      setSeverity('warning');
       return;
     };
     fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${_id}`, {
@@ -31,32 +44,45 @@ export default function TransactionCard({ transaction }) {
           dispatch(editTransactionAction(_id, updatedTransaction));
           const changeAmt = parseInt(amt) - parseInt(amount);
           dispatch(editExpenditureAction(changeAmt));
-          dispatch(editAvailableBalAction(-1*changeAmt))
+          dispatch(editAvailableBalAction(-1 * changeAmt));
+          setMsg('Transaction Edited Successfully!');
+          setSeverity('success');
         },
-        () => { console.log('Failed To edit') }
+        () => {
+          console.log('Failed To edit')
+          setMsg('Transaction Edit Failed!');
+          setSeverity('error');
+        }
       )
-      .finally(() => setEditFieldVisibilty(false));
+      .finally(() => {
+        setEditFieldVisibilty(false)
+        setSnackbarOpen(true);
+      });
   }
   return (
-    editFieldVisible ?
-      <div className="edit-field transaction-card">
-        <input
-          className="edit-field-input"
-          type="text"
-          value={head}
-          onChange={(e) => setHead(e.target.value)}
-        />
-        <input
-          className="edit-field-input edit-field-input-amt"
-          type="number"
-          value={amt}
-          onChange={(e) => setAmt(e.target.value)}
-        />
-        <CheckCircleRoundedIcon onClick={handleEditSubmit} />
-      </div> :
-      (<div className="transaction-card" onClick={() => setEditFieldVisibilty(true)}>
-        <p className="transaction-card-text">{heading}</p>
-        <p className="transaction-card-text">{amount}</p>
-      </div>)
+    <>
+      {editFieldVisible ?
+        <div className="edit-field transaction-card">
+          <input
+            className="edit-field-input"
+            type="text"
+            value={head}
+            onChange={(e) => setHead(e.target.value)}
+          />
+          <input
+            className="edit-field-input edit-field-input-amt"
+            type="number"
+            value={amt}
+            onChange={(e) => setAmt(e.target.value)}
+          />
+          <CheckCircleRoundedIcon onClick={handleEditSubmit} />
+        </div> :
+        (<div className="transaction-card" onClick={() => setEditFieldVisibilty(true)}>
+          <p className="transaction-card-text">{heading}</p>
+          <p className="transaction-card-text">{amount}</p>
+        </div>)
+      }
+      <SnackBarFeedback open={snackbarOpen} handleClose={handleClose} severity={severity} msg={msg} />
+    </>
   );
 }

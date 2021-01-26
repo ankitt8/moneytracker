@@ -14,6 +14,7 @@ export default function Transactions() {
   const storeTransactions = useSelector(state => state.transactions.transactions);
   const [loader, setLoader] = React.useState(true);
   const [transactions, setTransactions] = React.useState(storeTransactions);
+  const [offline, setOffline] = React.useState(false);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
   function sortTransactionsByDate(a, b) {
     const da = new Date(a.date);
@@ -22,14 +23,24 @@ export default function Transactions() {
   }
   const loadTransactions = useCallback(
     async () => {
-      const response = await fetch(url.API_URL_GET_TRANSACTIONS);
-      const data = await response.json();
-      // setTransactions(data);
-      dispatch(getTransactionsAction(data));
-      const totalExpenditure = data.reduce((acc, curr) => acc + curr.amount, 0);
-      dispatch(editExpenditureAction(totalExpenditure));
-      dispatch(editAvailableBalAction(-1*totalExpenditure));
-      setLoader(false);
+      try {
+        const response = await fetch(url.API_URL_GET_TRANSACTIONS);
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data)
+          // setTransactions(data);
+          dispatch(getTransactionsAction(data));
+          const totalExpenditure = data.reduce((acc, curr) => acc + curr.amount, 0);
+          dispatch(editExpenditureAction(totalExpenditure));
+          dispatch(editAvailableBalAction(-1 * totalExpenditure));
+        }
+        setLoader(false)
+      } catch {
+        console.log('Either your internet is disconnected or issue from our side');
+        setLoader(false);
+        setOffline(true);
+        console.log(offline)
+      }
     },
     [dispatch, setLoader],
   );
@@ -66,10 +77,17 @@ export default function Transactions() {
       </li>
     ))
   }
-  return (
-    loader ? <Loader /> :
-      <ul className="list">{monthlyTransactionsList}</ul>
-  )
+  let componentToRender = null;
+  if (loader) {
+    componentToRender = <Loader />;
+  } else {
+    if (offline) {
+      componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;
+    } else {
+      componentToRender = <ul className="list">{monthlyTransactionsList}</ul>
+    }
+  }
+  return componentToRender;
 }
 
 function getNoOfDays(year, month) {

@@ -1,7 +1,6 @@
 import React from 'react';
 import TransactionCard from './TransactionCard';
 export default function MonthlyTransactionCard({ transactions, date, totalAmount }) {
-
   const transactionsList = transactions.map((transaction) => {
     return <li key={transaction._id}>
       <TransactionCard

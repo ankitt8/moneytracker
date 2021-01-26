@@ -27,5 +27,5 @@ export const ADD_TRANSACTION_SUCCESS_MSG = 'Transaction Added Successfully:)';
 export const EDIT_TRANSACTION_FAIL_ERROR = 'Transaction Edit Failed :(';
 export const DELETE_TRANSACTION_FAIL_ERROR = 'Transaction Delete Failed :(';
 export const EDIT_TRANSACTION_SUCCESS_MSG = 'Transaction Edited Successfully:)';
-export const DELETE_TRANSACTION_SUCCESS_MSG = 'Transaction Deleted Successfully!';
+export const DELETE_TRANSACTION_SUCCESS_MSG = 'Transaction Deleted!';
 export const OFFLINE_ERROR = 'OOPS You Are Offline :(';

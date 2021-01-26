@@ -1,6 +1,6 @@
 import {
   ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION, DELETE_TRANSACTION,
-  EDIT_EXPENDITURE, EDIT_AVAILABLE_BAL 
+  EDIT_EXPENDITURE, EDIT_AVAILABLE_BAL, UPDATE_STATUS
 } from './actionTypes';
 
 export function StatusAction({
@@ -37,6 +37,21 @@ export function deleteTransactionAction(id) {
   return {
     type: DELETE_TRANSACTION,
     payload: id,
+  }
+}
+export function updateStatusAction(status) {
+  
+  return {
+    type: UPDATE_STATUS,
+    payload: {
+      addTransaction: null,
+      editTransaction: null,
+      deleteTransaction: null,
+      isOffline: null,
+      msg:null,
+      severity:null,
+      ...status
+    },
   }
 }
 export function editExpenditureAction(amount) {

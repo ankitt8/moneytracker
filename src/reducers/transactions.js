@@ -2,10 +2,10 @@ import {
   GET_TRANSACTIONS,
   ADD_TRANSACTION,
   EDIT_TRANSACTION,
-  EDIT_TRANSACTION_SUMMARY,
   EDIT_EXPENDITURE,
   EDIT_AVAILABLE_BAL,
-  DELETE_TRANSACTION
+  DELETE_TRANSACTION,
+  UPDATE_STATUS
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -15,6 +15,13 @@ const initialState = {
     totalExpenditure: 0,
     availableBal: 41500,
     moneyCredited: 41500,
+  },
+  status: {
+    addTransaction: null,
+    editTransaction: null,
+    deleteTransaction: null,
+    msg: null,
+    severity: null,
   }
 };
 const transactions = (state = initialState, action) => {
@@ -45,11 +52,18 @@ const transactions = (state = initialState, action) => {
       const transactions = state.transactions;
       const index = transactions.findIndex((transaction) => transaction._id === deleteId);
       console.log(index);
-      const deletedTransaction = transactions.splice(index, 1);
-      console.log(deletedTransaction)
+      transactions.splice(index, 1);
       return {
         ...state,
         transactions: [...transactions],
+      }
+    }
+    case UPDATE_STATUS: {
+      return {
+        ...state,
+        status: {
+          ...action.payload
+        }
       }
     }
     case EDIT_EXPENDITURE: {

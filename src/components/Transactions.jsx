@@ -27,8 +27,6 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
-          // console.log(data)
-          // setTransactions(data);
           dispatch(getTransactionsAction(data));
           const totalExpenditure = data.reduce((acc, curr) => acc + curr.amount, 0);
           dispatch(editExpenditureAction(totalExpenditure));
@@ -39,7 +37,6 @@ export default function Transactions() {
         console.log('Either your internet is disconnected or issue from our side');
         setLoader(false);
         setOffline(true);
-        console.log(offline)
       }
     },
     [dispatch, setLoader],

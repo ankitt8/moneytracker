@@ -6,9 +6,12 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
-import { addTransactionAction, editAvailableBalAction, editExpenditureAction } from '../actions/actionCreator'
-import { ADD_TRANSACTION_FAIL_ERROR, url, ADD_TRANSACTION_SUCCESS_MSG, INVALID_TITLE_WARNING, INVALID_AMOUNT_WARNING } from '../Constants';
-import SnackBarFeedback from './SnackBarFeedback';
+import { addTransactionAction, editAvailableBalAction, editExpenditureAction, updateStatusAction } from '../actions/actionCreator'
+import {
+  ADD_TRANSACTION_FAIL_ERROR,
+  url, ADD_TRANSACTION_SUCCESS_MSG,
+  INVALID_TITLE_WARNING, INVALID_AMOUNT_WARNING
+} from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,9 +28,6 @@ export default function AddTransaction() {
   const dispatch = useDispatch();
   const [heading, setHeading] = React.useState('');
   const [amount, setAmount] = React.useState('');
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-  const [msg, setMsg] = React.useState('');
-  const [severity, setSeverity] = React.useState('');
   const [loadingState, setLoadingState] = React.useState(false);
   const classes = useStyles();
   function handleheadingChange(event) {
@@ -36,25 +36,21 @@ export default function AddTransaction() {
   function handleAmountChange(event) {
     setAmount(event.target.value);
   };
-  function handleClose(event, reason)  {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackbarOpen(false);
-  };
 
   function handleTransactionSubmit() {
     if (amount === '' || amount <= 0 || heading === '') {
       setLoadingState(false);
       setHeading('');
       setAmount('');
-      setSnackbarOpen(true);
       const msg = heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
-      setMsg(msg);
-      setSeverity('warning');
+      dispatch(updateStatusAction({
+        addTransaction: false,
+        msg,
+        severity: 'warning'
+      }))
       return;
     }
-    setLoadingState(true)
+    setLoadingState(true);
     const transaction = {
       heading,
       amount,
@@ -64,45 +60,46 @@ export default function AddTransaction() {
     result
       .then(
         function (res) {
-          // console.log(res)
           dispatch(addTransactionAction(res));
           dispatch(editExpenditureAction(parseInt(amount)));
-          dispatch(editAvailableBalAction(-1*parseInt(amount)));
-          setMsg(ADD_TRANSACTION_SUCCESS_MSG);
-          setSeverity('success');
+          dispatch(editAvailableBalAction(-1 * parseInt(amount)));
+          dispatch(updateStatusAction({
+            addTransaction: true,
+            msg: ADD_TRANSACTION_SUCCESS_MSG,
+            severity: 'success'
+          }))
         },
         function () {
           console.log('Failed to add transaction', transaction);
-          // setSnackbarOpen(true);
-          setMsg(ADD_TRANSACTION_FAIL_ERROR);
-          setSeverity('error');
+          dispatch(updateStatusAction({
+            addTransaction: false,
+            msg: ADD_TRANSACTION_FAIL_ERROR,
+            severity: 'error'
+          }))
         }
-
       )
       .finally(() => {
         setLoadingState(false);
         setHeading('');
         setAmount('');
-        setSnackbarOpen(true);
       })
   }
   return (
     <>
-    <form className={classes.root} noValidate autoComplete="off">
-      <FormControl>
-        <InputLabel htmlFor="heading">Title</InputLabel>
-        <Input id="heading" value={heading} onChange={handleheadingChange} />
-      </FormControl>
-      <FormControl>
-        <InputLabel htmlFor="amount">Amount</InputLabel>
-        <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
-      </FormControl>
-      {loadingState ? <CircularIndeterminate /> : <AddOutlinedIcon
-        fontSize="large"
-        onClick={handleTransactionSubmit}
-      />}
-    </form>
-    <SnackBarFeedback open={snackbarOpen} handleClose={handleClose} severity={severity} msg={msg}/>
+      <form className={classes.root} noValidate autoComplete="off">
+        <FormControl>
+          <InputLabel htmlFor="heading">Title</InputLabel>
+          <Input id="heading" value={heading} onChange={handleheadingChange} />
+        </FormControl>
+        <FormControl>
+          <InputLabel htmlFor="amount">Amount</InputLabel>
+          <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
+        </FormControl>
+        {loadingState ? <CircularIndeterminate /> : <AddOutlinedIcon
+          fontSize="large"
+          onClick={handleTransactionSubmit}
+        />}
+      </form>
     </>
 
   );
@@ -116,6 +113,5 @@ async function addTransactionToDatabase(transaction) {
     body: JSON.stringify(transaction),
   });
   const result = await res.json();
-  // console.log(result)
   return result;
 }

@@ -1,27 +1,55 @@
 import React, { useState } from 'react';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
+import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import {
-  editTransactionAction, editExpenditureAction, editAvailableBalAction
+  editTransactionAction, editExpenditureAction, editAvailableBalAction, deleteTransactionAction
 } from '../actions/actionCreator'
-import { INVALID_AMOUNT_WARNING, url, INVALID_TITLE_WARNING, EDIT_TRANSACTION_SUCCESS_MSG, EDIT_TRANSACTION_FAIL_ERROR } from '../Constants';
+import { INVALID_AMOUNT_WARNING, url, INVALID_TITLE_WARNING, EDIT_TRANSACTION_SUCCESS_MSG, EDIT_TRANSACTION_FAIL_ERROR, DELETE_TRANSACTION_SUCCESS_MSG, DELETE_TRANSACTION_FAIL_ERROR } from '../Constants';
 import { useDispatch } from 'react-redux';
 import SnackBarFeedback from './SnackBarFeedback';
-export default function TransactionCard({ transaction }) {
+export default function TransactionCard({
+  transaction,
+}) {
   const dispatch = useDispatch();
-  const [editFieldVisible, setEditFieldVisibilty] = useState(false);
   const { heading, amount, _id } = transaction;
-
+  const [editFieldVisible, setEditFieldVisibilty] = useState(false);
   const [head, setHead] = useState(heading);
   const [amt, setAmt] = useState(amount);
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
-  const [msg, setMsg] = React.useState('');
-  const [severity, setSeverity] = React.useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [msg, setMsg] = useState('');
+  const [severity, setSeverity] = useState('');
   function handleClose(event, reason) {
     if (reason === 'clickaway') {
       return;
     }
     setSnackbarOpen(false);
   };
+  function deleteTransaction() {
+
+    fetch(`${url.API_URL_DELETE_TRANSACTION}/?id=${_id}`, {
+      method: 'POST'
+    })
+      .then(
+        function success() {
+          dispatch(editExpenditureAction(-1 * parseInt(amount)));
+          dispatch(editAvailableBalAction(parseInt(amount)));
+          setMsg(DELETE_TRANSACTION_SUCCESS_MSG);
+          setSeverity('success');
+          console.log('Delted successfully')
+          dispatch(deleteTransactionAction(_id));
+        },
+        function error() {
+          console.log('Failed To delete')
+          setMsg(DELETE_TRANSACTION_FAIL_ERROR);
+          setSeverity('error');
+        }
+      )
+      .finally(() => {
+        setEditFieldVisibilty(false)
+        setSnackbarOpen(true);
+
+      })
+  }
   function handleEditSubmit() {
     const updatedTransaction = { ...transaction, heading: head, amount: amt };
     if (amt === '' || amt <= 0 || head === '') {
@@ -60,10 +88,12 @@ export default function TransactionCard({ transaction }) {
           console.log('Failed To edit')
           setMsg(EDIT_TRANSACTION_FAIL_ERROR);
           setSeverity('error');
+
         }
       )
       .finally(() => {
         setEditFieldVisibilty(false)
+        setSnackbarOpen(true);
         setSnackbarOpen(true);
       });
   }
@@ -71,6 +101,7 @@ export default function TransactionCard({ transaction }) {
     <>
       {editFieldVisible ?
         <div className="edit-field transaction-card">
+          <DeleteRoundedIcon onClick={deleteTransaction} />
           <input
             className="edit-field-input"
             type="text"

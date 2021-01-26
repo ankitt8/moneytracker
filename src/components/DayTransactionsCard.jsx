@@ -1,9 +1,12 @@
 import React from 'react';
 import TransactionCard from './TransactionCard';
-export default function MonthlyTransactionCard({transactions, date, totalAmount}) {
+export default function MonthlyTransactionCard({ transactions, date, totalAmount }) {
+
   const transactionsList = transactions.map((transaction) => {
     return <li key={transaction._id}>
-      <TransactionCard transaction={transaction} />
+      <TransactionCard
+        transaction={transaction}
+      />
     </li>
   })
   return (
@@ -13,7 +16,7 @@ export default function MonthlyTransactionCard({transactions, date, totalAmount}
         <h2>{totalAmount}</h2>
       </div>
       {transactions.length === 0 ? <p className="no-transaction">!!No Transactions Found!!</p> :
-      <ul className="list">{transactionsList}</ul>}
+        <ul className="list">{transactionsList}</ul>}
     </>
   )
 }

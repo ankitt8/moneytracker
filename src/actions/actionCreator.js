@@ -1,5 +1,5 @@
 import {
-  ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION, EDIT_TRANSACTION_SUMMARY,
+  ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION, DELETE_TRANSACTION,
   EDIT_EXPENDITURE, EDIT_AVAILABLE_BAL 
 } from './actionTypes';
 
@@ -33,10 +33,10 @@ export function editTransactionAction(_id, updatedTransaction) {
     payload: { _id, updatedTransaction }
   }
 }
-export function editTransactionSummary(updatedTransactionSummary) {
+export function deleteTransactionAction(id) {
   return {
-    type: EDIT_TRANSACTION_SUMMARY,
-    updatedTransactionSummary
+    type: DELETE_TRANSACTION,
+    payload: id,
   }
 }
 export function editExpenditureAction(amount) {

@@ -27,7 +27,7 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
+          // console.log(data)
           // setTransactions(data);
           dispatch(getTransactionsAction(data));
           const totalExpenditure = data.reduce((acc, curr) => acc + curr.amount, 0);

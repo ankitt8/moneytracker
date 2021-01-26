@@ -17,3 +17,11 @@ const prod = {
 }
 
 export const url = process.env.NODE_ENV === `development` ? dev.url : prod.url;
+
+export const INVALID_AMOUNT_WARNING = 'Please Enter Valid Amount!';
+export const INVALID_TITLE_WARNING = 'Please Enter Valid Title!';
+export const ADD_TRANSACTION_FAIL_ERROR = 'Transaction Addition Failed :(';
+export const ADD_TRANSACTION_SUCCESS_MSG = 'Transaction Added Successfully:)';
+export const EDIT_TRANSACTION_FAIL_ERROR = 'Transaction Edit Failed :(';
+export const EDIT_TRANSACTION_SUCCESS_MSG = 'Transaction Edited Successfully:)'
+export const OFFLINE_ERROR = 'OOPS You Are Offline :(';

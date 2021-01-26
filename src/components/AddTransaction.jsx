@@ -7,7 +7,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import CircularIndeterminate from './Loader';
 import { addTransactionAction, editAvailableBalAction, editExpenditureAction } from '../actions/actionCreator'
-import { url } from '../Constants';
+import { ADD_TRANSACTION_FAIL_ERROR, url, ADD_TRANSACTION_SUCCESS_MSG, INVALID_TITLE_WARNING, INVALID_AMOUNT_WARNING } from '../Constants';
 import SnackBarFeedback from './SnackBarFeedback';
 
 const useStyles = makeStyles((theme) => ({
@@ -49,7 +49,7 @@ export default function AddTransaction() {
       setHeading('');
       setAmount('');
       setSnackbarOpen(true);
-      const msg = heading === '' ? 'Please Enter Title!' : 'Please Enter Valid Amount';
+      const msg = heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
       setMsg(msg);
       setSeverity('warning');
       return;
@@ -68,13 +68,13 @@ export default function AddTransaction() {
           dispatch(addTransactionAction(res));
           dispatch(editExpenditureAction(parseInt(amount)));
           dispatch(editAvailableBalAction(-1*parseInt(amount)));
-          setMsg('Transaction Added Successfully!');
+          setMsg(ADD_TRANSACTION_SUCCESS_MSG);
           setSeverity('success');
         },
         function () {
           console.log('Failed to add transaction', transaction);
           // setSnackbarOpen(true);
-          setMsg('Transaction Addition Failed!');
+          setMsg(ADD_TRANSACTION_FAIL_ERROR);
           setSeverity('error');
         }
 

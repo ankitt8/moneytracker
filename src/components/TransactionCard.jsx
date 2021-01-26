@@ -3,7 +3,7 @@ import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import {
   editTransactionAction, editExpenditureAction, editAvailableBalAction
 } from '../actions/actionCreator'
-import { url } from '../Constants';
+import { INVALID_AMOUNT_WARNING, url, INVALID_TITLE_WARNING, EDIT_TRANSACTION_SUCCESS_MSG, EDIT_TRANSACTION_FAIL_ERROR } from '../Constants';
 import { useDispatch } from 'react-redux';
 import SnackBarFeedback from './SnackBarFeedback';
 export default function TransactionCard({ transaction }) {
@@ -29,10 +29,10 @@ export default function TransactionCard({ transaction }) {
       setSnackbarOpen(true);
       let msg;
       if (head === '') {
-        msg = 'Pleae Enter Title;'
+        msg = INVALID_TITLE_WARNING;
         setHead(heading);
       } else {
-        msg = 'Please Enter Valid Amount';
+        msg = INVALID_AMOUNT_WARNING;
         setAmt(amount);
       }
       setMsg(msg);
@@ -53,12 +53,12 @@ export default function TransactionCard({ transaction }) {
           const changeAmt = parseInt(amt) - parseInt(amount);
           dispatch(editExpenditureAction(changeAmt));
           dispatch(editAvailableBalAction(-1 * changeAmt));
-          setMsg('Transaction Edited Successfully!');
+          setMsg(EDIT_TRANSACTION_SUCCESS_MSG);
           setSeverity('success');
         },
         () => {
           console.log('Failed To edit')
-          setMsg('Transaction Edit Failed!');
+          setMsg(EDIT_TRANSACTION_FAIL_ERROR);
           setSeverity('error');
         }
       )

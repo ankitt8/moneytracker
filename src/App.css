@@ -121,3 +121,18 @@ ul {
   justify-content: center;
   align-items: center;
 }
+
+.quote-and-add-icon {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  justify-content: space-between;
+  padding: 0px 10px;
+}
+.quote {
+  font-size: 18px;
+  color: #2d6dec;
+}
+.date-picker {
+  margin-top:20px;
+}

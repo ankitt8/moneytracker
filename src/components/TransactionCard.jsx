@@ -118,6 +118,7 @@ export default function TransactionCard({
             type="text"
             value={head}
             onChange={(e) => setHead(e.target.value)}
+            autoFocus
           />
           <input
             className="edit-field-input edit-field-input-amt"

@@ -102,7 +102,7 @@ export default function QuoteAndAddIcon() {
             dispatch(editCashBalanceAction(-1 * intAmount))
           } else if (mode.toLowerCase() === ONLINE_MODE) {
             dispatch(editBankDebitAction(intAmount));
-            dispatch(editBankBalanceAction(-1*intAmount));
+            dispatch(editBankBalanceAction(-1 * intAmount));
           }
 
           dispatch(updateStatusAction({
@@ -154,7 +154,7 @@ export default function QuoteAndAddIcon() {
           <form className={classes.root} noValidate autoComplete="off">
             <FormControl>
               <InputLabel htmlFor="heading">Title</InputLabel>
-              <Input id="heading" value={heading} onChange={handleheadingChange} />
+              <Input id="heading" value={heading} onChange={handleheadingChange} autoFocus />
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="amount">Amount</InputLabel>

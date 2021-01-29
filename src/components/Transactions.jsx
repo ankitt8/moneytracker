@@ -2,11 +2,14 @@ import React, { useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux'
 import {
-  getTransactionsAction, editExpenditureAction
-  , editAvailableBalAction
+  getTransactionsAction,
+  editBankBalanceAction,
+  editBankDebitAction,
+  editCashDebitAction,
+  editCashBalanceAction
 } from '../actions/actionCreator'
 import Loader from './Loader';
-import { url } from '../Constants';
+import { CASH_MODE, ONLINE_MODE, url } from '../Constants';
 import DayTransactionsCard from './DayTransactionsCard';
 
 export default function Transactions() {
@@ -27,15 +30,28 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
+
           dispatch(getTransactionsAction(data));
-          const totalExpenditure = data.reduce((acc, curr) => acc + curr.amount, 0);
-          dispatch(editExpenditureAction(totalExpenditure));
-          dispatch(editAvailableBalAction(-1 * totalExpenditure));
+
+          const onlineTransactions = data.filter(
+            transaction => (transaction.mode === ONLINE_MODE || transaction.mode === undefined)
+          );
+          const cashTransactions = data.filter(transaction => transaction.mode === CASH_MODE);
+
+          const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0);
+          const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0)
+
+          dispatch(editBankDebitAction(bankDebit));
+          dispatch(editBankBalanceAction(-1 * bankDebit));
+          dispatch(editCashDebitAction(cashDebit));
+          dispatch(editCashBalanceAction(-1 * cashDebit));
         }
-        setLoader(false)
-      } catch {
+        setLoader(false);
+      } catch (err) {
+        console.error(err);
         console.log('Either your internet is disconnected or issue from our side');
         setLoader(false);
+        // assuming the error will happen only if failed to get the transactions
         setOffline(true);
       }
     },

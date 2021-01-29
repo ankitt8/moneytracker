@@ -29,3 +29,6 @@ export const DELETE_TRANSACTION_FAIL_ERROR = 'Transaction Delete Failed :(';
 export const EDIT_TRANSACTION_SUCCESS_MSG = 'Transaction Edited Successfully:)';
 export const DELETE_TRANSACTION_SUCCESS_MSG = 'Transaction Deleted!';
 export const OFFLINE_ERROR = 'OOPS You Are Offline :(';
+
+export const CASH_MODE = 'cash';
+export const ONLINE_MODE = 'online';

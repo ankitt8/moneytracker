@@ -2,19 +2,28 @@ import {
   GET_TRANSACTIONS,
   ADD_TRANSACTION,
   EDIT_TRANSACTION,
-  EDIT_EXPENDITURE,
-  EDIT_AVAILABLE_BAL,
+  EDIT_BANK_DEBIT,
+  EDIT_CASH_DEBIT,
+  EDIT_BANK_BALANCE,
   DELETE_TRANSACTION,
-  UPDATE_STATUS
+  UPDATE_STATUS,
+  EDIT_CASH_BALANCE
 } from '../actions/actionTypes';
 
 const initialState = {
   transactions: [],
 
   transactionSummary: {
-    totalExpenditure: 0,
-    availableBal: 41500,
-    moneyCredited: 41500,
+    bank: {
+      credit: 41500,
+      debit: 0,
+      balance: 41500,
+    },
+    cash: {
+      credit: 1000,
+      debit: 0,
+      balance: 1000,
+    }
   },
   status: {
     addTransaction: null,
@@ -66,18 +75,32 @@ const transactions = (state = initialState, action) => {
         }
       }
     }
-    case EDIT_EXPENDITURE: {
-      const totalExpenditure = state.transactionSummary.totalExpenditure + action.amount;
+    case EDIT_BANK_DEBIT: {
+      const debit = state.transactionSummary.bank.debit + action.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, totalExpenditure }
+        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, debit } }
       }
     }
-    case EDIT_AVAILABLE_BAL: {
-      const availableBal = state.transactionSummary.availableBal + action.amount;
+    case EDIT_BANK_BALANCE: {
+      const balance = state.transactionSummary.bank.balance + action.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, availableBal }
+        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, balance } }
+      }
+    }
+    case EDIT_CASH_DEBIT: {
+      const debit = state.transactionSummary.cash.debit + action.amount;
+      return {
+        ...state,
+        transactionSummary: { ...state.transactionSummary, cash: { ...state.transactionSummary.cash, debit } }
+      }
+    }
+    case EDIT_CASH_BALANCE: {
+      const balance = state.transactionSummary.cash.balance + action.amount;
+      return {
+        ...state,
+        transactionSummary: { ...state.transactionSummary, cash: { ...state.transactionSummary.cash, balance } }
       }
     }
     default: {

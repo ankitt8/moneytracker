@@ -1,6 +1,7 @@
 import {
   ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION, DELETE_TRANSACTION,
-  EDIT_EXPENDITURE, EDIT_AVAILABLE_BAL, UPDATE_STATUS
+  EDIT_BANK_DEBIT, EDIT_BANK_BALANCE,
+  EDIT_CASH_DEBIT, UPDATE_STATUS, EDIT_CASH_BALANCE
 } from './actionTypes';
 
 export function StatusAction({
@@ -40,7 +41,7 @@ export function deleteTransactionAction(id) {
   }
 }
 export function updateStatusAction(status) {
-  
+
   return {
     type: UPDATE_STATUS,
     payload: {
@@ -48,21 +49,33 @@ export function updateStatusAction(status) {
       editTransaction: null,
       deleteTransaction: null,
       isOffline: null,
-      msg:null,
-      severity:null,
+      msg: null,
+      severity: null,
       ...status
     },
   }
 }
-export function editExpenditureAction(amount) {
+export function editBankDebitAction(amount) {
   return {
-    type: EDIT_EXPENDITURE,
+    type: EDIT_BANK_DEBIT,
     amount
   }
 }
-export function editAvailableBalAction(amount) {
+export function editBankBalanceAction(amount) {
   return {
-    type: EDIT_AVAILABLE_BAL,
+    type: EDIT_BANK_BALANCE,
+    amount
+  }
+}
+export function editCashDebitAction(amount) {
+  return {
+    type: EDIT_CASH_DEBIT,
+    amount
+  }
+}
+export function editCashBalanceAction(amount) {
+  return {
+    type: EDIT_CASH_BALANCE,
     amount
   }
 }

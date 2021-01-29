@@ -2,21 +2,23 @@ import React, { useState } from 'react';
 import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
 import DeleteRoundedIcon from '@material-ui/icons/DeleteRounded';
 import {
-  editTransactionAction, editExpenditureAction, editAvailableBalAction, deleteTransactionAction, updateStatusAction
+  editTransactionAction, deleteTransactionAction, updateStatusAction,
+  editBankDebitAction, editBankBalanceAction,
+  editCashDebitAction, editCashBalanceAction
 } from '../actions/actionCreator'
 import {
   INVALID_AMOUNT_WARNING,
   url,
   INVALID_TITLE_WARNING,
   EDIT_TRANSACTION_SUCCESS_MSG,
-  EDIT_TRANSACTION_FAIL_ERROR, DELETE_TRANSACTION_SUCCESS_MSG, DELETE_TRANSACTION_FAIL_ERROR
+  EDIT_TRANSACTION_FAIL_ERROR, DELETE_TRANSACTION_SUCCESS_MSG, DELETE_TRANSACTION_FAIL_ERROR, ONLINE_MODE
 } from '../Constants';
 import { useDispatch } from 'react-redux';
 export default function TransactionCard({
   transaction,
 }) {
   const dispatch = useDispatch();
-  const { heading, amount, _id } = transaction;
+  const { heading, amount, _id, mode } = transaction;
   const [editFieldVisible, setEditFieldVisibilty] = useState(false);
   const [head, setHead] = useState(heading);
   const [amt, setAmt] = useState(amount);
@@ -27,8 +29,14 @@ export default function TransactionCard({
     })
       .then(
         function success() {
-          dispatch(editExpenditureAction(-1 * parseInt(amount)));
-          dispatch(editAvailableBalAction(parseInt(amount)));
+          if (mode === ONLINE_MODE || mode === undefined) {
+            dispatch(editBankDebitAction(-1 * parseInt(amount)));
+            dispatch(editBankBalanceAction(parseInt(amount)));
+          } else {
+            dispatch(editCashDebitAction(-1 * parseInt(amount)));
+            dispatch(editCashBalanceAction(parseInt(amount)));
+          }
+
           dispatch(deleteTransactionAction(_id));
           dispatch(updateStatusAction({
             deleteTransaction: true,
@@ -78,8 +86,8 @@ export default function TransactionCard({
         () => {
           dispatch(editTransactionAction(_id, updatedTransaction));
           const changeAmt = parseInt(amt) - parseInt(amount);
-          dispatch(editExpenditureAction(changeAmt));
-          dispatch(editAvailableBalAction(-1 * changeAmt));
+          dispatch(editBankDebitAction(changeAmt));
+          dispatch(editBankBalanceAction(-1 * changeAmt));
           dispatch(updateStatusAction({
             editTransaction: true,
             msg: EDIT_TRANSACTION_SUCCESS_MSG,

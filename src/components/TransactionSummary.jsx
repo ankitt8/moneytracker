@@ -1,7 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 export default function TransactionSummary() {
-  const {totalExpenditure, availableBal, moneyCredited} = useSelector(state => state.transactions.transactionSummary);
+  const { bank, cash } = useSelector(state => state.transactions.transactionSummary);
+  const { debit: bankDebit, credit: bankCredit, balance: bankBalance } = bank;
+  const { debit: cashDebit, credit: cashCredit, balance: cashBalance } = cash;
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -9,14 +11,18 @@ export default function TransactionSummary() {
   const daysRemaining = noOfDays - date.getDate();
   return (
     <div className="transaction-summary-card">
-    	<div className="transaction-summary">
-    	  <h2>Credit : {moneyCredited}</h2>
-    	  <h2>Debit : {totalExpenditure}</h2>
-    	</div>
+      <div className="transaction-summary">
+        <h2>Bank</h2>
+        <h2>{bankCredit} - {bankDebit} = {bankBalance}</h2>
+      </div>
       <div className="transactions-heading">
-    	  <h2>Bal : {availableBal}</h2>
-        <h2>DaysLeft : {daysRemaining}</h2>
-    	</div>
+        <h2>Cash</h2>
+        <h2>{cashCredit} - {cashDebit} = {cashBalance}</h2>
+      </div>
+      <div className="transactions-heading">
+        <h2>Spent {bankDebit + cashDebit}</h2>
+        <h2>Days Left {daysRemaining}</h2>
+      </div>
     </div>
   )
 }

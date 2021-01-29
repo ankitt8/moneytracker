@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -19,11 +18,14 @@ import CircularIndeterminate from './Loader';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import FormLabel from "@material-ui/core/FormLabel";
 
-import { addTransactionAction, editAvailableBalAction, editExpenditureAction, updateStatusAction } from '../actions/actionCreator'
+import {
+  addTransactionAction, updateStatusAction,
+  editBankDebitAction, editBankBalanceAction, editCashDebitAction, editCashBalanceAction
+} from '../actions/actionCreator'
 import {
   ADD_TRANSACTION_FAIL_ERROR,
   url, ADD_TRANSACTION_SUCCESS_MSG,
-  INVALID_TITLE_WARNING, INVALID_AMOUNT_WARNING
+  INVALID_TITLE_WARNING, INVALID_AMOUNT_WARNING, CASH_MODE, ONLINE_MODE
 } from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -70,18 +72,15 @@ export default function QuoteAndAddIcon() {
 
   function handleTransactionSubmit() {
     if (amount === '' || amount <= 0 || heading === '') {
-      setLoadingState(false);
-      // setHeading('');
-      // setAmount('');
+      // TODO if date is not changed then no need to set the date again
       setDate(new Date());
 
-      const msg = heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
+      const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
       dispatch(updateStatusAction({
         addTransaction: false,
         msg,
         severity: 'warning'
       }))
-      // handleClose();
       return;
     }
     setLoadingState(true);
@@ -89,14 +88,23 @@ export default function QuoteAndAddIcon() {
       heading,
       amount,
       date,
+      mode
     };
     const result = addTransactionToDatabase(transaction);
     result
       .then(
         function (res) {
+          const intAmount = parseInt(amount);
           dispatch(addTransactionAction(res));
-          dispatch(editExpenditureAction(parseInt(amount)));
-          dispatch(editAvailableBalAction(-1 * parseInt(amount)));
+
+          if (mode.toLowerCase() === CASH_MODE) {
+            dispatch(editCashDebitAction(intAmount));
+            dispatch(editCashBalanceAction(-1 * intAmount))
+          } else if (mode.toLowerCase() === ONLINE_MODE) {
+            dispatch(editBankDebitAction(intAmount));
+            dispatch(editBankBalanceAction(-1*intAmount));
+          }
+
           dispatch(updateStatusAction({
             addTransaction: true,
             msg: ADD_TRANSACTION_SUCCESS_MSG,
@@ -182,7 +190,7 @@ export default function QuoteAndAddIcon() {
                   label="Online/Card"
                 />
                 <FormControlLabel
-                  value='offline'
+                  value='cash'
                   control={<Radio color="primary" />}
                   label="Cash"
                 />

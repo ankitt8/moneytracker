@@ -13,6 +13,7 @@ import { CASH_MODE, ONLINE_MODE, url } from '../Constants';
 import DayTransactionsCard from './DayTransactionsCard';
 
 export default function Transactions() {
+
   const dispatch = useDispatch();
   const storeTransactions = useSelector(state => state.transactions.transactions);
   const [loader, setLoader] = React.useState(true);
@@ -27,6 +28,7 @@ export default function Transactions() {
   const loadTransactions = useCallback(
     async () => {
       try {
+        console.log(url.API_URL_GET_TRANSACTIONS)
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
@@ -57,35 +59,32 @@ export default function Transactions() {
     },
     [dispatch, setLoader],
   );
+  useEffect(() => {
+    loadTransactions();
+  }, [loadTransactions]);
   transactions.sort(sortTransactionsByDate);
 
-  let monthlyTransactions = [];
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth();
   const noOfDays = getNoOfDays(year, month);
-
-  let totalAmountPerDay = new Array(noOfDays);
-  for (let i = 0; i < noOfDays; ++i) {
-    monthlyTransactions[i] = [];
-  }
-  for (let i = 0; i < transactions.length; ++i) {
-    monthlyTransactions[new Date(transactions[i].date).getDate()].push(transactions[i]);
-  }
-  useEffect(() => {
-    loadTransactions();
-  }, [loadTransactions]);
-
+  let dayTransactions = [];
   const todayDate = date.getDate();
-
-  const monthlyTransactionsList = [];
+  const dayTransactionsList = [];
+  let totalAmountPerDay = new Array(noOfDays);
+  for (let i = 0; i <= noOfDays; ++i) {
+    dayTransactions[i] = [];
+  }
+  for (const transaction of transactions) {
+    dayTransactions[new Date(transaction.date).getDate()].push(transaction);
+  }
   for (let i = todayDate; i >= 1; --i) {
-    totalAmountPerDay[i] = monthlyTransactions[i].reduce((acc, curr) => acc + parseInt(curr.amount), 0);
-    monthlyTransactionsList.push((
+    totalAmountPerDay[i] = dayTransactions[i].reduce((acc, curr) => acc + parseInt(curr.amount), 0);
+    dayTransactionsList.push((
       <li key={i}>
         <DayTransactionsCard
           date={new Date(year, month, i).toDateString()}
-          transactions={monthlyTransactions[i]}
+          transactions={dayTransactions[i]}
           totalAmount={totalAmountPerDay[i]} />
       </li>
     ))
@@ -97,7 +96,7 @@ export default function Transactions() {
     if (offline) {
       componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;
     } else {
-      componentToRender = <ul className="list">{monthlyTransactionsList}</ul>
+      componentToRender = <ul className="list">{dayTransactionsList}</ul>
     }
   }
   return componentToRender;

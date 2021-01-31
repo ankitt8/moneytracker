@@ -36,7 +36,10 @@
     transform: rotate(360deg);
   }
 }
-
+a {
+  text-decoration: none;
+  color: black;
+}
 ul {
   list-style: none;
 }
@@ -135,4 +138,11 @@ ul {
 }
 .date-picker {
   margin-top:20px;
+}
+.new-feature {
+  height: 100vh;
+  /* width: 100vh; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

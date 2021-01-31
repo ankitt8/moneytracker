@@ -16,11 +16,11 @@ import ReduxThunk from 'redux-thunk';
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(ReduxThunk)));
 
 ReactDOM.render(
-    <Provider store={store}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <App />
-      </MuiPickersUtilsProvider>
-    </Provider>,
+  <Provider store={store}>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <App />
+    </MuiPickersUtilsProvider>
+  </Provider>,
   document.getElementById('root')
 );
 

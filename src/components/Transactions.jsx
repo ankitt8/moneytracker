@@ -28,7 +28,6 @@ export default function Transactions() {
   const loadTransactions = useCallback(
     async () => {
       try {
-        console.log(url.API_URL_GET_TRANSACTIONS)
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();

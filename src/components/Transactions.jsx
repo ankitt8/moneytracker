@@ -31,7 +31,7 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
-          const currentMonthTransactions = getCurrentMonthTransactions(transactions);
+          const currentMonthTransactions = getCurrentMonthTransactions(data);
           dispatch(getTransactionsAction(currentMonthTransactions));
 
           const onlineTransactions = currentMonthTransactions.filter(

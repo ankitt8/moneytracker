@@ -45,7 +45,7 @@ export default function TransactionCard({
           }))
         },
         function error() {
-          console.log('Failed To delete')
+          // console.log('Failed To delete')
           setEditFieldVisibilty(false)
           dispatch(updateStatusAction({
             deleteTransaction: false,

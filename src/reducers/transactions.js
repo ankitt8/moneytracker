@@ -60,7 +60,6 @@ const transactions = (state = initialState, action) => {
       const deleteId = action.payload;
       const transactions = state.transactions;
       const index = transactions.findIndex((transaction) => transaction._id === deleteId);
-      console.log(index);
       transactions.splice(index, 1);
       return {
         ...state,

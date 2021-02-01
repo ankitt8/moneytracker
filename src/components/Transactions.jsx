@@ -49,8 +49,8 @@ export default function Transactions() {
         }
         setLoader(false);
       } catch (err) {
-        console.error(err);
-        console.log('Either your internet is disconnected or issue from our side');
+        // console.error(err);
+        // console.log('Either your internet is disconnected or issue from our side');
         setLoader(false);
         // assuming the error will happen only if failed to get the transactions
         setOffline(true);
@@ -74,11 +74,9 @@ export default function Transactions() {
   for (let i = 0; i <= noOfDays; ++i) {
     dayTransactions[i] = [];
   }
-  console.log(transactions)
 
   for (const transaction of transactions) {
     const dayTransactionIndex = new Date(transaction.date).getDate();
-    console.log(dayTransactionIndex)
     dayTransactions[dayTransactionIndex].push(transaction);
   }
   for (let i = todayDate; i >= 1; --i) {

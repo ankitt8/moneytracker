@@ -70,7 +70,7 @@ export default function AddTransaction() {
           }))
         },
         function () {
-          console.log('Failed to add transaction', transaction);
+          // console.log('Failed to add transaction', transaction);
           dispatch(updateStatusAction({
             addTransaction: false,
             msg: ADD_TRANSACTION_FAIL_ERROR,

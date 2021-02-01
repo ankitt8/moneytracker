@@ -31,13 +31,13 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
+          const currentMonthTransactions = getCurrentMonthTransactions(transactions);
+          dispatch(getTransactionsAction(currentMonthTransactions));
 
-          dispatch(getTransactionsAction(data));
-
-          const onlineTransactions = data.filter(
+          const onlineTransactions = currentMonthTransactions.filter(
             transaction => (transaction.mode === ONLINE_MODE || transaction.mode === undefined)
           );
-          const cashTransactions = data.filter(transaction => transaction.mode === CASH_MODE);
+          const cashTransactions = currentMonthTransactions.filter(transaction => transaction.mode === CASH_MODE);
 
           const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0);
           const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0)
@@ -74,8 +74,12 @@ export default function Transactions() {
   for (let i = 0; i <= noOfDays; ++i) {
     dayTransactions[i] = [];
   }
+  console.log(transactions)
+
   for (const transaction of transactions) {
-    dayTransactions[new Date(transaction.date).getDate()].push(transaction);
+    const dayTransactionIndex = new Date(transaction.date).getDate();
+    console.log(dayTransactionIndex)
+    dayTransactions[dayTransactionIndex].push(transaction);
   }
   for (let i = todayDate; i >= 1; --i) {
     totalAmountPerDay[i] = dayTransactions[i].reduce((acc, curr) => acc + parseInt(curr.amount), 0);
@@ -109,4 +113,8 @@ function getNoOfDays(year, month) {
     dateFirstDay.setDate(dateFirstDay.getDate() + 1);
   }
   return noOfDays;
+}
+function getCurrentMonthTransactions(transactions) {
+  const currMonth = new Date().getMonth();
+  return (transactions.filter(transaction => new Date(transaction.date).getMonth() === currMonth));
 }

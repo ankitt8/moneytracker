@@ -139,7 +139,7 @@ export default function QuoteAndAddIcon() {
   return (
     <>
       <div className="quote-and-add-icon">
-        <div className="quote">Money Saved Is Money Earned</div>
+        <div className="quote">You should know where you are spending</div>
         <AddOutlinedIcon fontSize="large" onClick={handleClickOpen} />
       </div>
       <Dialog

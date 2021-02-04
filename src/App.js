@@ -28,6 +28,9 @@ function App() {
         <Route path="/analysis">
           <UpcomingFeature />
         </Route>
+        <Route path="/food-tracker">
+          <UpcomingFeature />
+        </Route>
         <Route path="/">
           <div style={{ marginTop: '60px' }}>
             <TransactionSummary />

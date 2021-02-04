@@ -6,12 +6,9 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -20,6 +17,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PaymentIcon from '@material-ui/icons/Payment';
+import FastfoodIcon from '@material-ui/icons/Fastfood';
 import { Link } from 'react-router-dom'
 
 const drawerWidth = 240;
@@ -77,9 +75,6 @@ function Header(props) {
           <ListItemText primary="Home" />
         </ListItem>
       </Link>
-      {/* <ListItem>
-        <Link to="/">Home</Link>
-      </ListItem> */}
       <Link to="/bankaccounts">
         <ListItem button key="bankaccount" onClick={handleDrawerToggle}>
           <ListItemIcon><AccountBalanceIcon /></ListItemIcon>
@@ -100,7 +95,12 @@ function Header(props) {
           <ListItemText primary="Budget" />
         </ListItem>
       </Link>
-
+      <Link to="/food-tracker">
+        <ListItem button key="foodtracker" onClick={handleDrawerToggle}>
+          <ListItemIcon><FastfoodIcon /></ListItemIcon>
+          <ListItemText primary="Food Tracker" />
+        </ListItem>
+      </Link>
       <Link to="/analysis">
         <ListItem button key="analysis" onClick={handleDrawerToggle}>
           <ListItemIcon><AssessmentIcon /></ListItemIcon>

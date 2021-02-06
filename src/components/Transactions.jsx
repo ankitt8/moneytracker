@@ -21,6 +21,8 @@ export default function Transactions() {
   const [offline, setOffline] = React.useState(false);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
   function sortTransactionsByDate(a, b) {
+    console.log(typeof a.date)
+    console.log(a.date)
     const da = new Date(a.date);
     const db = new Date(b.date);
     return db - da;
@@ -31,13 +33,12 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
-          const currentMonthTransactions = getCurrentMonthTransactions(data);
-          dispatch(getTransactionsAction(currentMonthTransactions));
+          dispatch(getTransactionsAction(data));
 
-          const onlineTransactions = currentMonthTransactions.filter(
+          const onlineTransactions = data.filter(
             transaction => (transaction.mode === ONLINE_MODE || transaction.mode === undefined)
           );
-          const cashTransactions = currentMonthTransactions.filter(transaction => transaction.mode === CASH_MODE);
+          const cashTransactions = data.filter(transaction => transaction.mode === CASH_MODE);
 
           const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0);
           const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0)

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
+// import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -122,9 +122,9 @@ function Header(props) {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+    // <div className={classes.root}>
+      <>
+      <AppBar position="sticky" className={classes.appBar}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -171,9 +171,8 @@ function Header(props) {
           </Drawer>
         </Hidden>
       </nav>
-
-
-    </div>
+      </>
+    // </div>
   );
 }
 

@@ -31,13 +31,12 @@ export default function Transactions() {
         const response = await fetch(url.API_URL_GET_TRANSACTIONS);
         if (response.ok) {
           const data = await response.json();
-          const currentMonthTransactions = getCurrentMonthTransactions(data);
-          dispatch(getTransactionsAction(currentMonthTransactions));
+          dispatch(getTransactionsAction(data));
 
-          const onlineTransactions = currentMonthTransactions.filter(
+          const onlineTransactions = data.filter(
             transaction => (transaction.mode === ONLINE_MODE || transaction.mode === undefined)
           );
-          const cashTransactions = currentMonthTransactions.filter(transaction => transaction.mode === CASH_MODE);
+          const cashTransactions = data.filter(transaction => transaction.mode === CASH_MODE);
 
           const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0);
           const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0)
@@ -90,7 +89,7 @@ export default function Transactions() {
       </li>
     ))
   }
-  let componentToRender = null;
+  let componentToRender;
   if (loader) {
     componentToRender = <Loader />;
   } else {
@@ -111,8 +110,4 @@ function getNoOfDays(year, month) {
     dateFirstDay.setDate(dateFirstDay.getDate() + 1);
   }
   return noOfDays;
-}
-function getCurrentMonthTransactions(transactions) {
-  const currMonth = new Date().getMonth();
-  return (transactions.filter(transaction => new Date(transaction.date).getMonth() === currMonth));
 }

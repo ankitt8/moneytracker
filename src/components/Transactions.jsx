@@ -21,8 +21,6 @@ export default function Transactions() {
   const [offline, setOffline] = React.useState(false);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
   function sortTransactionsByDate(a, b) {
-    console.log(typeof a.date)
-    console.log(a.date)
     const da = new Date(a.date);
     const db = new Date(b.date);
     return db - da;
@@ -91,7 +89,7 @@ export default function Transactions() {
       </li>
     ))
   }
-  let componentToRender = null;
+  let componentToRender;
   if (loader) {
     componentToRender = <Loader />;
   } else {
@@ -112,8 +110,4 @@ function getNoOfDays(year, month) {
     dateFirstDay.setDate(dateFirstDay.getDate() + 1);
   }
   return noOfDays;
-}
-function getCurrentMonthTransactions(transactions) {
-  const currMonth = new Date().getMonth();
-  return (transactions.filter(transaction => new Date(transaction.date).getMonth() === currMonth));
 }

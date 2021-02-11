@@ -12,8 +12,7 @@ import Loader from './Loader';
 import { CASH_MODE, ONLINE_MODE, url } from '../Constants';
 import DayTransactionsCard from './DayTransactionsCard';
 
-export default function Transactions() {
-
+export default function Transactions({userId}) {
   const dispatch = useDispatch();
   const storeTransactions = useSelector(state => state.transactions.transactions);
   const [loader, setLoader] = React.useState(true);
@@ -28,7 +27,13 @@ export default function Transactions() {
   const loadTransactions = useCallback(
     async () => {
       try {
-        const response = await fetch(url.API_URL_GET_TRANSACTIONS);
+        const response = await fetch(url.API_URL_GET_TRANSACTIONS, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({"userId": userId})
+        });
         if (response.ok) {
           const data = await response.json();
           dispatch(getTransactionsAction(data));
@@ -55,9 +60,10 @@ export default function Transactions() {
         setOffline(true);
       }
     },
-    [dispatch, setLoader],
+    [dispatch, setLoader, userId],
   );
   useEffect(() => {
+    // const user
     loadTransactions();
   }, [loadTransactions]);
   transactions.sort(sortTransactionsByDate);

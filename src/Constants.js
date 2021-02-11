@@ -1,10 +1,12 @@
 const dev = {
   url: {
     API_URL: 'http://localhost:8080/api/',
-    API_URL_GET_TRANSACTIONS: 'http://localhost:8080/api/get_transactions/',
+    API_URL_GET_TRANSACTIONS: 'http://localhost:8080/api/get_transactions',
     API_URL_ADD_TRANSACTION: 'http://localhost:8080/api/add_transaction',
     API_URL_EDIT_TRANSACTION: 'http://localhost:8080/api/edit_transaction',
     API_URL_DELETE_TRANSACTION: 'http://localhost:8080/api/delete_transaction',
+    API_URL_SIGNUP: 'http://localhost:8080/api/signup',
+    API_URL_SIGNIN: 'http://localhost:8080/api/signin',
   }
 }
 
@@ -14,7 +16,9 @@ const prod = {
     API_URL_GET_TRANSACTIONS: 'https://moneytrackerbackend.herokuapp.com/api/get_transactions/',
     API_URL_ADD_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/add_transaction',
     API_URL_EDIT_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/edit_transaction',
-    API_URL_DELETE_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/delete_transaction'
+    API_URL_DELETE_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/delete_transaction',
+    API_URL_SIGNUP: 'https://moneytrackerbackend.herokuapp.com/api/signup',
+    API_URL_SIGNIN: 'https://moneytrackerbackend.herokuapp.com/api/signin',
   }
 }
 

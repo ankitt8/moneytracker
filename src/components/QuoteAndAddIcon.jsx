@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
 import { makeStyles } from '@material-ui/core/styles';
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function QuoteAndAddIcon() {
+export default function QuoteAndAddIcon({userId}) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
@@ -59,7 +59,7 @@ export default function QuoteAndAddIcon() {
   const [loadingState, setLoadingState] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = React.useState("online");
-
+  // const userId = useSelector((state) => state.user.userId);
   const handleChange = (event) => {
     setMode(event.target.value);
   };
@@ -88,7 +88,8 @@ export default function QuoteAndAddIcon() {
       heading,
       amount,
       date,
-      mode
+      mode,
+      userId
     };
     const result = addTransactionToDatabase(transaction);
     result

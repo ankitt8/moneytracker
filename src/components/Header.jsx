@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
-// import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -18,6 +17,8 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PaymentIcon from '@material-ui/icons/Payment';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
 const drawerWidth = 240;
@@ -56,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Header(props) {
-  const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -64,6 +64,12 @@ function Header(props) {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const handleLogout = () => {
+      localStorage.clear();
+      window.location.href = '/';
+      // history.push('/');
+      // handleDrawerToggle();
+  }
 
   const drawer = (
     <div>
@@ -81,14 +87,12 @@ function Header(props) {
           <ListItemText primary="Bank Accounts" />
         </ListItem>
       </Link>
-
       <Link to="/investments">
         <ListItem button key="investments" onClick={handleDrawerToggle}>
           <ListItemIcon><PaymentIcon /></ListItemIcon>
           <ListItemText primary="Investments" />
         </ListItem>
       </Link>
-
       <Link to="/budget">
         <ListItem button key="budget" onClick={handleDrawerToggle}>
           <ListItemIcon><PaymentIcon /></ListItemIcon>
@@ -108,6 +112,10 @@ function Header(props) {
         </ListItem>
       </Link>
       <Divider />
+      <ListItem button key="logout" onClick={handleLogout}>
+        <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>
+        <ListItemText primary="Logout" />
+      </ListItem>
       {/* <List>
         {['All mail', 'Trash', 'Spam'].map((text, index) => (
           <ListItem button key={text}>
@@ -119,7 +127,6 @@ function Header(props) {
     </div>
   );
 
-  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     // <div className={classes.root}>
@@ -144,7 +151,6 @@ function Header(props) {
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
-            container={container}
             variant="temporary"
             anchor={theme.direction === 'rtl' ? 'right' : 'left'}
             open={mobileOpen}

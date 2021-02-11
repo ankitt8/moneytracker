@@ -79,3 +79,12 @@ export function editCashBalanceAction(amount) {
     amount
   }
 }
+
+export function newUserLoggedIn(userId) {
+  return {
+    type: 'USER_AUTHENTICATED',
+    payload: {
+      userId,
+    }
+  }
+}

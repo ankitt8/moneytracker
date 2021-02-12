@@ -20,7 +20,11 @@ import FastfoodIcon from '@material-ui/icons/Fastfood';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components';
 
+const StyledUsername = styled.p`
+  font-size: 23px;
+`
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -56,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header(props) {
+function Header({ username }) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -74,12 +78,15 @@ function Header(props) {
   const drawer = (
     <div>
       <div className={classes.toolbar} />
+        <ListItem button key="username">
+            <StyledUsername>{`Hi ${ username }`}</StyledUsername>
+        </ListItem>
       <Divider />
       <Link to="/">
-        <ListItem button key="home" onClick={handleDrawerToggle}>
+      <ListItem button key="home" onClick={handleDrawerToggle}>
           <ListItemIcon><HomeIcon /></ListItemIcon>
           <ListItemText primary="Home" />
-        </ListItem>
+      </ListItem>
       </Link>
       <Link to="/bankaccounts">
         <ListItem button key="bankaccount" onClick={handleDrawerToggle}>

@@ -10,19 +10,15 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Loader from "./components/Loader";
 import {useSelector} from "react-redux";
 const UpcomingFeature = lazy(() => import('./components/UpcomingFeature'));
-// const UserContext = React.createContext('');
 function App() {
   const userId = useSelector((state) => state.user.userId);
-  // console.log(userId);
-  // useEffect(() => {
-  //   if(userId === '') window.location.href = '/login';
-  // }, [userId])
+  const username = useSelector((state) => state.user.username)
   if(userId === '') {
     return <Login />
   }
   return (
       <Router>
-        <Header />
+        <Header username={ username }/>
         <Suspense fallback={<Loader />}>
           <Switch >
             <Route path="/login">

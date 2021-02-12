@@ -29,11 +29,11 @@ const Login: React.FC = () => {
         signin({username, password})
             .then(
                 (userSavedDetails) => {
+                    const { userId, username } = userSavedDetails;
                     if(userSavedDetails.error) {
                         setError(userSavedDetails.error);
                     } else {
-                        dispatch(newUserLoggedIn(userSavedDetails.userId));
-                        // history.push('/');
+                        dispatch(newUserLoggedIn(userId, username));
                     }
                 },
                 (err) => {
@@ -51,11 +51,11 @@ const Login: React.FC = () => {
         signup({username, password})
             .then(
                 (userSavedDetails) => {
-                    console.log(userSavedDetails);
+                    const {userId, username} = userSavedDetails;
                     if(userSavedDetails.error) {
                         setError(userSavedDetails.error);
                     } else {
-                        dispatch(newUserLoggedIn(userSavedDetails.userId));
+                        dispatch(newUserLoggedIn(userId, username));
                         // history.push('/');
                     }
                 },

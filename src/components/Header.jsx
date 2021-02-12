@@ -24,7 +24,19 @@ import styled from 'styled-components';
 
 const StyledUsername = styled.p`
   font-size: 23px;
-`
+`;
+
+// const StyledLogoutButton = styled.button`
+//   background-color: red;
+//   color: white;
+// `;
+const StyledDrawerDiv = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    height: 100vh;
+`;
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -76,7 +88,8 @@ function Header({ username }) {
   }
 
   const drawer = (
-    <div>
+    <StyledDrawerDiv>
+        <div>
       <div className={classes.toolbar} />
         <ListItem button key="username">
             <StyledUsername>{`Hi ${ username }`}</StyledUsername>
@@ -119,19 +132,21 @@ function Header({ username }) {
         </ListItem>
       </Link>
       <Divider />
-      <ListItem button key="logout" onClick={handleLogout}>
-        <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>
-        <ListItemText primary="Logout" />
-      </ListItem>
-      {/* <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List> */}
-    </div>
+      {/*<ListItem button key="logout" onClick={handleLogout}>*/}
+      {/*  <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>*/}
+      {/*  <ListItemText primary="Logout" />*/}
+      {/*</ListItem>*/}
+        </div>
+        <div>
+            {/*<StyledLogoutButton>*/}
+            {/*    <FontAwesomeIcon icon={faSignOutAlt} />Logout*/}
+            {/*</StyledLogoutButton>*/}
+            <ListItem button key="logout" onClick={handleLogout}>
+                <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>
+                <ListItemText primary="Logout" />
+            </ListItem>
+        </div>
+    </StyledDrawerDiv>
   );
 
 

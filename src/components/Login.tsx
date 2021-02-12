@@ -25,7 +25,7 @@ const Login: React.FC = () => {
         if(error){
             setError(error);
             return;
-        };
+        }
         signin({username, password})
             .then(
                 (userSavedDetails) => {
@@ -68,7 +68,7 @@ const Login: React.FC = () => {
         <StyledFormWrapper>
             <StyledForm>
                 <StyledError>{error}</StyledError>
-                <StyledInputWrapper>
+                <StyledInputWrapper style={{width: '61%'}}>
                     <StyledInput type="text" name="userid" id="userid" placeholder="User Name"
                            autoComplete="username"
                            onChange={(e) => setUserName(e.target.value)}
@@ -147,11 +147,9 @@ const StyledInputWrapper = styled.div`
   display: flex;
   margin: 10px 0;
   padding: 10px;
-  width: 70%;
   border-radius: 10px;
   outline: none;
   border: 0.5px solid #ccc;
-  box-shadow: none;
 `;
 
 const StyledButtonWrapper = styled.div`

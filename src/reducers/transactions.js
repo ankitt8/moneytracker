@@ -1,13 +1,15 @@
 import {
-  GET_TRANSACTIONS,
   ADD_TRANSACTION,
-  EDIT_TRANSACTION,
-  EDIT_BANK_DEBIT,
-  EDIT_CASH_DEBIT,
-  EDIT_BANK_BALANCE,
   DELETE_TRANSACTION,
+  EDIT_BANK_BALANCE,
+  EDIT_BANK_CREDIT,
+  EDIT_BANK_DEBIT,
+  EDIT_CASH_BALANCE,
+  EDIT_CASH_CREDIT,
+  EDIT_CASH_DEBIT,
+  EDIT_TRANSACTION,
+  GET_TRANSACTIONS,
   UPDATE_STATUS,
-  EDIT_CASH_BALANCE
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -15,14 +17,14 @@ const initialState = {
 
   transactionSummary: {
     bank: {
-      credit: 41500,
+      credit: 0,
       debit: 0,
-      balance: 41500,
+      balance: 0,
     },
     cash: {
-      credit: 1000,
+      credit: 0,
       debit: 0,
-      balance: 1000,
+      balance: 0,
     }
   },
   status: {
@@ -74,25 +76,39 @@ const transactions = (state = initialState, action) => {
         }
       }
     }
+    case EDIT_BANK_CREDIT: {
+      const credit = state.transactionSummary.bank.credit + action.amount;
+      return {
+        ...state,
+        transactionSummary: {...state.transactionSummary, bank: {...state.transactionSummary.bank, credit}}
+      }
+    }
     case EDIT_BANK_DEBIT: {
       const debit = state.transactionSummary.bank.debit + action.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, debit } }
+        transactionSummary: {...state.transactionSummary, bank: {...state.transactionSummary.bank, debit}}
       }
     }
     case EDIT_BANK_BALANCE: {
       const balance = state.transactionSummary.bank.balance + action.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, balance } }
+        transactionSummary: {...state.transactionSummary, bank: {...state.transactionSummary.bank, balance}}
+      }
+    }
+    case EDIT_CASH_CREDIT: {
+      const credit = state.transactionSummary.cash.credit + action.amount;
+      return {
+        ...state,
+        transactionSummary: {...state.transactionSummary, cash: {...state.transactionSummary.cash, credit}}
       }
     }
     case EDIT_CASH_DEBIT: {
       const debit = state.transactionSummary.cash.debit + action.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, cash: { ...state.transactionSummary.cash, debit } }
+        transactionSummary: {...state.transactionSummary, cash: {...state.transactionSummary.cash, debit}}
       }
     }
     case EDIT_CASH_BALANCE: {

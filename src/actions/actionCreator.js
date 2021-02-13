@@ -1,7 +1,15 @@
 import {
-  ADD_TRANSACTION, GET_TRANSACTIONS, EDIT_TRANSACTION, DELETE_TRANSACTION,
-  EDIT_BANK_DEBIT, EDIT_BANK_BALANCE,
-  EDIT_CASH_DEBIT, UPDATE_STATUS, EDIT_CASH_BALANCE
+  ADD_TRANSACTION,
+  DELETE_TRANSACTION,
+  EDIT_BANK_BALANCE,
+  EDIT_BANK_CREDIT,
+  EDIT_BANK_DEBIT,
+  EDIT_CASH_BALANCE,
+  EDIT_CASH_CREDIT,
+  EDIT_CASH_DEBIT,
+  EDIT_TRANSACTION,
+  GET_TRANSACTIONS,
+  UPDATE_STATUS
 } from './actionTypes';
 
 export function StatusAction({
@@ -17,7 +25,6 @@ export function StatusAction({
   };
 }
 export function addTransactionAction(transaction) {
-  console.log(typeof transaction)
   return {
     type: ADD_TRANSACTION,
     transaction,
@@ -56,24 +63,42 @@ export function updateStatusAction(status) {
     },
   }
 }
+
+export function editBankCreditAction(amount) {
+  return {
+    type: EDIT_BANK_CREDIT,
+    amount
+  }
+}
+
 export function editBankDebitAction(amount) {
   return {
     type: EDIT_BANK_DEBIT,
     amount
   }
 }
+
 export function editBankBalanceAction(amount) {
   return {
     type: EDIT_BANK_BALANCE,
     amount
   }
 }
+
+export function editCashCreditAction(amount) {
+  return {
+    type: EDIT_CASH_CREDIT,
+    amount
+  }
+}
+
 export function editCashDebitAction(amount) {
   return {
     type: EDIT_CASH_DEBIT,
     amount
   }
 }
+
 export function editCashBalanceAction(amount) {
   return {
     type: EDIT_CASH_BALANCE,

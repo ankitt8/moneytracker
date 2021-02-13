@@ -30,11 +30,11 @@ export default function TransactionCard({
       .then(
         function success() {
           if (mode === ONLINE_MODE || mode === undefined) {
-            dispatch(editBankDebitAction(-1 * parseInt(amount)));
-            dispatch(editBankBalanceAction(parseInt(amount)));
+            dispatch(editBankDebitAction(-1 * amount));
+            dispatch(editBankBalanceAction(amount));
           } else {
-            dispatch(editCashDebitAction(-1 * parseInt(amount)));
-            dispatch(editCashBalanceAction(parseInt(amount)));
+            dispatch(editCashDebitAction(-1 * amount));
+            dispatch(editCashBalanceAction(amount));
           }
 
           dispatch(deleteTransactionAction(_id));
@@ -85,7 +85,7 @@ export default function TransactionCard({
       .then(
         () => {
           dispatch(editTransactionAction(_id, updatedTransaction));
-          const changeAmt = parseInt(amt) - parseInt(amount);
+          const changeAmt = parseInt(amt) - amount;
           dispatch(editBankDebitAction(changeAmt));
           dispatch(editBankBalanceAction(-1 * changeAmt));
           dispatch(updateStatusAction({

@@ -43,8 +43,8 @@ export default function Transactions({userId}) {
           );
           const cashTransactions = data.filter(transaction => transaction.mode === CASH_MODE);
 
-          const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0);
-          const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + parseInt(curr.amount), 0)
+          const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + curr.amount, 0);
+          const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + curr.amount, 0)
 
           dispatch(editBankDebitAction(bankDebit));
           dispatch(editBankBalanceAction(-1 * bankDebit));
@@ -85,7 +85,7 @@ export default function Transactions({userId}) {
     dayTransactions[dayTransactionIndex].push(transaction);
   }
   for (let i = todayDate; i >= 1; --i) {
-    totalAmountPerDay[i] = dayTransactions[i].reduce((acc, curr) => acc + parseInt(curr.amount), 0);
+    totalAmountPerDay[i] = dayTransactions[i].reduce((acc, curr) => acc + curr.amount, 0);
     dayTransactionsList.push((
       <li key={i}>
         <DayTransactionsCard

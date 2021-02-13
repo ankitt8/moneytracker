@@ -59,16 +59,15 @@ export default function QuoteAndAddIcon({userId}) {
   const [loadingState, setLoadingState] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = React.useState("online");
-  // const userId = useSelector((state) => state.user.userId);
   const handleChange = (event) => {
     setMode(event.target.value);
-  };
+  }
   function handleheadingChange(event) {
     setHeading(event.target.value);
-  };
+  }
   function handleAmountChange(event) {
     setAmount(event.target.value);
-  };
+  }
 
   function handleTransactionSubmit() {
     if (amount === '' || amount <= 0 || heading === '') {
@@ -83,6 +82,11 @@ export default function QuoteAndAddIcon({userId}) {
       }))
       return;
     }
+    // const intAmount = parseInt(amount);
+    // no need reason the db will automatically convert to int
+    // the string value but if empty string is returned
+    // then there will be propble since parseInt('') returns
+    // NaN so we should ensure that empty string is not passed
     setLoadingState(true);
     const transaction = {
       heading,

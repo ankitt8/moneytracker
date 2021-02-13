@@ -17,6 +17,7 @@ export function StatusAction({
   };
 }
 export function addTransactionAction(transaction) {
+  console.log(typeof transaction)
   return {
     type: ADD_TRANSACTION,
     transaction,

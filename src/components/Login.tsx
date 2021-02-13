@@ -87,6 +87,9 @@ const Login: React.FC = () => {
                     <StyledButton onClick={(e) => handleSignUp(e)}>Sign Up</StyledButton>
                     <StyledButton onClick={(e) => handleSignIn(e)}>Sign In</StyledButton>
                 </StyledButtonWrapper>
+                {/*<StyledInstructionsWrapper>*/}
+                {/*    <StyledPasswordInstruction></StyledPasswordInstruction>*/}
+                {/*</StyledInstructionsWrapper>*/}
             </StyledForm>
         </StyledFormWrapper>
   )
@@ -170,5 +173,10 @@ const StyledButton = styled.button`
 const StyledError = styled.p`
   color: red;
 `;
+
+// const StyledInstructionsWrapper = styled.div`
+//   border: 1px solid lightgrey;
+//   background-color: lightgrey;
+// `;
 
 export default Login;

@@ -1,7 +1,7 @@
 import React from 'react';
 import TransactionCard from './TransactionCard.tsx';
 
-export default function MonthlyTransactionCard({transactions, date, totalAmount}) {
+export default function DayTransactionsCard({transactions, date, totalAmount}) {
     const transactionsList = transactions.map((transaction) => {
         return (
             <li key={transaction._id}>
@@ -10,8 +10,8 @@ export default function MonthlyTransactionCard({transactions, date, totalAmount}
         )
     })
     return (
-    <>
-      <div className="transactions-heading">
+        <>
+            <div className="transactions-heading">
         <h2>{date}</h2>
         <h2>{totalAmount}</h2>
       </div>

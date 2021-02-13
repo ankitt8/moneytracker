@@ -10,5 +10,5 @@ export interface TransactionInterface {
 }
 
 export const debitTransaction = (transaction: TransactionInterface) => {
-    return transaction.type === DEBIT_TYPE;
+    return transaction.type === DEBIT_TYPE || transaction.type === undefined;
 }

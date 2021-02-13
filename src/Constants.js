@@ -36,3 +36,5 @@ export const OFFLINE_ERROR = 'OOPS You Are Offline :(';
 
 export const CASH_MODE = 'cash';
 export const ONLINE_MODE = 'online';
+export const CREDIT_TYPE = 'credit';
+export const DEBIT_TYPE = 'debit';

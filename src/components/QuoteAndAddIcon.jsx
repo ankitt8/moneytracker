@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-
+import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -14,18 +13,28 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Input from '@material-ui/core/Input';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import CircularIndeterminate from './Loader';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import Loader from './Loader';
+import {KeyboardDatePicker} from '@material-ui/pickers';
 import FormLabel from "@material-ui/core/FormLabel";
 
 import {
-  addTransactionAction, updateStatusAction,
-  editBankDebitAction, editBankBalanceAction, editCashDebitAction, editCashBalanceAction
+  addTransactionAction,
+  editBankCreditAction,
+  editBankDebitAction,
+  editCashCreditAction,
+  editCashDebitAction,
+  updateStatusAction
 } from '../actions/actionCreator'
 import {
   ADD_TRANSACTION_FAIL_ERROR,
-  url, ADD_TRANSACTION_SUCCESS_MSG,
-  INVALID_TITLE_WARNING, INVALID_AMOUNT_WARNING, CASH_MODE, ONLINE_MODE
+  ADD_TRANSACTION_SUCCESS_MSG,
+  CASH_MODE,
+  CREDIT_TYPE,
+  DEBIT_TYPE,
+  INVALID_AMOUNT_WARNING,
+  INVALID_TITLE_WARNING,
+  ONLINE_MODE,
+  url
 } from '../Constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -58,15 +67,19 @@ export default function QuoteAndAddIcon({userId}) {
   const [amount, setAmount] = useState('');
   const [loadingState, setLoadingState] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = React.useState("online");
-  const handleChange = (event) => {
+  const [mode, setMode] = React.useState('online');
+  const [type, setType] = React.useState('debit');
+  const handleModeChange = (event) => {
     setMode(event.target.value);
   }
-  function handleheadingChange(event) {
+  const handleheadingChange = (event) => {
     setHeading(event.target.value);
   }
-  function handleAmountChange(event) {
+  const handleAmountChange = (event) => {
     setAmount(event.target.value);
+  }
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
   }
 
   function handleTransactionSubmit() {
@@ -93,6 +106,7 @@ export default function QuoteAndAddIcon({userId}) {
       amount,
       date,
       mode,
+      type,
       userId
     };
     const result = addTransactionToDatabase(transaction);
@@ -101,14 +115,20 @@ export default function QuoteAndAddIcon({userId}) {
         function (res) {
           const intAmount = parseInt(amount);
           dispatch(addTransactionAction(res));
-
-          if (mode.toLowerCase() === CASH_MODE) {
-            dispatch(editCashDebitAction(intAmount));
-            dispatch(editCashBalanceAction(-1 * intAmount))
-          } else if (mode.toLowerCase() === ONLINE_MODE) {
-            dispatch(editBankDebitAction(intAmount));
-            dispatch(editBankBalanceAction(-1 * intAmount));
+          if (type === DEBIT_TYPE) {
+            if (mode === CASH_MODE) {
+              dispatch(editCashDebitAction(intAmount));
+            } else if (mode === ONLINE_MODE) {
+              dispatch(editBankDebitAction(intAmount));
+            }
+          } else {
+            if (mode === CASH_MODE) {
+              dispatch(editCashCreditAction(intAmount));
+            } else if (mode === ONLINE_MODE) {
+              dispatch(editBankCreditAction(intAmount));
+            }
           }
+
 
           dispatch(updateStatusAction({
             addTransaction: true,
@@ -166,7 +186,6 @@ export default function QuoteAndAddIcon({userId}) {
               <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
             </FormControl>
             <FormControl>
-
               <KeyboardDatePicker
                 style={{ marginTop: '20px' }}
                 required
@@ -178,42 +197,59 @@ export default function QuoteAndAddIcon({userId}) {
                 InputAdornmentProps={{ position: 'start' }}
                 onChange={(date) => setDate(date)}
               />
-
             </FormControl>
             <FormControl component="fieldset" style={{ marginTop: '20px' }}>
               <FormLabel component="legend">Mode</FormLabel>
               <RadioGroup
-                aria-label="Mode"
-                name="mode"
-                value={mode}
-                onChange={handleChange}
-                style={{ flexDirection: 'row' }}
+                  aria-label="Mode"
+                  name="mode"
+                  value={mode}
+                  onChange={handleModeChange}
+                  style={{flexDirection: 'row'}}
               >
                 <FormControlLabel
-                  value='online'
-                  control={<Radio color="primary" />}
-                  label="Online/Card"
+                    value={ONLINE_MODE}
+                    control={<Radio color="primary"/>}
+                    label="Online/Card"
                 />
                 <FormControlLabel
-                  value='cash'
-                  control={<Radio color="primary" />}
-                  label="Cash"
+                    value={CASH_MODE}
+                    control={<Radio color="primary"/>}
+                    label="Cash"
                 />
               </RadioGroup>
-
+            </FormControl>
+            <FormControl component="fieldset" style={{marginTop: '20px'}}>
+              <FormLabel component="legend">Type</FormLabel>
+              <RadioGroup
+                  aria-label="Type"
+                  name="type"
+                  value={type}
+                  onChange={handleTypeChange}
+                  style={{flexDirection: 'row'}}
+              >
+                <FormControlLabel
+                    value={DEBIT_TYPE}
+                    control={<Radio color="primary"/>}
+                    label="Debit"
+                />
+                <FormControlLabel
+                    value={CREDIT_TYPE}
+                    control={<Radio color="primary"/>}
+                    label="Credit"
+                />
+              </RadioGroup>
             </FormControl>
           </form>
         </DialogContent>
-        <DialogActions>
-
-
-          <Button onClick={handleClose} >
+        <DialogActions style={{justifyContent: 'space-between'}}>
+          <Button onClick={handleClose}>
             Close
           </Button>
-          {loadingState ? <CircularIndeterminate /> :
-            <Button onClick={handleTransactionSubmit} >
-              Add
-            </Button>
+          {loadingState ? <Loader/> :
+              <Button onClick={handleTransactionSubmit}>
+                Add
+              </Button>
           }
         </DialogActions>
       </Dialog>

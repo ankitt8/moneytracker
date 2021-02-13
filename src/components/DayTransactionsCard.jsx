@@ -1,16 +1,17 @@
 import React from 'react';
-import TransactionCard from './TransactionCard';
-export default function MonthlyTransactionCard({ transactions, date, totalAmount }) {
-  const transactionsList = transactions.map((transaction) => {
-    return <li key={transaction._id}>
-      <TransactionCard
-        transaction={transaction}
-      />
-    </li>
-  })
-  return (
-    <>
-      <div className="transactions-heading">
+import TransactionCard from './TransactionCard.tsx';
+
+export default function DayTransactionsCard({transactions, date, totalAmount}) {
+    const transactionsList = transactions.map((transaction) => {
+        return (
+            <li key={transaction._id}>
+                <TransactionCard transaction={transaction}/>
+            </li>
+        )
+    })
+    return (
+        <>
+            <div className="transactions-heading">
         <h2>{date}</h2>
         <h2>{totalAmount}</h2>
       </div>

@@ -1,16 +1,45 @@
-import React, { useEffect, useCallback } from 'react'
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux'
+import React, {useCallback, useEffect} from 'react'
+import {useDispatch, useSelector} from 'react-redux';
 import {
-  getTransactionsAction,
-  editBankBalanceAction,
+  editBankCreditAction,
   editBankDebitAction,
+  editCashCreditAction,
   editCashDebitAction,
-  editCashBalanceAction
+  getTransactionsAction,
 } from '../actions/actionCreator'
 import Loader from './Loader';
-import { CASH_MODE, ONLINE_MODE, url } from '../Constants';
+import {CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url} from '../Constants';
 import DayTransactionsCard from './DayTransactionsCard';
+import {debitTransaction} from '../helpers/helper'
+
+const checkCreditTypeTransaction = (transaction) => {
+  return transaction.type === CREDIT_TYPE;
+}
+const checkDebitTypeTransaction = (transaction) => {
+  // console.log(transaction.type === DEBIT_TYPE || transaction.type === undefined)
+  return transaction.type === DEBIT_TYPE || transaction.type === undefined;
+}
+const checkOnlineModeTransaction = (transaction) => {
+  return transaction.mode === ONLINE_MODE;
+}
+const checkCashModeTransaction = (transaction) => {
+  return transaction.mode === CASH_MODE;
+}
+const calculateTotalAmount = (transactions) => {
+  return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
+}
+const calculateBankDebitAmount = (bankDebitTransactions) => {
+  return calculateTotalAmount(bankDebitTransactions);
+}
+const calculateBankCreditAmount = (bankCreditTransactions) => {
+  return calculateTotalAmount(bankCreditTransactions);
+}
+const calculateCashCreditAmount = (cashCreditTransactions) => {
+  return calculateTotalAmount(cashCreditTransactions);
+}
+const calculateCashDebitAmount = (cashDebitTransactions) => {
+  return calculateTotalAmount(cashDebitTransactions);
+}
 
 export default function Transactions({userId}) {
   const dispatch = useDispatch();
@@ -19,6 +48,7 @@ export default function Transactions({userId}) {
   const [transactions, setTransactions] = React.useState(storeTransactions);
   const [offline, setOffline] = React.useState(false);
   if (transactions !== storeTransactions) setTransactions(storeTransactions)
+
   function sortTransactionsByDate(a, b) {
     const da = new Date(a.date);
     const db = new Date(b.date);
@@ -36,20 +66,27 @@ export default function Transactions({userId}) {
         });
         if (response.ok) {
           const data = await response.json();
-          dispatch(getTransactionsAction(data));
+          // to handle the transactions where type debit or credit is not stored
+          // adding undefined match also
+          const debitTransactions = data.filter(checkDebitTypeTransaction);
+          const creditTransactions = data.filter(checkCreditTypeTransaction);
 
-          const onlineTransactions = data.filter(
-            transaction => (transaction.mode === ONLINE_MODE || transaction.mode === undefined)
-          );
-          const cashTransactions = data.filter(transaction => transaction.mode === CASH_MODE);
+          const bankCreditTransactions = creditTransactions.filter(checkOnlineModeTransaction);
+          const cashCreditTransactions = creditTransactions.filter(checkCashModeTransaction);
+          const bankDebitTransactions = debitTransactions.filter(checkOnlineModeTransaction);
+          const cashDebitTransactions = debitTransactions.filter(checkCashModeTransaction);
 
-          const bankDebit = onlineTransactions.length === 0 ? 0 : onlineTransactions.reduce((acc, curr) => acc + curr.amount, 0);
-          const cashDebit = cashTransactions.length === 0 ? 0 : cashTransactions.reduce((acc, curr) => acc + curr.amount, 0)
+          const bankCredit = calculateBankCreditAmount(bankCreditTransactions);
+          const bankDebit = calculateBankDebitAmount(bankDebitTransactions);
+          const cashCredit = calculateCashCreditAmount(cashCreditTransactions);
+          const cashDebit = calculateCashDebitAmount(cashDebitTransactions);
 
+          dispatch(editBankCreditAction(bankCredit));
           dispatch(editBankDebitAction(bankDebit));
-          dispatch(editBankBalanceAction(-1 * bankDebit));
+
+          dispatch(editCashCreditAction(cashCredit));
           dispatch(editCashDebitAction(cashDebit));
-          dispatch(editCashBalanceAction(-1 * cashDebit));
+          dispatch(getTransactionsAction(data));
         }
         setLoader(false);
       } catch (err) {
@@ -85,14 +122,16 @@ export default function Transactions({userId}) {
     dayTransactions[dayTransactionIndex].push(transaction);
   }
   for (let i = todayDate; i >= 1; --i) {
-    totalAmountPerDay[i] = dayTransactions[i].reduce((acc, curr) => acc + curr.amount, 0);
+    totalAmountPerDay[i] = dayTransactions[i]
+        .filter(debitTransaction)
+        .reduce((acc, curr) => acc + curr.amount, 0);
     dayTransactionsList.push((
-      <li key={i}>
-        <DayTransactionsCard
-          date={new Date(year, month, i).toDateString()}
-          transactions={dayTransactions[i]}
-          totalAmount={totalAmountPerDay[i]} />
-      </li>
+        <li key={i}>
+          <DayTransactionsCard
+              date={new Date(year, month, i).toDateString()}
+              transactions={dayTransactions[i]}
+              totalAmount={totalAmountPerDay[i]}/>
+        </li>
     ))
   }
   let componentToRender;
@@ -117,3 +156,5 @@ function getNoOfDays(year, month) {
   }
   return noOfDays;
 }
+
+

@@ -180,7 +180,7 @@ export default function QuoteAndAddIcon({userId}) {
           <form className={classes.root} noValidate autoComplete="off">
             <FormControl>
               <InputLabel htmlFor="heading">Title</InputLabel>
-              <Input id="heading" value={heading} onChange={handleheadingChange} autoFocus />
+              <Input id="heading" value={heading} onChange={handleheadingChange}/>
             </FormControl>
             <FormControl>
               <InputLabel htmlFor="amount">Amount</InputLabel>

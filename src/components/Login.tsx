@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components';
-import {url} from "../Constants";
+import {PASSWORD_REQUIREMENT, url} from "../Constants";
 import {useDispatch} from "react-redux";
 import {newUserLoggedIn} from "../actions/actionCreator";
 import Loader from './Loader';
@@ -24,7 +24,7 @@ const Login: React.FC = () => {
     const [signupLoader, setSignUpLoader] = useState(false);
     const handleSignIn = (e: any) => {
         e.preventDefault();
-        let error = validate(username, password);
+        let error = singInValidate(username, password);
         if (error) {
             setError(error);
             return;
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
     }
     const handleSignUp = (e: any) => {
         e.preventDefault();
-        let error = validate(username, password);
+        let error = singUpValidate(username, password);
         if(error) {
             setError(error);
             return;
@@ -64,7 +64,6 @@ const Login: React.FC = () => {
                         setError(userSavedDetails.error);
                     } else {
                         dispatch(newUserLoggedIn(userId, username));
-                        // history.push('/');
                     }
                 },
                 (err) => {
@@ -111,18 +110,26 @@ const Login: React.FC = () => {
                             </StyledButton>
                     }
                 </StyledButtonWrapper>
-                {/*<StyledInstructionsWrapper>*/}
-                {/*    <StyledPasswordInstruction></StyledPasswordInstruction>*/}
-                {/*</StyledInstructionsWrapper>*/}
+                <StyledInstructionsWrapper>
+                    <StyledPasswordInstruction>{PASSWORD_REQUIREMENT}</StyledPasswordInstruction>
+                </StyledInstructionsWrapper>
             </StyledForm>
         </StyledFormWrapper>
   )
 }
 
-const validate = (userName: string, password: string) => {
+const singUpValidate = (userName: string, password: string) => {
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
     let error = '';
     if (userName === '') error = "Username can't be empty!";
-        else if(password === '') error = "Password can't be empty!";
+    else if (password === '') error = "Password can't be empty!";
+    else if (!passwordRegex.test(password)) error = "Invalid Password!";
+    return error;
+}
+const singInValidate = (userName: string, password: string) => {
+    let error = '';
+    if (userName === '') error = "Username can't be empty!";
+    else if (password === '') error = "Password can't be empty!";
     return error;
 }
 
@@ -198,9 +205,17 @@ const StyledError = styled.p`
   color: red;
 `;
 
-// const StyledInstructionsWrapper = styled.div`
-//   border: 1px solid lightgrey;
-//   background-color: lightgrey;
-// `;
+const StyledInstructionsWrapper = styled.div`
+  width: 70%;
+  display: flex;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  outline: none;
+  text-align: justify;
+`;
 
+const StyledPasswordInstruction = styled.p`
+  color: gray;
+`;
 export default Login;

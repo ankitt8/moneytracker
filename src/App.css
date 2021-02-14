@@ -82,6 +82,11 @@ ul {
   font-size: 18px;
 }
 
+.transaction-card-credit {
+  font-size: 20px;
+  color: green;
+}
+
 .edit-field-input-amt {
   text-align: end;
 }

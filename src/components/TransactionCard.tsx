@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import EditTransactionModal from "./EditTransactionModal";
-import {TransactionInterface} from '../helpers/helper'
-import styled from 'styled-components'
+import EditTransactionModal from './EditTransactionModal';
+import {TransactionInterface} from '../helpers/helper';
+import styled from 'styled-components';
+import {CREDIT_TYPE} from '../Constants';
 
 interface TransactionCardProps {
     transaction: TransactionInterface
@@ -29,16 +30,19 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
     const handleClose = () => {
         setOpen(false);
     };
-    // need to show green card or maybe some better minimilastic UI to show
-    // the transaction type is credit type
-    // const color = transaction.type === CREDIT_TYPE ? 'greeen' : '';
+
+    let transactionCardTextStyle = "transaction-card-text";
+    if (transaction.type === CREDIT_TYPE) {
+        transactionCardTextStyle += " transaction-card-credit";
+    }
+
     return (
         <>
             <StyledTransactionCard
                 onClick={handleClickOpen}
             >
-                <p className="transaction-card-text">{heading}</p>
-                <p className="transaction-card-text">{amount}</p>
+                <p className={transactionCardTextStyle}>{heading}</p>
+                <p className={transactionCardTextStyle}>{amount}</p>
             </StyledTransactionCard>
             <EditTransactionModal transaction={transaction} open={open} handleClose={handleClose}/>
         </>

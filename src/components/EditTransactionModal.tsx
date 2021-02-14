@@ -1,13 +1,23 @@
 import React, {useState} from 'react';
-import Dialog from "@material-ui/core/Dialog";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import DialogContent from "@material-ui/core/DialogContent";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Input from "@material-ui/core/Input";
-import {KeyboardDatePicker} from "@material-ui/pickers";
+import {useDispatch} from 'react-redux';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import Input from '@material-ui/core/Input';
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Loader from './Loader';
+import {KeyboardDatePicker} from '@material-ui/pickers';
+import FormLabel from "@material-ui/core/FormLabel";
+
 import {
     CASH_MODE,
+    CREDIT_TYPE,
     DEBIT_TYPE,
     DELETE_TRANSACTION_FAIL_ERROR,
     DELETE_TRANSACTION_SUCCESS_MSG,
@@ -18,9 +28,6 @@ import {
     ONLINE_MODE,
     url
 } from "../Constants";
-import DialogActions from "@material-ui/core/DialogActions";
-import Button from "@material-ui/core/Button";
-import {useDispatch} from "react-redux";
 import {
     deleteTransactionAction,
     editBankCreditAction,
@@ -31,7 +38,7 @@ import {
     updateStatusAction
 } from "../actions/actionCreator";
 import {TransactionInterface} from "../helpers/helper";
-import Loader from "./Loader";
+
 
 interface EditTransactionModalProps {
     transaction: TransactionInterface
@@ -51,7 +58,8 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     const [deleteLoading, setDeleteLoading] = useState(false);
     const {_id, mode, type, amount, heading} = transaction;
     const handleModeChange = (event: any) => {
-        setEditedTransaction({...editedTransaction, mode: event.target.value});
+        //For now not changin g the mode will do it later
+        // setEditedTransaction({...editedTransaction, mode: event.target.value});
     }
     const handleHeadingChange = (event: any) => {
         setEditedTransaction({...editedTransaction, heading: event.target.value});
@@ -60,7 +68,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         setEditedTransaction({...editedTransaction, amount: event.target.value});
     }
     const handleTypeChange = (event: any) => {
-        setEditedTransaction({...editedTransaction, type: event.target.value});
+        // setEditedTransaction({...editedTransaction, type: event.target.value});
     }
     const handleDateChange = (date: any) => {
         setEditedTransaction({...transaction, date})
@@ -217,48 +225,48 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                             onChange={(date) => handleDateChange(date)}
                         />
                     </FormControl>
-                    {/*<FormControl component="fieldset" style={{ marginTop: '20px' }}>*/}
-                    {/*    <FormLabel component="legend">Mode</FormLabel>*/}
-                    {/*    <RadioGroup*/}
-                    {/*        aria-label="Mode"*/}
-                    {/*        name="mode"*/}
-                    {/*        value={editedTransaction.mode}*/}
-                    {/*        onChange={handleModeChange}*/}
-                    {/*        style={{ flexDirection: 'row' }}*/}
-                    {/*    >*/}
-                    {/*        <FormControlLabel*/}
-                    {/*            value={ONLINE_MODE}*/}
-                    {/*            control={<Radio color="primary" />}*/}
-                    {/*            label="Online/Card"*/}
-                    {/*        />*/}
-                    {/*        <FormControlLabel*/}
-                    {/*            value={CASH_MODE}*/}
-                    {/*            control={<Radio color="primary" />}*/}
-                    {/*            label="Cash"*/}
-                    {/*        />*/}
-                    {/*    </RadioGroup>*/}
-                    {/*</FormControl>*/}
-                    {/*<FormControl component="fieldset" style={{ marginTop: '20px' }}>*/}
-                    {/*    <FormLabel component="legend">Type</FormLabel>*/}
-                    {/*    <RadioGroup*/}
-                    {/*        aria-label="Type"*/}
-                    {/*        name="type"*/}
-                    {/*        value={editedTransaction.type || DEBIT_TYPE}*/}
-                    {/*        onChange={handleTypeChange}*/}
-                    {/*        style={{ flexDirection: 'row' }}*/}
-                    {/*    >*/}
-                    {/*        <FormControlLabel*/}
-                    {/*            value={DEBIT_TYPE}*/}
-                    {/*            control={<Radio color="primary" />}*/}
-                    {/*            label="Debit"*/}
-                    {/*        />*/}
-                    {/*        <FormControlLabel*/}
-                    {/*            value={CREDIT_TYPE}*/}
-                    {/*            control={<Radio color="primary" />}*/}
-                    {/*            label="Credit"*/}
-                    {/*        />*/}
-                    {/*    </RadioGroup>*/}
-                    {/*</FormControl>*/}
+                    <FormControl component="fieldset" style={{marginTop: '20px'}}>
+                        <FormLabel component="legend">Mode</FormLabel>
+                        <RadioGroup
+                            aria-label="Mode"
+                            name="mode"
+                            value={editedTransaction.mode}
+                            onChange={handleModeChange}
+                            style={{flexDirection: 'row'}}
+                        >
+                            <FormControlLabel
+                                value={ONLINE_MODE}
+                                control={<Radio color="primary"/>}
+                                label="Online/Card"
+                            />
+                            <FormControlLabel
+                                value={CASH_MODE}
+                                control={<Radio color="primary"/>}
+                                label="Cash"
+                            />
+                        </RadioGroup>
+                    </FormControl>
+                    <FormControl component="fieldset" style={{marginTop: '20px'}}>
+                        <FormLabel component="legend">Type</FormLabel>
+                        <RadioGroup
+                            aria-label="Type"
+                            name="type"
+                            value={editedTransaction.type || DEBIT_TYPE}
+                            onChange={handleTypeChange}
+                            style={{flexDirection: 'row'}}
+                        >
+                            <FormControlLabel
+                                value={DEBIT_TYPE}
+                                control={<Radio color="primary"/>}
+                                label="Debit"
+                            />
+                            <FormControlLabel
+                                value={CREDIT_TYPE}
+                                control={<Radio color="primary"/>}
+                                label="Credit"
+                            />
+                        </RadioGroup>
+                    </FormControl>
                 </form>
             </DialogContent>
             <DialogActions style={{justifyContent: 'space-between'}}>

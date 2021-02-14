@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import EditTransactionModal from "./EditTransactionModal";
 import {TransactionInterface} from '../helpers/helper'
-import {CREDIT_TYPE} from "../Constants";
 import styled from 'styled-components'
 
 interface TransactionCardProps {
@@ -30,7 +29,9 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
     const handleClose = () => {
         setOpen(false);
     };
-    const color = transaction.type === CREDIT_TYPE ? 'greeen' : '';
+    // need to show green card or maybe some better minimilastic UI to show
+    // the transaction type is credit type
+    // const color = transaction.type === CREDIT_TYPE ? 'greeen' : '';
     return (
         <>
             <StyledTransactionCard

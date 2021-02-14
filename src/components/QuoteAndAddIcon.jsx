@@ -36,6 +36,7 @@ import {
   ONLINE_MODE,
   url
 } from '../Constants';
+import styled from 'styled-components';
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -241,22 +242,38 @@ export default function QuoteAndAddIcon({userId}) {
               </RadioGroup>
             </FormControl>
           </form>
+          <StyledButtonWrapper style={{justifyContent: 'space-between'}}>
+            <StyledButton onClick={handleClose}>
+              Close
+            </StyledButton>
+            {loadingState ? <Loader/> :
+                <StyledButton onClick={handleTransactionSubmit}>
+                  Add
+                </StyledButton>
+            }
+          </StyledButtonWrapper>
         </DialogContent>
-        <DialogActions style={{justifyContent: 'space-between'}}>
-          <Button onClick={handleClose}>
-            Close
-          </Button>
-          {loadingState ? <Loader/> :
-              <Button onClick={handleTransactionSubmit}>
-                Add
-              </Button>
-          }
-        </DialogActions>
+
       </Dialog>
     </>
 
   )
 }
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+`;
+
+const StyledButton = styled.button`
+  background-color: #3f51b5;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 18px;
+  width: 30%;
+`;
+
 async function addTransactionToDatabase(transaction) {
   const res = await fetch(url.API_URL_ADD_TRANSACTION, {
     method: 'POST',

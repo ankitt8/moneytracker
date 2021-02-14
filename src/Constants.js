@@ -38,3 +38,6 @@ export const CASH_MODE = 'cash';
 export const ONLINE_MODE = 'online';
 export const CREDIT_TYPE = 'credit';
 export const DEBIT_TYPE = 'debit';
+
+export const PASSWORD_REQUIREMENT = 'Password must be between 7 to 15 characters ' +
+    'which contain at least one numeric digit and a special character.';

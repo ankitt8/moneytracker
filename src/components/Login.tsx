@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, {useState} from 'react';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components';
 import {url} from "../Constants";
 import {useDispatch} from "react-redux";
 import {newUserLoggedIn} from "../actions/actionCreator";
+import Loader from './Loader';
 const eyeOpen = <FontAwesomeIcon icon={faEye} />
 const eyeClosed = <FontAwesomeIcon icon={faEyeSlash} />
 
@@ -15,28 +16,33 @@ interface UserObject {
 
 const Login: React.FC = () => {
     const dispatch = useDispatch();
-    const [error, setError] = React.useState('');
-    const [username, setUserName] = React.useState('');
-    const [password, setPassword] = React.useState('');
-    const [passwordVisible, setPasswordVisible] = React.useState(false);
+    const [error, setError] = useState('');
+    const [username, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [signinLoader, setSigninLoader] = useState(false);
+    const [signupLoader, setSignUpLoader] = useState(false);
     const handleSignIn = (e: any) => {
         e.preventDefault();
         let error = validate(username, password);
-        if(error){
+        if (error) {
             setError(error);
             return;
         }
+        setSigninLoader(true);
         signin({username, password})
             .then(
                 (userSavedDetails) => {
-                    const { userId, username } = userSavedDetails;
-                    if(userSavedDetails.error) {
+                    setSigninLoader(false);
+                    const {userId, username} = userSavedDetails;
+                    if (userSavedDetails.error) {
                         setError(userSavedDetails.error);
                     } else {
                         dispatch(newUserLoggedIn(userId, username));
                     }
                 },
                 (err) => {
+                    setSigninLoader(false);
                     console.error(err);
                 }
             )
@@ -48,11 +54,13 @@ const Login: React.FC = () => {
             setError(error);
             return;
         }
+        setSignUpLoader(true);
         signup({username, password})
             .then(
                 (userSavedDetails) => {
                     const {userId, username} = userSavedDetails;
-                    if(userSavedDetails.error) {
+                    setSignUpLoader(false);
+                    if (userSavedDetails.error) {
                         setError(userSavedDetails.error);
                     } else {
                         dispatch(newUserLoggedIn(userId, username));
@@ -60,6 +68,7 @@ const Login: React.FC = () => {
                     }
                 },
                 (err) => {
+                    setSignUpLoader(false)
                     console.error(err);
                 }
             )
@@ -75,17 +84,32 @@ const Login: React.FC = () => {
                     />
                 </StyledInputWrapper>
                 <StyledInputWrapper>
-                    <StyledInput type={passwordVisible ? "text": "password"} name="password" id="password" placeholder="Password"
-                         autoComplete="current-password"
-                        onChange={(e) => setPassword(e.target.value)}
+                    <StyledInput type={passwordVisible ? "text" : "password"} name="password" id="password"
+                                 placeholder="Password"
+                                 autoComplete="current-password"
+                                 onChange={(e) => setPassword(e.target.value)}
                     />
                     <div onClick={() => setPasswordVisible(!passwordVisible)}>
                         {passwordVisible ? eyeOpen : eyeClosed}
                     </div>
                 </StyledInputWrapper>
                 <StyledButtonWrapper>
-                    <StyledButton onClick={(e) => handleSignUp(e)}>Sign Up</StyledButton>
-                    <StyledButton onClick={(e) => handleSignIn(e)}>Sign In</StyledButton>
+                    {
+                        signupLoader ? <Loader/> :
+                            <StyledButton
+                                onClick={(e) => handleSignUp(e)}
+                            >
+                                Sign Up
+                            </StyledButton>
+                    }
+                    {
+                        signinLoader ? <Loader/> :
+                            <StyledButton
+                                onClick={(e) => handleSignIn(e)}
+                            >
+                                Sign In
+                            </StyledButton>
+                    }
                 </StyledButtonWrapper>
                 {/*<StyledInstructionsWrapper>*/}
                 {/*    <StyledPasswordInstruction></StyledPasswordInstruction>*/}

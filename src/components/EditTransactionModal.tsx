@@ -200,7 +200,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             onClose={handleClose}
             aria-labelledby="max-width-dialog-title"
         >
-            <DialogTitle id="max-width-dialog-title">Add Transaction</DialogTitle>
+            <DialogTitle id="max-width-dialog-title">Edit Transaction</DialogTitle>
             <DialogContent>
                 <form noValidate autoComplete="off">
                     <FormControl>

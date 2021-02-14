@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import Button from '@material-ui/core/Button';
+import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
@@ -39,7 +38,6 @@ import {
 } from "../actions/actionCreator";
 import {TransactionInterface} from "../helpers/helper";
 
-
 interface EditTransactionModalProps {
     transaction: TransactionInterface
     open: boolean
@@ -58,7 +56,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     const [deleteLoading, setDeleteLoading] = useState(false);
     const {_id, mode, type, amount, heading} = transaction;
     const handleModeChange = (event: any) => {
-        //For now not changin g the mode will do it later
+        //For now not changing the mode will do it later
         // setEditedTransaction({...editedTransaction, mode: event.target.value});
     }
     const handleHeadingChange = (event: any) => {
@@ -118,8 +116,8 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 }
             )
             .finally(() => {
-                // calling belwo things will trhow error that you are calling on
-                // unmounted componenet since when deleteTransactionaction is dispatch
+                // calling below things will throw error that you are calling on
+                // unmounted component since when deleteTransaction action is dispatch
                 // the card will be deleted
                 // setDeleteLoading(false);
                 // handleClose();
@@ -268,23 +266,47 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                         </RadioGroup>
                     </FormControl>
                 </form>
+                <StyledButtonWrapper style={{justifyContent: 'space-between'}}>
+                    {
+                        deleteLoading ? <Loader/> :
+                            <StyledDeleteButton onClick={handleDeleteTransaction}>
+                                Delete
+                            </StyledDeleteButton>
+                    }
+                    {
+                        editLoading ? <Loader/> :
+                            <StyledEditButton onClick={handleEditTransaction}>
+                                Edit
+                            </StyledEditButton>
+                    }
+                </StyledButtonWrapper>
             </DialogContent>
-            <DialogActions style={{justifyContent: 'space-between'}}>
-                {
-                    deleteLoading ? <Loader/> :
-                        <Button onClick={handleDeleteTransaction}>
-                            Delete
-                        </Button>
-                }
-                {
-                    editLoading ? <Loader/> :
-                        <Button onClick={handleEditTransaction}>
-                            Edit
-                        </Button>
-                }
-            </DialogActions>
         </Dialog>
     )
 }
+
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+`;
+
+const StyledDeleteButton = styled.button`
+  background-color: #e51d1d;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-size: 18px;
+  width: 30%;
+`;
+const StyledEditButton = styled.button`
+  background-color: #3f51b5;
+  padding: 10px;
+  border-radius: 5px;
+  color: white;
+  font-size: 18px;
+  width: 30%;
+`;
 
 export default EditTransactionModal;

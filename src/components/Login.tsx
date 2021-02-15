@@ -76,10 +76,10 @@ const Login: React.FC = () => {
         <StyledFormWrapper>
             <StyledForm>
                 <StyledError>{error}</StyledError>
-                <StyledInputWrapper style={{width: '61%'}}>
+                <StyledInputWrapper>
                     <StyledInput type="text" name="userid" id="userid" placeholder="User Name"
-                           autoComplete="username"
-                           onChange={(e) => setUserName(e.target.value)}
+                                 autoComplete="username"
+                                 onChange={(e) => setUserName(e.target.value)}
                     />
                 </StyledInputWrapper>
                 <StyledInputWrapper>
@@ -159,6 +159,9 @@ const StyledFormWrapper = styled.div`
   display: flex;
   align-items: center;
   height: calc(100vh - 56px);
+  @media (min-width: 1025px) {
+    justify-content: center;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -167,6 +170,10 @@ const StyledForm = styled.form`
   align-items: center;
   justify-content: center;
   width: 100vh;
+  @media (min-width: 1025px) {
+    justify-content: center;
+    width: 40%;
+  }
 `;
 
 const StyledInput = styled.input`
@@ -184,6 +191,9 @@ const StyledInputWrapper = styled.div`
   border-radius: 10px;
   outline: none;
   border: 0.5px solid #ccc;
+  @media (min-width: 1025px) {
+    width: inherit;
+  }
 `;
 
 const StyledButtonWrapper = styled.div`
@@ -191,6 +201,9 @@ const StyledButtonWrapper = styled.div`
   justify-content: space-between;
   width: 50%;
   margin: 20px 0 0 0;
+  @media (min-width: 1025px) {
+    width: inherit;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -213,6 +226,9 @@ const StyledInstructionsWrapper = styled.div`
   border-radius: 10px;
   outline: none;
   text-align: justify;
+  @media (min-width: 1025px) {
+    width: inherit;
+  }
 `;
 
 const StyledPasswordInstruction = styled.p`

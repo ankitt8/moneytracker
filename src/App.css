@@ -27,6 +27,11 @@ ul {
   border-radius: 2px;
   box-shadow: 0 1px lightgrey;
 }
+@media screen and (min-width: 1025px) {
+  .desktop-view {
+    margin-left: 240px;
+  }
+}
 
 .transaction-summary-card h2 {
   margin: 0;

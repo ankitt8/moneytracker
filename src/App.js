@@ -41,12 +41,12 @@ function App() {
             </Route>
             <Route path="/">
 
-              <>
-                <TransactionSummary />
-                <QuoteAndAddIcon userId={userId} />
-                <Transactions userId={userId} />
-                <SnackBarFeedback />
-              </>
+              <div className="desktop-view">
+                <TransactionSummary/>
+                <QuoteAndAddIcon userId={userId}/>
+                <Transactions userId={userId}/>
+                <SnackBarFeedback/>
+              </div>
 
             </Route>
           </Switch>

@@ -63,7 +63,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         setEditedTransaction({...editedTransaction, heading: event.target.value});
     }
     const handleAmountChange = (event: any) => {
-        setEditedTransaction({...editedTransaction, amount: event.target.value});
+        setEditedTransaction({...editedTransaction, amount: parseInt(event.target.value)});
     }
     const handleTypeChange = (event: any) => {
         // setEditedTransaction({...editedTransaction, type: event.target.value});

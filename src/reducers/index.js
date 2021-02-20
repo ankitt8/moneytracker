@@ -11,22 +11,19 @@ const rootPersistConfig = {
   whitelist: [],
 };
 
-// const transactionsPersistConfig = {
-//   key: 'transactions',
-//   storage,
-//   blacklist: ['status'],
-// };
+const transactionsPersistConfig = {
+  key: 'transactions',
+  storage,
+  blacklist: ['status']
+};
 const userPersistConfig = {
   key: 'user',
   storage,
-  // whitelist: ['userLoggedIn', 'userDetails'],
 };
 
 const rootReducer = combineReducers({
-  // transactions: persistReducer(transactionsPersistConfig, transactions),
-  transactions,
+  transactions: persistReducer(transactionsPersistConfig, transactions),
   user: persistReducer(userPersistConfig, user),
-  // import { composeWithDevTools } from 'redux-devtools-extension';
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

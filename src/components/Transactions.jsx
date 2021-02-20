@@ -57,6 +57,19 @@ export default function Transactions({userId}) {
   const loadTransactions = useCallback(
     async () => {
       try {
+        // If there are transactions in store or if its not first day of month
+        // then no need to load transactions
+        // implies we need to refresh the store if its first day of month
+        // also we need to refresh the store if a new user is logged in
+        // or user deletes the local storage data
+        // local storage is better since I am sure that in a month
+        // the user will not store data more than 5MB
+        // also got a overview from adding so many transactions still the value didn't cross even 1MB
+
+        if (storeTransactions.length !== 0 && new Date().getDate() !== 1) {
+          setLoader(false);
+          return;
+        }
         const response = await fetch(url.API_URL_GET_TRANSACTIONS, {
           method: 'POST',
           headers: {
@@ -97,12 +110,12 @@ export default function Transactions({userId}) {
         setOffline(true);
       }
     },
-    [dispatch, setLoader, userId],
+      [dispatch, setLoader, userId, storeTransactions],
   );
   useEffect(() => {
-    // const user
     loadTransactions();
   }, [loadTransactions]);
+
   transactions.sort(sortTransactionsByDate);
 
   const date = new Date();

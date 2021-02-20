@@ -1,20 +1,23 @@
 import React, {Suspense, lazy} from 'react';
-import './App.css';
 import SnackBarFeedback from './components/SnackBarFeedback';
-import Transactions from "./components/Transactions";
+import Transactions from './components/Transactions';
 import TransactionSummary from './components/TransactionSummary';
-import QuoteAndAddIcon from './components/QuoteAndAddIcon';
+import AddTransaction from './components/AddTransaction';
+import Quote from "./components/Quote";
 import Login from './components/Login';
 import Header from './components/Header';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Loader from "./components/Loader";
 import {useSelector} from "react-redux";
+import './App.css';
+
 const UpcomingFeature = lazy(() => import('./components/UpcomingFeature'));
+
 function App() {
   const userId = useSelector((state) => state.user.userId);
   const username = useSelector((state) => state.user.username)
-  if(userId === '') {
-    return <Login />
+  if (userId === '') {
+    return <Login/>
   }
   return (
       <Router>
@@ -43,7 +46,10 @@ function App() {
 
               <div className="desktop-view">
                 <TransactionSummary/>
-                <QuoteAndAddIcon userId={userId}/>
+                <div className="quote-and-add-icon">
+                  <Quote/>
+                  <AddTransaction userId={userId}/>
+                </div>
                 <Transactions userId={userId}/>
                 <SnackBarFeedback/>
               </div>

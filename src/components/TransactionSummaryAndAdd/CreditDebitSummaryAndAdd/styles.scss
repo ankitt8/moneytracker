@@ -1,0 +1,34 @@
+
+.credit-debit-summary {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+}
+
+.type-of-transaction {
+  padding: 10px;
+}
+
+.balance-and-add-transaction {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.credit-debit-button {
+  display: inline-block;
+  padding: 8px;
+  margin: 0 10px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.credit {
+  background-color: lightgray;
+}
+
+.debit {
+  background-color: lightgray;
+}

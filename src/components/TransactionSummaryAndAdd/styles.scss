@@ -1,0 +1,14 @@
+.transaction-summary {
+  padding: 5px 0;
+  border-radius: 15px;
+  box-shadow: 0 1px lightgrey;
+  font-weight: bold;
+}
+.transaction-summary-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 10px;
+  font-size: 24px;
+}

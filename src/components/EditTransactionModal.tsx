@@ -203,7 +203,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 <form noValidate autoComplete="off">
                     <FormControl>
                         <InputLabel htmlFor="heading">Title</InputLabel>
-                        <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange} autoFocus/>
+                        <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange}/>
                     </FormControl>
                     <FormControl>
                         <InputLabel htmlFor="amount">Amount</InputLabel>

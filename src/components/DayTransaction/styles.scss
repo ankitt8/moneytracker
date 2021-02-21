@@ -1,0 +1,29 @@
+.day-transaction-card {
+  margin-top: 20px;
+}
+
+.transactions-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding: 0 10px;
+
+  > div {
+    font-size: 16px;
+    font-weight: 780;
+  }
+}
+
+.no-transaction {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list {
+  margin: 0 5px;
+  padding: 0;
+  //border: 1px solid lightgrey;
+  //border-radius: 10px;
+}

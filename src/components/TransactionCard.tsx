@@ -17,7 +17,7 @@ const StyledTransactionCard = styled.div`
   align-items: center;
   border-bottom: 1px solid grey;
   border-radius: 2px;
-  box-shadow: 1px 1px lightgrey;
+  //box-shadow: 1px 1px lightgrey;
 `;
 const TransactionCard: React.FC<TransactionCardProps> = ({
                                                              transaction,

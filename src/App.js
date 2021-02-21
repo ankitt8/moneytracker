@@ -1,7 +1,7 @@
 import React, {Suspense, lazy} from 'react';
 import SnackBarFeedback from './components/SnackBarFeedback';
 import Transactions from './components/Transactions';
-import TransactionSummary from './components/TransactionSummary';
+import TransactionSummaryAndAdd from './components/TransactionSummaryAndAdd';
 import AddTransaction from './components/AddTransaction';
 import Quote from "./components/Quote";
 import Login from './components/Login';
@@ -45,11 +45,11 @@ function App() {
             <Route path="/">
 
               <div className="desktop-view">
-                <TransactionSummary/>
-                <div className="quote-and-add-icon">
-                  <Quote/>
-                  <AddTransaction userId={userId}/>
-                </div>
+                <TransactionSummaryAndAdd/>
+                {/*<div className="quote-and-add-icon">*/}
+                {/*  <Quote/>*/}
+                {/*  <AddTransaction userId={userId}/>*/}
+                {/*</div>*/}
                 <Transactions userId={userId}/>
                 <SnackBarFeedback/>
               </div>

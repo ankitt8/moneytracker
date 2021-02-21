@@ -16,12 +16,12 @@ export default function TransactionSummary() {
     return (
         <div className="transaction-summary">
             <CreditDebitSummaryAndAdd
-                typeOfTransaction='Bank '
+                typeOfTransaction='Bank'
                 creditAmount={bankCredit}
                 debitAmount={bankDebit}
             />
             <CreditDebitSummaryAndAdd
-                typeOfTransaction='Cash '
+                typeOfTransaction='Cash'
                 creditAmount={cashCredit}
                 debitAmount={cashDebit}
             />

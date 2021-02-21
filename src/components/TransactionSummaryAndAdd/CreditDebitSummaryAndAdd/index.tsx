@@ -16,30 +16,13 @@ const CreditDebitSummaryAndAdd: React.FC<TransactionSummaryHeadingPropsInterface
         <div className="credit-debit-summary">
             <div className='type-of-transaction'>{typeOfTransaction}</div>
             <div className='balance-and-add-transaction'>
-                {/*Desing 1 below*/}
-                {/*<div>*/}
-                {/*    {creditAmount}*/}
-                {/*    <button className='credit-debit-button credit'>Credit</button>*/}
-                {/*</div>*/}
-                {/*<div>   - </div>*/}
-                {/*<div>*/}
-                {/*    {debitAmount}*/}
-                {/*    <button className='credit-debit-button debit'>Debit</button>*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    =*/}
-                {/*</div>*/}
-                {/*<div>*/}
-                {/*    {creditAmount - debitAmount}*/}
-                {/*</div>*/}
-                {/*Design two side wise*/}
                 <div>
-                    <button className='credit-debit-button credit'>CR</button>
+                    <button className='credit-debit-button'>CR</button>
                     {creditAmount}
                 </div>
                 <div>-</div>
                 <div>
-                    <button className='credit-debit-button debit'>DR</button>
+                    <button className='credit-debit-button'>DR</button>
                     {debitAmount}
                 </div>
                 <div>=</div>

@@ -22,7 +22,8 @@ const userPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  transactions: persistReducer(transactionsPersistConfig, transactions),
+  // transactions: persistReducer(transactionsPersistConfig, transactions),
+  transactions,
   user: persistReducer(userPersistConfig, user),
 });
 

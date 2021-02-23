@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -11,7 +11,7 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Input from '@material-ui/core/Input';
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Loader from './Loader';
-import {KeyboardDatePicker} from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import FormLabel from "@material-ui/core/FormLabel";
 
 import {
@@ -36,7 +36,7 @@ import {
     editTransactionAction,
     updateStatusAction
 } from "../actions/actionCreator";
-import {TransactionInterface} from "../helpers/helper";
+import { TransactionInterface } from "../helpers/helper";
 
 interface EditTransactionModalProps {
     transaction: TransactionInterface
@@ -45,31 +45,31 @@ interface EditTransactionModalProps {
 }
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
-                                                                       transaction,
-                                                                       open,
-                                                                       handleClose
-                                                                   }) => {
+    transaction,
+    open,
+    handleClose
+}) => {
     const dispatch = useDispatch();
     if (transaction.type === undefined) transaction.type = DEBIT_TYPE;
     const [editedTransaction, setEditedTransaction] = useState(transaction);
     const [editLoading, setEditLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
-    const {_id, mode, type, amount, heading} = transaction;
+    const { _id, mode, type, amount, heading } = transaction;
     const handleModeChange = (event: any) => {
         //For now not changing the mode will do it later
         // setEditedTransaction({...editedTransaction, mode: event.target.value});
     }
     const handleHeadingChange = (event: any) => {
-        setEditedTransaction({...editedTransaction, heading: event.target.value});
+        setEditedTransaction({ ...editedTransaction, heading: event.target.value });
     }
     const handleAmountChange = (event: any) => {
-        setEditedTransaction({...editedTransaction, amount: parseInt(event.target.value)});
+        setEditedTransaction({ ...editedTransaction, amount: parseInt(event.target.value) });
     }
     const handleTypeChange = (event: any) => {
         // setEditedTransaction({...editedTransaction, type: event.target.value});
     }
     const handleDateChange = (date: any) => {
-        setEditedTransaction({...transaction, date})
+        setEditedTransaction({ ...transaction, date })
     }
 
     function handleDeleteTransaction() {
@@ -125,15 +125,15 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     }
 
     function handleEditTransaction() {
-        const {amount: updatedAmount, heading: editedHeading} = editedTransaction;
+        const { amount: updatedAmount, heading: editedHeading } = editedTransaction;
         if (updatedAmount <= 0 || editedHeading === '') {
             let msg;
             if (editedHeading === '') {
                 msg = INVALID_TITLE_WARNING;
-                setEditedTransaction({...editedTransaction, heading});
+                setEditedTransaction({ ...editedTransaction, heading });
             } else {
                 msg = INVALID_AMOUNT_WARNING;
-                setEditedTransaction({...editedTransaction, amount});
+                setEditedTransaction({ ...editedTransaction, amount });
             }
             dispatch(updateStatusAction({
                 editTransaction: false,
@@ -153,12 +153,12 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             .then(
                 () => {
                     dispatch(editTransactionAction(_id, editedTransaction));
-                    const {type: editedType, mode: editedMode} = editedTransaction;
+                    const { type: editedType, mode: editedMode } = editedTransaction;
                     const changedAmount = updatedAmount - transaction.amount;
                     if (editedType === DEBIT_TYPE) {
                         //if changedAmount negative implies less spent, increase in balance
                         if (editedMode === CASH_MODE) {
-                            editCashDebitAction(changedAmount);
+                            dispatch(editCashDebitAction(changedAmount));
                         } else if (editedMode === ONLINE_MODE) {
                             dispatch(editBankDebitAction(changedAmount));
                         }
@@ -203,78 +203,78 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 <form noValidate autoComplete="off">
                     <FormControl>
                         <InputLabel htmlFor="heading">Title</InputLabel>
-                        <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange} autoFocus/>
+                        <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange} autoFocus />
                     </FormControl>
                     <FormControl>
                         <InputLabel htmlFor="amount">Amount</InputLabel>
                         <Input type="number" id="amount" value={editedTransaction.amount}
-                               onChange={handleAmountChange}/>
+                            onChange={handleAmountChange} />
                     </FormControl>
                     <FormControl>
                         <KeyboardDatePicker
-                            style={{marginTop: '20px'}}
+                            style={{ marginTop: '20px' }}
                             required
                             autoOk
                             variant="inline"
                             inputVariant="standard"
                             format="dd/MM/yyyy"
                             value={editedTransaction.date}
-                            InputAdornmentProps={{position: 'start'}}
+                            InputAdornmentProps={{ position: 'start' }}
                             onChange={(date) => handleDateChange(date)}
                         />
                     </FormControl>
-                    <FormControl component="fieldset" style={{marginTop: '20px'}}>
+                    <FormControl component="fieldset" style={{ marginTop: '20px' }}>
                         <FormLabel component="legend">Mode</FormLabel>
                         <RadioGroup
                             aria-label="Mode"
                             name="mode"
                             value={editedTransaction.mode}
                             onChange={handleModeChange}
-                            style={{flexDirection: 'row'}}
+                            style={{ flexDirection: 'row' }}
                         >
                             <FormControlLabel
                                 value={ONLINE_MODE}
-                                control={<Radio color="primary"/>}
+                                control={<Radio color="primary" />}
                                 label="Online/Card"
                             />
                             <FormControlLabel
                                 value={CASH_MODE}
-                                control={<Radio color="primary"/>}
+                                control={<Radio color="primary" />}
                                 label="Cash"
                             />
                         </RadioGroup>
                     </FormControl>
-                    <FormControl component="fieldset" style={{marginTop: '20px'}}>
+                    <FormControl component="fieldset" style={{ marginTop: '20px' }}>
                         <FormLabel component="legend">Type</FormLabel>
                         <RadioGroup
                             aria-label="Type"
                             name="type"
                             value={editedTransaction.type || DEBIT_TYPE}
                             onChange={handleTypeChange}
-                            style={{flexDirection: 'row'}}
+                            style={{ flexDirection: 'row' }}
                         >
                             <FormControlLabel
                                 value={DEBIT_TYPE}
-                                control={<Radio color="primary"/>}
+                                control={<Radio color="primary" />}
                                 label="Debit"
                             />
                             <FormControlLabel
                                 value={CREDIT_TYPE}
-                                control={<Radio color="primary"/>}
+                                control={<Radio color="primary" />}
                                 label="Credit"
                             />
                         </RadioGroup>
                     </FormControl>
                 </form>
-                <StyledButtonWrapper style={{justifyContent: 'space-between'}}>
+                <StyledButtonWrapper style={{ justifyContent: 'space-between' }}>
                     {
-                        deleteLoading ? <Loader/> :
+                        deleteLoading ? <Loader /> :
                             <StyledDeleteButton onClick={handleDeleteTransaction}>
                                 Delete
                             </StyledDeleteButton>
                     }
                     {
-                        editLoading ? <Loader/> :
+                        editLoading ? <Loader /> :
                             <StyledEditButton onClick={handleEditTransaction}>
                                 Edit
                             </StyledEditButton>

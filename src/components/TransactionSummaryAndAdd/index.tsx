@@ -1,27 +1,38 @@
 import React from 'react'
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import './CreditDebitSummaryAndAdd';
-import {getNoOfDaysCurrentMonth, getNoOfDaysRemainingCurrentMonth} from '../../helpers/helper';
+import { getNoOfDaysCurrentMonth, getNoOfDaysRemainingCurrentMonth } from '../../helpers/helper';
 import CreditDebitSummaryAndAdd from "./CreditDebitSummaryAndAdd";
 import './styles.scss';
+import { CASH_MODE, DEBIT_TYPE, ONLINE_MODE } from "../../Constants";
 
-export default function TransactionSummary() {
+interface TransactionSummaryAndAddProps {
+    userId: object;
+}
+
+const TransactionSummaryAndAdd: React.FC<TransactionSummaryAndAddProps> = ({
+    userId,
+}) => {
     // @ts-ignore
-    const {bank, cash} = useSelector(state => state.transactions.transactionSummary);
-    const {debit: bankDebit, credit: bankCredit} = bank;
-    const {debit: cashDebit, credit: cashCredit} = cash;
+    const { bank, cash } = useSelector(state => state.transactions.transactionSummary);
+    const { debit: bankDebit, credit: bankCredit } = bank;
+    const { debit: cashDebit, credit: cashCredit } = cash;
 
     const noOfDays = getNoOfDaysCurrentMonth();
-    const daysRemaining = getNoOfDaysRemainingCurrentMonth(noOfDays);
+    // const daysRemaining = getNoOfDaysRemainingCurrentMonth(noOfDays);
     return (
         <div className="transaction-summary">
             <CreditDebitSummaryAndAdd
-                typeOfTransaction='Bank'
+                userId={userId}
+                mode={ONLINE_MODE}
+                title='Bank'
                 creditAmount={bankCredit}
                 debitAmount={bankDebit}
             />
             <CreditDebitSummaryAndAdd
-                typeOfTransaction='Cash'
+                userId={userId}
+                mode={CASH_MODE}
+                title='Cash'
                 creditAmount={cashCredit}
                 debitAmount={cashDebit}
             />
@@ -29,3 +40,5 @@ export default function TransactionSummary() {
         </div>
     )
 }
+
+export default TransactionSummaryAndAdd;

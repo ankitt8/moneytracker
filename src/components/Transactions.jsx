@@ -65,11 +65,11 @@ export default function Transactions({userId}) {
         // local storage is better since I am sure that in a month
         // the user will not store data more than 5MB
         // also got a overview from adding so many transactions still the value didn't cross even 1MB
-
-        if (storeTransactions.length !== 0 && new Date().getDate() !== 1) {
-          setLoader(false);
-          return;
-        }
+//  the code is buggy since it will not sync up from different browsers so commenting below code
+        // if (storeTransactions.length !== 0 && new Date().getDate() !== 1) {
+        //   setLoader(false);
+        //   return;
+        // }
         const response = await fetch(url.API_URL_GET_TRANSACTIONS, {
           method: 'POST',
           headers: {
@@ -110,7 +110,9 @@ export default function Transactions({userId}) {
         setOffline(true);
       }
     },
-      [dispatch, setLoader, userId, storeTransactions],
+      // [dispatch, setLoader, userId, storeTransactions],
+      [dispatch, setLoader, userId],
+
   );
   useEffect(() => {
     loadTransactions();

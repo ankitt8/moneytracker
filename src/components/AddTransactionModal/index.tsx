@@ -30,7 +30,8 @@ import {
 import styled from 'styled-components';
 
 interface AddTransactionModalPropsInterface {
-    userId: object
+    modalTitle: string;
+    userId: object;
     open: boolean;
     type: string;
     mode: string;
@@ -38,11 +39,11 @@ interface AddTransactionModalPropsInterface {
 }
 
 const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
+    modalTitle,
     userId,
     open,
     type,
     mode,
-
     handleClose,
 }) => {
     const dispatch = useDispatch();
@@ -74,7 +75,7 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
             }))
             return;
         }
-        
+
         setLoadingState(true);
         const transaction = {
             userId,
@@ -134,7 +135,7 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
             onClose={handleClose}
             aria-labelledby="max-width-dialog-title"
         >
-            <DialogTitle id="max-width-dialog-title">Add Transaction</DialogTitle>
+            <DialogTitle id="max-width-dialog-title">{modalTitle}</DialogTitle>
             <DialogContent>
                 <form noValidate autoComplete="off">
                     <FormControl>

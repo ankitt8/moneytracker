@@ -20,17 +20,19 @@ const CreditDebitSummaryAndAdd: React.FC<CreditDebitSummaryAndAddPropsInterface>
 }) => {
     const [open, setOpen] = useState(false);
     const [type, setType] = useState('');
-
+    const [addTransactionModalTitle, setAddTransactionModalTitle] = useState('')
     const handleClose = () => {
         setOpen(false);
     };
     const handleCreditClick = (): void => {
         setType(CREDIT_TYPE);
         setOpen(true);
+        setAddTransactionModalTitle(`${mode.toUpperCase()} ${CREDIT_TYPE.toUpperCase()} Transaction`);
     }
     const handleDebitClick = (): void => {
         setType(DEBIT_TYPE);
         setOpen(true);
+        setAddTransactionModalTitle(`${mode.toUpperCase()} ${DEBIT_TYPE.toUpperCase()} Transaction`)
     }
 
     return (
@@ -65,6 +67,7 @@ const CreditDebitSummaryAndAdd: React.FC<CreditDebitSummaryAndAddPropsInterface>
 
             </div>
             <AddTransactionModal
+                modalTitle={addTransactionModalTitle}
                 userId={userId}
                 open={open}
                 type={type}

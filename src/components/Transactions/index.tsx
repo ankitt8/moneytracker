@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect} from 'react'
-import {useDispatch, useSelector} from 'react-redux';
+import React, { useCallback, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import {
     editBankCreditAction,
     editBankDebitAction,
@@ -8,10 +8,10 @@ import {
     getTransactionsAction,
 } from '../../actions/actionCreator'
 import Loader from '../Loader';
-import {CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url} from '../../Constants';
+import { CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url } from '../../Constants';
 import DayTransactionsCard from '../DayTransaction';
-import {debitTransaction, getNoOfDaysCurrentMonth} from '../../helpers/helper'
-import {TransactionInterface} from "../../helpers/helper";
+import { debitTransaction, getNoOfDaysCurrentMonth } from '../../helpers/helper'
+import { TransactionInterface } from "../../helpers/helper";
 import './styles.scss';
 
 const checkCreditTypeTransaction = (transaction: TransactionInterface) => {
@@ -46,7 +46,7 @@ interface InterfaceTransactionsProps {
     userId: object;
 }
 
-const Transactions: React.FC<InterfaceTransactionsProps> = ({userId}) => {
+const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
     const dispatch = useDispatch();
     // @ts-ignore
     const storeTransactions = useSelector(state => state.transactions.transactions);
@@ -74,16 +74,17 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({userId}) => {
                 // the user will not store data more than 5MB
                 // also got a overview from adding so many transactions still the value didn't cross even 1MB
 
-                if (storeTransactions.length !== 0 && new Date().getDate() !== 1) {
-                    setLoader(false);
-                    return;
-                }
+                //  the code is buggy since it will not sync up from different browsers so commenting below code
+                // if (storeTransactions.length !== 0 && new Date().getDate() !== 1) {
+                //   setLoader(false);
+                //   return;
+                // }
                 const response = await fetch(url.API_URL_GET_TRANSACTIONS, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({"userId": userId})
+                    body: JSON.stringify({ "userId": userId })
                 });
                 if (response.ok) {
                     const data = await response.json();
@@ -118,7 +119,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({userId}) => {
                 setOffline(true);
             }
         },
-        [dispatch, setLoader, userId, storeTransactions],
+        [dispatch, setLoader, userId],
     );
     useEffect(() => {
         loadTransactions();
@@ -151,13 +152,13 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({userId}) => {
                 <DayTransactionsCard
                     date={new Date(year, month, i).toDateString()}
                     transactions={dayTransactions[i]}
-                    totalAmount={totalAmountPerDay[i]}/>
+                    totalAmount={totalAmountPerDay[i]} />
             </li>
         ))
     }
     let componentToRender;
     if (loader) {
-        componentToRender = <Loader/>;
+        componentToRender = <Loader />;
     } else {
         if (offline) {
             componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;

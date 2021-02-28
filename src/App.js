@@ -2,8 +2,6 @@ import React, { Suspense, lazy } from 'react';
 import SnackBarFeedback from './components/SnackBarFeedback';
 import Transactions from './components/Transactions';
 import TransactionSummaryAndAdd from './components/TransactionSummaryAndAdd';
-import AddTransaction from './components/AddTransaction';
-import Quote from "./components/Quote";
 import Login from './components/Login';
 import Header from './components/Header';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';

@@ -4,7 +4,7 @@ import { CREDIT_TYPE, DEBIT_TYPE } from "../../../Constants";
 import AddTransactionModal from "../../AddTransactionModal/index";
 
 interface CreditDebitSummaryAndAddPropsInterface {
-    userId: string;
+    userId: object;
     title: string;
     mode: string;
     creditAmount: number;
@@ -20,9 +20,7 @@ const CreditDebitSummaryAndAdd: React.FC<CreditDebitSummaryAndAddPropsInterface>
 }) => {
     const [open, setOpen] = useState(false);
     const [type, setType] = useState('');
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
+
     const handleClose = () => {
         setOpen(false);
     };

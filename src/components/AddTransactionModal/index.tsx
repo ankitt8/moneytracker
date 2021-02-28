@@ -74,6 +74,7 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
             }))
             return;
         }
+        
         setLoadingState(true);
         const transaction = {
             userId,

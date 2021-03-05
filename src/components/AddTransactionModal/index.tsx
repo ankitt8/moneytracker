@@ -7,7 +7,11 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Loader from '../Loader';
+import CategoryFormInput from '../CategoryFormInput'
 import { KeyboardDatePicker } from '@material-ui/pickers';
+import { AddTransactionInterface } from './interface';
+
+import styles from './styles.module.scss';
 
 import {
     addTransactionAction,
@@ -49,8 +53,13 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
     const dispatch = useDispatch();
     const [heading, setHeading] = useState('');
     const [amount, setAmount] = useState('');
-    const [loadingState, setLoadingState] = useState(false);
     const [date, setDate] = useState(new Date());
+    const [category, setCategory] = useState('');
+    const [loadingState, setLoadingState] = useState(false);
+
+    const handleSelectedCategory = (category: string) => {
+        setCategory(category);
+    }
 
     const handleHeadingChange = (event: any) => {
         setHeading(event.target.value);
@@ -84,6 +93,7 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
             date,
             mode,
             type,
+            category,
         };
         const result = addTransactionToDatabase(transaction);
         result
@@ -159,45 +169,29 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
                             onChange={(value) => handleDateChange(value)}
                         />
                     </FormControl>
+                    <CategoryFormInput handleSelectedCategory={handleSelectedCategory}/>
                 </form>
-                <StyledButtonWrapper style={{ justifyContent: 'space-between' }}>
-                    <StyledButton onClick={handleClose}>
+                <div className={styles.buttonWrapper}>
+                    <button
+                        className={styles.addTransactionModalButton}
+                        onClick={handleClose}
+                    >
                         Close
-                    </StyledButton>
-                    {loadingState ? <Loader /> :
-                        <StyledButton onClick={handleTransactionSubmit}>
-                            Add
-                        </StyledButton>
+                    </button>
+                    {
+                        loadingState ? <Loader /> :
+                            <button
+                                className={styles.addTransactionModalButton}
+                                onClick={handleTransactionSubmit}
+                            >
+                                Add
+                            </button>
                     }
-                </StyledButtonWrapper>
+                </div>
             </DialogContent>
-
         </Dialog>
     )
-}
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-`;
-
-const StyledButton = styled.button`
-  background-color: #3f51b5;
-  padding: 10px;
-  border-radius: 5px;
-  color: white;
-  font-size: 18px;
-  width: 30%;
-`;
-
-interface AddTransactionInterface {
-    userId: object
-    heading: string
-    amount: number
-    date: Date
-    mode: string
-    type: string
-}
+};
 
 const addTransactionToDatabase: (transaction: AddTransactionInterface) => Promise<any> = async function (
     transaction: AddTransactionInterface

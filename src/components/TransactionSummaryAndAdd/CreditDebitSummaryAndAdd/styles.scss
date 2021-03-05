@@ -17,10 +17,11 @@
 
 .credit-debit-button {
   display: inline-block;
-  padding: 8px 20px;
+  padding: 8px;
   margin: 0 10px 0 0;
-  border: none;
+  border: 1px solid dimgray;
   border-radius: 5px;
   font-size: 20px;
   background-color: lightgray;
+  outline: none;
 }

@@ -9,7 +9,8 @@ import {
   EDIT_CASH_DEBIT,
   EDIT_TRANSACTION,
   GET_TRANSACTIONS,
-  UPDATE_STATUS
+  UPDATE_STATUS,
+  ADD_TRANSACTION_CATEGORY,
 } from './actionTypes';
 
 export function StatusAction({
@@ -103,6 +104,13 @@ export function editCashBalanceAction(amount) {
   return {
     type: EDIT_CASH_BALANCE,
     amount
+  }
+}
+
+export function addTransactionCategory(category) {
+  return {
+    type: ADD_TRANSACTION_CATEGORY,
+    category
   }
 }
 

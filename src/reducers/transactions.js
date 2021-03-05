@@ -1,5 +1,6 @@
 import {
   ADD_TRANSACTION,
+  ADD_TRANSACTION_CATEGORY,
   DELETE_TRANSACTION,
   EDIT_BANK_BALANCE,
   EDIT_BANK_CREDIT,
@@ -33,7 +34,10 @@ const initialState = {
     deleteTransaction: null,
     msg: null,
     severity: null,
-  }
+  },
+  categories: [
+    'Breakfast', 'Lunch', 'EveningSnacks', 'Dinner', 'Mess'
+  ]
 };
 const transactions = (state = initialState, action) => {
   switch (action.type) {
@@ -42,6 +46,12 @@ const transactions = (state = initialState, action) => {
         ...state,
         transactions: [...state.transactions, action.transaction],
       };
+    }
+    case ADD_TRANSACTION_CATEGORY: {
+      return {
+        ...state,
+        categories: [...state.categories, action.category],
+      }
     }
     case GET_TRANSACTIONS: {
       return {

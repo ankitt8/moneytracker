@@ -107,10 +107,11 @@ export function editCashBalanceAction(amount) {
   }
 }
 
-export function addTransactionCategory(category) {
+export function addTransactionCategory(category, transactionType) {
   return {
     type: ADD_TRANSACTION_CATEGORY,
-    category
+    category,
+    transactionType,
   }
 }
 

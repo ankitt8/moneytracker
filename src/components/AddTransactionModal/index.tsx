@@ -169,7 +169,10 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
                             onChange={(value) => handleDateChange(value)}
                         />
                     </FormControl>
-                    <CategoryFormInput handleSelectedCategory={handleSelectedCategory}/>
+                    <CategoryFormInput
+                        handleSelectedCategory={handleSelectedCategory}
+                        type={type}
+                    />
                 </form>
                 <div className={styles.buttonWrapper}>
                     <button

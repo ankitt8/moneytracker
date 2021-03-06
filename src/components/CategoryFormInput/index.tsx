@@ -1,28 +1,29 @@
 import React, { useState, ReactElement, FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styles from './styles.module.scss';
-import AddOutlinedIcon from '@material-ui/icons/AddOutlined';
-import { addTransactionCategory } from '../../actions/actionCreator';
 import cn from 'classnames';
 import { CategoryFormInputProps } from './interface';
+import { DEBIT_TYPE } from '../../Constants';
 
 
-const CategoryFormInput: FC<CategoryFormInputProps> = (
-  { handleSelectedCategory }
-): ReactElement => {
-
-  const dispatch = useDispatch();
+const CategoryFormInput: FC<CategoryFormInputProps> = ({
+  handleSelectedCategory,
+  type
+}): ReactElement => {
   // @ts-ignore
-  const categories: string[] = useSelector((state) => state.transactions.categories)
-  const [categorySelected, setCategorySelected] = useState('');
-  const handleAddCategory = (category: string) => {
-    dispatch(addTransactionCategory(category));
+  let transactionCategories = useSelector((state) => state.transactions.categories);
+  let categories: string[];
+  if (type === DEBIT_TYPE) {
+    categories = transactionCategories.debit;
+  } else {
+    categories = transactionCategories.credit;
   }
+  const [categorySelected, setCategorySelected] = useState('');
+
   const handleCategoryChange = (category: string) => {
-    handleSelectedCategory(category);
+    handleSelectedCategory(category, type);
     setCategorySelected(category);
   }
-
 
   return (
     <div className={styles.categoryFormInput}>

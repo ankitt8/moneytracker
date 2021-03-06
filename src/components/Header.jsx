@@ -18,7 +18,7 @@ import AssessmentIcon from '@material-ui/icons/Assessment';
 import PaymentIcon from '@material-ui/icons/Payment';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
 
@@ -96,10 +96,16 @@ function Header({ username }) {
         </ListItem>
       <Divider />
       <Link to="/">
-      <ListItem button key="home" onClick={handleDrawerToggle}>
-          <ListItemIcon><HomeIcon /></ListItemIcon>
-          <ListItemText primary="Home" />
-      </ListItem>
+        <ListItem button key="home" onClick={handleDrawerToggle}>
+            <ListItemIcon><HomeIcon /></ListItemIcon>
+            <ListItemText primary="Home" />
+        </ListItem>
+        </Link>
+        <Link to="/transaction-category">
+        <ListItem button key="transactionCategory" onClick={handleDrawerToggle}>
+            <ListItemIcon><FontAwesomeIcon icon={faFilter} /></ListItemIcon>
+            <ListItemText primary="Add Category" />
+        </ListItem>
       </Link>
       <Link to="/bankaccounts">
         <ListItem button key="bankaccount" onClick={handleDrawerToggle}>

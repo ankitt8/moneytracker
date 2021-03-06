@@ -1,0 +1,25 @@
+.title {
+  font-size: 26px;
+}
+
+.addCategory{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+}
+
+.addCategoryInput {
+  border: 1px solid gray;
+  border-radius: 10px;
+  font-size: 18px;
+  padding-left: 5px;
+  outline: none;
+  height: 30px;
+  width: 30vh;
+}
+
+.addCategoryIcon {
+  font-size: 40px;
+}
+

@@ -12,6 +12,7 @@ import {
   GET_TRANSACTIONS,
   UPDATE_STATUS,
 } from '../actions/actionTypes';
+import { DEBIT_TYPE } from '../Constants';
 
 const initialState = {
   transactions: [],
@@ -35,9 +36,10 @@ const initialState = {
     msg: null,
     severity: null,
   },
-  categories: [
-    'Breakfast', 'Lunch', 'EveningSnacks', 'Dinner', 'Mess'
-  ]
+  categories: {
+    debit: ['Breakfast', 'Lunch', 'EveningSnacks', 'Dinner', 'Mess'],
+    credit: ['Salary', 'Cash Credit From Bank'],
+  }
 };
 const transactions = (state = initialState, action) => {
   switch (action.type) {
@@ -48,9 +50,16 @@ const transactions = (state = initialState, action) => {
       };
     }
     case ADD_TRANSACTION_CATEGORY: {
+      let { debit, credit } = state.categories;
+      if (action.transactionType === DEBIT_TYPE) {
+        debit = [...debit, action.category]
+      } else {
+        credit = [...credit, action.category]
+      }
+
       return {
         ...state,
-        categories: [...state.categories, action.category],
+        categories: { debit, credit }
       }
     }
     case GET_TRANSACTIONS: {

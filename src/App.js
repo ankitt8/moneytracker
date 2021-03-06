@@ -27,7 +27,10 @@ function App() {
             <Login />
           </Route>
           <Route path="/transaction-category">
-            <TransactionCategory />
+            <>
+              <TransactionCategory />
+              <SnackBarFeedback />
+            </>
           </Route>
           <Route path="/bankaccounts">
             <UpcomingFeature />

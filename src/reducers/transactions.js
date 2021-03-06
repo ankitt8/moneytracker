@@ -31,15 +31,13 @@ const initialState = {
     }
   },
   status: {
-    addTransaction: null,
-    editTransaction: null,
-    deleteTransaction: null,
+    showFeedback: null,
     msg: null,
     severity: null,
   },
   categories: {
     debit: ['Breakfast', 'Lunch', 'EveningSnacks', 'Dinner', 'Mess'],
-    credit: ['Salary', 'Cash Credit From Bank'],
+    credit: ['Salary', 'Cash Credit From Bank', 'Person Gave'],
   }
 };
 const transactions = (state = initialState, action) => {
@@ -106,6 +104,7 @@ const transactions = (state = initialState, action) => {
       return {
         ...state,
         status: {
+          ...state.status,
           ...action.payload
         }
       }

@@ -1,6 +1,6 @@
 import React from 'react';
 import TransactionCard from '../TransactionCard';
-import {TransactionInterface} from "../../helpers/helper";
+import { TransactionInterface } from "../../helpers/helper";
 import './styles.scss';
 
 interface InterfaceDayTransactionsCardProps {
@@ -10,19 +10,13 @@ interface InterfaceDayTransactionsCardProps {
 }
 
 const DayTransactionsCard: React.FC<InterfaceDayTransactionsCardProps> = ({
-                                                                              transactions,
-                                                                              date,
-                                                                              totalAmount
-                                                                          }) => {
+    transactions,
+    date,
+    totalAmount
+}) => {
     const transactionsList = transactions.map((transaction) => {
-        const {_id: id} = transaction;
-
-        return (
-            // @ts-ignore
-            <li key={id}>
-                <TransactionCard transaction={transaction}/>
-            </li>
-        )
+        const { _id: id } = transaction;
+        return <TransactionCard key={id.toString()} transaction={transaction} />
     })
     return (
         <div className='day-transaction-card'>

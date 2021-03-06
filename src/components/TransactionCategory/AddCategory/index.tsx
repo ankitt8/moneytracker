@@ -1,6 +1,7 @@
 import React, { useState, FC, ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTransactionCategory } from '../../../actions/actionCreator';
+import { addTransactionCategory, updateStatusAction } from '../../../actions/actionCreator';
+import { ADD_TRANSACTION_CATEGORY_SUCCESS_MSG, INVALID_CATEGORY_WARNING, SEVERITY_SUCCESS, SEVERITY_WARNING } from '../../../Constants';
 import { AddCategoryProps } from './interface';
 import styles from './styles.module.scss';
 const AddCategory: FC<AddCategoryProps> = ({
@@ -9,15 +10,28 @@ const AddCategory: FC<AddCategoryProps> = ({
 }): ReactElement => {
   const dispatch = useDispatch();
   const [newCategory, setNewCategory] = useState('');
+
   const handleAddCategory = () => {
-    dispatch(addTransactionCategory(newCategory, type));
-  };
-  const handleCategoryChange = (e: any) => {
-    const category = e.target.value;
-    if (category === '') {
+    if (newCategory === '') {
+      dispatch(updateStatusAction({
+        showFeedback: true,
+        msg: INVALID_CATEGORY_WARNING,
+        severity: SEVERITY_WARNING
+      }))
       return;
     }
-    setNewCategory(category);
+
+    setNewCategory('');
+    dispatch(addTransactionCategory(newCategory, type));
+    dispatch(updateStatusAction({
+      showFeedback: true,
+      msg: ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
+      severity: SEVERITY_SUCCESS
+    }))
+  };
+
+  const handleCategoryChange = (e: any) => {
+    setNewCategory(e.target.value);
   };
 
   return (

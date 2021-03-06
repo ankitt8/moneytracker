@@ -1,11 +1,11 @@
 import React, { FC, ReactElement } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { DEBIT_TYPE } from '../../../Constants';
+import { DEBIT_TYPE, DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG, SEVERITY_SUCCESS } from '../../../Constants';
 import { DisplayCategoriesProps } from './interface';
 import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
-import { deleteTransactionCategory } from '../../../actions/actionCreator';
+import { deleteTransactionCategory, updateStatusAction } from '../../../actions/actionCreator';
 const DisplayCategories: FC<DisplayCategoriesProps> = ({
   type,
 }): ReactElement => {
@@ -19,7 +19,12 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
     categories = transactionCategories.credit;
   }
   const handleDeleteCategory = (category: string): void => {
-    dispatch(deleteTransactionCategory(category));
+    dispatch(deleteTransactionCategory(category, type));
+    dispatch(updateStatusAction({
+      showFeedback: true,
+      msg: DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
+      severity: SEVERITY_SUCCESS
+    }))
   }
   return (
     <div className={styles.categoryInput}>

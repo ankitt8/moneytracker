@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { FC, ReactElement } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -20,23 +19,9 @@ import FastfoodIcon from '@material-ui/icons/Fastfood';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { HeaderProps } from './interface';
+import styles from './styles.module.scss';
 
-const StyledUsername = styled.p`
-  font-size: 23px;
-`;
-
-// const StyledLogoutButton = styled.button`
-//   background-color: red;
-//   color: white;
-// `;
-const StyledDrawerDiv = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 30px;
-    height: 100vh;
-`;
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -72,7 +57,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header({ username }) {
+const Header: FC<HeaderProps> = ({
+  username
+}): ReactElement => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -81,84 +68,84 @@ function Header({ username }) {
     setMobileOpen(!mobileOpen);
   };
   const handleLogout = () => {
-      localStorage.clear();
-      window.location.href = '/';
-      // history.push('/');
-      // handleDrawerToggle();
+    localStorage.clear();
+    window.location.href = '/';
+    // history.push('/');
+    // handleDrawerToggle();
   }
 
   const drawer = (
-    <StyledDrawerDiv>
-        <div>
-      <div className={classes.toolbar} />
+    <div className={styles.drawer}>
+      <div>
+        <div className={classes.toolbar} />
         <ListItem button key="username">
-            <StyledUsername>{`Hi ${ username }`}</StyledUsername>
+          <p className={styles.username}>{`Hi ${username}`}</p>
         </ListItem>
-      <Divider />
-      <Link to="/">
-        <ListItem button key="home" onClick={handleDrawerToggle}>
+        <Divider />
+        <Link className={styles.headerLink} to="/">
+          <ListItem button key="home" onClick={handleDrawerToggle}>
             <ListItemIcon><HomeIcon /></ListItemIcon>
             <ListItemText primary="Home" />
-        </ListItem>
+          </ListItem>
         </Link>
-        <Link to="/transaction-category">
-        <ListItem button key="transactionCategory" onClick={handleDrawerToggle}>
+        <Link className={styles.headerLink} to="/transaction-category">
+          <ListItem button key="transactionCategory" onClick={handleDrawerToggle}>
             <ListItemIcon><FontAwesomeIcon icon={faFilter} /></ListItemIcon>
             <ListItemText primary="Add Category" />
+          </ListItem>
+        </Link>
+        <Link className={styles.headerLink} to="/bankaccounts">
+          <ListItem button key="bankaccount" onClick={handleDrawerToggle}>
+            <ListItemIcon><AccountBalanceIcon /></ListItemIcon>
+            <ListItemText primary="Bank Accounts" />
+          </ListItem>
+        </Link>
+        <Link className={styles.headerLink} to="/investments">
+          <ListItem button key="investments" onClick={handleDrawerToggle}>
+            <ListItemIcon><PaymentIcon /></ListItemIcon>
+            <ListItemText primary="Investments" />
+          </ListItem>
+        </Link>
+        <Link className={styles.headerLink} to="/budget">
+          <ListItem button key="budget" onClick={handleDrawerToggle}>
+            <ListItemIcon><PaymentIcon /></ListItemIcon>
+            <ListItemText primary="Budget" />
+          </ListItem>
+        </Link>
+        <Link className={styles.headerLink} to="/food-tracker">
+          <ListItem button key="foodtracker" onClick={handleDrawerToggle}>
+            <ListItemIcon><FastfoodIcon /></ListItemIcon>
+            <ListItemText primary="Food Tracker" />
+          </ListItem>
+        </Link>
+        <Link className={styles.headerLink} to="/analysis">
+          <ListItem button key="analysis" onClick={handleDrawerToggle}>
+            <ListItemIcon><AssessmentIcon /></ListItemIcon>
+            <ListItemText primary="Spend Analysis" />
+          </ListItem>
+        </Link>
+        <Divider />
+        {/*<ListItem button key="logout" onClick={handleLogout}>*/}
+        {/*  <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>*/}
+        {/*  <ListItemText primary="Logout" />*/}
+        {/*</ListItem>*/}
+      </div>
+      <div>
+        {/*<StyledLogoutButton>*/}
+        {/*    <FontAwesomeIcon icon={faSignOutAlt} />Logout*/}
+        {/*</StyledLogoutButton>*/}
+        <ListItem button key="logout" onClick={handleLogout}>
+          <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>
+          <ListItemText primary="Logout" />
         </ListItem>
-      </Link>
-      <Link to="/bankaccounts">
-        <ListItem button key="bankaccount" onClick={handleDrawerToggle}>
-          <ListItemIcon><AccountBalanceIcon /></ListItemIcon>
-          <ListItemText primary="Bank Accounts" />
-        </ListItem>
-      </Link>
-      <Link to="/investments">
-        <ListItem button key="investments" onClick={handleDrawerToggle}>
-          <ListItemIcon><PaymentIcon /></ListItemIcon>
-          <ListItemText primary="Investments" />
-        </ListItem>
-      </Link>
-      <Link to="/budget">
-        <ListItem button key="budget" onClick={handleDrawerToggle}>
-          <ListItemIcon><PaymentIcon /></ListItemIcon>
-          <ListItemText primary="Budget" />
-        </ListItem>
-      </Link>
-      <Link to="/food-tracker">
-        <ListItem button key="foodtracker" onClick={handleDrawerToggle}>
-          <ListItemIcon><FastfoodIcon /></ListItemIcon>
-          <ListItemText primary="Food Tracker" />
-        </ListItem>
-      </Link>
-      <Link to="/analysis">
-        <ListItem button key="analysis" onClick={handleDrawerToggle}>
-          <ListItemIcon><AssessmentIcon /></ListItemIcon>
-          <ListItemText primary="Spend Analysis" />
-        </ListItem>
-      </Link>
-      <Divider />
-      {/*<ListItem button key="logout" onClick={handleLogout}>*/}
-      {/*  <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>*/}
-      {/*  <ListItemText primary="Logout" />*/}
-      {/*</ListItem>*/}
-        </div>
-        <div>
-            {/*<StyledLogoutButton>*/}
-            {/*    <FontAwesomeIcon icon={faSignOutAlt} />Logout*/}
-            {/*</StyledLogoutButton>*/}
-            <ListItem button key="logout" onClick={handleLogout}>
-                <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>
-                <ListItemText primary="Logout" />
-            </ListItem>
-        </div>
-    </StyledDrawerDiv>
+      </div>
+    </div>
   );
 
 
   return (
     // <div className={classes.root}>
-      <>
+    <>
       <AppBar position="sticky" className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -205,17 +192,17 @@ function Header({ username }) {
           </Drawer>
         </Hidden>
       </nav>
-      </>
+    </>
     // </div>
   );
 }
 
-Header.propTypes = {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window: PropTypes.func,
-};
+// Header.propTypes = {
+//   /**
+//    * Injected by the documentation to work in an iframe.
+//    * You won't need it on your project.
+//    */
+//   window: PropTypes.func,
+// };
 
 export default Header;

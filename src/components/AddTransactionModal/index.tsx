@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,7 +9,7 @@ import Input from '@material-ui/core/Input';
 import Loader from '../Loader';
 import CategoryFormInput from '../CategoryFormInput'
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import { AddTransactionInterface } from './interface';
+import { AddTransactionInterface, AddTransactionModalProps } from './interface';
 
 import styles from './styles.module.scss';
 
@@ -29,20 +29,13 @@ import {
     INVALID_AMOUNT_WARNING,
     INVALID_TITLE_WARNING,
     ONLINE_MODE,
+    SEVERITY_ERROR,
+    SEVERITY_SUCCESS,
+    SEVERITY_WARNING,
     url
 } from '../../Constants';
-import styled from 'styled-components';
 
-interface AddTransactionModalPropsInterface {
-    modalTitle: string;
-    userId: object;
-    open: boolean;
-    type: string;
-    mode: string;
-    handleClose: () => void;
-}
-
-const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
+const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     modalTitle,
     userId,
     open,
@@ -57,9 +50,16 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
     const [category, setCategory] = useState('');
     const [loadingState, setLoadingState] = useState(false);
 
-    const handleSelectedCategory = (category: string) => {
-        setCategory(category);
-    }
+    useEffect(() => {
+        return function setFieldsEmpty() {
+            console.log('Clean up add transaction modal called');
+            setHeading('');
+            setAmount('');
+            setDate(new Date());
+            setCategory('');
+            setLoadingState(false);
+        }
+    }, [open]);
 
     const handleHeadingChange = (event: any) => {
         setHeading(event.target.value);
@@ -70,22 +70,25 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
     const handleDateChange = (value: any) => {
         setDate(new Date(value));
     }
+    const handleSelectedCategory = (category: string) => {
+        setCategory(category);
+    }
 
     function handleTransactionSubmit() {
 
-        if (parseInt(amount) <= 0 || heading === '') {
-            // TODO if date is not changed then no need to set the date again
-            setDate(new Date());
+        if (amount === '' || parseInt(amount) <= 0 || heading === '') {
             const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
             dispatch(updateStatusAction({
-                addTransaction: false,
+                // addTransaction: false,
+                showFeedback: true,
                 msg,
-                severity: 'warning'
+                severity: SEVERITY_WARNING
             }))
             return;
         }
 
         setLoadingState(true);
+
         const transaction = {
             userId,
             heading,
@@ -115,25 +118,23 @@ const AddTransactionModal: React.FC<AddTransactionModalPropsInterface> = ({
                         }
                     }
                     dispatch(updateStatusAction({
-                        addTransaction: true,
+                        // addTransaction: true,
+                        showFeedback: true,
                         msg: ADD_TRANSACTION_SUCCESS_MSG,
-                        severity: 'success'
+                        severity: SEVERITY_SUCCESS
                     }))
                 },
                 function error() {
                     // console.log('Failed to add transaction', transaction);
                     dispatch(updateStatusAction({
-                        addTransaction: false,
+                        // addTransaction: false,
+                        showFeedback: true,
                         msg: ADD_TRANSACTION_FAIL_ERROR,
-                        severity: 'error'
+                        severity: SEVERITY_ERROR
                     }))
                 }
             )
             .finally(() => {
-                setLoadingState(false);
-                setHeading('');
-                setAmount('');
-                setDate(new Date());
                 handleClose();
             })
     }

@@ -1,5 +1,6 @@
 import React, { useState, ReactElement, FC } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 import cn from 'classnames';
 import { CategoryFormInputProps } from './interface';
@@ -28,11 +29,16 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
   return (
     <div className={styles.categoryFormInput}>
       <p className={styles.categoryFormInputLabel}>Category</p>
-      {/* <AddOutlinedIcon fontSize="large" onClick={handleAddCategory}/> */}
-      <div className={styles.categoryInput}>
-        {
-          categories.map((category) => {
-            return (
+      {
+        categories.length === 0 ? (
+          <div>
+            No Categories Found!
+            Please add categories here
+            <Link to='/transaction-category'>Add Category</Link>
+          </div>
+        ) :
+          <div className={styles.categoryInput}>
+            {categories.map((category) => (
               <div
                 key={category}
                 className={
@@ -43,12 +49,13 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
                     }
                   )
                 }
-                onClick={() => handleCategoryChange(category)}>{category}
+                onClick={() => handleCategoryChange(category)}
+              >
+                {category}
               </div>
-            )
-          })
-        }
-      </div>
+            ))}
+          </div>
+      }
     </div>
   )
 }

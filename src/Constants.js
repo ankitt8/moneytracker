@@ -24,15 +24,23 @@ const prod = {
 
 export const url = process.env.NODE_ENV === `development` ? dev.url : prod.url;
 
+export const SEVERITY_SUCCESS = 'success';
+export const SEVERITY_WARNING = 'warning';
+export const SEVERITY_ERROR = 'error';
+
 export const INVALID_AMOUNT_WARNING = 'Please Enter Valid Amount!';
 export const INVALID_TITLE_WARNING = 'Please Enter Valid Title!';
 export const ADD_TRANSACTION_FAIL_ERROR = 'Transaction Addition Failed :(';
-export const ADD_TRANSACTION_SUCCESS_MSG = 'Transaction Added Successfully:)';
+export const ADD_TRANSACTION_SUCCESS_MSG = 'Transaction Added Successfully :)';
 export const EDIT_TRANSACTION_FAIL_ERROR = 'Transaction Edit Failed :(';
 export const DELETE_TRANSACTION_FAIL_ERROR = 'Transaction Delete Failed :(';
 export const EDIT_TRANSACTION_SUCCESS_MSG = 'Transaction Edited Successfully:)';
 export const DELETE_TRANSACTION_SUCCESS_MSG = 'Transaction Deleted!';
 export const OFFLINE_ERROR = 'OOPS You Are Offline :(';
+
+export const ADD_TRANSACTION_CATEGORY_SUCCESS_MSG = 'Category Added Succesfully :)';
+export const DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG = 'Category Deleted!';
+export const INVALID_CATEGORY_WARNING = 'Category Addition Failed ):';
 
 export const CASH_MODE = 'cash';
 export const ONLINE_MODE = 'online';
@@ -40,4 +48,4 @@ export const CREDIT_TYPE = 'credit';
 export const DEBIT_TYPE = 'debit';
 
 export const PASSWORD_REQUIREMENT = 'Password must be between 7 to 15 characters ' +
-    'which contain at least one numeric digit and a special character.';
+  'which contain at least one numeric digit and a special character.';

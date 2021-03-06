@@ -147,14 +147,14 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         totalAmountPerDay[i] = dayTransactions[i]
             .filter(debitTransaction)
             .reduce((acc: number, curr: TransactionInterface) => acc + curr.amount, 0);
-        dayTransactionsList.push((
-            <li key={i}>
-                <DayTransactionsCard
-                    date={new Date(year, month, i).toDateString()}
-                    transactions={dayTransactions[i]}
-                    totalAmount={totalAmountPerDay[i]} />
-            </li>
-        ))
+        dayTransactionsList.push(
+            <DayTransactionsCard
+                key={new Date(year, month, i).toDateString()}
+                date={new Date(year, month, i).toDateString()}
+                transactions={dayTransactions[i]}
+                totalAmount={totalAmountPerDay[i]}
+            />
+        );
     }
     let componentToRender;
     if (loader) {

@@ -55,12 +55,15 @@ export function updateStatusAction(status) {
   return {
     type: UPDATE_STATUS,
     payload: {
-      addTransaction: null,
-      editTransaction: null,
-      deleteTransaction: null,
-      isOffline: null,
-      msg: null,
-      severity: null,
+      // addTransaction: null,
+      // editTransaction: null,
+      // deleteTransaction: null,
+      // addTransactionCategory: null,
+      // deleteTransactionCategory: null,
+      // isOffline: null,
+      // msg: null,
+      // showFeedback: true,
+      // severity: null,
       ...status
     },
   }

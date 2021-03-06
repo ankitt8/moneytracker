@@ -17,9 +17,9 @@ import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import AssessmentIcon from '@material-ui/icons/Assessment';
 import PaymentIcon from '@material-ui/icons/Payment';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledUsername = styled.p`

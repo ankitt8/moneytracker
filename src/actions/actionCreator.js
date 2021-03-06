@@ -11,6 +11,7 @@ import {
   GET_TRANSACTIONS,
   UPDATE_STATUS,
   ADD_TRANSACTION_CATEGORY,
+  DELETE_TRANSACTION_CATEGORY,
 } from './actionTypes';
 
 export function StatusAction({
@@ -110,6 +111,14 @@ export function editCashBalanceAction(amount) {
 export function addTransactionCategory(category, transactionType) {
   return {
     type: ADD_TRANSACTION_CATEGORY,
+    category,
+    transactionType,
+  }
+}
+
+export function deleteTransactionCategory(category, transactionType) {
+  return {
+    type: DELETE_TRANSACTION_CATEGORY,
     category,
     transactionType,
   }

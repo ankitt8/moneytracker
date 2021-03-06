@@ -1,12 +1,15 @@
 import React, { FC, ReactElement } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { DEBIT_TYPE } from '../../../Constants';
 import { DisplayCategoriesProps } from './interface';
 import styles from './styles.module.scss';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { deleteTransactionCategory } from '../../../actions/actionCreator';
 const DisplayCategories: FC<DisplayCategoriesProps> = ({
   type,
 }): ReactElement => {
+  const dispatch = useDispatch();
   // @ts-ignore
   let transactionCategories = useSelector((state) => state.transactions.categories);
   let categories: string[];
@@ -15,6 +18,9 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
   } else {
     categories = transactionCategories.credit;
   }
+  const handleDeleteCategory = (category: string): void => {
+    dispatch(deleteTransactionCategory(category));
+  }
   return (
     <div className={styles.categoryInput}>
       {
@@ -22,9 +28,11 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
           return (
             <div
               key={category}
-              className={styles.category}
+              className={styles.categoryWrapper}
             >
-              {category}
+              <div>{category}</div>
+              <div>|</div>
+              <FontAwesomeIcon icon={faWindowClose} onClick={() => handleDeleteCategory(category)} />
             </div>
           )
         })

@@ -5,7 +5,6 @@ import DisplayCategories from './DisplayCategories';
 import styles from './styles.module.scss';
 
 const TransactionCategory = (): ReactElement => {
-  // @ts-ignore
   return (
     <>
       <div className={styles.transactionCategoryCard}>
@@ -15,6 +14,7 @@ const TransactionCategory = (): ReactElement => {
         />
         <DisplayCategories type={CREDIT_TYPE} />
       </div>
+      
       <div className={styles.transactionCategoryCard}>
         <AddCategory
           title='Debit Transaction Category'

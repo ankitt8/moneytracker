@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import EditTransactionModal from './EditTransactionModal';
-import {TransactionInterface} from '../helpers/helper';
+import { TransactionInterface } from '../helpers/helper';
 import styled from 'styled-components';
-import {CREDIT_TYPE} from '../Constants';
+import { CREDIT_TYPE } from '../Constants';
 
 interface TransactionCardProps {
     transaction: TransactionInterface
@@ -17,13 +17,12 @@ const StyledTransactionCard = styled.div`
   align-items: center;
   border-bottom: 1px solid grey;
   border-radius: 2px;
-  box-shadow: 1px 1px lightgrey;
 `;
 const TransactionCard: React.FC<TransactionCardProps> = ({
-                                                             transaction,
-                                                         }) => {
+    transaction,
+}) => {
     const [open, setOpen] = useState(false);
-    const {heading, amount} = transaction;
+    const { heading, amount } = transaction;
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -44,7 +43,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
                 <p className={transactionCardTextStyle}>{heading}</p>
                 <p className={transactionCardTextStyle}>{amount}</p>
             </StyledTransactionCard>
-            <EditTransactionModal transaction={transaction} open={open} handleClose={handleClose}/>
+            <EditTransactionModal transaction={transaction} open={open} handleClose={handleClose} />
         </>
     );
 }

@@ -1,0 +1,16 @@
+.headerLink {
+  text-decoration: none;
+  color: black;
+}
+
+.username {
+  font-size: 23px;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  height: 100vh;
+}

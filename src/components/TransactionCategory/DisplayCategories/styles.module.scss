@@ -1,0 +1,18 @@
+.categoryInput {
+  display: flex;
+  flex-wrap: wrap;
+  // border: 1px solid gray;
+  padding: 10px 0;
+}
+
+.categoryWrapper {
+  display: flex;
+  color: black;
+  padding: 5px;
+  border: 1px solid gray;
+  margin: 0px 7px 7px 0;
+  border-radius: 10px;
+  > div {
+    margin-right: 5px;
+  }
+}

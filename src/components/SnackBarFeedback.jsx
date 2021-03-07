@@ -1,53 +1,57 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
 import { OFFLINE_ERROR } from '../Constants';
 import { useSelector } from 'react-redux';
+import { SEVERITY_ERROR } from '../Constants';
+import { updateStatusAction } from '../actions/actionCreator';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
-
 export default function SnackBarFeedback() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const status = useSelector((state) => state.transactions.status);
-  const { addTransaction, editTransaction, deleteTransaction } = status;
   let { severity, msg } = status;
+  
   useEffect(() => {
-    if (addTransaction !== null || editTransaction !== null || deleteTransaction !== null) {
+    console.log('snackbar rendered')
+    const { showFeedback } = status;
+    if ( showFeedback !== null ) {
       setOpen(true);
     }
-  }, [addTransaction, deleteTransaction, editTransaction, status]);
+  }, [status]);
+
+  // if msg is null the component will not be mounted
+  if (msg === null) return null;
+ 
   if (navigator.onLine === false) {
     msg = OFFLINE_ERROR;
-    severity = 'error';
+    severity = SEVERITY_ERROR;
   }
 
   function handleClose(event, reason) {
-    if (reason === 'clickaway') {
-      return;
-    }
     setOpen(false);
+    // the below code sets everythin gto null
+    //  so that when page is changed the Snackbar feedback 
+    //  doesn't render with the existing messages
+    // want to make severity null but it require some props
+    //  anyways is msg is empty string then nothing will be shown;;
+    dispatch(updateStatusAction({
+      showFeedback: null,
+      msg: null,
+      severity: null,
+    }));
   };
 
   return (
-    <div className={classes.root}>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
-          {msg}
-        </Alert>
-      </Snackbar>
-    </div>
+    <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity={severity}>
+        {msg}
+      </Alert>
+    </Snackbar>
   );
 }

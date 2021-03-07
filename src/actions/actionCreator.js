@@ -9,7 +9,9 @@ import {
   EDIT_CASH_DEBIT,
   EDIT_TRANSACTION,
   GET_TRANSACTIONS,
-  UPDATE_STATUS
+  UPDATE_STATUS,
+  ADD_TRANSACTION_CATEGORY,
+  DELETE_TRANSACTION_CATEGORY,
 } from './actionTypes';
 
 export function StatusAction({
@@ -53,12 +55,15 @@ export function updateStatusAction(status) {
   return {
     type: UPDATE_STATUS,
     payload: {
-      addTransaction: null,
-      editTransaction: null,
-      deleteTransaction: null,
-      isOffline: null,
-      msg: null,
-      severity: null,
+      // addTransaction: null,
+      // editTransaction: null,
+      // deleteTransaction: null,
+      // addTransactionCategory: null,
+      // deleteTransactionCategory: null,
+      // isOffline: null,
+      // msg: null,
+      // showFeedback: true,
+      // severity: null,
       ...status
     },
   }
@@ -103,6 +108,22 @@ export function editCashBalanceAction(amount) {
   return {
     type: EDIT_CASH_BALANCE,
     amount
+  }
+}
+
+export function addTransactionCategory(category, transactionType) {
+  return {
+    type: ADD_TRANSACTION_CATEGORY,
+    category,
+    transactionType,
+  }
+}
+
+export function deleteTransactionCategory(category, transactionType) {
+  return {
+    type: DELETE_TRANSACTION_CATEGORY,
+    category,
+    transactionType,
   }
 }
 

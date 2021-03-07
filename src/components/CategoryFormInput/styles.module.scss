@@ -1,0 +1,33 @@
+.categoryFormInput {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryInput {
+  border: 1px solid gray;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+
+.category {
+  color: black;
+  padding: 5px;
+  border: 1px solid gray;
+  margin: 3px;
+  border-radius: 10px;
+}
+
+.categorySelected {
+  background-color: gray;
+  border: none;
+}
+
+a {
+  color: gray
+}
+
+
+
+
+

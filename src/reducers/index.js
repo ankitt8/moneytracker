@@ -14,7 +14,7 @@ const rootPersistConfig = {
 const transactionsPersistConfig = {
   key: 'transactions',
   storage,
-  blacklist: ['status']
+  whitelist: ['categories']
 };
 const userPersistConfig = {
   key: 'user',
@@ -22,8 +22,8 @@ const userPersistConfig = {
 };
 
 const rootReducer = combineReducers({
-  // transactions: persistReducer(transactionsPersistConfig, transactions),
-  transactions,
+  transactions: persistReducer(transactionsPersistConfig, transactions),
+  // transactions,
   user: persistReducer(userPersistConfig, user),
 });
 

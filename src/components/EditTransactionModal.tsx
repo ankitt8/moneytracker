@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
@@ -25,6 +25,9 @@ import {
     INVALID_AMOUNT_WARNING,
     INVALID_TITLE_WARNING,
     ONLINE_MODE,
+    SEVERITY_ERROR,
+    SEVERITY_SUCCESS,
+    SEVERITY_WARNING,
     url
 } from "../Constants";
 import {
@@ -55,6 +58,13 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     const [editLoading, setEditLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const { _id, mode, type, amount, heading } = transaction;
+
+    useEffect(() => {
+        return function cleanUp() {
+            setEditLoading(false);
+            setDeleteLoading(false);
+        }
+    }, [open])
     const handleModeChange = (event: any) => {
         //For now not changing the mode will do it later
         // setEditedTransaction({...editedTransaction, mode: event.target.value});
@@ -63,7 +73,13 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         setEditedTransaction({ ...editedTransaction, heading: event.target.value });
     }
     const handleAmountChange = (event: any) => {
-        setEditedTransaction({ ...editedTransaction, amount: parseInt(event.target.value) });
+        let amount;
+        if (event.target.value === '') {
+            amount = 0;
+        } else {
+            amount = parseInt(event.target.value);
+        }
+        setEditedTransaction({ ...editedTransaction, amount });
     }
     const handleTypeChange = (event: any) => {
         // setEditedTransaction({...editedTransaction, type: event.target.value});
@@ -96,32 +112,22 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                     }
 
                     dispatch(updateStatusAction({
-                        deleteTransaction: true,
+                        showFeedback: true,
                         msg: DELETE_TRANSACTION_SUCCESS_MSG,
-                        severity: 'success'
+                        severity: SEVERITY_SUCCESS
                     }))
-                    setDeleteLoading(false);
                     handleClose();
                     dispatch(deleteTransactionAction(_id));
                 },
                 function error() {
-                    // handleClose();
                     dispatch(updateStatusAction({
-                        deleteTransaction: false,
+                        showFeedback: true,
                         msg: DELETE_TRANSACTION_FAIL_ERROR,
-                        severity: 'error',
+                        severity: SEVERITY_ERROR,
                     }))
-                    setDeleteLoading(false);
                     handleClose();
                 }
             )
-            .finally(() => {
-                // calling below things will throw error that you are calling on
-                // unmounted component since when deleteTransaction action is dispatch
-                // the card will be deleted
-                // setDeleteLoading(false);
-                // handleClose();
-            })
     }
 
     function handleEditTransaction() {
@@ -136,9 +142,9 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 setEditedTransaction({ ...editedTransaction, amount });
             }
             dispatch(updateStatusAction({
-                editTransaction: false,
+                showFeedback: true,
                 msg,
-                severity: 'warning',
+                severity: SEVERITY_WARNING,
             }))
             return;
         }
@@ -170,23 +176,22 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                         }
                     }
                     dispatch(updateStatusAction({
-                        editTransaction: true,
+                        showFeedback: true,
                         msg: EDIT_TRANSACTION_SUCCESS_MSG,
-                        severity: 'success',
+                        severity: SEVERITY_SUCCESS
                     }))
 
                 },
                 () => {
                     console.log('Failed To edit')
                     dispatch(updateStatusAction({
-                        editTransaction: false,
+                        showFeedback: true,
                         msg: EDIT_TRANSACTION_FAIL_ERROR,
-                        severity: 'error'
+                        severity: SEVERITY_ERROR
                     }))
                 }
             )
             .finally(() => {
-                setEditLoading(false);
                 handleClose();
             });
     }
@@ -203,7 +208,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 <form noValidate autoComplete="off">
                     <FormControl>
                         <InputLabel htmlFor="heading">Title</InputLabel>
-                        <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange} autoFocus />
+                        <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange} />
                     </FormControl>
                     <FormControl>
                         <InputLabel htmlFor="amount">Amount</InputLabel>

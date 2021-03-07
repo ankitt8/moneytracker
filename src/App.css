@@ -6,27 +6,13 @@
 * {
   box-sizing: border-box;
 }
-a {
-  text-decoration: none;
-  color: black;
-}
+
 
 ul {
   list-style: none;
 }
 
-.list {
-  margin: 0 5px;
-  padding: 0;
-}
 
-.transaction-summary-card {
-  margin: 5px 5px;
-  padding: 0;
-  border-bottom: 1px solid grey;
-  border-radius: 2px;
-  box-shadow: 0 1px lightgrey;
-}
 @media screen and (min-width: 1025px) {
   .desktop-view {
     margin-left: 240px;
@@ -37,12 +23,6 @@ ul {
   margin: 0;
 }
 
-.transaction-summary {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
 
 .transaction-card {
   height: 40px;
@@ -56,13 +36,6 @@ ul {
   box-shadow: 1px 1px lightgrey
 }
 
-.transactions-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  padding: 0 10px;
-}
 
 .loader-position {
   height: 100%;
@@ -84,11 +57,11 @@ ul {
 }
 
 .transaction-card-text {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .transaction-card-credit {
-  font-size: 20px;
+  font-size: 22px;
   color: green;
 }
 
@@ -100,11 +73,6 @@ ul {
   outline: none;
 }
 
-.no-transaction {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
 .quote-and-add-icon {
   display: flex;
@@ -133,3 +101,4 @@ ul {
 /*  display: flex;*/
 /*  justify-content: space-between;*/
 /*}*/
+

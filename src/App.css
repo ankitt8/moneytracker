@@ -12,6 +12,7 @@ ul {
   list-style: none;
 }
 
+/* Currently have not handled device other than mobile devices */
 
 @media screen and (min-width: 1025px) {
   .desktop-view {
@@ -19,74 +20,11 @@ ul {
   }
 }
 
-.transaction-summary-card h2 {
-  margin: 0;
-}
-
-
-.transaction-card {
-  height: 40px;
-  margin-bottom: 5px;
-  padding: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid grey;
-  border-radius: 2px;
-  box-shadow: 1px 1px lightgrey
-}
-
-
 .loader-position {
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.edit-field {
-  display: flex;
-  justify-content: space-between;
-}
-
-.edit-field-input {
-  width: 50%;
-  border: none;
-  padding-right: 10px;
-  font-size: 18px;
-}
-
-.transaction-card-text {
-  font-size: 20px;
-}
-
-.transaction-card-credit {
-  font-size: 22px;
-  color: green;
-}
-
-.edit-field-input-amt {
-  text-align: end;
-}
-
-.edit-field input:focus {
-  outline: none;
-}
-
-
-.quote-and-add-icon {
-  display: flex;
-  align-items: center;
-  margin: 5px;
-  justify-content: space-between;
-  padding: 0 10px;
-}
-.quote {
-  font-size: 18px;
-  color: #2d6dec;
-}
-.date-picker {
-  margin-top: 20px;
 }
 
 .new-feature {
@@ -97,8 +35,4 @@ ul {
   align-items: center;
 }
 
-/*.edit-transaction-button-wrapper {*/
-/*  display: flex;*/
-/*  justify-content: space-between;*/
-/*}*/
 

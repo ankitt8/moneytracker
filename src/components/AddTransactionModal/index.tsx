@@ -21,6 +21,7 @@ import {
     editCashDebitAction,
     updateStatusAction
 } from '../../actions/actionCreator'
+
 import {
     ADD_TRANSACTION_FAIL_ERROR,
     ADD_TRANSACTION_SUCCESS_MSG,
@@ -52,7 +53,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
     useEffect(() => {
         return function setFieldsEmpty() {
-            console.log('Clean up add transaction modal called');
             setHeading('');
             setAmount('');
             setDate(new Date());
@@ -118,16 +118,13 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                         }
                     }
                     dispatch(updateStatusAction({
-                        // addTransaction: true,
                         showFeedback: true,
                         msg: ADD_TRANSACTION_SUCCESS_MSG,
                         severity: SEVERITY_SUCCESS
                     }))
                 },
                 function error() {
-                    // console.log('Failed to add transaction', transaction);
                     dispatch(updateStatusAction({
-                        // addTransaction: false,
                         showFeedback: true,
                         msg: ADD_TRANSACTION_FAIL_ERROR,
                         severity: SEVERITY_ERROR

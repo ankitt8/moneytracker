@@ -1,18 +1,24 @@
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import {
+    setCreditDebitZero,
     editBankCreditAction,
     editBankDebitAction,
     editCashCreditAction,
     editCashDebitAction,
     getTransactionsAction,
-} from '../../actions/actionCreator'
+} from 'actions/actionCreator';
 import Loader from '../Loader';
-import { CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url } from '../../Constants';
-import DayTransactionsCard from '../DayTransaction';
-import { debitTransaction, getNoOfDaysCurrentMonth } from '../../helpers/helper'
-import { TransactionInterface } from "../../helpers/helper";
-import './styles.scss';
+import { CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url } from 'Constants';
+import DayTransactionsCard from 'components/DayTransaction';
+import {
+    TransactionInterface,
+    debitTransaction,
+    getNoOfDaysCurrentMonth,
+    getTransactionCategoriesFromDB
+} from 'helper';
+import { getTransactionCategories } from 'actions/actionCreator';
+import styles from './styles.module.scss';
 
 const checkCreditTypeTransaction = (transaction: TransactionInterface) => {
     return transaction.type === CREDIT_TYPE;
@@ -53,7 +59,9 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
     const [loader, setLoader] = React.useState(true);
     const [transactions, setTransactions] = React.useState(storeTransactions);
     const [offline, setOffline] = React.useState(false);
-    if (transactions !== storeTransactions) setTransactions(storeTransactions)
+    if (transactions !== storeTransactions) {
+        setTransactions(storeTransactions)
+    }
 
     function sortTransactionsByDate(a: TransactionInterface, b: TransactionInterface): number {
         const da = new Date(a.date);
@@ -87,6 +95,9 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
                     body: JSON.stringify({ "userId": userId })
                 });
                 if (response.ok) {
+                    // dispatch(editBankCreditAction(0))
+                    // Quick Fix
+                    dispatch(setCreditDebitZero())
                     const data = await response.json();
                     // to handle the transactions where type debit or credit is not stored
                     // adding undefined match also
@@ -121,9 +132,15 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         },
         [dispatch, setLoader, userId],
     );
+
     useEffect(() => {
+        getTransactionCategoriesFromDB(userId)
+            .then(({ transactionCategories }) => {
+                dispatch(getTransactionCategories(transactionCategories));
+            });
         loadTransactions();
-    }, [loadTransactions]);
+
+    }, [dispatch, loadTransactions, userId]);
 
     transactions.sort(sortTransactionsByDate);
 
@@ -163,7 +180,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         if (offline) {
             componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;
         } else {
-            componentToRender = <ul className="transactions-list">{dayTransactionsList}</ul>
+            componentToRender = <ul className={styles.transactionsList}>{dayTransactionsList}</ul>
         }
     }
     return componentToRender;

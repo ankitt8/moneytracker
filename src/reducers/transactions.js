@@ -1,4 +1,5 @@
 import {
+  SET_CREDIT_DEBIT_ZERO,
   ADD_TRANSACTION,
   ADD_TRANSACTION_CATEGORY,
   DELETE_TRANSACTION,
@@ -11,6 +12,7 @@ import {
   EDIT_CASH_DEBIT,
   EDIT_TRANSACTION,
   GET_TRANSACTIONS,
+  GET_TRANSACTION_CATEGORIES,
   UPDATE_STATUS,
 } from '../actions/actionTypes';
 import { DEBIT_TYPE } from '../Constants';
@@ -36,17 +38,40 @@ const initialState = {
     severity: null,
   },
   categories: {
-    debit: ['Breakfast', 'Lunch', 'EveningSnacks', 'Dinner', 'Mess'],
-    credit: ['Salary', 'Cash Credit From Bank', 'Person Gave'],
+    credit: [],
+    debit: [],
   }
 };
 const transactions = (state = initialState, action) => {
   switch (action.type) {
+    case SET_CREDIT_DEBIT_ZERO: {
+      return {
+        ...state,
+        transactionSummary: {
+          bank: {
+            credit: 0,
+            debit: 0,
+            balance: 0,
+          },
+          cash: {
+            credit: 0,
+            debit: 0,
+            balance: 0,
+          }
+        }
+      }
+    }
     case ADD_TRANSACTION: {
       return {
         ...state,
         transactions: [...state.transactions, action.transaction],
       };
+    }
+    case GET_TRANSACTION_CATEGORIES: {
+      return {
+        ...state,
+        categories: { ...action.transactionCategories }
+      }
     }
     case ADD_TRANSACTION_CATEGORY: {
       let { debit, credit } = state.categories;
@@ -55,24 +80,22 @@ const transactions = (state = initialState, action) => {
       } else {
         credit = [...credit, action.category]
       }
-
       return {
         ...state,
         categories: { debit, credit }
       }
     }
     case DELETE_TRANSACTION_CATEGORY: {
-      let { debit, credit } = state.categories;
+      const { debit, credit } = state.categories;
       const category = action.category;
       if (action.transactionType === DEBIT_TYPE) {
         debit.splice(debit.findIndex((debitCategory) => debitCategory === category), 1)
       } else {
         credit.splice(credit.findIndex((creditCategory) => creditCategory === category), 1)
       }
-      
       return {
         ...state,
-        categories: { debit, credit }
+        categories: { ...state.categories, debit, credit }
       }
     }
     case GET_TRANSACTIONS: {

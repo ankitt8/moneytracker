@@ -1,4 +1,5 @@
 import {
+  SET_CREDIT_DEBIT_ZERO,
   ADD_TRANSACTION,
   DELETE_TRANSACTION,
   EDIT_BANK_BALANCE,
@@ -12,6 +13,7 @@ import {
   UPDATE_STATUS,
   ADD_TRANSACTION_CATEGORY,
   DELETE_TRANSACTION_CATEGORY,
+  GET_TRANSACTION_CATEGORIES
 } from './actionTypes';
 
 export function StatusAction({
@@ -26,6 +28,13 @@ export function StatusAction({
     },
   };
 }
+
+export function setCreditDebitZero() {
+  return {
+    type: SET_CREDIT_DEBIT_ZERO
+  }
+}
+
 export function addTransactionAction(transaction) {
   return {
     type: ADD_TRANSACTION,
@@ -55,15 +64,6 @@ export function updateStatusAction(status) {
   return {
     type: UPDATE_STATUS,
     payload: {
-      // addTransaction: null,
-      // editTransaction: null,
-      // deleteTransaction: null,
-      // addTransactionCategory: null,
-      // deleteTransactionCategory: null,
-      // isOffline: null,
-      // msg: null,
-      // showFeedback: true,
-      // severity: null,
       ...status
     },
   }
@@ -111,6 +111,13 @@ export function editCashBalanceAction(amount) {
   }
 }
 
+export function getTransactionCategories(transactionCategories) {
+  return {
+    type: GET_TRANSACTION_CATEGORIES,
+    transactionCategories,
+  }
+}
+
 export function addTransactionCategory(category, transactionType) {
   return {
     type: ADD_TRANSACTION_CATEGORY,
@@ -120,6 +127,8 @@ export function addTransactionCategory(category, transactionType) {
 }
 
 export function deleteTransactionCategory(category, transactionType) {
+  console.log(category);
+  console.log(transactionType);
   return {
     type: DELETE_TRANSACTION_CATEGORY,
     category,

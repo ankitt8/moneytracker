@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { CREDIT_TYPE, DEBIT_TYPE } from '../../Constants';
+import { CREDIT_TYPE, DEBIT_TYPE } from 'Constants';
 import AddCategory from './AddCategory';
 import DisplayCategories from './DisplayCategories';
 import styles from './styles.module.scss';
@@ -14,7 +14,7 @@ const TransactionCategory = (): ReactElement => {
         />
         <DisplayCategories type={CREDIT_TYPE} />
       </div>
-      
+
       <div className={styles.transactionCategoryCard}>
         <AddCategory
           title='Debit Transaction Category'

@@ -34,7 +34,7 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
           <div>
             No Categories Found!
             Please add categories here
-            <Link to='/transaction-category'>Add Category</Link>
+            <Link to='/transaction-category'> Add Category </Link>
           </div>
         ) :
           <div className={styles.categoryInput}>

@@ -1,11 +1,12 @@
-import React, {useState} from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import styled from 'styled-components';
-import {PASSWORD_REQUIREMENT, url} from "../Constants";
-import {useDispatch} from "react-redux";
-import {newUserLoggedIn} from "../actions/actionCreator";
-import Loader from './Loader';
+import { PASSWORD_REQUIREMENT, url } from '../Constants';
+import { useDispatch } from 'react-redux';
+import { newUserLoggedIn } from 'actions/actionCreator';
+import Loader from 'components/Loader';
+
 const eyeOpen = <FontAwesomeIcon icon={faEye} />
 const eyeClosed = <FontAwesomeIcon icon={faEyeSlash} />
 
@@ -30,11 +31,11 @@ const Login: React.FC = () => {
             return;
         }
         setSigninLoader(true);
-        signin({username, password})
+        signin({ username, password })
             .then(
                 (userSavedDetails) => {
                     setSigninLoader(false);
-                    const {userId, username} = userSavedDetails;
+                    const { userId, username } = userSavedDetails;
                     if (userSavedDetails.error) {
                         setError(userSavedDetails.error);
                     } else {
@@ -50,15 +51,15 @@ const Login: React.FC = () => {
     const handleSignUp = (e: any) => {
         e.preventDefault();
         let error = singUpValidate(username, password);
-        if(error) {
+        if (error) {
             setError(error);
             return;
         }
         setSignUpLoader(true);
-        signup({username, password})
+        signup({ username, password })
             .then(
                 (userSavedDetails) => {
-                    const {userId, username} = userSavedDetails;
+                    const { userId, username } = userSavedDetails;
                     setSignUpLoader(false);
                     if (userSavedDetails.error) {
                         setError(userSavedDetails.error);
@@ -78,15 +79,15 @@ const Login: React.FC = () => {
                 <StyledError>{error}</StyledError>
                 <StyledInputWrapper>
                     <StyledInput type="text" name="userid" id="userid" placeholder="User Name"
-                                 autoComplete="username"
-                                 onChange={(e) => setUserName(e.target.value)}
+                        autoComplete="username"
+                        onChange={(e) => setUserName(e.target.value)}
                     />
                 </StyledInputWrapper>
                 <StyledInputWrapper>
                     <StyledInput type={passwordVisible ? "text" : "password"} name="password" id="password"
-                                 placeholder="Password"
-                                 autoComplete="current-password"
-                                 onChange={(e) => setPassword(e.target.value)}
+                        placeholder="Password"
+                        autoComplete="current-password"
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <div onClick={() => setPasswordVisible(!passwordVisible)}>
                         {passwordVisible ? eyeOpen : eyeClosed}
@@ -94,7 +95,7 @@ const Login: React.FC = () => {
                 </StyledInputWrapper>
                 <StyledButtonWrapper>
                     {
-                        signupLoader ? <Loader/> :
+                        signupLoader ? <Loader /> :
                             <StyledButton
                                 onClick={(e) => handleSignUp(e)}
                             >
@@ -102,7 +103,7 @@ const Login: React.FC = () => {
                             </StyledButton>
                     }
                     {
-                        signinLoader ? <Loader/> :
+                        signinLoader ? <Loader /> :
                             <StyledButton
                                 onClick={(e) => handleSignIn(e)}
                             >
@@ -115,7 +116,7 @@ const Login: React.FC = () => {
                 </StyledInstructionsWrapper>
             </StyledForm>
         </StyledFormWrapper>
-  )
+    )
 }
 
 const singUpValidate = (userName: string, password: string) => {

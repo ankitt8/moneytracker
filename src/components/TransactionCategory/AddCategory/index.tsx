@@ -1,15 +1,27 @@
 import React, { useState, FC, ReactElement } from 'react';
-import { useDispatch } from 'react-redux';
-import { addTransactionCategory, updateStatusAction } from '../../../actions/actionCreator';
-import { ADD_TRANSACTION_CATEGORY_SUCCESS_MSG, INVALID_CATEGORY_WARNING, SEVERITY_SUCCESS, SEVERITY_WARNING } from '../../../Constants';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTransactionCategory, updateStatusAction } from 'actions/actionCreator';
+import { addTransactionCategoryToDB } from 'helper';
+import {
+  ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
+  INVALID_CATEGORY_WARNING,
+  SEVERITY_SUCCESS,
+  SEVERITY_WARNING
+} from 'Constants';
 import { AddCategoryProps } from './interface';
+import Loader from 'components/Loader';
+
 import styles from './styles.module.scss';
 const AddCategory: FC<AddCategoryProps> = ({
   title,
-  type
+  type,
 }): ReactElement => {
+  // @ts-ignore
+  const userId = useSelector(state => state.user.userId);
   const dispatch = useDispatch();
+  // @ts-ignore
   const [newCategory, setNewCategory] = useState('');
+  const [loader, setLoader] = useState(false);
 
   const handleAddCategory = () => {
     if (newCategory === '') {
@@ -21,13 +33,23 @@ const AddCategory: FC<AddCategoryProps> = ({
       return;
     }
 
-    setNewCategory('');
-    dispatch(addTransactionCategory(newCategory, type));
-    dispatch(updateStatusAction({
-      showFeedback: true,
-      msg: ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
-      severity: SEVERITY_SUCCESS
-    }))
+    setLoader(true);
+    addTransactionCategoryToDB(userId, newCategory, type)
+      .then((res: any) => {
+        if (res.ok) {
+          dispatch(addTransactionCategory(newCategory, type));
+          dispatch(updateStatusAction({
+            showFeedback: true,
+            msg: ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
+            severity: SEVERITY_SUCCESS
+          }))
+        }
+      })
+      .finally(() => {
+        setNewCategory('');
+        setLoader(false);
+      })
+
   };
 
   const handleCategoryChange = (e: any) => {
@@ -39,10 +61,11 @@ const AddCategory: FC<AddCategoryProps> = ({
       <h3 className={styles.title}>{title}</h3>
       <div className={styles.addCategory}>
         <input className={styles.addCategoryInput} type="text" value={newCategory} onChange={handleCategoryChange} />
-        <div className={styles.addCategoryIcon} onClick={handleAddCategory}>+</div>
+        {loader ? <Loader /> : <div className={styles.addCategoryIcon} onClick={handleAddCategory}>+</div>}
       </div>
+
     </>
-  )
+  );
 }
 
 export default AddCategory;

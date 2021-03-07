@@ -5,7 +5,7 @@ import MuiAlert from '@material-ui/lab/Alert';
 import { OFFLINE_ERROR } from '../Constants';
 import { useSelector } from 'react-redux';
 import { SEVERITY_ERROR } from '../Constants';
-import { updateStatusAction } from '../actions/actionCreator';
+import { updateStatusAction } from 'actions/actionCreator';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -18,7 +18,6 @@ export default function SnackBarFeedback() {
   let { severity, msg } = status;
   
   useEffect(() => {
-    console.log('snackbar rendered')
     const { showFeedback } = status;
     if ( showFeedback !== null ) {
       setOpen(true);

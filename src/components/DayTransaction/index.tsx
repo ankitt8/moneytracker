@@ -1,6 +1,6 @@
 import React from 'react';
-import TransactionCard from '../TransactionCard';
-import { TransactionInterface } from "../../helpers/helper";
+import TransactionCard from 'components/TransactionCard';
+import { TransactionInterface } from 'helper';
 import './styles.scss';
 
 interface InterfaceDayTransactionsCardProps {

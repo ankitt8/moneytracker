@@ -6,13 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
 import Input from '@material-ui/core/Input';
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Loader from './Loader';
 import { KeyboardDatePicker } from '@material-ui/pickers';
-import FormLabel from "@material-ui/core/FormLabel";
+import FormLabel from '@material-ui/core/FormLabel';
 
 import {
     CASH_MODE,
@@ -29,7 +29,7 @@ import {
     SEVERITY_SUCCESS,
     SEVERITY_WARNING,
     url
-} from "../Constants";
+} from 'Constants';
 import {
     deleteTransactionAction,
     editBankCreditAction,
@@ -38,8 +38,8 @@ import {
     editCashDebitAction,
     editTransactionAction,
     updateStatusAction
-} from "../actions/actionCreator";
-import { TransactionInterface } from "../helpers/helper";
+} from 'actions/actionCreator';
+import { TransactionInterface } from 'helper';
 
 interface EditTransactionModalProps {
     transaction: TransactionInterface
@@ -183,7 +183,6 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
 
                 },
                 () => {
-                    console.log('Failed To edit')
                     dispatch(updateStatusAction({
                         showFeedback: true,
                         msg: EDIT_TRANSACTION_FAIL_ERROR,

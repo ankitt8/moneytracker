@@ -19,50 +19,50 @@ function App() {
     return <Login />
   }
   return (
-    <Router>
-      <Header username={username} />
-      <Suspense fallback={<Loader />}>
-        <Switch >
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/transaction-category">
-            <>
-              <TransactionCategory />
-              <SnackBarFeedback />
-            </>
-          </Route>
-          <Route path="/bankaccounts">
-            <UpcomingFeature />
-          </Route>
-          <Route path="/investments">
-            <UpcomingFeature />
-          </Route>
-          <Route path="/budget">
-            <UpcomingFeature />
-          </Route>
-          <Route path="/analysis">
-            <UpcomingFeature />
-          </Route>
-          <Route path="/food-tracker">
-            <UpcomingFeature />
-          </Route>
-          <Route path="/">
+      <Router>
+        <Header username={username} />
+        <Suspense fallback={<Loader />}>
+          <Switch >
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route path="/transaction-category">
+              <>
+                <TransactionCategory />
+                <SnackBarFeedback />
+              </>
+            </Route>
+            <Route path="/bankaccounts">
+              <UpcomingFeature />
+            </Route>
+            <Route path="/investments">
+              <UpcomingFeature />
+            </Route>
+            <Route path="/budget">
+              <UpcomingFeature />
+            </Route>
+            <Route path="/analysis">
+              <UpcomingFeature />
+            </Route>
+            <Route path="/food-tracker">
+              <UpcomingFeature />
+            </Route>
+            <Route path="/">
 
-            <div className="desktop-view">
-              <TransactionSummaryAndAdd userId={userId} />
-              {/*<div className="quote-and-add-icon">*/}
-              {/*  <Quote/>*/}
-              {/*  <AddTransaction userId={userId}/>*/}
-              {/*</div>*/}
-              <Transactions userId={userId} />
-              <SnackBarFeedback />
-            </div>
+              <div className="desktop-view">
+                <TransactionSummaryAndAdd userId={userId} />
+                {/*<div className="quote-and-add-icon">*/}
+                {/*  <Quote/>*/}
+                {/*  <AddTransaction userId={userId}/>*/}
+                {/*</div>*/}
+                <Transactions userId={userId} />
+                <SnackBarFeedback />
+              </div>
 
-          </Route>
-        </Switch>
-      </Suspense>
-    </Router>
+            </Route>
+          </Switch>
+        </Suspense>
+      </Router>
   );
 }
 

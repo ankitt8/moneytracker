@@ -28,8 +28,10 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
+
 const storeCreator = () => {
-  const store = createStore(persistedReducer, composeWithDevTools());
+  const store = createStore(persistedReducer, composeEnhancers());
   const persistor = persistStore(store);
   return { store, persistor };
 };

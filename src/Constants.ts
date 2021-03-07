@@ -7,6 +7,11 @@ const dev = {
     API_URL_DELETE_TRANSACTION: 'http://localhost:8080/api/delete_transaction',
     API_URL_SIGNUP: 'http://localhost:8080/api/signup',
     API_URL_SIGNIN: 'http://localhost:8080/api/signin',
+    API_URL_ADD_CREDIT_TRANSACTION_CATEGORY: 'http://localhost:8080/api/add-credit-transaction-category',
+    API_URL_ADD_DEBIT_TRANSACTION_CATEGORY: 'http://localhost:8080/api/add-debit-transaction-category',
+    API_URL_DELETE_CREDIT_TRANSACTION_CATEGORY: 'http://localhost:8080/api/delete-credit-transaction-category',
+    API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY: 'http://localhost:8080/api/delete-debit-transaction-category',
+    API_URL_GET_TRANSACTION_CATEGORIES: 'http://localhost:8080/api/get-transaction-categories'
   }
 }
 
@@ -19,6 +24,11 @@ const prod = {
     API_URL_DELETE_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/delete_transaction',
     API_URL_SIGNUP: 'https://moneytrackerbackend.herokuapp.com/api/signup',
     API_URL_SIGNIN: 'https://moneytrackerbackend.herokuapp.com/api/signin',
+    API_URL_ADD_CREDIT_TRANSACTION_CATEGORY: 'https://moneytrackerbackend.herokuapp.com/api/add-credit-transaction-category',
+    API_URL_ADD_DEBIT_TRANSACTION_CATEGORY: 'https://moneytrackerbackend.herokuapp.com/api/add-debit-transaction-category',
+    API_URL_DELETE_CREDIT_TRANSACTION_CATEGORY: 'https://moneytrackerbackend.herokuapp.com/api/delete-credit-transaction-category',
+    API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY: 'https://moneytrackerbackend.herokuapp.com/api/delete-debit-transaction-category',
+    API_URL_GET_TRANSACTION_CATEGORIES: 'https://moneytrackerbackend.herokuapp.com/api/get-transaction-categories'
   }
 }
 
@@ -35,11 +45,13 @@ export const ADD_TRANSACTION_SUCCESS_MSG = 'Transaction Added Successfully :)';
 export const EDIT_TRANSACTION_FAIL_ERROR = 'Transaction Edit Failed :(';
 export const DELETE_TRANSACTION_FAIL_ERROR = 'Transaction Delete Failed :(';
 export const EDIT_TRANSACTION_SUCCESS_MSG = 'Transaction Edited Successfully:)';
-export const DELETE_TRANSACTION_SUCCESS_MSG = 'Transaction Deleted!';
+export const DELETE_TRANSACTION_SUCCESS_MSG = 'Transaction Deleted !';
 export const OFFLINE_ERROR = 'OOPS You Are Offline :(';
 
 export const ADD_TRANSACTION_CATEGORY_SUCCESS_MSG = 'Category Added Succesfully :)';
-export const DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG = 'Category Deleted!';
+export const ADD_TRANSACTION_CATEGORY_ERROR_MSG = 'Category Addition Failed :(';
+export const DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG = 'Category Deleted !';
+export const DELETE_TRANSACTION_CATEGORY_ERROR_MSG = 'Category Delete Failed :(';
 export const INVALID_CATEGORY_WARNING = 'Category Addition Failed ):';
 
 export const CASH_MODE = 'cash';

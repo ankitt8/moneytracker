@@ -1,0 +1,17 @@
+.transactionCard {
+  height: 40px;
+  margin-bottom: 5px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid grey;
+  border-radius: 2px;
+  font-size: 20px;
+}
+
+
+.transactionCardCredit {
+  font-size: 22px;
+  color: green;
+}

@@ -27,10 +27,10 @@ function App() {
               <Login />
             </Route>
             <Route path="/transaction-category">
-              <>
+              <div className='desktop-view'>
                 <TransactionCategory />
                 <SnackBarFeedback />
-              </>
+              </div>
             </Route>
             <Route path="/bankaccounts">
               <UpcomingFeature />

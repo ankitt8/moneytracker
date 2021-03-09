@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -13,6 +13,7 @@ import Loader from '../Loader';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import FormLabel from '@material-ui/core/FormLabel';
 import cn from 'classnames';
+import CategoryFormInput from 'components/CategoryFormInput';
 
 import {
     CASH_MODE,
@@ -48,12 +49,19 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     handleClose
 }) => {
     const dispatch = useDispatch();
-    if (transaction.type === undefined) transaction.type = DEBIT_TYPE;
     const [editedTransaction, setEditedTransaction] = useState(transaction);
     const [editLoading, setEditLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const { _id, mode, type, amount, heading } = transaction;
+    // @ts-ignore
+    const transactionCategories = useSelector((state) => state.transactions.categories);
+    let categories: string[];
 
+    if (type === DEBIT_TYPE) {
+        categories = transactionCategories.debit;
+    } else {
+        categories = transactionCategories.credit;
+    }
     useEffect(() => {
         return function cleanUp() {
             setEditLoading(false);
@@ -124,7 +132,12 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 }
             )
     }
-
+    function handleCategoryChange(category: string) {
+        setEditedTransaction({
+            ...editedTransaction,
+            category
+        })
+    }
     function handleEditTransaction() {
         const { amount: updatedAmount, heading: editedHeading } = editedTransaction;
         if (updatedAmount <= 0 || editedHeading === '') {
@@ -264,6 +277,11 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                             />
                         </RadioGroup>
                     </FormControl>
+                    <CategoryFormInput
+                        categories={categories}
+                        categorySelected={editedTransaction.category || ''}
+                        handleCategoryChange={handleCategoryChange}
+                    />
                 </form>
                 <div className={styles.buttonWrapper}>
                     {

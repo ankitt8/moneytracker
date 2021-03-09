@@ -1,4 +1,5 @@
 export interface CategoryFormInputProps {
-  handleSelectedCategory: (category: string, type: string) => void;
-  type: string;
+  categories: string[];
+  categorySelected: string;
+  handleCategoryChange: (category: string) => void;
 }

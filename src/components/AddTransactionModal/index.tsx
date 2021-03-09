@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -50,7 +50,15 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     const [date, setDate] = useState(new Date());
     const [category, setCategory] = useState('');
     const [loadingState, setLoadingState] = useState(false);
+    // @ts-ignore
+    const transactionCategories = useSelector((state) => state.transactions.categories);
+    let categories: string[];
 
+    if (type === DEBIT_TYPE) {
+        categories = transactionCategories.debit;
+    } else {
+        categories = transactionCategories.credit;
+    }
     useEffect(() => {
         return function setFieldsEmpty() {
             setHeading('');
@@ -70,7 +78,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     const handleDateChange = (value: any) => {
         setDate(new Date(value));
     }
-    const handleSelectedCategory = (category: string) => {
+    const handleCategoryChange = (category: string) => {
         setCategory(category);
     }
 
@@ -168,8 +176,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                         />
                     </FormControl>
                     <CategoryFormInput
-                        handleSelectedCategory={handleSelectedCategory}
-                        type={type}
+                        categories={categories}
+                        categorySelected={category}
+                        handleCategoryChange={handleCategoryChange}
                     />
                 </form>
                 <div className={styles.buttonWrapper}>

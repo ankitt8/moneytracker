@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -10,9 +9,10 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Input from '@material-ui/core/Input';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Loader from './Loader';
+import Loader from '../Loader';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import FormLabel from '@material-ui/core/FormLabel';
+import cn from 'classnames';
 
 import {
     CASH_MODE,
@@ -39,13 +39,8 @@ import {
     editTransactionAction,
     updateStatusAction
 } from 'actions/actionCreator';
-import { TransactionInterface } from 'helper';
-
-interface EditTransactionModalProps {
-    transaction: TransactionInterface
-    open: boolean
-    handleClose: () => void
-}
+import { EditTransactionModalProps } from './interface';
+import styles from './styles.module.scss';
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     transaction,
@@ -270,47 +265,23 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                         </RadioGroup>
                     </FormControl>
                 </form>
-                <StyledButtonWrapper style={{ justifyContent: 'space-between' }}>
+                <div className={styles.buttonWrapper}>
                     {
                         deleteLoading ? <Loader /> :
-                            <StyledDeleteButton onClick={handleDeleteTransaction}>
+                            <button className={cn(styles.button, styles.delete)} onClick={handleDeleteTransaction}>
                                 Delete
-                            </StyledDeleteButton>
+                            </button>
                     }
                     {
                         editLoading ? <Loader /> :
-                            <StyledEditButton onClick={handleEditTransaction}>
+                            <button className={cn(styles.button, styles.edit)} onClick={handleEditTransaction}>
                                 Edit
-                            </StyledEditButton>
+                            </button>
                     }
-                </StyledButtonWrapper>
+                </div>
             </DialogContent>
         </Dialog>
     )
 }
-
-const StyledButtonWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-`;
-
-const StyledDeleteButton = styled.button`
-  background-color: #e51d1d;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  color: white;
-  font-size: 18px;
-  width: 30%;
-`;
-const StyledEditButton = styled.button`
-  background-color: #3f51b5;
-  padding: 10px;
-  border-radius: 5px;
-  color: white;
-  font-size: 18px;
-  width: 30%;
-`;
 
 export default EditTransactionModal;

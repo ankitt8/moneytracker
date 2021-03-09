@@ -1,6 +1,15 @@
+.flexWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .categoryFormInput {
   display: flex;
   flex-direction: column;
+}
+
+.categoryFormInputLabel {
+  color: gray;
 }
 
 .categoryInput {
@@ -19,14 +28,9 @@
 }
 
 .categorySelected {
-  background-color: gray;
+  background-color: lightgray;
   border: none;
 }
-
-a {
-  color: gray
-}
-
 
 
 

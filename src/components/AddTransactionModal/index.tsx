@@ -154,13 +154,18 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             <DialogTitle id="max-width-dialog-title">{modalTitle}</DialogTitle>
             <DialogContent>
                 <form noValidate autoComplete="off">
-                    <FormControl>
-                        <InputLabel htmlFor="heading">Title</InputLabel>
-                        <Input id="heading" value={heading} onChange={handleHeadingChange} />
-                    </FormControl>
+                    <CategoryFormInput
+                        categories={categories}
+                        categorySelected={category}
+                        handleCategoryChange={handleCategoryChange}
+                    />
                     <FormControl>
                         <InputLabel htmlFor="amount">Amount</InputLabel>
                         <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
+                    </FormControl>
+                    <FormControl>
+                        <InputLabel htmlFor="heading">Title</InputLabel>
+                        <Input id="heading" value={heading} onChange={handleHeadingChange} />
                     </FormControl>
                     <FormControl>
                         <KeyboardDatePicker
@@ -175,11 +180,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                             onChange={(value) => handleDateChange(value)}
                         />
                     </FormControl>
-                    <CategoryFormInput
-                        categories={categories}
-                        categorySelected={category}
-                        handleCategoryChange={handleCategoryChange}
-                    />
+                    
                 </form>
                 <div className={styles.buttonWrapper}>
                     <button

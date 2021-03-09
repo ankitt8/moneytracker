@@ -15,34 +15,23 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
 
   return (
     <div className={styles.categoryFormInput}>
-      <p className={styles.categoryFormInputLabel}>Category</p>
-      {
-        categories.length === 0 ? (
-          <div>
-            No Categories Found!
-            Please add categories here
-            <Link to='/transaction-category'> Add Category </Link>
+      <div className={styles.flexWrapper}>
+        <p className={styles.categoryFormInputLabel}>Category</p>
+        <Link to='/transaction-category'> Add Category </Link>
+      </div>
+      <div className={styles.categoryInput}>
+        {categories.map((category) => (
+          <div
+            key={category}
+            className={cn(styles.category, {
+              [styles.categorySelected]: category === categorySelected
+            })}
+            onClick={() => handleCategoryChange(category)}
+          >
+            {category}
           </div>
-        ) :
-          <div className={styles.categoryInput}>
-            {categories.map((category) => (
-              <div
-                key={category}
-                className={
-                  cn(
-                    styles.category,
-                    {
-                      [styles.categorySelected]: category === categorySelected
-                    }
-                  )
-                }
-                onClick={() => handleCategoryChange(category)}
-              >
-                {category}
-              </div>
-            ))}
-          </div>
-      }
+        ))}
+      </div>
     </div>
   )
 }

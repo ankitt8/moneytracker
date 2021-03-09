@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import EditTransactionModal from '../EditTransactionModal';
-import { CREDIT_TYPE } from '../../Constants';
+import EditTransactionModal from 'components/EditTransactionModal';
+import { CREDIT_TYPE } from 'Constants';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 import { TransactionCardProps } from './interface';

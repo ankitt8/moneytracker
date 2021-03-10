@@ -9,6 +9,7 @@ import Loader from './components/Loader';
 import TransactionCategory from './components/TransactionCategory';
 import { useSelector } from "react-redux";
 import './App.css';
+import TransactionAnalysisPage from 'components/TransactionAnalysis';
 
 const UpcomingFeature = lazy(() => import('./components/UpcomingFeature'));
 
@@ -42,7 +43,9 @@ function App() {
               <UpcomingFeature />
             </Route>
             <Route path="/analysis">
-              <UpcomingFeature />
+              <div className='desktop-view'>
+                <TransactionAnalysisPage />
+              </div>
             </Route>
             <Route path="/food-tracker">
               <UpcomingFeature />

@@ -8,45 +8,27 @@ import {
     editCashDebitAction,
     getTransactionsAction,
 } from 'actions/actionCreator';
-import Loader from '../Loader';
-import { CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url } from 'Constants';
+import Loader from 'components/Loader';
+import { url } from 'Constants';
 import DayTransactionsCard from 'components/DayTransaction';
 import {
     TransactionInterface,
     debitTransaction,
     getNoOfDaysCurrentMonth,
-    getTransactionCategoriesFromDB
+    getTransactionCategoriesFromDB,
+    sortTransactionsByDate,
+    checkCreditTypeTransaction,
+    calculateBankCreditAmount,
+    calculateBankDebitAmount,
+    calculateCashCreditAmount,
+    calculateCashDebitAmount,
+    checkCashModeTransaction,
+    checkDebitTypeTransaction,
+    checkOnlineModeTransaction
 } from 'helper';
 import { getTransactionCategories } from 'actions/actionCreator';
 import styles from './styles.module.scss';
 
-const checkCreditTypeTransaction = (transaction: TransactionInterface) => {
-    return transaction.type === CREDIT_TYPE;
-}
-const checkDebitTypeTransaction = (transaction: TransactionInterface) => {
-    return transaction.type === DEBIT_TYPE || transaction.type === undefined;
-}
-const checkOnlineModeTransaction = (transaction: TransactionInterface) => {
-    return transaction.mode === ONLINE_MODE;
-}
-const checkCashModeTransaction = (transaction: TransactionInterface) => {
-    return transaction.mode === CASH_MODE;
-}
-const calculateTotalAmount = (transactions: TransactionInterface[]) => {
-    return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
-}
-const calculateBankDebitAmount = (bankDebitTransactions: TransactionInterface[]) => {
-    return calculateTotalAmount(bankDebitTransactions);
-}
-const calculateBankCreditAmount = (bankCreditTransactions: TransactionInterface[]) => {
-    return calculateTotalAmount(bankCreditTransactions);
-}
-const calculateCashCreditAmount = (cashCreditTransactions: TransactionInterface[]) => {
-    return calculateTotalAmount(cashCreditTransactions);
-}
-const calculateCashDebitAmount = (cashDebitTransactions: TransactionInterface[]) => {
-    return calculateTotalAmount(cashDebitTransactions);
-}
 
 interface InterfaceTransactionsProps {
     userId: object;
@@ -63,12 +45,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         setTransactions(storeTransactions)
     }
 
-    function sortTransactionsByDate(a: TransactionInterface, b: TransactionInterface): number {
-        const da = new Date(a.date);
-        const db = new Date(b.date);
-        // @ts-ignore
-        return db - da;
-    }
+   
 
     const loadTransactions = useCallback(
         async () => {
@@ -160,6 +137,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         const dayTransactionIndex = new Date(transaction.date).getDate();
         dayTransactions[dayTransactionIndex].push(transaction);
     }
+
     for (let i = todayDate; i >= 1; --i) {
         totalAmountPerDay[i] = dayTransactions[i]
             .filter(debitTransaction)
@@ -167,7 +145,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         dayTransactionsList.push(
             <DayTransactionsCard
                 key={new Date(year, month, i).toDateString()}
-                date={new Date(year, month, i).toDateString()}
+                title={new Date(year, month, i).toDateString()}
                 transactions={dayTransactions[i]}
                 totalAmount={totalAmountPerDay[i]}
             />

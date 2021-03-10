@@ -14,7 +14,7 @@ const rootPersistConfig = {
 const transactionsPersistConfig = {
   key: 'transactions',
   storage,
-  whitelist: ['categories']
+  // whitelist: ['categories']
 };
 const userPersistConfig = {
   key: 'user',

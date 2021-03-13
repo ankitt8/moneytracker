@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, lazy } from 'react';
 import './styles.scss';
-import { CREDIT_TYPE, DEBIT_TYPE } from "../../../Constants";
-import AddTransactionModal from "../../AddTransactionModal/index";
+import { CREDIT_TYPE, DEBIT_TYPE } from 'Constants';
+import { CreditDebitSummaryAndAddProps } from './interface';
 
-interface CreditDebitSummaryAndAddPropsInterface {
-    userId: object;
-    title: string;
-    mode: string;
-    creditAmount: number;
-    debitAmount: number;
-}
+const AddTransactionModal = lazy(() => import('components/AddTransactionModal'));
 
-const CreditDebitSummaryAndAdd: React.FC<CreditDebitSummaryAndAddPropsInterface> = ({
+const CreditDebitSummaryAndAdd: React.FC<CreditDebitSummaryAndAddProps> = ({
     userId,
     title,
     mode,
@@ -66,14 +60,13 @@ const CreditDebitSummaryAndAdd: React.FC<CreditDebitSummaryAndAddPropsInterface>
                 </div>
 
             </div>
-            <AddTransactionModal
+            {open && <AddTransactionModal
                 modalTitle={addTransactionModalTitle}
                 userId={userId}
-                open={open}
                 type={type}
                 mode={mode}
                 handleClose={handleClose}
-            />
+            />}
         </>
 
     )

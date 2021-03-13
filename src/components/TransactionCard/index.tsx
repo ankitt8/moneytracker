@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import EditTransactionModal from 'components/EditTransactionModal';
+import React, { useState, lazy } from 'react';
+
 import { CREDIT_TYPE } from 'Constants';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 import { TransactionCardProps } from './interface';
+
+const EditTransactionModal = lazy(() => import('components/EditTransactionModal'));
 
 const TransactionCard: React.FC<TransactionCardProps> = ({
   transaction
@@ -28,7 +30,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
         <p>{heading}</p>
         <p>{amount}</p>
       </div>
-      <EditTransactionModal transaction={transaction} open={open} handleClose={handleClose} />
+      {open && <EditTransactionModal transaction={transaction} handleClose={handleClose} />}
     </>
   );
 }

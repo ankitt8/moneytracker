@@ -73,7 +73,7 @@ export function createTransactionsGroupedByCategories (
         }
     });
     transactions.forEach((transaction) => {
-        if (transaction.category === undefined) {
+        if (transaction.category === '' || transaction.category === undefined) {
             // @ts-ignore
             transactionsGroupedByCategories['No Category']['transactions'].push(transaction);
             transactionsGroupedByCategories['No Category'].totalAmount += transaction.amount;

@@ -60,6 +60,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         categories = transactionCategories.credit;
     }
     useEffect(() => {
+
         return function setFieldsEmpty() {
             setHeading('');
             setAmount('');
@@ -67,7 +68,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             setCategory('');
             setLoadingState(false);
         }
-    });
+    }, []);
 
     const handleHeadingChange = (event: any) => {
         setHeading(event.target.value);

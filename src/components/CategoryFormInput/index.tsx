@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 import cn from 'classnames';
 import { CategoryFormInputProps } from './interface';
+import { ROUTES } from 'Constants';
 
 
 const CategoryFormInput: FC<CategoryFormInputProps> = ({
@@ -17,7 +18,7 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
     <div className={styles.categoryFormInput}>
       <div className={styles.flexWrapper}>
         <p className={styles.categoryFormInputLabel}>Category</p>
-        <Link to='/transaction-category'> Add Category </Link>
+        <Link to={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
       </div>
       <div className={styles.categoryInput}>
         {categories.map((category) => (

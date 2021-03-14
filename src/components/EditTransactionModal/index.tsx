@@ -29,7 +29,6 @@ import {
     SEVERITY_ERROR,
     SEVERITY_SUCCESS,
     SEVERITY_WARNING,
-    url
 } from 'Constants';
 import {
     deleteTransactionAction,
@@ -42,17 +41,17 @@ import {
 } from 'actions/actionCreator';
 import { EditTransactionModalProps } from './interface';
 import styles from './styles.module.scss';
+import { deleteTransactionDB, editTransactionDB } from 'helper';
 
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     transaction,
-    open,
     handleClose
 }) => {
     const dispatch = useDispatch();
     const [editedTransaction, setEditedTransaction] = useState(transaction);
     const [editLoading, setEditLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
-    const { _id, mode, type, amount, heading } = transaction;
+    const { _id: id, mode, type, amount, heading } = transaction;
     // @ts-ignore
     const transactionCategories = useSelector((state) => state.transactions.categories);
     let categories: string[];
@@ -66,8 +65,10 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         return function cleanUp() {
             setEditLoading(false);
             setDeleteLoading(false);
+            setEditedTransaction(transaction);
         }
-    }, [open])
+    });
+
     const handleModeChange = (event: any) => {
         //For now not changing the mode will do it later
         // setEditedTransaction({...editedTransaction, mode: event.target.value});
@@ -90,54 +91,51 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     const handleDateChange = (date: any) => {
         setEditedTransaction({ ...transaction, date })
     }
-
-    function handleDeleteTransaction() {
-        setDeleteLoading(true);
-        fetch(`${url.API_URL_DELETE_TRANSACTION}/?id=${_id}`, {
-            method: 'POST'
-        })
-            .then(
-                function success(res) {
-                    if (type === DEBIT_TYPE) {
-                        if (mode === ONLINE_MODE || mode === undefined) {
-                            // while deleting edited values should not be taken
-                            dispatch(editBankDebitAction(-1 * amount));
-                        } else {
-                            dispatch(editCashDebitAction(-1 * amount));
-                        }
-
-                    } else {
-                        if (mode === ONLINE_MODE) {
-                            dispatch(editBankCreditAction(-1 * amount));
-                        } else {
-                            dispatch(editCashCreditAction(-1 * amount));
-                        }
-                    }
-
-                    dispatch(updateStatusAction({
-                        showFeedback: true,
-                        msg: DELETE_TRANSACTION_SUCCESS_MSG,
-                        severity: SEVERITY_SUCCESS
-                    }))
-                    handleClose();
-                    dispatch(deleteTransactionAction(_id));
-                },
-                function error() {
-                    dispatch(updateStatusAction({
-                        showFeedback: true,
-                        msg: DELETE_TRANSACTION_FAIL_ERROR,
-                        severity: SEVERITY_ERROR,
-                    }))
-                    handleClose();
-                }
-            )
-    }
-    function handleCategoryChange(category: string) {
+    const handleCategoryChange = (category: string) => {
         setEditedTransaction({
             ...editedTransaction,
             category
         })
     }
+
+    function handleDeleteTransaction() {
+        setDeleteLoading(true);
+        deleteTransactionDB(id)
+            .then(function onFulfilled(res) {
+                const { transactionId } = res;
+                if (type === DEBIT_TYPE) {
+                    if (mode === ONLINE_MODE || mode === undefined) {
+                        // while deleting edited values should not be taken
+                        dispatch(editBankDebitAction(-1 * amount));
+                    } else {
+                        dispatch(editCashDebitAction(-1 * amount));
+                    }
+                } else {
+                    if (mode === ONLINE_MODE) {
+                        dispatch(editBankCreditAction(-1 * amount));
+                    } else {
+                        dispatch(editCashCreditAction(-1 * amount));
+                    }
+                }
+                handleClose();
+                dispatch(deleteTransactionAction(transactionId));
+                dispatch(updateStatusAction({
+                    showFeedback: true,
+                    msg: DELETE_TRANSACTION_SUCCESS_MSG,
+                    severity: SEVERITY_SUCCESS
+                }))
+            })
+            .catch(function onRejected(error) {
+                dispatch(updateStatusAction({
+                    showFeedback: true,
+                    msg: DELETE_TRANSACTION_FAIL_ERROR,
+                    severity: SEVERITY_ERROR,
+                }));
+                handleClose();
+                console.error(error);
+            });
+    }
+
     function handleEditTransaction() {
         const { amount: updatedAmount, heading: editedHeading } = editedTransaction;
         if (updatedAmount <= 0 || editedHeading === '') {
@@ -157,64 +155,55 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             return;
         }
         setEditLoading(true);
-        fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${_id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(editedTransaction)
-        })
-            .then(
-                () => {
-                    dispatch(editTransactionAction(_id, editedTransaction));
-                    const { type: editedType, mode: editedMode } = editedTransaction;
-                    const changedAmount = updatedAmount - transaction.amount;
-                    if (editedType === DEBIT_TYPE) {
-                        //if changedAmount negative implies less spent, increase in balance
-                        if (editedMode === CASH_MODE) {
-                            dispatch(editCashDebitAction(changedAmount));
-                        } else if (editedMode === ONLINE_MODE) {
-                            dispatch(editBankDebitAction(changedAmount));
-                        }
-                    } else {
-                        if (editedMode === CASH_MODE) {
-                            dispatch(editCashCreditAction(changedAmount));
-                        } else if (editedMode === ONLINE_MODE) {
-                            dispatch(editBankCreditAction(changedAmount));
-                        }
-                    }
-                    dispatch(updateStatusAction({
-                        showFeedback: true,
-                        msg: EDIT_TRANSACTION_SUCCESS_MSG,
-                        severity: SEVERITY_SUCCESS
-                    }))
 
-                },
-                () => {
-                    dispatch(updateStatusAction({
-                        showFeedback: true,
-                        msg: EDIT_TRANSACTION_FAIL_ERROR,
-                        severity: SEVERITY_ERROR
-                    }))
+        editTransactionDB(id, editedTransaction)
+            .then(function onFulfilled(updatedTransactionObject) {
+                dispatch(editTransactionAction(id, updatedTransactionObject));
+                const { type: editedType, mode: editedMode } = updatedTransactionObject;
+                const changedAmount = updatedAmount - transaction.amount;
+                if (editedType === DEBIT_TYPE) {
+                    //if changedAmount negative implies less spent, increase in balance
+                    if (editedMode === CASH_MODE) {
+                        dispatch(editCashDebitAction(changedAmount));
+                    } else if (editedMode === ONLINE_MODE) {
+                        dispatch(editBankDebitAction(changedAmount));
+                    }
+                } else {
+                    if (editedMode === CASH_MODE) {
+                        dispatch(editCashCreditAction(changedAmount));
+                    } else if (editedMode === ONLINE_MODE) {
+                        dispatch(editBankCreditAction(changedAmount));
+                    }
                 }
-            )
-            .finally(() => {
-                handleClose();
-            });
+                dispatch(updateStatusAction({
+                    showFeedback: true,
+                    msg: EDIT_TRANSACTION_SUCCESS_MSG,
+                    severity: SEVERITY_SUCCESS
+                }))
+            })
+            .catch(function onRejected(error) {
+                console.error(error);
+                dispatch(updateStatusAction({
+                    showFeedback: true,
+                    msg: EDIT_TRANSACTION_FAIL_ERROR,
+                    severity: SEVERITY_ERROR
+                }))
+            })
+            .finally(handleClose);
     }
 
     return (
         <Dialog
             maxWidth={'sm'}
-            open={open}
+            open={true}
             onClose={handleClose}
-            aria-labelledby="max-width-dialog-title"
+            aria-labelledby="max-width-dialog-heading"
         >
-            <DialogTitle id="max-width-dialog-title">Edit Transaction</DialogTitle>
+            <DialogTitle id="max-width-dialog-heading">Edit Transaction</DialogTitle>
             <DialogContent>
                 <form noValidate autoComplete="off">
                     <FormControl>
-                        <InputLabel htmlFor="heading">Title</InputLabel>
+                        <InputLabel htmlFor="heading">heading</InputLabel>
                         <Input id="heading" value={editedTransaction.heading} onChange={handleHeadingChange} />
                     </FormControl>
                     <FormControl>

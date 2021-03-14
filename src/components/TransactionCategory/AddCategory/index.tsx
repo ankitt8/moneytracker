@@ -19,7 +19,6 @@ const AddCategory: FC<AddCategoryProps> = ({
   // @ts-ignore
   const userId = useSelector(state => state.user.userId);
   const dispatch = useDispatch();
-  // @ts-ignore
   const [newCategory, setNewCategory] = useState('');
   const [loader, setLoader] = useState(false);
 

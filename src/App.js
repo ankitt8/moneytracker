@@ -1,17 +1,19 @@
 import React, { Suspense, lazy } from 'react';
-import SnackBarFeedback from './components/SnackBarFeedback';
-import Transactions from './components/Transactions';
-import TransactionSummaryAndAdd from './components/TransactionSummaryAndAdd';
-import Login from './components/Login';
-import Header from './components/Header';
+import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Loader from './components/Loader';
-import TransactionCategory from './components/TransactionCategory';
-import { useSelector } from "react-redux";
 import './App.css';
-import TransactionAnalysisPage from 'components/TransactionAnalysis';
 
-const UpcomingFeature = lazy(() => import('./components/UpcomingFeature'));
+import SnackBarFeedback from 'components/SnackBarFeedback';
+import Transactions from 'components/Transactions';
+import TransactionSummaryAndAdd from 'components/TransactionSummaryAndAdd';
+import Login from 'components/Login';
+import Header from 'components/Header';
+import Loader from 'components/Loader';
+import TransactionCategory from 'components/TransactionCategory';
+
+const UpcomingFeature = lazy(() => import('components/UpcomingFeature'));
+const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysis'));
+const BankAccountPage = lazy(() => import('components/BankAccounts'));
 
 function App() {
   const userId = useSelector((state) => state.user.userId);
@@ -34,7 +36,7 @@ function App() {
               </div>
             </Route>
             <Route path="/bankaccounts">
-              <UpcomingFeature />
+              <BankAccountPage />
             </Route>
             <Route path="/investments">
               <UpcomingFeature />
@@ -51,17 +53,11 @@ function App() {
               <UpcomingFeature />
             </Route>
             <Route path="/">
-
               <div className="desktop-view">
                 <TransactionSummaryAndAdd userId={userId} />
-                {/*<div className="quote-and-add-icon">*/}
-                {/*  <Quote/>*/}
-                {/*  <AddTransaction userId={userId}/>*/}
-                {/*</div>*/}
                 <Transactions userId={userId} />
                 <SnackBarFeedback />
               </div>
-
             </Route>
           </Switch>
         </Suspense>

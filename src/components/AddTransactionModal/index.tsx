@@ -6,8 +6,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import Loader from '../Loader';
-import CategoryFormInput from '../CategoryFormInput'
+import Loader from 'components/Loader';
+import CategoryFormInput from 'components/CategoryFormInput'
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionInterface, AddTransactionModalProps } from './interface';
 
@@ -20,7 +20,7 @@ import {
     editCashCreditAction,
     editCashDebitAction,
     updateStatusAction
-} from '../../actions/actionCreator'
+} from 'actions/actionCreator'
 
 import {
     ADD_TRANSACTION_FAIL_ERROR,
@@ -33,13 +33,13 @@ import {
     SEVERITY_ERROR,
     SEVERITY_SUCCESS,
     SEVERITY_WARNING,
-    url
-} from '../../Constants';
+} from 'Constants';
+
+import { addTransactionDB } from 'helper';
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     modalTitle,
     userId,
-    open,
     type,
     mode,
     handleClose,
@@ -67,7 +67,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             setCategory('');
             setLoadingState(false);
         }
-    }, [open]);
+    });
 
     const handleHeadingChange = (event: any) => {
         setHeading(event.target.value);
@@ -83,7 +83,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     }
 
     function handleTransactionSubmit() {
-
         if (amount === '' || parseInt(amount) <= 0 || heading === '') {
             const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
             dispatch(updateStatusAction({
@@ -97,7 +96,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
         setLoadingState(true);
 
-        const transaction = {
+        const transaction: AddTransactionInterface = {
             userId,
             heading,
             amount: parseInt(amount),
@@ -106,52 +105,49 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             type,
             category,
         };
-        const result = addTransactionToDatabase(transaction);
-        result
-            .then(
-                function success(res) {
-                    dispatch(addTransactionAction(res));
-                    const { amount, mode } = res;
-                    if (type === DEBIT_TYPE) {
-                        if (mode === CASH_MODE) {
-                            dispatch(editCashDebitAction(amount));
-                        } else if (mode === ONLINE_MODE) {
-                            dispatch(editBankDebitAction(amount));
-                        }
-                    } else {
-                        if (mode === CASH_MODE) {
-                            dispatch(editCashCreditAction(amount));
-                        } else if (mode === ONLINE_MODE) {
-                            dispatch(editBankCreditAction(amount));
-                        }
+
+        addTransactionDB(transaction)
+            .then(function onFulfilled(transactionObject) {
+                dispatch(addTransactionAction(transactionObject));
+                const { amount, mode } = transactionObject;
+                if (type === DEBIT_TYPE) {
+                    if (mode === CASH_MODE) {
+                        dispatch(editCashDebitAction(amount));
+                    } else if (mode === ONLINE_MODE) {
+                        dispatch(editBankDebitAction(amount));
                     }
-                    dispatch(updateStatusAction({
-                        showFeedback: true,
-                        msg: ADD_TRANSACTION_SUCCESS_MSG,
-                        severity: SEVERITY_SUCCESS
-                    }))
-                },
-                function error() {
-                    dispatch(updateStatusAction({
-                        showFeedback: true,
-                        msg: ADD_TRANSACTION_FAIL_ERROR,
-                        severity: SEVERITY_ERROR
-                    }))
+                } else {
+                    if (mode === CASH_MODE) {
+                        dispatch(editCashCreditAction(amount));
+                    } else if (mode === ONLINE_MODE) {
+                        dispatch(editBankCreditAction(amount));
+                    }
                 }
-            )
-            .finally(() => {
-                handleClose();
+                dispatch(updateStatusAction({
+                    showFeedback: true,
+                    msg: ADD_TRANSACTION_SUCCESS_MSG,
+                    severity: SEVERITY_SUCCESS
+                }));
             })
+            .catch(function onRejected(error) {
+                console.error(error);
+                dispatch(updateStatusAction({
+                    showFeedback: true,
+                    msg: ADD_TRANSACTION_FAIL_ERROR,
+                    severity: SEVERITY_ERROR
+                }));
+            })
+            .finally(handleClose);
     }
 
     return (
         <Dialog
             maxWidth={'sm'}
-            open={open}
+            open={true}
             onClose={handleClose}
-            aria-labelledby="max-width-dialog-title"
+            aria-labelledby="max-width-dialog-heading"
         >
-            <DialogTitle id="max-width-dialog-title">{modalTitle}</DialogTitle>
+            <DialogTitle id="max-width-dialog-heading">{modalTitle}</DialogTitle>
             <DialogContent>
                 <form noValidate autoComplete="off">
                     <CategoryFormInput
@@ -180,7 +176,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                             onChange={(value) => handleDateChange(value)}
                         />
                     </FormControl>
-                    
                 </form>
                 <div className={styles.buttonWrapper}>
                     <button
@@ -202,19 +197,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             </DialogContent>
         </Dialog>
     )
-};
-
-const addTransactionToDatabase: (transaction: AddTransactionInterface) => Promise<any> = async function (
-    transaction: AddTransactionInterface
-): Promise<any> {
-    const res = await fetch(url.API_URL_ADD_TRANSACTION, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(transaction),
-    });
-    return await res.json();
 };
 
 export default AddTransactionModal;

@@ -45,8 +45,6 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         setTransactions(storeTransactions)
     }
 
-   
-
     const loadTransactions = useCallback(
         async () => {
             try {
@@ -118,48 +116,53 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
         loadTransactions();
 
     }, [dispatch, loadTransactions, userId]);
-
-    transactions.sort(sortTransactionsByDate);
-
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const noOfDays: number = getNoOfDaysCurrentMonth();
-    const dayTransactions: any[] = [];
-    const todayDate: number = date.getDate();
-    const dayTransactionsList: any[] = [];
-    let totalAmountPerDay = new Array(noOfDays);
-    for (let i = 0; i <= noOfDays; ++i) {
-        dayTransactions[i] = [];
-    }
-
-    for (const transaction of transactions) {
-        const dayTransactionIndex = new Date(transaction.date).getDate();
-        dayTransactions[dayTransactionIndex].push(transaction);
-    }
-
-    for (let i = todayDate; i >= 1; --i) {
-        totalAmountPerDay[i] = dayTransactions[i]
-            .filter(debitTransaction)
-            .reduce((acc: number, curr: TransactionInterface) => acc + curr.amount, 0);
-        dayTransactionsList.push(
-            <DayTransactionsCard
-                key={new Date(year, month, i).toDateString()}
-                title={new Date(year, month, i).toDateString()}
-                transactions={dayTransactions[i]}
-                totalAmount={totalAmountPerDay[i]}
-            />
-        );
-    }
     let componentToRender;
-    if (loader) {
-        componentToRender = <Loader />;
-    } else {
-        if (offline) {
-            componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;
-        } else {
-            componentToRender = <ul className={styles.transactionsList}>{dayTransactionsList}</ul>
+
+    try {
+        transactions.sort(sortTransactionsByDate);
+
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const noOfDays: number = getNoOfDaysCurrentMonth();
+        const dayTransactions: any[] = [];
+        const todayDate: number = date.getDate();
+        const dayTransactionsList: any[] = [];
+        let totalAmountPerDay = new Array(noOfDays);
+        for (let i = 0; i <= noOfDays; ++i) {
+            dayTransactions[i] = [];
         }
+
+        transactions.forEach((transaction: TransactionInterface) => {
+            const dayTransactionIndex = new Date(transaction.date).getDate();
+            dayTransactions[dayTransactionIndex].push(transaction);
+        });
+
+        for (let i = todayDate; i >= 1; --i) {
+            totalAmountPerDay[i] = dayTransactions[i]
+                .filter(debitTransaction)
+                .reduce((acc: number, curr: TransactionInterface) => acc + curr.amount, 0);
+            dayTransactionsList.push(
+                <DayTransactionsCard
+                    key={new Date(year, month, i).toDateString()}
+                    title={new Date(year, month, i).toDateString()}
+                    transactions={dayTransactions[i]}
+                    totalAmount={totalAmountPerDay[i]}
+                />
+            );
+        }
+        if (loader) {
+            componentToRender = <Loader />;
+        } else {
+            if (offline) {
+                componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;
+            } else {
+                componentToRender = <ul className={styles.transactionsList}>{dayTransactionsList}</ul>
+            }
+        }
+    } catch (error) {
+        componentToRender = <h2>Something Broke From Our End</h2>
+        console.error(error)
     }
     return componentToRender;
 }

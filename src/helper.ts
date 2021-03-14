@@ -1,3 +1,4 @@
+import { AddTransactionInterface } from 'components/AddTransactionModal/interface';
 import {
     url,
     CREDIT_TYPE,
@@ -153,6 +154,36 @@ export async function deleteTransactionCategoryFromDB(userId: object, categories
         })
     });
 
+}
+export async function addTransactionDB (transaction: AddTransactionInterface) {
+    const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transaction),
+    });
+    const transactionObject = await addTransactionResponse.json();
+    return Promise.resolve(transactionObject);
+}
+
+export async function editTransactionDB (transactionId: object, updatedTransaction: TransactionInterface) {
+    const updatedTransactionResponse = await fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${transactionId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedTransaction)
+    });
+    const updatedTransactionObject = await updatedTransactionResponse.json();
+    return Promise.resolve(updatedTransactionObject);
+}
+
+export async function deleteTransactionDB (transactionId: object) {
+    const response = await fetch(`${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`, {
+        method: 'POST'
+    });
+    return await response.json();
 }
 
 export const checkCreditTypeTransaction = (transaction: TransactionInterface) => {

@@ -67,7 +67,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             setDeleteLoading(false);
             setEditedTransaction(transaction);
         }
-    });
+    }, []);
 
     const handleModeChange = (event: any) => {
         //For now not changing the mode will do it later

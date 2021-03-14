@@ -60,14 +60,16 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         categories = transactionCategories.credit;
     }
     useEffect(() => {
+
         return function setFieldsEmpty() {
+            console.log('cleanup called add transaction modal');
             setHeading('');
             setAmount('');
             setDate(new Date());
             setCategory('');
             setLoadingState(false);
         }
-    });
+    }, []);
 
     const handleHeadingChange = (event: any) => {
         setHeading(event.target.value);

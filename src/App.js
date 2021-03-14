@@ -10,6 +10,12 @@ import Login from 'components/Login';
 import Header from 'components/Header';
 import Loader from 'components/Loader';
 import TransactionCategory from 'components/TransactionCategory';
+import FixedBottomNavBar from 'components/FixedBottomNavBar';
+import { ROUTES } from 'Constants';
+
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faHome, faChartBar, faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons';
+library.add(faHome, faChartBar, faSignOutAlt, faFilter);
 
 const UpcomingFeature = lazy(() => import('components/UpcomingFeature'));
 const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysis'));
@@ -22,46 +28,47 @@ function App() {
     return <Login />
   }
   return (
-      <Router>
-        <Header username={username} />
-        <Suspense fallback={<Loader />}>
-          <Switch >
-            <Route path="/login">
-              <Login />
-            </Route>
-            <Route path="/transaction-category">
-              <div className='desktop-view'>
-                <TransactionCategory />
-                <SnackBarFeedback />
-              </div>
-            </Route>
-            <Route path="/bankaccounts">
-              <BankAccountPage />
-            </Route>
-            <Route path="/investments">
-              <UpcomingFeature />
-            </Route>
-            <Route path="/budget">
-              <UpcomingFeature />
-            </Route>
-            <Route path="/analysis">
-              <div className='desktop-view'>
-                <TransactionAnalysisPage />
-              </div>
-            </Route>
-            <Route path="/food-tracker">
-              <UpcomingFeature />
-            </Route>
-            <Route path="/">
-              <div className="desktop-view">
-                <TransactionSummaryAndAdd userId={userId} />
-                <Transactions userId={userId} />
-                <SnackBarFeedback />
-              </div>
-            </Route>
-          </Switch>
-        </Suspense>
-      </Router>
+    <Router>
+      <Header username={username} />
+      <FixedBottomNavBar />
+      <Suspense fallback={<Loader />}>
+        <Switch >
+          <Route path={ROUTES.LOGIN}>
+            <Login />
+          </Route>
+          <Route path={ROUTES.TRANSACTION_CATEGORIES}>
+            <div className='desktop-view'>
+              <TransactionCategory />
+              <SnackBarFeedback />
+            </div>
+          </Route>
+          <Route path={ROUTES.BANK}>
+            <BankAccountPage />
+          </Route>
+          <Route path={ROUTES.INVESTMENT}>
+            <UpcomingFeature />
+          </Route>
+          <Route path={ROUTES.BUDGET}>
+            <UpcomingFeature />
+          </Route>
+          <Route path={ROUTES.SPEND_ANALYSIS}>
+            <div className='desktop-view'>
+              <TransactionAnalysisPage />
+            </div>
+          </Route>
+          <Route path={ROUTES.FOOD_TRACKER}>
+            <UpcomingFeature />
+          </Route>
+          <Route path={ROUTES.HOME}>
+            <div className="desktop-view">
+              <TransactionSummaryAndAdd userId={userId} />
+              <Transactions userId={userId} />
+              <SnackBarFeedback />
+            </div>
+          </Route>
+        </Switch>
+      </Suspense>
+    </Router>
   );
 }
 

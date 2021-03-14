@@ -34,6 +34,17 @@ const prod = {
 
 export const url = process.env.NODE_ENV === `development` ? dev.url : prod.url;
 
+export const ROUTES = {
+  LOGIN: '/login',
+  HOME: '/',
+  SPEND_ANALYSIS: '/spend-analysis',
+  TRANSACTION_CATEGORIES: '/transaction-categories',
+  BANK: '/bank',
+  INVESTMENT: '/investment',
+  FOOD_TRACKER: '/food-tracker',
+  BUDGET: '/budget',
+}
+
 export const SEVERITY_SUCCESS = 'success';
 export const SEVERITY_WARNING = 'warning';
 export const SEVERITY_ERROR = 'error';

@@ -11,16 +11,19 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import HomeIcon from '@material-ui/icons/Home';
+
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-import AssessmentIcon from '@material-ui/icons/Assessment';
 import PaymentIcon from '@material-ui/icons/Payment';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import { Link } from 'react-router-dom';
 import { HeaderProps } from './interface';
+
 import styles from './styles.module.scss';
+
+import { ROUTES } from 'Constants';
 
 const drawerWidth = 240;
 
@@ -82,60 +85,53 @@ const Header: FC<HeaderProps> = ({
           <p className={styles.username}>{`Hi ${username}`}</p>
         </ListItem>
         <Divider />
-        <Link className={styles.headerLink} to="/">
+        <Link className={styles.headerLink} to={ROUTES.HOME}>
           <ListItem button key="home" onClick={handleDrawerToggle}>
-            <ListItemIcon><HomeIcon /></ListItemIcon>
+            <ListItemIcon><FontAwesomeIcon icon='home' size='lg'/></ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
         </Link>
-        <Link className={styles.headerLink} to="/transaction-category">
+        <Link className={styles.headerLink} to={ROUTES.TRANSACTION_CATEGORIES}>
           <ListItem button key="transactionCategory" onClick={handleDrawerToggle}>
-            <ListItemIcon><FontAwesomeIcon icon={faFilter} /></ListItemIcon>
+            <ListItemIcon><FontAwesomeIcon icon='filter' size='lg'/></ListItemIcon>
             <ListItemText primary="Add Category" />
           </ListItem>
         </Link>
-        <Link className={styles.headerLink} to="/bankaccounts">
+        <Link className={styles.headerLink} to={ROUTES.BANK}>
           <ListItem button key="bankaccount" onClick={handleDrawerToggle}>
             <ListItemIcon><AccountBalanceIcon /></ListItemIcon>
             <ListItemText primary="Bank Accounts" />
           </ListItem>
         </Link>
-        <Link className={styles.headerLink} to="/investments">
+        <Link className={styles.headerLink} to={ROUTES.INVESTMENT}>
           <ListItem button key="investments" onClick={handleDrawerToggle}>
             <ListItemIcon><PaymentIcon /></ListItemIcon>
             <ListItemText primary="Investments" />
           </ListItem>
         </Link>
-        <Link className={styles.headerLink} to="/budget">
+        <Link className={styles.headerLink} to={ROUTES.BUDGET}>
           <ListItem button key="budget" onClick={handleDrawerToggle}>
             <ListItemIcon><PaymentIcon /></ListItemIcon>
             <ListItemText primary="Budget" />
           </ListItem>
         </Link>
-        <Link className={styles.headerLink} to="/food-tracker">
+        <Link className={styles.headerLink} to={ROUTES.FOOD_TRACKER}>
           <ListItem button key="foodtracker" onClick={handleDrawerToggle}>
             <ListItemIcon><FastfoodIcon /></ListItemIcon>
             <ListItemText primary="Food Tracker" />
           </ListItem>
         </Link>
-        <Link className={styles.headerLink} to="/analysis">
+        <Link className={styles.headerLink} to={ROUTES.SPEND_ANALYSIS}>
           <ListItem button key="analysis" onClick={handleDrawerToggle}>
-            <ListItemIcon><AssessmentIcon /></ListItemIcon>
+            <ListItemIcon><FontAwesomeIcon icon='chart-bar' size='lg' /></ListItemIcon>
             <ListItemText primary="Spend Analysis" />
           </ListItem>
         </Link>
         <Divider />
-        {/*<ListItem button key="logout" onClick={handleLogout}>*/}
-        {/*  <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>*/}
-        {/*  <ListItemText primary="Logout" />*/}
-        {/*</ListItem>*/}
       </div>
       <div>
-        {/*<StyledLogoutButton>*/}
-        {/*    <FontAwesomeIcon icon={faSignOutAlt} />Logout*/}
-        {/*</StyledLogoutButton>*/}
         <ListItem button key="logout" onClick={handleLogout}>
-          <ListItemIcon><FontAwesomeIcon icon={faSignOutAlt} /></ListItemIcon>
+          <ListItemIcon><FontAwesomeIcon icon='sign-out-alt' /></ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItem>
       </div>

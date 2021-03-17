@@ -6,7 +6,7 @@ import styles from './styles.module.scss';
 
 const TransactionCategory = (): ReactElement => {
   return (
-    <>
+    <div className={styles.transactionCategoriesPage}>
       <div className={styles.transactionCategoryCard}>
         <AddCategory
           title='Credit Transaction Category'
@@ -22,7 +22,7 @@ const TransactionCategory = (): ReactElement => {
         />
         <DisplayCategories type={DEBIT_TYPE} />
       </div>
-    </>
+    </div>
   )
 }
 

@@ -127,8 +127,8 @@ export function addTransactionCategory(category, transactionType) {
 }
 
 export function deleteTransactionCategory(category, transactionType) {
-  console.log(category);
-  console.log(transactionType);
+  // console.log(category);
+  // console.log(transactionType);
   return {
     type: DELETE_TRANSACTION_CATEGORY,
     category,

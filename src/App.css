@@ -1,12 +1,6 @@
-
-#root {
-  min-height: 100vh;
-}
-
 * {
   box-sizing: border-box;
 }
-
 
 ul {
   list-style: none;

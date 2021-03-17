@@ -9,7 +9,6 @@ import TransactionSummaryAndAdd from 'components/TransactionSummaryAndAdd';
 import Login from 'components/Login';
 import Header from 'components/Header';
 import Loader from 'components/Loader';
-import TransactionCategory from 'components/TransactionCategory';
 import FixedBottomNavBar from 'components/FixedBottomNavBar';
 import { ROUTES } from 'Constants';
 
@@ -19,6 +18,7 @@ library.add(faHome, faChartBar, faSignOutAlt, faFilter);
 
 const UpcomingFeature = lazy(() => import('components/UpcomingFeature'));
 const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysis'));
+const TransactionCategoriesPage = lazy(() => import('components/TransactionCategories'));
 const BankAccountPage = lazy(() => import('components/BankAccounts'));
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
           </Route>
           <Route path={ROUTES.TRANSACTION_CATEGORIES}>
             <div className='desktop-view'>
-              <TransactionCategory />
+              <TransactionCategoriesPage />
               <SnackBarFeedback />
             </div>
           </Route>

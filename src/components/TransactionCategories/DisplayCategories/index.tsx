@@ -37,7 +37,7 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
 
   function handleDeleteCategory(category: string) {
     // belwo line is weird I am getting empty array
-    console.log(categories)
+    // console.log(categories)
     // I spent 3 hours debugging the below issue
     // const updatedCategories = [categories];
     // instead I should have used [...categories]

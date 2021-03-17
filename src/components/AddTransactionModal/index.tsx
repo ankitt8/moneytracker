@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Loader from 'components/Loader';
-import CategoryFormInput from 'components/CategoryFormInput'
+import CategoryFormInput from 'components/AddTransactionCategoryInput'
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionInterface, AddTransactionModalProps } from './interface';
 
@@ -62,7 +62,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     useEffect(() => {
 
         return function setFieldsEmpty() {
-            console.log('cleanup called add transaction modal');
+            // console.log('cleanup called add transaction modal');
             setHeading('');
             setAmount('');
             setDate(new Date());

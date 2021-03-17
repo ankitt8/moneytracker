@@ -1,4 +1,5 @@
+@import 'src/styles/mixins';
+
 .transactionAnalysisPage {
-  margin: 0;
-  padding: 0 5px;
+  @include page;
 }

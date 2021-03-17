@@ -13,7 +13,7 @@ import Loader from '../Loader';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import FormLabel from '@material-ui/core/FormLabel';
 import cn from 'classnames';
-import CategoryFormInput from 'components/CategoryFormInput';
+import CategoryFormInput from 'components/AddTransactionCategoryInput';
 
 import {
     CASH_MODE,

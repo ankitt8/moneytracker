@@ -27,8 +27,8 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
         })}
         onClick={handleClickOpen}
       >
-        <p>{heading}</p>
-        <p>{amount}</p>
+        <p className={styles.title}>{heading}</p>
+        <p className={styles.amount}>{amount}</p>
       </div>
       {open && <EditTransactionModal transaction={transaction} handleClose={handleClose} />}
     </>

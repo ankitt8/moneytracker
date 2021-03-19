@@ -11,11 +11,13 @@
     justify-content: space-around;
     background-color:white;
     border: 1px solid lightgray;
-    border-radius: 15px;
+    border-radius: 15px 15px 0 0;    
     
     a {
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      padding: 15px 0;
+      border: 3px solid white;
       
       &:active {
         border-top: 3px solid blue;
@@ -48,5 +50,3 @@
     -ms-user-select: none;
     user-select: none;
 }
-
-

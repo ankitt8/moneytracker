@@ -60,7 +60,7 @@ function App() {
             <UpcomingFeature />
           </Route>
           <Route path={ROUTES.HOME}>
-            <div className="desktop-view">
+            <div className='desktop-view'>
               <TransactionSummaryAndAdd userId={userId} />
               <Transactions userId={userId} />
               <SnackBarFeedback />

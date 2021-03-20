@@ -1,3 +1,7 @@
+import { ReactElement } from 'react';
+import { motion } from 'framer-motion';
+import { useSelector } from 'react-redux';
+
 import DayTransactionsCard from 'components/DayTransaction';
 import { DEBIT_TYPE } from 'Constants';
 import {
@@ -6,8 +10,6 @@ import {
   sortCategoriesDescByTotalAmount,
   TransactionsGroupedByCategoriesInterface
 } from 'helper';
-import { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 
 import styles from './styles.module.scss';
 
@@ -37,26 +39,31 @@ const TransactionAnalysisPage = (): ReactElement => {
   } else {
     categories = transactionCategories.credit;
   }
-  const transactionsGroupedByCategories: TransactionsGroupedByCategoriesInterface =
-    createTransactionsGroupedByCategories(transactions, categories);
-  const TransactionAnalysisCards: ReactElement[] = [];
+  let componentToRender;
+  if (categories.length === 0) {
+    componentToRender = <h2>No Categories Added</h2>;
+  } else {
+    const transactionsGroupedByCategories: TransactionsGroupedByCategoriesInterface =
+      createTransactionsGroupedByCategories(transactions, categories);
 
-  const categoriesSortedDescTotalAmount = sortCategoriesDescByTotalAmount(transactionsGroupedByCategories);
+    const categoriesSortedDescTotalAmount = sortCategoriesDescByTotalAmount(transactionsGroupedByCategories);
 
-  categoriesSortedDescTotalAmount.forEach((category) => {
-    TransactionAnalysisCards.push(
-      <DayTransactionsCard
+    const TransactionAnalysisCards: ReactElement[] = categoriesSortedDescTotalAmount.map((category) => (
+      <motion.li
         key={category}
-        title={category}
-        transactions={transactionsGroupedByCategories[category]['transactions']}
-        totalAmount={transactionsGroupedByCategories[category]['totalAmount']}
-      />
-    )
-  })
+        layout
+      >
+        <DayTransactionsCard
+          title={category}
+          transactions={transactionsGroupedByCategories[category]['transactions']}
+          totalAmount={transactionsGroupedByCategories[category]['totalAmount']}
+        />
+      </motion.li>
+    ))
 
-  return (
-    <ul className={styles.transactionAnalysisPage}>{TransactionAnalysisCards}</ul>
-  )
+    componentToRender = <ul className={styles.transactionAnalysisPage}>{TransactionAnalysisCards}</ul>
+  }
+  return componentToRender;
 }
 
 export default TransactionAnalysisPage;

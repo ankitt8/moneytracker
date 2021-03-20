@@ -60,6 +60,9 @@ export function getNoOfDaysRemainingCurrentMonth(noOfDays: number): number {
 export function createTransactionsGroupedByCategories (
     transactions: TransactionInterface[], categories: string[]
 ) {
+  if (categories.length === 0) return {
+      
+    }
     let transactionsGroupedByCategories: TransactionsGroupedByCategoriesInterface = {
         'No Category': {
             transactions: [],
@@ -191,6 +194,8 @@ export const checkCreditTypeTransaction = (transaction: TransactionInterface) =>
 }
 
 export const checkDebitTypeTransaction = (transaction: TransactionInterface) => {
+		// to handle the transactions where type debit or credit is not stored
+  		// adding undefined match also
     return transaction.type === DEBIT_TYPE || transaction.type === undefined;
 }
 export const checkOnlineModeTransaction = (transaction: TransactionInterface) => {

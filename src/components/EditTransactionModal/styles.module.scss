@@ -1,3 +1,5 @@
+@import 'src/styles/mixins';
+
 .buttonWrapper {
   display: flex;
   justify-content: space-between;
@@ -5,12 +7,7 @@
 }
 
 .button {
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  color: white;
-  font-size: 18px;
-  width: 30%;
+  @include button;
 
   &.delete {
     background-color: #e51d1d;

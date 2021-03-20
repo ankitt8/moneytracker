@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useEffect } from 'react';
+import React, { FC, ReactElement, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   DEBIT_TYPE,
@@ -11,8 +11,10 @@ import { DisplayCategoriesProps } from './interface';
 import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
-import { deleteTransactionCategory, updateStatusAction, getTransactionCategories } from 'actions/actionCreator';
-import { getTransactionCategoriesFromDB, deleteTransactionCategoryFromDB } from 'helper';
+import { deleteTransactionCategory, getTransactionCategories, updateStatusAction } from 'actions/actionCreator';
+import { deleteTransactionCategoryFromDB, getTransactionCategoriesFromDB } from 'helper';
+import { TransactionCategory } from 'components/AddTransactionCategoryInput/interface';
+import { motion } from 'framer-motion';
 
 const DisplayCategories: FC<DisplayCategoriesProps> = ({
   type,
@@ -28,13 +30,26 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
   } else {
     categories = transactionCategories.credit;
   }
-  useEffect(() => {
-    getTransactionCategoriesFromDB(userId)
-      .then(({ transactionCategories }) => {
-        dispatch(getTransactionCategories(transactionCategories));
-      });
-  }, []);
+  const checkTransactionCategoriesChanged = (data: TransactionCategory) => {
+    const { credit, debit } = transactionCategories;
+    const { credit: dbCredit, debit: dbDebit } = data;
+    if (credit.length !== dbCredit.length) return true;
+    if (debit.length !== dbDebit.length) return true;
+    return false;
+  }
 
+  const loadTransactionCategories = useCallback(() => {
+    getTransactionCategoriesFromDB(userId)
+      .then(({ transactionCategories: dbTransactionCategories }) => {
+        if (checkTransactionCategoriesChanged(dbTransactionCategories)) {
+          dispatch(getTransactionCategories(dbTransactionCategories));
+        }
+      });
+  }, [])
+
+  useEffect(() => {
+    loadTransactionCategories();
+  }, []);
   function handleDeleteCategory(category: string) {
     // belwo line is weird I am getting empty array
     // console.log(categories)
@@ -66,18 +81,21 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
 
   }
   return (
-    <div className={styles.categoryInput}>
+    <div className={styles.categoriesWrapper}>
       {
         categories.map((category) => {
           return (
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: 0 }}
               key={category}
               className={styles.categoryWrapper}
             >
               <div>{category}</div>
               <div>|</div>
               <FontAwesomeIcon icon={faWindowClose} onClick={() => handleDeleteCategory(category)} />
-            </div>
+            </motion.div>
           )
         })
       }

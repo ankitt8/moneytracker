@@ -3,3 +3,8 @@ export interface CategoryFormInputProps {
   categorySelected: string;
   handleCategoryChange: (category: string) => void;
 }
+
+export interface TransactionCategory {
+  credit: string[];
+  debit: string[];
+}

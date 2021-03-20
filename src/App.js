@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 

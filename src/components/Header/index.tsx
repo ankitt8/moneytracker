@@ -70,11 +70,33 @@ const Header: FC<HeaderProps> = ({
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = '/';
     // history.push('/');
     // handleDrawerToggle();
+  }
+  
+  window.addEventListener('beforeinstallprompt', (e) => {
+    debugger;
+    // @ts-ignore
+    window.deferredPrompt = e;
+    document.getElementById('installBtn')?.classList.toggle('hidden', false);
+  })
+
+  const handleInstallAppClick = async () => {
+    // @ts-ignore
+    const promptEvent = window.deferredPrompt;
+    if (!promptEvent) return;
+    promptEvent.prompt();
+    const result = await promptEvent.userChoice;
+    console.log(result);
+
+    // garbage collect the deferredPrompt added 
+    // @ts-ignore;
+    window.deferredPrompt = null;
+    document.getElementById('installBtn')?.classList.toggle('hidden', true);
   }
 
   const drawer = (
@@ -82,18 +104,21 @@ const Header: FC<HeaderProps> = ({
       <div>
         <div className={classes.toolbar} />
         <ListItem button key="username">
-          <p className={styles.username}>{`Hi ${username}`}</p>
+          <div className={styles.flexWrapper}>
+            <p className={styles.username}>{`Hi ${username}`}</p>
+            <button id="installBtn" className={styles.installBtn} onClick={handleInstallAppClick}>Install App</button>
+          </div>
         </ListItem>
         <Divider />
         <Link className={styles.headerLink} to={ROUTES.HOME}>
           <ListItem button key="home" onClick={handleDrawerToggle}>
-            <ListItemIcon><FontAwesomeIcon icon='home' size='lg'/></ListItemIcon>
+            <ListItemIcon><FontAwesomeIcon icon='home' size='lg' /></ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
         </Link>
         <Link className={styles.headerLink} to={ROUTES.TRANSACTION_CATEGORIES}>
           <ListItem button key="transactionCategory" onClick={handleDrawerToggle}>
-            <ListItemIcon><FontAwesomeIcon icon='filter' size='lg'/></ListItemIcon>
+            <ListItemIcon><FontAwesomeIcon icon='filter' size='lg' /></ListItemIcon>
             <ListItemText primary="Add Category" />
           </ListItem>
         </Link>

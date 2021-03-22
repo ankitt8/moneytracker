@@ -11,9 +11,6 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
   categorySelected,
   handleCategoryChange,
 }): ReactElement => {
-  // @ts-ignore
-
-
   return (
     <div className={styles.categoryFormInput}>
       <div className={styles.flexWrapper}>
@@ -21,7 +18,7 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
         <Link to={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
       </div>
       <div className={styles.categoryInput}>
-        {categories.map((category) => (
+        {categories.length !== 0 ? categories.map((category) => (
           <div
             key={category}
             className={cn(styles.category, {
@@ -31,7 +28,7 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
           >
             {category}
           </div>
-        ))}
+        )) : <p className={styles.noData}>!!No Categoires Found!!</p>}
       </div>
     </div>
   )

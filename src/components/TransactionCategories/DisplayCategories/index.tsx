@@ -45,7 +45,7 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
           dispatch(getTransactionCategories(dbTransactionCategories));
         }
       });
-  }, [])
+  }, []);
 
   useEffect(() => {
     loadTransactionCategories();

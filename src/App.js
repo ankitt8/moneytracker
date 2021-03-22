@@ -54,7 +54,7 @@ function App() {
           </Route>
           <Route path={ROUTES.SPEND_ANALYSIS}>
             <div className='desktop-view'>
-              <TransactionAnalysisPage />
+              <TransactionAnalysisPage userId={userId}/>
             </div>
           </Route>
           <Route path={ROUTES.FOOD_TRACKER}>

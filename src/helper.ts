@@ -110,6 +110,17 @@ export function sortCategoriesDescByTotalAmount(transactionsGroupedByCategories:
     return categoryAmountArray.map((categoryAmount) => categoryAmount.category);
 }
 
+export async function getTransactionsFromDB(userId: object): Promise<any> {
+    const res = await fetch(url.API_URL_GET_TRANSACTIONS, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ "userId": userId })
+      });
+    return await res.json();
+}
+
 export async function getTransactionCategoriesFromDB(userId: object): Promise<any> {
     const res = await fetch(url.API_URL_GET_TRANSACTION_CATEGORIES, {
         method: 'POST',

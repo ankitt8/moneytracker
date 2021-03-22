@@ -1,4 +1,5 @@
-import { ReactElement } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
@@ -7,20 +8,72 @@ import { DEBIT_TYPE } from 'Constants';
 import {
   checkDebitTypeTransaction,
   createTransactionsGroupedByCategories,
+  getTransactionCategoriesFromDB,
+  getTransactionsFromDB,
   sortCategoriesDescByTotalAmount,
   TransactionsGroupedByCategoriesInterface
 } from 'helper';
 
 import styles from './styles.module.scss';
+import { getTransactionCategories, getTransactionsAction } from 'actions/actionCreator';
+import { TransactionAnalysisPage as TransactionAnalyisisPageProps } from './interface';
+import Loader from 'components/Loader';
 
-const TransactionAnalysisPage = (): ReactElement => {
-  // const dispatch = useDispatch();
+const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ userId }): ReactElement => {
+  const dispatch = useDispatch();
   // @ts-ignore
-  const storeTransactions = useSelector(state => state.transactions.transactions);
+  const transactions = useSelector(state => state.transactions.transactions);
+  const transactionsEmpty = transactions.length === 0;
   // for now assuming type = 'Debit' filter is selected
   // @ts-ignore
-  const transactionCategories = useSelector((state) => state.transactions.categories);
+  let transactionCategories = useSelector((state) => state.transactions.categories);
+  const transactionCategoriesEmpty = transactionCategories.credit.length === 0 && transactionCategories.debit.length === 0;
+
+  const [loader, setLoader] = useState(() => transactionsEmpty || transactionCategoriesEmpty);
+  // if either no transactions are present in the store
+  // or if no categoires are present in the store set the loader true
+  // fetch the data set loader false
+
+
   let categories: string[];
+
+  const loadTransactions = useCallback(() => {
+    getTransactionsFromDB(userId)
+      .then((transactions) => {
+        dispatch(getTransactionsAction(transactions));
+      })
+  }, []);
+
+  const loadTransactionCategories = useCallback(() => {
+    getTransactionCategoriesFromDB(userId)
+      .then(({ transactionCategories: dbTransactionCategories }) => {
+        dispatch(getTransactionCategories(dbTransactionCategories));
+      });
+  }, []);
+
+
+  useEffect(() => {
+    // if the redux store transaction categoires are empty then fetch the
+    // transaction categories
+    // this will happen when analysis page is visited before categoires page is visited
+
+    /* TODO */
+    // If transactions are added in different device
+    // and user visits transaction analysis page directly in other device
+    // the transactions will not be in sync 
+    // because I am loading the transactions or categories only when
+    // the redux store categories or transactions are empty
+    if (transactionsEmpty) {
+      loadTransactions();
+    }
+    if (transactionCategoriesEmpty) {
+      loadTransactionCategories();
+    }
+    if (!transactionsEmpty && !transactionCategoriesEmpty) {
+      setLoader(() => loader && false);
+    }    
+  }, [transactionsEmpty, transactionCategoriesEmpty]);
+
   // const [loader, setLoader] = React.useState(true);
   // const [transactions, setTransactions] = React.useState(storeTransactions);
 
@@ -33,18 +86,20 @@ const TransactionAnalysisPage = (): ReactElement => {
 
   // in future will give filters where based on filter applied type will be choose
   const type = DEBIT_TYPE;
-  const transactions = storeTransactions.filter(checkDebitTypeTransaction)
-  if (type === DEBIT_TYPE) {
-    categories = transactionCategories.debit;
-  } else {
-    categories = transactionCategories.credit;
-  }
   let componentToRender;
-  if (categories.length === 0) {
+
+  let filteredTransactions = transactions.filter(checkDebitTypeTransaction)
+  categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
+
+  if (loader) {
+    componentToRender = <Loader />;
+  } else if (categories.length === 0) {
     componentToRender = <h2>No Categories Added</h2>;
+  } else if (transactionsEmpty) {
+    componentToRender = <h2>No Transactions Found</h2>
   } else {
     const transactionsGroupedByCategories: TransactionsGroupedByCategoriesInterface =
-      createTransactionsGroupedByCategories(transactions, categories);
+      createTransactionsGroupedByCategories(filteredTransactions, categories);
 
     const categoriesSortedDescTotalAmount = sortCategoriesDescByTotalAmount(transactionsGroupedByCategories);
 

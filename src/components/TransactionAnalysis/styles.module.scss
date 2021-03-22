@@ -3,3 +3,8 @@
 .transactionAnalysisPage {
   @include page;
 }
+
+.noData {
+  @include noData;
+  height: 80vh;
+}

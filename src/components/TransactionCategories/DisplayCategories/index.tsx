@@ -80,6 +80,10 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
       });
 
   }
+
+  if (categories.length === 0) {
+    return <p className={styles.noData}>!!No Categories Found!!</p>
+  }
   return (
     <div className={styles.categoriesWrapper}>
       {

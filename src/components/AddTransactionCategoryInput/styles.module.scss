@@ -1,8 +1,11 @@
+@import 'src/styles/mixins';
+
 .flexWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .categoryFormInput {
   display: flex;
   flex-direction: column;
@@ -34,6 +37,9 @@
   border: none;
 }
 
-
+.noData {
+  @include noData;
+  width: 100vh;
+}
 
 

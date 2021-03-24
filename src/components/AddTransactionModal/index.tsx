@@ -7,7 +7,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Loader from 'components/Loader';
-import CategoryFormInput from 'components/AddTransactionCategoryInput'
+import CategoryInput from './CategoryInput'
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { AddTransactionInterface, AddTransactionModalProps } from './interface';
 
@@ -37,7 +37,7 @@ import {
 } from 'Constants';
 
 import { addTransactionDB, getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategory } from 'components/AddTransactionCategoryInput/interface';
+import { TransactionCategory } from './CategoryInput/interface';
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   modalTitle,
@@ -107,7 +107,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     if (amount === '' || parseInt(amount) <= 0 || heading === '') {
       const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
       dispatch(updateStatusAction({
-        // addTransaction: false,
         showFeedback: true,
         msg,
         severity: SEVERITY_WARNING
@@ -171,7 +170,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       <DialogTitle id="max-width-dialog-heading">{modalTitle}</DialogTitle>
       <DialogContent>
         <form noValidate autoComplete="off">
-          <CategoryFormInput
+          <CategoryInput
             categories={categories}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
@@ -200,7 +199,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         </form>
         <div className={styles.buttonWrapper}>
           <button
-            className={styles.addTransactionModalButton}
+            className={styles.button}
             onClick={handleClose}
           >
             Close
@@ -208,7 +207,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           {
             loadingState ? <Loader /> :
               <button
-                className={styles.addTransactionModalButton}
+                className={styles.button}
                 onClick={handleTransactionSubmit}
               >
                 Add

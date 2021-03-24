@@ -6,12 +6,12 @@
   align-items: center;
 }
 
-.categoryFormInput {
+.transactionCategoryInput {
   display: flex;
   flex-direction: column;
 }
 
-.categoryFormInputLabel {
+.transactionCategoryInputLabel {
   color: gray;
 }
 
@@ -39,7 +39,7 @@
 
 .noData {
   @include noData;
-  width: 100vh;
+  width: 100vw;
 }
 
 

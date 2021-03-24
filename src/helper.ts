@@ -5,7 +5,7 @@ import {
   DEBIT_TYPE,
   CASH_MODE,
   ONLINE_MODE,
-} from './Constants';
+} from 'Constants';
 
 export interface TransactionInterface {
   _id: object;
@@ -207,24 +207,31 @@ export const checkDebitTypeTransaction = (transaction: TransactionInterface) => 
   // adding undefined match also
   return transaction.type === DEBIT_TYPE || transaction.type === undefined;
 }
+
 export const checkOnlineModeTransaction = (transaction: TransactionInterface) => {
   return transaction.mode === ONLINE_MODE;
 }
+
 export const checkCashModeTransaction = (transaction: TransactionInterface) => {
   return transaction.mode === CASH_MODE;
 }
+
 export const calculateTotalAmount = (transactions: TransactionInterface[]) => {
   return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
 }
+
 export const calculateBankDebitAmount = (bankDebitTransactions: TransactionInterface[]) => {
   return calculateTotalAmount(bankDebitTransactions);
 }
+
 export const calculateBankCreditAmount = (bankCreditTransactions: TransactionInterface[]) => {
   return calculateTotalAmount(bankCreditTransactions);
 }
+
 export const calculateCashCreditAmount = (cashCreditTransactions: TransactionInterface[]) => {
   return calculateTotalAmount(cashCreditTransactions);
 }
+
 export const calculateCashDebitAmount = (cashDebitTransactions: TransactionInterface[]) => {
   return calculateTotalAmount(cashDebitTransactions);
 }

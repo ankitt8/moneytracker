@@ -10,12 +10,11 @@ import {
   getTransactionsAction,
 } from 'actions/actionCreator';
 import { url } from 'Constants';
-import DayTransactionsCard from 'components/DayTransaction';
+import DayTransactionsCard from 'components/TransactionCardWrapper';
 import {
   TransactionInterface,
   debitTransaction,
   getNoOfDaysCurrentMonth,
-  getTransactionCategoriesFromDB,
   checkCreditTypeTransaction,
   calculateBankCreditAmount,
   calculateBankDebitAmount,
@@ -25,8 +24,6 @@ import {
   checkDebitTypeTransaction,
   checkOnlineModeTransaction
 } from 'helper';
-import { TransactionCategory } from 'components/AddTransactionCategoryInput/interface';
-import { getTransactionCategories } from 'actions/actionCreator';
 import styles from './styles.module.scss';
 
 

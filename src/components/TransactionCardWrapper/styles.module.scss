@@ -1,8 +1,10 @@
-.day-transaction-card {
+@import 'src/styles/mixins';
+
+.transactionCardWrapper {
   margin-top: 20px;
 }
 
-.transactions-heading {
+.transactionCardHeading {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,15 +17,11 @@
   }
 }
 
-.no-transaction {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.noData {
+  @include noData;
 }
 
 .list {
   margin: 0 5px;
   padding: 0;
-  //border: 1px solid lightgrey;
-  //border-radius: 10px;
 }

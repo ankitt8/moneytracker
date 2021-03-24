@@ -2,19 +2,23 @@ import React, { ReactElement, FC } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 import cn from 'classnames';
-import { CategoryFormInputProps } from './interface';
+import { TransactionCategoryInputProps } from './interface';
 import { ROUTES } from 'Constants';
 
-
-const CategoryFormInput: FC<CategoryFormInputProps> = ({
+/*
+  TransactionCategoryInput Component is rendered in AddTransactionModal
+  The component provides AddCategory link
+  The component shows different transaction categories and allows user to select one of them
+*/
+const TransactionCategoryInput: FC<TransactionCategoryInputProps> = ({
   categories,
   categorySelected,
   handleCategoryChange,
 }): ReactElement => {
   return (
-    <div className={styles.categoryFormInput}>
+    <div className={styles.TransactionCategoryInput}>
       <div className={styles.flexWrapper}>
-        <p className={styles.categoryFormInputLabel}>Category</p>
+        <p className={styles.TransactionCategoryInputLabel}>Category</p>
         <Link to={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
       </div>
       <div className={styles.categoryInput}>
@@ -34,4 +38,4 @@ const CategoryFormInput: FC<CategoryFormInputProps> = ({
   )
 }
 
-export default CategoryFormInput;
+export default TransactionCategoryInput;

@@ -1,10 +1,11 @@
-.transaction-summary {
+.transactionSummary {
   padding: 5px 0;
   border-radius: 15px;
   box-shadow: 0 1px lightgrey;
   font-weight: bold;
 }
-.transaction-summary-heading {
+
+.transactionSummaryHeading {
   display: flex;
   justify-content: space-between;
   align-items: center;

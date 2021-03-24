@@ -1,0 +1,80 @@
+.formWrapper {
+  display: flex;
+  align-items: center;
+  height: calc(100vh - 56px);
+  @media (min-width: 1025px) {
+    justify-content: center;
+  }
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  @media (min-width: 1025px) {
+    justify-content: center;
+    width: 40%;
+  }
+}
+
+.error {
+  color: red;
+}
+
+.inputWrapper {
+  display: flex;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  outline: none;
+  border: 0.5px solid #ccc;
+  width: 68vw;
+  @media (min-width: 1025px) {
+    width: inherit;
+  }
+}
+
+input {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin: 20px 0 0 0;
+  @media (min-width: 1025px) {
+    width: inherit;
+  }
+}
+
+button {
+  background-color:  #97afeb;
+  outline: none;
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.passwordInstructionWrapper {
+  width: 70%;
+  display: flex;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  outline: none;
+  text-align: justify;
+  @media (min-width: 1025px) {
+    width: inherit;
+  }
+}
+
+.passwordInstruction {
+  color: gray;
+}

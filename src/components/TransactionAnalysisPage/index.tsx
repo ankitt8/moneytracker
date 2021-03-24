@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
-import DayTransactionsCard from 'components/DayTransaction';
+import DayTransactionsCard from 'components/TransactionCardWrapper';
 import { DEBIT_TYPE } from 'Constants';
 import {
   checkDebitTypeTransaction,

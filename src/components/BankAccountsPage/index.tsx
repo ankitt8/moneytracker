@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.scss';
 
-const BankAccount = () => {
+const BankAccountsPage = () => {
   return (
     <div className={styles.bankAccounts}>
       BankAccounts
@@ -9,4 +9,4 @@ const BankAccount = () => {
   )
 }
 
-export default BankAccount;
+export default BankAccountsPage;

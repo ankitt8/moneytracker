@@ -1,11 +1,11 @@
 import { AddTransactionInterface } from 'components/AddTransactionModal/interface';
 import {
-    url,
-    CREDIT_TYPE,
-    DEBIT_TYPE,
-    CASH_MODE,
-    ONLINE_MODE,
-} from './Constants';
+  url,
+  CREDIT_TYPE,
+  DEBIT_TYPE,
+  CASH_MODE,
+  ONLINE_MODE,
+} from 'Constants';
 
 export interface TransactionInterface {
     _id: object;
@@ -169,16 +169,17 @@ export async function deleteTransactionCategoryFromDB(userId: object, categories
     });
 
 }
-export async function addTransactionDB (transaction: AddTransactionInterface) {
-    const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(transaction),
-    });
-    const transactionObject = await addTransactionResponse.json();
-    return Promise.resolve(transactionObject);
+
+export async function addTransactionDB(transaction: AddTransactionInterface) {
+  const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(transaction),
+  });
+  const transactionObject = await addTransactionResponse.json();
+  return Promise.resolve(transactionObject);
 }
 
 export async function editTransactionDB (transactionId: object, updatedTransaction: TransactionInterface) {
@@ -209,24 +210,31 @@ export const checkDebitTypeTransaction = (transaction: TransactionInterface) => 
   		// adding undefined match also
     return transaction.type === DEBIT_TYPE || transaction.type === undefined;
 }
+
 export const checkOnlineModeTransaction = (transaction: TransactionInterface) => {
     return transaction.mode === ONLINE_MODE;
 }
+
 export const checkCashModeTransaction = (transaction: TransactionInterface) => {
     return transaction.mode === CASH_MODE;
 }
+
 export const calculateTotalAmount = (transactions: TransactionInterface[]) => {
     return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
 }
+
 export const calculateBankDebitAmount = (bankDebitTransactions: TransactionInterface[]) => {
     return calculateTotalAmount(bankDebitTransactions);
 }
+
 export const calculateBankCreditAmount = (bankCreditTransactions: TransactionInterface[]) => {
     return calculateTotalAmount(bankCreditTransactions);
 }
+
 export const calculateCashCreditAmount = (cashCreditTransactions: TransactionInterface[]) => {
     return calculateTotalAmount(cashCreditTransactions);
 }
+
 export const calculateCashDebitAmount = (cashDebitTransactions: TransactionInterface[]) => {
     return calculateTotalAmount(cashDebitTransactions);
 }

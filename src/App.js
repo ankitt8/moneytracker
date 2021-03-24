@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react';
 import { useSelector } from 'react-redux';
-import { motion } from 'framer-motion';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 
@@ -18,9 +17,9 @@ import { faHome, faChartBar, faSignOutAlt, faFilter } from '@fortawesome/free-so
 library.add(faHome, faChartBar, faSignOutAlt, faFilter);
 
 const UpcomingFeature = lazy(() => import('components/UpcomingFeature'));
-const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysis'));
-const TransactionCategoriesPage = lazy(() => import('components/TransactionCategories'));
-const BankAccountPage = lazy(() => import('components/BankAccounts'));
+const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysisPage'));
+const TransactionCategoriesPage = lazy(() => import('components/TransactionCategoriesPage'));
+const BankAccountsPage = lazy(() => import('components/BankAccountsPage'));
 
 function App() {
   const userId = useSelector((state) => state.user.userId);
@@ -44,7 +43,7 @@ function App() {
             </div>
           </Route>
           <Route path={ROUTES.BANK}>
-            <BankAccountPage />
+            <BankAccountsPage />
           </Route>
           <Route path={ROUTES.INVESTMENT}>
             <UpcomingFeature />
@@ -54,7 +53,8 @@ function App() {
           </Route>
           <Route path={ROUTES.SPEND_ANALYSIS}>
             <div className='desktop-view'>
-              <TransactionAnalysisPage userId={userId}/>
+              <TransactionAnalysisPage userId={userId} />
+              <SnackBarFeedback />
             </div>
           </Route>
           <Route path={ROUTES.FOOD_TRACKER}>

@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { deleteTransactionCategory, getTransactionCategories, updateStatusAction } from 'actions/actionCreator';
 import { deleteTransactionCategoryFromDB, getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategory } from 'components/AddTransactionCategoryInput/interface';
+import { TransactionCategory } from 'components/AddTransactionModal/CategoryInput/interface';
 import { motion } from 'framer-motion';
 
 const DisplayCategories: FC<DisplayCategoriesProps> = ({
@@ -79,6 +79,10 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
         }
       });
 
+  }
+
+  if (categories.length === 0) {
+    return <p className={styles.noData}>!!No Categories Found!!</p>
   }
   return (
     <div className={styles.categoriesWrapper}>

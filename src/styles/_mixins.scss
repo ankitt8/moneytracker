@@ -13,3 +13,9 @@
   width: 30%;
   outline: none;
 }
+
+@mixin noData {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

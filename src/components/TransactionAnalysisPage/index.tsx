@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
 
-import DayTransactionsCard from 'components/DayTransaction';
+import DayTransactionsCard from 'components/TransactionCardWrapper';
 import { DEBIT_TYPE } from 'Constants';
 import {
   checkDebitTypeTransaction,
@@ -48,6 +48,13 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
     getTransactionCategoriesFromDB(userId)
       .then(({ transactionCategories: dbTransactionCategories }) => {
         dispatch(getTransactionCategories(dbTransactionCategories));
+        // need to figure out later and dig deep why the loader was set before the 
+        // https://github.com/reduxjs/react-redux/issues/1298
+        // https://github.com/reduxjs/react-redux/issues/1428
+        // links:- https://codesandbox.io/s/suspicious-merkle-0kzcg?file=/src/index.js
+        // The below code shows No Transactions First then shown the analysiss which is bug
+
+        setLoader(() => loader && false);
       });
   }, []);
 
@@ -69,13 +76,9 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
     if (transactionCategoriesEmpty) {
       loadTransactionCategories();
     }
-    if (!transactionsEmpty && !transactionCategoriesEmpty) {
-      setLoader(() => loader && false);
-    }    
-  }, [transactionsEmpty, transactionCategoriesEmpty]);
 
-  // const [loader, setLoader] = React.useState(true);
-  // const [transactions, setTransactions] = React.useState(storeTransactions);
+  }, []);
+
 
   // If user directly visits the analysis page then he will not see updated transactions
   // reason the store gets updated when home page is visited
@@ -85,6 +88,7 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
   // storing transactions in redux store is actually required
 
   // in future will give filters where based on filter applied type will be choose
+
   const type = DEBIT_TYPE;
   let componentToRender;
 
@@ -93,10 +97,8 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
 
   if (loader) {
     componentToRender = <Loader />;
-  } else if (categories.length === 0) {
-    componentToRender = <h2>No Categories Added</h2>;
-  } else if (transactionsEmpty) {
-    componentToRender = <h2>No Transactions Found</h2>
+  } else if (filteredTransactions.length === 0) {
+    componentToRender = <p className={styles.noData}>!!No Transactions Found!!</p>
   } else {
     const transactionsGroupedByCategories: TransactionsGroupedByCategoriesInterface =
       createTransactionsGroupedByCategories(filteredTransactions, categories);

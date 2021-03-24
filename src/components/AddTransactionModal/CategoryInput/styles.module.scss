@@ -1,14 +1,17 @@
+@import 'src/styles/mixins';
+
 .flexWrapper {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.categoryFormInput {
+
+.transactionCategoryInput {
   display: flex;
   flex-direction: column;
 }
 
-.categoryFormInputLabel {
+.transactionCategoryInputLabel {
   color: gray;
 }
 
@@ -34,6 +37,9 @@
   border: none;
 }
 
-
+.noData {
+  @include noData;
+  width: 100vw;
+}
 
 

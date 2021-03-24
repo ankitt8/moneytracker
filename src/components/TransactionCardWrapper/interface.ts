@@ -1,6 +1,6 @@
 import { TransactionInterface } from 'helper';
 
-export interface DayTransactionsCardProps {
+export interface TransactionCardWrapperProps {
   transactions: TransactionInterface[];
   totalAmount: number;
   title: string;

@@ -74,12 +74,9 @@ const Header: FC<HeaderProps> = ({
   const handleLogout = () => {
     localStorage.clear();
     window.location.href = '/';
-    // history.push('/');
-    // handleDrawerToggle();
   }
-  
+
   window.addEventListener('beforeinstallprompt', (e) => {
-    debugger;
     // @ts-ignore
     window.deferredPrompt = e;
     document.getElementById('installBtn')?.classList.toggle('hidden', false);
@@ -165,7 +162,6 @@ const Header: FC<HeaderProps> = ({
 
 
   return (
-    // <div className={classes.root}>
     <>
       <AppBar position="sticky" className={classes.appBar}>
         <Toolbar>
@@ -184,7 +180,6 @@ const Header: FC<HeaderProps> = ({
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
           <Drawer
             variant="temporary"
@@ -214,16 +209,7 @@ const Header: FC<HeaderProps> = ({
         </Hidden>
       </nav>
     </>
-    // </div>
   );
 }
-
-// Header.propTypes = {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   window: PropTypes.func,
-// };
 
 export default Header;

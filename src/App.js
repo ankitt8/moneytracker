@@ -5,7 +5,6 @@ import './App.css';
 
 import SnackBarFeedback from 'components/SnackBarFeedback';
 import Transactions from 'components/Transactions';
-import TransactionSummaryAndAdd from 'components/TransactionSummaryAndAdd';
 import Login from 'components/Login';
 import Header from 'components/Header';
 import Loader from 'components/Loader';
@@ -13,8 +12,8 @@ import FixedBottomNavBar from 'components/FixedBottomNavBar';
 import { ROUTES } from 'Constants';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faHome, faChartBar, faSignOutAlt, faFilter } from '@fortawesome/free-solid-svg-icons';
-library.add(faHome, faChartBar, faSignOutAlt, faFilter);
+import { faHome, faChartBar, faSignOutAlt, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
+library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
 const UpcomingFeature = lazy(() => import('components/UpcomingFeature'));
 const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysisPage'));
@@ -30,7 +29,7 @@ function App() {
   return (
     <Router>
       <Header username={username} />
-      <FixedBottomNavBar />
+      <FixedBottomNavBar userId={userId} />
       <Suspense fallback={<Loader />}>
         <Switch >
           <Route path={ROUTES.LOGIN}>
@@ -62,7 +61,7 @@ function App() {
           </Route>
           <Route path={ROUTES.HOME}>
             <div className='desktop-view'>
-              <TransactionSummaryAndAdd userId={userId} />
+              {/* <TransactionSummaryAndAdd userId={userId} /> */}
               <Transactions userId={userId} />
               <SnackBarFeedback />
             </div>

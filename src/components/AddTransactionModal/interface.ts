@@ -1,8 +1,5 @@
 export interface AddTransactionModalProps {
-    modalTitle: string;
     userId: object;
-    type: string;
-    mode: string;
     handleClose: () => void;
 }
 

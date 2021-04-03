@@ -27,6 +27,7 @@ import {
   ADD_TRANSACTION_FAIL_ERROR,
   ADD_TRANSACTION_SUCCESS_MSG,
   CASH_MODE,
+  CREDIT_TYPE,
   DEBIT_TYPE,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
@@ -37,13 +38,12 @@ import {
 } from 'Constants';
 
 import { addTransactionDB, getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategory } from './CategoryInput/interface';
+import { TransactionCategories } from './CategoryInput/interface';
+import Slide from '@material-ui/core/Slide';
+import { FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
-  modalTitle,
   userId,
-  type,
-  mode,
   handleClose,
 }) => {
   const dispatch = useDispatch();
@@ -52,6 +52,19 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [date, setDate] = useState(new Date());
   const [category, setCategory] = useState('');
   const [loadingState, setLoadingState] = useState(false);
+  const [mode, setMode] = React.useState('online');
+  const [type, setType] = React.useState('debit');
+  const handleModeChange = (event: any) => {
+    setMode(event.target.value);
+  }
+  const handleTypeChange = (event: any) => {
+    setType(event.target.value);
+  }
+  // @ts-ignore
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    // @ts-ignore
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
   // @ts-ignore
   const transactionCategories = useSelector((state) => state.transactions.categories);
   let categories: string[];
@@ -61,8 +74,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   } else {
     categories = transactionCategories.credit;
   }
-  const checkTransactionCategoriesChanged = (data: TransactionCategory) => {
+  const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
+    // data is of redux store transactionCategories
     const { credit, debit } = transactionCategories;
+    // db implies database
     const { credit: dbCredit, debit: dbDebit } = data;
     if (credit.length !== dbCredit.length) return true;
     if (debit.length !== dbDebit.length) return true;
@@ -164,38 +179,109 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     <Dialog
       maxWidth={'sm'}
       open={true}
+      // @ts-ignore
+      TransitionComponent={Transition}
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
     >
-      <DialogTitle id="max-width-dialog-heading">{modalTitle}</DialogTitle>
-      <DialogContent>
+
+      <div className={styles.modalWrapper}>
+        <h3 className={styles.modalTitle}>Add Transaction</h3>
         <form noValidate autoComplete="off">
           <CategoryInput
             categories={categories}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
           />
-          <FormControl>
-            <InputLabel htmlFor="amount">Amount</InputLabel>
-            <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="heading">Title</InputLabel>
-            <Input id="heading" value={heading} onChange={handleHeadingChange} />
-          </FormControl>
-          <FormControl>
-            <KeyboardDatePicker
-              style={{ marginTop: 20 }}
-              required
-              autoOk
-              variant="inline"
-              inputVariant="standard"
-              format="dd/MM/yyyy"
-              value={date}
-              InputAdornmentProps={{ position: 'start' }}
-              onChange={(value) => handleDateChange(value)}
-            />
-          </FormControl>
+          <div className={styles.fieldSet}>
+            <div className={styles.fieldSetLabel}>Mode</div>
+            <div className={styles.radioGroupWrapper}>
+              <div className={styles.radio}>
+                <input type="radio" name="transactionMode" id="bankmode" value="Bank" onChange={handleModeChange} />
+                <label htmlFor="bankmode">Bank</label>
+              </div>
+              <div className={styles.radio}>
+                <input type="radio" name="transactionMode" id="cashmode" value="Cash" onChange={handleModeChange} />
+                <label htmlFor="cashmode">Cash</label>
+              </div>
+            </div>
+          </div>
+          {/* <FormControl component="fieldset" style={{ marginTop: '20px' }}>
+              <FormLabel component="legend">Mode</FormLabel>
+              <RadioGroup
+                aria-label="Mode"
+                name="mode"
+                value={mode}
+                onChange={handleModeChange}
+                style={{ flexDirection: 'row' }}
+              >
+                <FormControlLabel
+                  value={ONLINE_MODE}
+                  control={<Radio color="primary" />}
+                  label="Bank"
+                />
+                <FormControlLabel
+                  value={CASH_MODE}
+                  control={<Radio color="primary" />}
+                  label="Cash"
+                />
+              </RadioGroup>
+            </FormControl> */}
+          {/* <FormControl component="fieldset" style={{ marginTop: '20px' }}>
+              <FormLabel component="legend">Type</FormLabel>
+              <RadioGroup
+                aria-label="Type"
+                name="type"
+                value={type}
+                onChange={handleTypeChange}
+                style={{ flexDirection: 'row' }}
+              >
+                <FormControlLabel
+                  value={DEBIT_TYPE}
+                  control={<Radio color="primary" />}
+                  label="Debit"
+                />
+                <FormControlLabel
+                  value={CREDIT_TYPE}
+                  control={<Radio color="primary" />}
+                  label="Credit"
+                />
+              </RadioGroup>
+            </FormControl>
+            <FormControl>
+              <InputLabel htmlFor="amount">Amount</InputLabel>
+              <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
+            </FormControl>
+            <FormControl>
+              <InputLabel htmlFor="heading">Title</InputLabel>
+              <Input id="heading" value={heading} onChange={handleHeadingChange} />
+            </FormControl>
+            <FormControl>
+              <KeyboardDatePicker
+                style={{ marginTop: 20 }}
+                required
+                autoOk
+                variant="inline"
+                inputVariant="standard"
+                format="dd/MM/yyyy"
+                value={date}
+                InputAdornmentProps={{ position: 'start' }}
+                onChange={(value) => handleDateChange(value)}
+              />
+            </FormControl> */}
+          <div className={styles.fieldSet}>
+            <div className={styles.fieldSetLabel}>Type</div>
+            <div className={styles.radioGroupWrapper}>
+              <div className={styles.radio}>
+                <input type="radio" name="transactionType" id="credittype" value="Credit" />
+                <label htmlFor="credittype">Credit</label>
+              </div>
+              <div className={styles.radio}>
+                <input type="radio" name="transactionType" id="debittype" value="Debit" />
+                <label htmlFor="debittype">Debit</label>
+              </div>
+            </div>
+          </div>
         </form>
         <div className={styles.buttonWrapper}>
           <button
@@ -214,7 +300,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               </button>
           }
         </div>
-      </DialogContent>
+      </div>
     </Dialog>
   )
 };

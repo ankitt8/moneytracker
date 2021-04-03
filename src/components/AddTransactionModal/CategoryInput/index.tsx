@@ -16,25 +16,25 @@ const TransactionCategoryInput: FC<TransactionCategoryInputProps> = ({
   handleCategoryChange,
 }): ReactElement => {
   return (
-    <div className={styles.TransactionCategoryInput}>
-      <div className={styles.flexWrapper}>
-        <p className={styles.TransactionCategoryInputLabel}>Category</p>
+    <>
+      <div className={styles.transactionCategoryInput}>
+        <div className={styles.transactionCategoryInputLabel}>Category</div>
         <Link to={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
       </div>
-      <div className={styles.categoryInput}>
+      <div className={styles.transactionCategories}>
         {categories.length !== 0 ? categories.map((category) => (
           <div
             key={category}
-            className={cn(styles.category, {
-              [styles.categorySelected]: category === categorySelected
+            className={cn(styles.transactionCategory, {
+              [styles.transactionCategorySelected]: category === categorySelected
             })}
             onClick={() => handleCategoryChange(category)}
           >
             {category}
           </div>
-        )) : <p className={styles.noData}>!!No Categoires Found!!</p>}
+        )) : <div className={styles.noData}>!!No Categoires Found!!</div>}
       </div>
-    </div>
+    </>
   )
 }
 

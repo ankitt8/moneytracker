@@ -62,7 +62,6 @@ const AddCategory: FC<AddCategoryProps> = ({
         <input className={styles.addCategoryInput} type="text" value={newCategory} onChange={handleCategoryChange} />
         {loader ? <Loader /> : <div className={styles.addCategoryIcon} onClick={handleAddCategory}>+</div>}
       </div>
-
     </>
   );
 }

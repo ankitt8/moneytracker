@@ -2,12 +2,6 @@ import React from 'react';
 import './styles.scss';
 import { CreditDebitSummaryProps } from './interface';
 
-const options = {
-  style: 'currency',
-  currency: 'INR',
-  maximumSignificantDigits: 3
-}
-
 const CreditDebitSummary: React.FC<CreditDebitSummaryProps> = ({
   title,
   creditAmount,
@@ -16,19 +10,19 @@ const CreditDebitSummary: React.FC<CreditDebitSummaryProps> = ({
   return (
     <>
       <div className="credit-debit-summary">
-        <div className='title'>{title}</div>
+        <h2 >{title}</h2>
         <div className='summary'>
-          <div>
-            {new Intl.NumberFormat('en-IN', options).format(creditAmount)}
-          </div>
-          <div>-</div>
-          <div>
-            {new Intl.NumberFormat('en-IN', options).format(debitAmount)}
-          </div>
-          <div>=</div>
-          <div>
-            {new Intl.NumberFormat('en-IN', options).format(creditAmount - debitAmount)}
-          </div>
+          <h2>
+            {new Intl.NumberFormat('en-IN').format(creditAmount)}
+          </h2>
+          <h2>-</h2>
+          <h2>
+            {new Intl.NumberFormat('en-IN').format(debitAmount)}
+          </h2>
+          <h2>=</h2>
+          <h2>
+            {new Intl.NumberFormat('en-IN').format(creditAmount - debitAmount)}
+          </h2>
         </div>
       </div>
     </>

@@ -4,3 +4,14 @@
   box-shadow: 0 1px lightgrey;
   font-weight: bold;
 }
+
+.transactionSummaryTitle {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+
+  > h2 {
+    margin: 0;
+    margin-right: 10px;
+  }
+}

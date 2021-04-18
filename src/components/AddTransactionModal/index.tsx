@@ -1,14 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import Slide from '@material-ui/core/Slide';
 import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
 import Loader from 'components/Loader';
-import CategoryInput from './CategoryInput'
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import TransactionCategoryInput from './TransactionCategoryInput'
 import { AddTransactionInterface, AddTransactionModalProps } from './interface';
 
 import styles from './styles.module.scss';
@@ -38,10 +33,25 @@ import {
 } from 'Constants';
 
 import { addTransactionDB, getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategories } from './CategoryInput/interface';
-import Slide from '@material-ui/core/Slide';
-import { FormLabel, RadioGroup, FormControlLabel, Radio } from '@material-ui/core';
+import { TransactionCategories } from './TransactionCategoryInput/interface';
 
+function constructTodayDate() {
+  let todayFormattedDate = "";
+  const todayDate = new Date();
+  const year = todayDate.getFullYear();
+  todayFormattedDate += `${year}`;
+  todayFormattedDate += "-";
+
+  let month = todayDate.getMonth();
+  if (month + 1 < 10) todayFormattedDate += `0${month + 1}`;
+  else todayFormattedDate += `${month + 1}`;
+  todayFormattedDate += "-";
+
+  const date = todayDate.getDate();
+  if (date < 10) todayFormattedDate += `0${date}`;
+  else todayFormattedDate += `${date}`;
+  return todayFormattedDate;
+}
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   userId,
   handleClose,
@@ -49,31 +59,20 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const dispatch = useDispatch();
   const [heading, setHeading] = useState('');
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(constructTodayDate());
   const [category, setCategory] = useState('');
   const [loadingState, setLoadingState] = useState(false);
-  const [mode, setMode] = React.useState('online');
-  const [type, setType] = React.useState('debit');
-  const handleModeChange = (event: any) => {
-    setMode(event.target.value);
-  }
-  const handleTypeChange = (event: any) => {
-    setType(event.target.value);
-  }
+  const [mode, setMode] = React.useState(ONLINE_MODE);
+  const [type, setType] = React.useState(DEBIT_TYPE);
+
   // @ts-ignore
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    // @ts-ignore
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+  // const Transition = React.forwardRef(function Transition(props, ref) {
+  //   // @ts-ignore
+  //   return <Slide direction="up" ref={ref} {...props} />;
+  // });
   // @ts-ignore
   const transactionCategories = useSelector((state) => state.transactions.categories);
-  let categories: string[];
-
-  if (type === DEBIT_TYPE) {
-    categories = transactionCategories.debit;
-  } else {
-    categories = transactionCategories.credit;
-  }
+  const categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
   const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
     // data is of redux store transactionCategories
     const { credit, debit } = transactionCategories;
@@ -83,7 +82,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     if (debit.length !== dbDebit.length) return true;
     return false;
   }
-
   const loadTransactionCategories = useCallback(() => {
     getTransactionCategoriesFromDB(userId)
       .then(({ transactionCategories: dbTransactionCategories }) => {
@@ -92,33 +90,46 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         }
       });
   }, [])
-
   useEffect(() => {
     loadTransactionCategories();
     return function setFieldsEmpty() {
       // console.log('cleanup called add transaction modal');
       setHeading('');
       setAmount('');
-      setDate(new Date());
+      setDate(constructTodayDate());
       setCategory('');
       setLoadingState(false);
     }
   }, []);
-
+  const isRadioModeChecked = (value: string) => {
+    if (mode === '') return value === ONLINE_MODE;
+    return mode === value
+  }
+  const handleModeChange = (event: any) => {
+    setMode(event.target.value);
+  }
+  const isRadioTypeChecked = (value: string) => {
+    if (type === '') return value === DEBIT_TYPE;
+    return type === value
+  }
+  const handleTypeChange = (event: any) => {
+    setType(event.target.value);
+  }
   const handleHeadingChange = (event: any) => {
     setHeading(event.target.value);
   }
   const handleAmountChange = (event: any) => {
     setAmount(event.target.value);
   }
-  const handleDateChange = (value: any) => {
-    setDate(new Date(value));
+  const handleDateChange = (event: any) => {
+    console.log(event.target.value)
+    setDate(event.target.value);
   }
   const handleCategoryChange = (category: string) => {
     setCategory(category);
   }
-
-  function handleTransactionSubmit() {
+  function handleTransactionSubmit(event: any) {
+    event.preventDefault();
     if (amount === '' || parseInt(amount) <= 0 || heading === '') {
       const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
       dispatch(updateStatusAction({
@@ -128,19 +139,16 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       }))
       return;
     }
-
     setLoadingState(true);
-
     const transaction: AddTransactionInterface = {
       userId,
       heading,
       amount: parseInt(amount),
-      date,
+      date: new Date(date),
       mode,
       type,
       category,
     };
-
     addTransactionDB(transaction)
       .then(function onFulfilled(transactionObject) {
         dispatch(addTransactionAction(transactionObject));
@@ -174,132 +182,94 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       })
       .finally(handleClose);
   }
-
   return (
     <Dialog
       maxWidth={'sm'}
       open={true}
       // @ts-ignore
-      TransitionComponent={Transition}
+      // if I add transition and change the categories then whole modal appears again from bottom
+      // TransitionComponent={Transition}
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
     >
-
       <div className={styles.modalWrapper}>
         <h3 className={styles.modalTitle}>Add Transaction</h3>
-        <form noValidate autoComplete="off">
-          <CategoryInput
+        <form onSubmit={handleTransactionSubmit}>
+          {/* Categories */}
+          <TransactionCategoryInput
             categories={categories}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
           />
+          {/* Mode */}
           <div className={styles.fieldSet}>
             <div className={styles.fieldSetLabel}>Mode</div>
+            {/* Mode radio group */}
             <div className={styles.radioGroupWrapper}>
               <div className={styles.radio}>
-                <input type="radio" name="transactionMode" id="bankmode" value="Bank" onChange={handleModeChange} />
+                <input type="radio" name="transactionMode" id="bankmode" value={ONLINE_MODE}
+                  checked={isRadioModeChecked('online')} onChange={handleModeChange} />
                 <label htmlFor="bankmode">Bank</label>
               </div>
               <div className={styles.radio}>
-                <input type="radio" name="transactionMode" id="cashmode" value="Cash" onChange={handleModeChange} />
+                <input type="radio" name="transactionMode" id="cashmode" value={CASH_MODE}
+                  checked={isRadioModeChecked('cash')} onChange={handleModeChange} />
                 <label htmlFor="cashmode">Cash</label>
               </div>
             </div>
           </div>
-          {/* <FormControl component="fieldset" style={{ marginTop: '20px' }}>
-              <FormLabel component="legend">Mode</FormLabel>
-              <RadioGroup
-                aria-label="Mode"
-                name="mode"
-                value={mode}
-                onChange={handleModeChange}
-                style={{ flexDirection: 'row' }}
-              >
-                <FormControlLabel
-                  value={ONLINE_MODE}
-                  control={<Radio color="primary" />}
-                  label="Bank"
-                />
-                <FormControlLabel
-                  value={CASH_MODE}
-                  control={<Radio color="primary" />}
-                  label="Cash"
-                />
-              </RadioGroup>
-            </FormControl> */}
-          {/* <FormControl component="fieldset" style={{ marginTop: '20px' }}>
-              <FormLabel component="legend">Type</FormLabel>
-              <RadioGroup
-                aria-label="Type"
-                name="type"
-                value={type}
-                onChange={handleTypeChange}
-                style={{ flexDirection: 'row' }}
-              >
-                <FormControlLabel
-                  value={DEBIT_TYPE}
-                  control={<Radio color="primary" />}
-                  label="Debit"
-                />
-                <FormControlLabel
-                  value={CREDIT_TYPE}
-                  control={<Radio color="primary" />}
-                  label="Credit"
-                />
-              </RadioGroup>
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="amount">Amount</InputLabel>
-              <Input type="number" id="amount" value={amount} onChange={handleAmountChange} />
-            </FormControl>
-            <FormControl>
-              <InputLabel htmlFor="heading">Title</InputLabel>
-              <Input id="heading" value={heading} onChange={handleHeadingChange} />
-            </FormControl>
-            <FormControl>
-              <KeyboardDatePicker
-                style={{ marginTop: 20 }}
-                required
-                autoOk
-                variant="inline"
-                inputVariant="standard"
-                format="dd/MM/yyyy"
-                value={date}
-                InputAdornmentProps={{ position: 'start' }}
-                onChange={(value) => handleDateChange(value)}
-              />
-            </FormControl> */}
+          {/* Type */}
           <div className={styles.fieldSet}>
             <div className={styles.fieldSetLabel}>Type</div>
+            {/* Type radio group */}
             <div className={styles.radioGroupWrapper}>
               <div className={styles.radio}>
-                <input type="radio" name="transactionType" id="credittype" value="Credit" />
+                <input type="radio" name="transactionType" id="credittype"
+                  value={CREDIT_TYPE} checked={isRadioTypeChecked("credit")} onChange={handleTypeChange} />
                 <label htmlFor="credittype">Credit</label>
               </div>
               <div className={styles.radio}>
-                <input type="radio" name="transactionType" id="debittype" value="Debit" />
+                <input type="radio" name="transactionType" id="debittype" value={DEBIT_TYPE}
+                  checked={isRadioTypeChecked("debit")}
+                  onChange={handleTypeChange} />
                 <label htmlFor="debittype">Debit</label>
               </div>
             </div>
           </div>
-        </form>
-        <div className={styles.buttonWrapper}>
-          <button
-            className={styles.button}
-            onClick={handleClose}
-          >
-            Close
+          {/* Amount */}
+          <div className={styles.fieldSet}>
+            <div className={styles.fieldSetLabel}>Amount</div>
+            <input type="number" value={amount} onChange={handleAmountChange} />
+          </div>
+          {/* Title */}
+          <div className={styles.fieldSet}>
+            <div className={styles.fieldSetLabel}>Title</div>
+            <input type="text" value={heading} onChange={handleHeadingChange} />
+          </div>
+          {/* Date */}
+          <div className={styles.fieldSet}>
+            <div className={styles.fieldSetLabel}>Date</div>
+            <input type="date" id="transactionDate" defaultValue={constructTodayDate()} onChange={handleDateChange} />
+          </div>
+          <div className={styles.buttonWrapper}>
+            <button
+              // why type="button" added https://github.com/redux-form/redux-form/issues/2679#issuecomment-286153902
+              type="button"
+              className={styles.button}
+              onClick={handleClose}
+            >
+              Close
           </button>
-          {
-            loadingState ? <Loader /> :
-              <button
-                className={styles.button}
-                onClick={handleTransactionSubmit}
-              >
-                Add
-              </button>
-          }
-        </div>
+            {
+              loadingState ? <Loader /> :
+                <input
+                  type="submit"
+                  className={styles.button}
+                  value="Add"
+                />
+            }
+          </div>
+        </form>
       </div>
     </Dialog>
   )

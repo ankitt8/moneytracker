@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { deleteTransactionCategory, getTransactionCategories, updateStatusAction } from 'actions/actionCreator';
 import { deleteTransactionCategoryFromDB, getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategories } from 'components/AddTransactionModal/CategoryInput/interface';
+import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { motion } from 'framer-motion';
 
 const DisplayCategories: FC<DisplayCategoriesProps> = ({

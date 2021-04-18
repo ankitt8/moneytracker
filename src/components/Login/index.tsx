@@ -82,14 +82,14 @@ const Login: React.FC = () => {
         {error && <p className={styles.error}>{error}</p>}
         
         <div className={styles.inputWrapper}>
-          <input type="text" name="userid" id="userid" placeholder="User Name"
+          <input className={styles.loginInput} type="text" name="userid" id="userid" placeholder="User Name"
             autoComplete="username"
             onChange={(e) => setUserName(e.target.value)}
           />
         </div>
 
         <div className={styles.inputWrapper}>
-          <input type={passwordVisible ? "text" : "password"} name="password" id="password"
+          <input className={styles.loginInput} type={passwordVisible ? "text" : "password"} name="password" id="password"
             placeholder="Password"
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}

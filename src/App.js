@@ -5,6 +5,7 @@ import './App.css';
 
 import SnackBarFeedback from 'components/SnackBarFeedback';
 import Transactions from 'components/Transactions';
+import TransactionSummary from 'components/TransactionSummary'
 import Login from 'components/Login';
 import Header from 'components/Header';
 import Loader from 'components/Loader';
@@ -61,7 +62,7 @@ function App() {
           </Route>
           <Route path={ROUTES.HOME}>
             <div className='desktop-view'>
-              {/* <TransactionSummaryAndAdd userId={userId} /> */}
+              <TransactionSummary />
               <Transactions userId={userId} />
               <SnackBarFeedback />
             </div>

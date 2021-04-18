@@ -4,7 +4,7 @@ import AddCategory from './AddCategory';
 import DisplayCategories from './DisplayCategories';
 import styles from './styles.module.scss';
 
-const TransactionCategory = (): ReactElement => {
+const TransactionCategoriesPage = (): ReactElement => {
   return (
     <div className={styles.transactionCategoriesPage}>
       <div className={styles.transactionCategoryCard}>
@@ -26,4 +26,4 @@ const TransactionCategory = (): ReactElement => {
   )
 }
 
-export default TransactionCategory;
+export default TransactionCategoriesPage;

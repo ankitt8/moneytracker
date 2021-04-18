@@ -1,10 +1,44 @@
 @import 'src/styles/mixins';
+@import 'src/styles/colors';
+@import 'src/styles/spacing';
+@import 'src/styles/fonts';
+.modalWrapper {
+  padding: $spacing-2;
+}
+
+.modalTitle {
+  margin: $spacing-2 0;
+  font-size: 22px;
+  font-weight: normal;
+}
+
+.fieldSet {
+  display: flex;
+  justify-content: space-between;
+  height: $spacing-8;
+  align-items: center;
+}
+
+.fieldSetLabel {
+  font-size: $form-label-font-size;
+  color: $gray;
+}
+
+.radioGroupWrapper {
+  display: flex;
+}
+
+.radio {
+  width: 10vh;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
 
 .buttonWrapper {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
-  justify-content: space-between;
 }
 
 .button {

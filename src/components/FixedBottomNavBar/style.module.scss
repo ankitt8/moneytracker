@@ -6,14 +6,14 @@
     display: flex;
     position: fixed;
     bottom: 0;
-    width: 100%;
+    width: 100vw;
     height: 10vh;
     justify-content: space-around;
     background-color:white;
     border: 1px solid lightgray;
     border-radius: 15px 15px 0 0;    
     
-    a {
+    .link {
       display: flex;
       align-items: center;
       text-decoration: none;

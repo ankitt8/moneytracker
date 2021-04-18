@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { deleteTransactionCategory, getTransactionCategories, updateStatusAction } from 'actions/actionCreator';
 import { deleteTransactionCategoryFromDB, getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategory } from 'components/AddTransactionModal/CategoryInput/interface';
+import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { motion } from 'framer-motion';
 
 const DisplayCategories: FC<DisplayCategoriesProps> = ({
@@ -30,7 +30,7 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
   } else {
     categories = transactionCategories.credit;
   }
-  const checkTransactionCategoriesChanged = (data: TransactionCategory) => {
+  const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
     const { credit, debit } = transactionCategories;
     const { credit: dbCredit, debit: dbDebit } = data;
     if (credit.length !== dbCredit.length) return true;
@@ -38,19 +38,7 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
     return false;
   }
 
-  const loadTransactionCategories = useCallback(() => {
-    getTransactionCategoriesFromDB(userId)
-      .then(({ transactionCategories: dbTransactionCategories }) => {
-        if (checkTransactionCategoriesChanged(dbTransactionCategories)) {
-          dispatch(getTransactionCategories(dbTransactionCategories));
-        }
-      });
-  }, []);
-
-  useEffect(() => {
-    loadTransactionCategories();
-  }, []);
-  function handleDeleteCategory(category: string) {
+  const handleDeleteCategory = (category: string) => {
     // belwo line is weird I am getting empty array
     // console.log(categories)
     // I spent 3 hours debugging the below issue
@@ -81,28 +69,40 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
 
   }
 
+  const loadTransactionCategories = useCallback(() => {
+    getTransactionCategoriesFromDB(userId)
+      .then(({ transactionCategories: dbTransactionCategories }) => {
+        if (checkTransactionCategoriesChanged(dbTransactionCategories)) {
+          dispatch(getTransactionCategories(dbTransactionCategories));
+        }
+      });
+  }, []);
+
+  useEffect(() => {
+    loadTransactionCategories();
+  }, []);
+
   if (categories.length === 0) {
     return <p className={styles.noData}>!!No Categories Found!!</p>
   }
+
   return (
     <div className={styles.categoriesWrapper}>
-      {
-        categories.map((category) => {
-          return (
-            <motion.div
-              initial={{ opacity: 0, y: -5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: 0 }}
-              key={category}
-              className={styles.categoryWrapper}
-            >
-              <div>{category}</div>
-              <div>|</div>
-              <FontAwesomeIcon icon={faWindowClose} onClick={() => handleDeleteCategory(category)} />
-            </motion.div>
-          )
-        })
-      }
+      {categories.map((category) => {
+        return (
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, delay: 0 }}
+            key={category}
+            className={styles.categoryWrapper}
+          >
+            <div>{category}</div>
+            <div>|</div>
+            <FontAwesomeIcon icon={faWindowClose} onClick={() => handleDeleteCategory(category)} />
+          </motion.div>
+        )
+      })}
     </div>
   )
 }

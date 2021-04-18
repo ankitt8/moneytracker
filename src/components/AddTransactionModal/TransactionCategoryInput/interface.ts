@@ -4,7 +4,7 @@ export interface TransactionCategoryInputProps {
   handleCategoryChange: (category: string) => void;
 }
 
-export interface TransactionCategory {
+export interface TransactionCategories {
   credit: string[];
   debit: string[];
 }

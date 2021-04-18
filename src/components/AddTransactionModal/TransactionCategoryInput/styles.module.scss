@@ -1,21 +1,21 @@
 @import 'src/styles/mixins';
-
-.flexWrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
+@import 'src/styles/colors';
+@import 'src/styles/fonts';
+@import 'src/styles/spacing';
 
 .transactionCategoryInput {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: $spacing-8;
 }
 
 .transactionCategoryInputLabel {
-  color: gray;
+  font-size: $form-label-font-size;
+  color: $gray;
 }
 
-.categoryInput {
+.transactionCategories {
   border: 1px solid gray;
   display: flex;
   flex-wrap: wrap;
@@ -24,7 +24,7 @@
   overflow: scroll;
 }
 
-.category {
+.transactionCategory {
   color: black;
   padding: 5px;
   border: 1px solid gray;
@@ -32,7 +32,7 @@
   border-radius: 10px;
 }
 
-.categorySelected {
+.transactionCategorySelected {
   background-color: lightgray;
   border: none;
 }

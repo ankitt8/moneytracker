@@ -1,7 +1,7 @@
-import { TransactionInterface } from 'helper';
+import { Transaction } from 'interfaces/index.interface';
 
 export interface TransactionCardWrapperProps {
-  transactions: TransactionInterface[];
+  transactions: Transaction[];
   totalAmount: number;
   title: string;
 }

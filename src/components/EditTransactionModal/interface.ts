@@ -1,6 +1,6 @@
-import { TransactionInterface } from 'helper';
+import { Transaction } from 'interfaces/index.interface';
 
 export interface EditTransactionModalProps {
-    transaction: TransactionInterface
+    transaction: Transaction
     handleClose: () => void
 }

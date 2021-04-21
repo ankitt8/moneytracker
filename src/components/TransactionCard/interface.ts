@@ -1,5 +1,5 @@
-import { TransactionInterface } from 'helper';
+import { Transaction } from 'interfaces/index.interface';
 
 export interface TransactionCardProps {
-  transaction: TransactionInterface
+  transaction: Transaction
 }

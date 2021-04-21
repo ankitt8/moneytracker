@@ -32,6 +32,7 @@ const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
 
 const storeCreator = () => {
   const store = createStore(persistedReducer, composeEnhancers());
+  // @ts-ignore
   const persistor = persistStore(store);
   return { store, persistor };
 };

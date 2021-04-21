@@ -1,10 +1,10 @@
 export interface AddTransactionModalProps {
-    userId: object;
+    userId: string;
     handleClose: () => void;
 }
 
-export interface AddTransactionInterface {
-  userId: object;
+export interface AddTransaction {
+  userId: string;
   heading: string;
   amount: number;
   date: Date;

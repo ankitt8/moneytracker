@@ -29,6 +29,7 @@ import {
     SEVERITY_ERROR,
     SEVERITY_SUCCESS,
     SEVERITY_WARNING,
+    url,
 } from 'Constants';
 import {
     deleteTransactionAction,
@@ -41,8 +42,27 @@ import {
 } from 'actions/actionCreator';
 import { EditTransactionModalProps } from './interface';
 import styles from './styles.module.scss';
-import { deleteTransactionDB, editTransactionDB } from 'helper';
+import { ReduxStore } from 'reducers/interface';
+import { Transaction } from 'interfaces/index.interface';
 
+const deleteTransactionDB = async (transactionId: string) => {
+  const response = await fetch(`${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`, {
+    method: 'POST'
+  });
+  return await response.json();
+}
+
+const editTransactionDB = async (transactionId: string, updatedTransaction: Transaction) => {
+  const updatedTransactionResponse = await fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${transactionId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedTransaction)
+  });
+  const updatedTransactionObject = await updatedTransactionResponse.json();
+  return Promise.resolve(updatedTransactionObject);
+}
 const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     transaction,
     handleClose
@@ -51,9 +71,8 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     const [editedTransaction, setEditedTransaction] = useState(transaction);
     const [editLoading, setEditLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
-    const { _id: id, mode, type, amount, heading } = transaction;
-    // @ts-ignore
-    const transactionCategories = useSelector((state) => state.transactions.categories);
+    const { _id: transactionId, mode, type, amount, heading } = transaction;
+    const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
     let categories: string[];
 
     if (type === DEBIT_TYPE) {
@@ -100,7 +119,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
 
     function handleDeleteTransaction() {
         setDeleteLoading(true);
-        deleteTransactionDB(id)
+      deleteTransactionDB(transactionId)
             .then(function onFulfilled(res) {
                 const { transactionId } = res;
                 if (type === DEBIT_TYPE) {
@@ -120,14 +139,14 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 handleClose();
                 dispatch(deleteTransactionAction(transactionId));
                 dispatch(updateStatusAction({
-                    showFeedback: true,
+                    showFeedBack: true,
                     msg: DELETE_TRANSACTION_SUCCESS_MSG,
                     severity: SEVERITY_SUCCESS
                 }))
             })
             .catch(function onRejected(error) {
                 dispatch(updateStatusAction({
-                    showFeedback: true,
+                    showFeedBack: true,
                     msg: DELETE_TRANSACTION_FAIL_ERROR,
                     severity: SEVERITY_ERROR,
                 }));
@@ -148,7 +167,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                 setEditedTransaction({ ...editedTransaction, amount });
             }
             dispatch(updateStatusAction({
-                showFeedback: true,
+                showFeedBack: true,
                 msg,
                 severity: SEVERITY_WARNING,
             }))
@@ -156,9 +175,9 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         }
         setEditLoading(true);
 
-        editTransactionDB(id, editedTransaction)
+        editTransactionDB(transactionId, editedTransaction)
             .then(function onFulfilled(updatedTransactionObject) {
-                dispatch(editTransactionAction(id, updatedTransactionObject));
+                dispatch(editTransactionAction(transactionId, updatedTransactionObject));
                 const { type: editedType, mode: editedMode } = updatedTransactionObject;
                 const changedAmount = updatedAmount - transaction.amount;
                 if (editedType === DEBIT_TYPE) {
@@ -176,7 +195,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
                     }
                 }
                 dispatch(updateStatusAction({
-                    showFeedback: true,
+                    showFeedBack: true,
                     msg: EDIT_TRANSACTION_SUCCESS_MSG,
                     severity: SEVERITY_SUCCESS
                 }))
@@ -184,7 +203,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             .catch(function onRejected(error) {
                 console.error(error);
                 dispatch(updateStatusAction({
-                    showFeedback: true,
+                    showFeedBack: true,
                     msg: EDIT_TRANSACTION_FAIL_ERROR,
                     severity: SEVERITY_ERROR
                 }))

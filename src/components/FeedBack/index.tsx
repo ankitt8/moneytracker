@@ -6,6 +6,7 @@ import { OFFLINE_ERROR, SEVERITY_ERROR } from 'Constants';
 import { useSelector } from 'react-redux';
 import { updateStatusAction } from 'actions/actionCreator';
 import styles from './style.module.scss';
+import { ReduxStore } from 'reducers/interface';
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -14,13 +15,12 @@ function Alert(props: any) {
 export default function SnackBarFeedback() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  // @ts-ignore
-  const status = useSelector((state) => state.transactions.status);
+  const status = useSelector((state: ReduxStore) => state.transactions.status);
   let { severity, msg } = status;
 
   useEffect(() => {
-    const { showFeedback } = status;
-    if (showFeedback !== null) {
+    const { showFeedBack } = status;
+    if (showFeedBack !== null) {
       setOpen(true);
     }
   }, [status]);
@@ -41,7 +41,7 @@ export default function SnackBarFeedback() {
     // want to make severity null but it require some props
     //  anyways is msg is empty string then nothing will be shown;;
     dispatch(updateStatusAction({
-      showFeedback: null,
+      showFeedBack: null,
       msg: null,
       severity: null,
     }));

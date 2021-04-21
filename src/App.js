@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 
-import SnackBarFeedback from 'components/SnackBarFeedback';
+import SnackBarFeedback from 'components/FeedBack';
 import Transactions from 'components/Transactions';
 import TransactionSummary from 'components/TransactionSummary'
 import Login from 'components/Login';

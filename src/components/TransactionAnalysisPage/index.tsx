@@ -7,26 +7,70 @@ import DayTransactionsCard from 'components/TransactionCardWrapper';
 import { DEBIT_TYPE } from 'Constants';
 import {
   checkDebitTypeTransaction,
-  createTransactionsGroupedByCategories,
   getTransactionCategoriesFromDB,
   getTransactionsFromDB,
-  sortCategoriesDescByTotalAmount,
-  TransactionsGroupedByCategoriesInterface
 } from 'helper';
+import { CategoryAmountArray, Transaction } from 'interfaces/index.interface';
 
 import styles from './styles.module.scss';
 import { getTransactionCategories, getTransactionsAction } from 'actions/actionCreator';
-import { TransactionAnalysisPage as TransactionAnalyisisPageProps } from './interface';
+import { TransactionAnalysisPage as TransactionAnalyisisPageProps, TransactionsGroupedByCategories } from './interface';
 import Loader from 'components/Loader';
+import { ReduxStore } from 'reducers/interface';
+
+const sortCategoriesDescByTotalAmount = (transactionsGroupedByCategories: TransactionsGroupedByCategories) => {
+  const categoryAmountArray: CategoryAmountArray[] = [];
+  Object.keys(transactionsGroupedByCategories).forEach((category: string) => {
+    categoryAmountArray.push({
+      category,
+      totalAmount: transactionsGroupedByCategories[category]['totalAmount'],
+    });
+  });
+
+  categoryAmountArray.sort((a, b) => {
+    return b.totalAmount - a.totalAmount;
+  });
+  return categoryAmountArray.map((categoryAmount) => categoryAmount.category);
+}
+
+const createTransactionsGroupedByCategories = (
+  transactions: Transaction[], categories: string[]
+) => {
+  let transactionsGroupedByCategories: TransactionsGroupedByCategories = {
+    'No Category': {
+      transactions: [],
+      totalAmount: 0,
+    }
+  };
+
+  categories.forEach((category: string) => {
+    transactionsGroupedByCategories[category] = {
+      transactions: [],
+      totalAmount: 0,
+    }
+  });
+
+  transactions.forEach(transaction => {
+    const { category, amount } = transaction;
+    if (category === '' || category === undefined) {
+      transactionsGroupedByCategories['No Category']['transactions'].push(transaction);
+      transactionsGroupedByCategories['No Category'].totalAmount += amount;
+    } else {
+      // for now user can add transaction without category
+      // reason have not yet made category required
+      transactionsGroupedByCategories[category]['transactions'].push(transaction);
+      transactionsGroupedByCategories[category].totalAmount += amount;
+    }
+  });
+
+  return transactionsGroupedByCategories;
+}
 
 const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ userId }): ReactElement => {
   const dispatch = useDispatch();
-  // @ts-ignore
-  const transactions = useSelector(state => state.transactions.transactions);
+  const transactions = useSelector((state: ReduxStore) => state.transactions.transactions);
   const transactionsEmpty = transactions.length === 0;
-  // for now assuming type = 'Debit' filter is selected
-  // @ts-ignore
-  let transactionCategories = useSelector((state) => state.transactions.categories);
+  let transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
   const transactionCategoriesEmpty = transactionCategories.credit.length === 0 && transactionCategories.debit.length === 0;
 
   const [loader, setLoader] = useState(() => transactionsEmpty || transactionCategoriesEmpty);
@@ -100,7 +144,7 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
   } else if (filteredTransactions.length === 0) {
     componentToRender = <p className={styles.noData}>!!No Transactions Found!!</p>
   } else {
-    const transactionsGroupedByCategories: TransactionsGroupedByCategoriesInterface =
+    const transactionsGroupedByCategories: TransactionsGroupedByCategories =
       createTransactionsGroupedByCategories(filteredTransactions, categories);
 
     const categoriesSortedDescTotalAmount = sortCategoriesDescByTotalAmount(transactionsGroupedByCategories);

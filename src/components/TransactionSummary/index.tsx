@@ -1,14 +1,15 @@
 import React from 'react';
+import { getNoOfDaysRemainingCurrentMonth } from 'helper';
 import { useSelector } from 'react-redux';
+import { ReduxStore } from 'reducers/interface';
 import CreditDebitSummary from './CreditDebitSummary';
 import styles from './styles.module.scss';
 
 const TransactionSummary = () => {
-  // @ts-ignore
-  const { bank, cash } = useSelector(state => state.transactions.transactionSummary);
+  const { bank, cash } = useSelector((state: ReduxStore) => state.transactions.transactionSummary);
   const { debit: bankDebit, credit: bankCredit } = bank;
   const { debit: cashDebit, credit: cashCredit } = cash;
-  const daysRemaining = getDaysRemaining();
+  const daysRemaining = getNoOfDaysRemainingCurrentMonth();
   return (
     <div className={styles.transactionSummary}>
       <CreditDebitSummary
@@ -29,22 +30,4 @@ const TransactionSummary = () => {
   )
 }
 
-function getDaysRemaining() {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const noOfDays = getNoOfDays(year, month);
-  const daysRemaining = noOfDays - date.getDate();
-  return daysRemaining;
-}
-
-function getNoOfDays(year: number, month: number) {
-  let noOfDays = 0;
-  const dateFirstDay = new Date(year, month, 1);
-  while (dateFirstDay.getMonth() === month) {
-    noOfDays += 1;
-    dateFirstDay.setDate(dateFirstDay.getDate() + 1);
-  }
-  return noOfDays;
-}
 export default TransactionSummary;

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from 'components/Loader';
 import TransactionCategoryInput from './TransactionCategoryInput'
-import { AddTransactionInterface, AddTransactionModalProps } from './interface';
+import { AddTransaction, AddTransactionModalProps } from './interface';
 
 import styles from './styles.module.scss';
 
@@ -30,12 +30,26 @@ import {
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
+  url,
 } from 'Constants';
 
-import { addTransactionDB, getTransactionCategoriesFromDB } from 'helper';
+import { getTransactionCategoriesFromDB } from 'helper';
 import { TransactionCategories } from './TransactionCategoryInput/interface';
+import { ReduxStore } from 'reducers/interface';
 
-function constructTodayDate() {
+const addTransactionDB = async (transaction: AddTransaction) => {
+  const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(transaction),
+  });
+  const transactionObject = await addTransactionResponse.json();
+  return Promise.resolve(transactionObject);
+}
+
+const constructTodayDate = () => {
   let todayFormattedDate = "";
   const todayDate = new Date();
   const year = todayDate.getFullYear();
@@ -52,6 +66,7 @@ function constructTodayDate() {
   else todayFormattedDate += `${date}`;
   return todayFormattedDate;
 }
+
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   userId,
   handleClose,
@@ -65,13 +80,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [mode, setMode] = React.useState(ONLINE_MODE);
   const [type, setType] = React.useState(DEBIT_TYPE);
 
-  // @ts-ignore
-  // const Transition = React.forwardRef(function Transition(props, ref) {
-  //   // @ts-ignore
-  //   return <Slide direction="up" ref={ref} {...props} />;
-  // });
-  // @ts-ignore
-  const transactionCategories = useSelector((state) => state.transactions.categories);
+  const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
   const categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
   const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
     // data is of redux store transactionCategories
@@ -133,14 +142,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     if (amount === '' || parseInt(amount) <= 0 || heading === '') {
       const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
       dispatch(updateStatusAction({
-        showFeedback: true,
+        showFeedBack: true,
         msg,
         severity: SEVERITY_WARNING
       }))
       return;
     }
     setLoadingState(true);
-    const transaction: AddTransactionInterface = {
+    const transaction: AddTransaction = {
       userId,
       heading,
       amount: parseInt(amount),
@@ -167,7 +176,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           }
         }
         dispatch(updateStatusAction({
-          showFeedback: true,
+          showFeedBack: true,
           msg: ADD_TRANSACTION_SUCCESS_MSG,
           severity: SEVERITY_SUCCESS
         }));
@@ -175,7 +184,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       .catch(function onRejected(error) {
         console.error(error);
         dispatch(updateStatusAction({
-          showFeedback: true,
+          showFeedBack: true,
           msg: ADD_TRANSACTION_FAIL_ERROR,
           severity: SEVERITY_ERROR
         }));
@@ -186,7 +195,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
     <Dialog
       maxWidth={'sm'}
       open={true}
-      // @ts-ignore
       // if I add transition and change the categories then whole modal appears again from bottom
       // TransitionComponent={Transition}
       onClose={handleClose}

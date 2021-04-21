@@ -9,83 +9,75 @@ import {
   editCashDebitAction,
   getTransactionsAction,
 } from 'actions/actionCreator';
-import { url } from 'Constants';
+import { CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, url } from 'Constants';
 import DayTransactionsCard from 'components/TransactionCardWrapper';
 import {
-  TransactionInterface,
-  debitTransaction,
   getNoOfDaysCurrentMonth,
-  checkCreditTypeTransaction,
-  calculateBankCreditAmount,
-  calculateBankDebitAmount,
-  calculateCashCreditAmount,
-  calculateCashDebitAmount,
-  checkCashModeTransaction,
   checkDebitTypeTransaction,
-  checkOnlineModeTransaction
+  getTransactionsFromDB
 } from 'helper';
+import { Transaction } from 'interfaces/index.interface';
+import { ReduxStore } from 'reducers/interface';
 import styles from './styles.module.scss';
+import { TransactionsProps } from './interface';
 
-
-interface InterfaceTransactionsProps {
-  userId: object;
+const checkCreditTypeTransaction = (transaction: Transaction) => transaction.type === CREDIT_TYPE;
+const debitTransaction = (transaction: Transaction) => (transaction.type === DEBIT_TYPE || transaction.type === undefined);
+const checkOnlineModeTransaction = (transaction: Transaction) => transaction.mode === ONLINE_MODE;
+const checkCashModeTransaction = (transaction: Transaction) => transaction.mode === CASH_MODE;
+const calculateTotalAmount = (transactions: Transaction[]) => {
+  return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
 }
 
-const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
+const Transactions: React.FC<TransactionsProps> = ({ userId }) => {
   const dispatch = useDispatch();
-  // @ts-ignore
-  const transactions = useSelector(state => state.transactions.transactions);
+  const transactions = useSelector((state: ReduxStore) => state.transactions.transactions);
   const [offline, setOffline] = React.useState(false);
-  const checkTransactionsChanged = (data: TransactionInterface[]) => {
-    if (data?.length === transactions?.length) {
+  const checkTransactionsChanged = (recentTransactions: Transaction[]) => {
+    // if length is same then check if values have changed
+    // fields of transaction can be changed by doing edit operation
+    if (recentTransactions.length === transactions.length) {
       for (let i = 0; i < transactions.length; i += 1) {
         for (const key of Object.keys(transactions[i])) {
           // @ts-ignore
-          if (transactions[i][key] !== data[i][key]) {
+          if (transactions[i][key] !== recentTransactions[i][key]) {
             return true;
           }
         }
       }
       return false;
     }
+    // if length is different implies new transactions have been added
     return true;
   }
   const loadTransactions = useCallback(
     async () => {
       try {
-        const response = await fetch(url.API_URL_GET_TRANSACTIONS, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ "userId": userId })
-        });
-        if (response.ok) {
-          const data = await response.json();
-          if (checkTransactionsChanged(data)) {
-            dispatch(setCreditDebitZero())
+        const transactions: Transaction[] = await getTransactionsFromDB(userId);
+        if (transactions.length === 0) return;
+        if (checkTransactionsChanged(transactions)) {
+          dispatch(setCreditDebitZero())
 
-            const debitTransactions = data.filter(checkDebitTypeTransaction);
-            const creditTransactions = data.filter(checkCreditTypeTransaction);
+          const debitTransactions = transactions.filter(checkDebitTypeTransaction);
+          const creditTransactions = transactions.filter(checkCreditTypeTransaction);
 
-            const bankCreditTransactions = creditTransactions.filter(checkOnlineModeTransaction);
-            const cashCreditTransactions = creditTransactions.filter(checkCashModeTransaction);
-            const bankDebitTransactions = debitTransactions.filter(checkOnlineModeTransaction);
-            const cashDebitTransactions = debitTransactions.filter(checkCashModeTransaction);
+          const bankCreditTransactions = creditTransactions.filter(checkOnlineModeTransaction);
+          const cashCreditTransactions = creditTransactions.filter(checkCashModeTransaction);
+          const bankDebitTransactions = debitTransactions.filter(checkOnlineModeTransaction);
+          const cashDebitTransactions = debitTransactions.filter(checkCashModeTransaction);
 
-            const bankCredit = calculateBankCreditAmount(bankCreditTransactions);
-            const bankDebit = calculateBankDebitAmount(bankDebitTransactions);
-            const cashCredit = calculateCashCreditAmount(cashCreditTransactions);
-            const cashDebit = calculateCashDebitAmount(cashDebitTransactions);
+          const bankCredit = calculateTotalAmount(bankCreditTransactions);
+          const bankDebit = calculateTotalAmount(bankDebitTransactions);
+          const cashCredit = calculateTotalAmount(cashCreditTransactions);
+          const cashDebit = calculateTotalAmount(cashDebitTransactions);
 
-            dispatch(editBankCreditAction(bankCredit));
-            dispatch(editBankDebitAction(bankDebit));
+          dispatch(editBankCreditAction(bankCredit));
+          dispatch(editBankDebitAction(bankDebit));
 
-            dispatch(editCashCreditAction(cashCredit));
-            dispatch(editCashDebitAction(cashDebit));
+          dispatch(editCashCreditAction(cashCredit));
+          dispatch(editCashDebitAction(cashDebit));
 
-            dispatch(getTransactionsAction(data));
-          }
+          dispatch(getTransactionsAction(transactions));
         }
       } catch (err) {
         // console.error(err);
@@ -115,7 +107,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
       dayTransactions[i] = [];
     }
 
-    transactions.forEach((transaction: TransactionInterface) => {
+    transactions.forEach((transaction: Transaction) => {
       const dayTransactionIndex = new Date(transaction.date).getDate();
       dayTransactions[dayTransactionIndex].push(transaction);
     });
@@ -123,7 +115,7 @@ const Transactions: React.FC<InterfaceTransactionsProps> = ({ userId }) => {
     for (let i = todayDate; i >= 1; --i) {
       totalAmountPerDay[i] = dayTransactions[i]
         .filter(debitTransaction)
-        .reduce((acc: number, curr: TransactionInterface) => acc + curr.amount, 0);
+        .reduce((acc: number, curr: Transaction) => acc + curr.amount, 0);
 
       dayTransactionsList.push(
         <motion.li

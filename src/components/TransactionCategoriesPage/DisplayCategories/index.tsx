@@ -1,29 +1,47 @@
 import React, { FC, ReactElement, useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
+  CREDIT_TYPE,
   DEBIT_TYPE,
   DELETE_TRANSACTION_CATEGORY_ERROR_MSG,
   DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
   SEVERITY_ERROR,
-  SEVERITY_SUCCESS
+  SEVERITY_SUCCESS,
+  url
 } from 'Constants';
 import { DisplayCategoriesProps } from './interface';
 import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { deleteTransactionCategory, getTransactionCategories, updateStatusAction } from 'actions/actionCreator';
-import { deleteTransactionCategoryFromDB, getTransactionCategoriesFromDB } from 'helper';
+import { getTransactionCategoriesFromDB } from 'helper';
 import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { motion } from 'framer-motion';
+import { ReduxStore } from 'reducers/interface';
+
+const deleteTransactionCategoryFromDB = async (userId: string, categories: string[], type: string) => {
+  let typeUrl = url.API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY;
+  if (type === CREDIT_TYPE) {
+    typeUrl = url.API_URL_DELETE_CREDIT_TRANSACTION_CATEGORY;
+  }
+  return await fetch(typeUrl, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "userId": userId,
+      "categories": categories
+    })
+  });
+}
 
 const DisplayCategories: FC<DisplayCategoriesProps> = ({
   type,
 }): ReactElement => {
   const dispatch = useDispatch();
-  // @ts-ignore
-  const userId = useSelector((state) => state.user.userId);
-  // @ts-ignore
-  const transactionCategories = useSelector((state) => state.transactions.categories);
+  const userId = useSelector((state: ReduxStore) => state.user.userId);
+  const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
   let categories: string[];
   if (type === DEBIT_TYPE) {
     categories = transactionCategories.debit;
@@ -54,13 +72,13 @@ const DisplayCategories: FC<DisplayCategoriesProps> = ({
         if (res.ok) {
           dispatch(deleteTransactionCategory(category, type));
           dispatch(updateStatusAction({
-            showFeedback: true,
+            showFeedBack: true,
             msg: DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
             severity: SEVERITY_SUCCESS
           }));
         } else {
           dispatch(updateStatusAction({
-            showFeedback: true,
+            showFeedBack: true,
             msg: DELETE_TRANSACTION_CATEGORY_ERROR_MSG,
             severity: SEVERITY_ERROR
           }));

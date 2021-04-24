@@ -24,8 +24,8 @@ const TransactionCardWrapper: React.FC<TransactionCardWrapperProps> = ({
   return (
     <div className={styles.transactionCardWrapper}>
       <div className={styles.transactionCardHeading}>
-        <div>{title}</div>
-        <div>{totalAmount}</div>
+        <p>{title}</p>
+        <p>{totalAmount}</p>
       </div>
       {transactions.length === 0 ? <p className={styles.noData}>!!No Transactions Found!!</p> :
         <ul className={styles.list}>{transactionsList}</ul>}

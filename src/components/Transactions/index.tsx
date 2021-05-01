@@ -54,7 +54,6 @@ const Transactions: React.FC<TransactionsProps> = ({ userId }) => {
     async () => {
       try {
         const transactions: Transaction[] = await getTransactionsFromDB(userId);
-        if (transactions.length === 0) return;
         if (checkTransactionsChanged(transactions)) {
           dispatch(setCreditDebitZero())
 

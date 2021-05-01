@@ -23,8 +23,8 @@ const TransactionSummary = () => {
         debitAmount={cashDebit}
       />
       <div className={styles.transactionSummaryTitle}>
-        <h2>Spent {bankDebit + cashDebit}</h2>
-        <h2>Days Left {daysRemaining}</h2>
+        <p>Spent {bankDebit + cashDebit}</p>
+        <p>Days Left {daysRemaining}</p>
       </div>
     </div>
   )

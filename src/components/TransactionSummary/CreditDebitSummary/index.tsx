@@ -10,19 +10,19 @@ const CreditDebitSummary: React.FC<CreditDebitSummaryProps> = ({
   return (
     <>
       <div className="credit-debit-summary">
-        <h2 >{title}</h2>
+        <p>{title}</p>
         <div className='summary'>
-          <h2>
+          <p>
             {new Intl.NumberFormat('en-IN').format(creditAmount)}
-          </h2>
-          <h2>-</h2>
-          <h2>
+          </p>
+          <p>-</p>
+          <p>
             {new Intl.NumberFormat('en-IN').format(debitAmount)}
-          </h2>
-          <h2>=</h2>
-          <h2>
+          </p>
+          <p>=</p>
+          <p>
             {new Intl.NumberFormat('en-IN').format(creditAmount - debitAmount)}
-          </h2>
+          </p>
         </div>
       </div>
     </>

@@ -6,5 +6,4 @@
 - Also its currently in development lot of features have been added with msg 'Will be live soon'
 - Deployed backend on Heroku, frontend on Netlify and storing database on MongoCloud 
 - PWA Link:- https://moneytrackerankit.netlify.app/
-- The code is in private repo have not made it public
-- Work In Progress:- https://docs.google.com/document/d/1jGHGzjALA4wX45vAANyaQbx3Yclgqw-gIVA6pS_XLbc/edit?usp=sharing
+- There are many issues which i need to work on

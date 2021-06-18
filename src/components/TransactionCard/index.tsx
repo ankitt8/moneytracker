@@ -7,9 +7,9 @@ import { TransactionCardProps } from './interface';
 
 const EditTransactionModal = lazy(() => import('components/EditTransactionModal'));
 
-const TransactionCard: React.FC<TransactionCardProps> = ({
+const TransactionCard = ({
   transaction
-}) => {
+}: TransactionCardProps) => {
   const [open, setOpen] = useState(false);
   const { heading, amount } = transaction;
   const handleClickOpen = () => {

@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
 import { useSelector } from 'react-redux';
@@ -66,7 +66,7 @@ const createTransactionsGroupedByCategories = (
   return transactionsGroupedByCategories;
 }
 
-const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ userId }): ReactElement => {
+const TransactionAnalysisPage = ({ userId }: TransactionAnalyisisPageProps) => {
   const dispatch = useDispatch();
   const transactions = useSelector((state: ReduxStore) => state.transactions.transactions);
   const transactionsEmpty = transactions.length === 0;
@@ -149,7 +149,7 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
 
     const categoriesSortedDescTotalAmount = sortCategoriesDescByTotalAmount(transactionsGroupedByCategories);
 
-    const TransactionAnalysisCards: ReactElement[] = categoriesSortedDescTotalAmount.map((category) => (
+    const TransactionAnalysisCards = categoriesSortedDescTotalAmount.map((category) => (
       <motion.li
         key={category}
         layout

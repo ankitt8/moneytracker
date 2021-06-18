@@ -9,11 +9,11 @@ const areEqual = (prevProps: any, nextProps: any) => {
   }
   return true;
 }
-const TransactionCardWrapper: React.FC<TransactionCardWrapperProps> = ({
+const TransactionCardWrapper = ({
   transactions,
   title,
   totalAmount
-}) => {
+}: TransactionCardWrapperProps) => {
   const transactionsList = transactions.map(transaction => {
     const { _id: transactionId } = transaction;
     return (<li key={transactionId}>

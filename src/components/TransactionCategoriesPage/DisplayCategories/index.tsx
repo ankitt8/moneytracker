@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   CREDIT_TYPE,
@@ -36,9 +36,7 @@ const deleteTransactionCategoryFromDB = async (userId: string, categories: strin
   });
 }
 
-const DisplayCategories: FC<DisplayCategoriesProps> = ({
-  type,
-}): ReactElement => {
+const DisplayCategories = ({ type }: DisplayCategoriesProps) => {
   const dispatch = useDispatch();
   const userId = useSelector((state: ReduxStore) => state.user.userId);
   const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);

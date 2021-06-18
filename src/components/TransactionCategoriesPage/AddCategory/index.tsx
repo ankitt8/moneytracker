@@ -1,4 +1,4 @@
-import React, { useState, FC, ReactElement } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTransactionCategory, updateStatusAction } from 'actions/actionCreator';
 import {
@@ -33,10 +33,10 @@ const addTransactionCategoryToDB = async (userId: string, category: string, type
 
 }
 
-const AddCategory: FC<AddCategoryProps> = ({
+const AddCategory = ({
   title,
   type,
-}): ReactElement => {
+}: AddCategoryProps) => {
   const userId = useSelector((state: ReduxStore) => state.user.userId);
   const dispatch = useDispatch();
   const [newCategory, setNewCategory] = useState('');

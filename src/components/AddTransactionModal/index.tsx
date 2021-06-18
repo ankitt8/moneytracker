@@ -67,10 +67,10 @@ const constructTodayDate = () => {
   return todayFormattedDate;
 }
 
-const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
+const AddTransactionModal = ({
   userId,
   handleClose,
-}) => {
+}: AddTransactionModalProps) => {
   const dispatch = useDispatch();
   const [heading, setHeading] = useState('');
   const [amount, setAmount] = useState('');

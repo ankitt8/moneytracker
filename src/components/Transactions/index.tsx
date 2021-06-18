@@ -29,7 +29,7 @@ const calculateTotalAmount = (transactions: Transaction[]) => {
   return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
 }
 
-const Transactions: React.FC<TransactionsProps> = ({ userId }) => {
+const Transactions = ({ userId }: TransactionsProps) => {
   const dispatch = useDispatch();
   const transactions = useSelector((state: ReduxStore) => state.transactions.transactions);
   const [offline, setOffline] = React.useState(false);

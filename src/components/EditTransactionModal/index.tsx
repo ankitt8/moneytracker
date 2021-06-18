@@ -63,10 +63,10 @@ const editTransactionDB = async (transactionId: string, updatedTransaction: Tran
   const updatedTransactionObject = await updatedTransactionResponse.json();
   return Promise.resolve(updatedTransactionObject);
 }
-const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
+const EditTransactionModal = ({
     transaction,
     handleClose
-}) => {
+}: EditTransactionModalProps) => {
     const dispatch = useDispatch();
     const [editedTransaction, setEditedTransaction] = useState(transaction);
     const [editLoading, setEditLoading] = useState(false);

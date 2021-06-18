@@ -16,7 +16,7 @@ interface UserObject {
   password: string
 }
 
-const Login: React.FC = () => {
+const Login = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState('');
   const [username, setUserName] = useState('');

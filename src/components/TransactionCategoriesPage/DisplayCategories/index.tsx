@@ -38,8 +38,8 @@ const deleteTransactionCategoryFromDB = async (userId: string, categories: strin
 
 const DisplayCategories = ({ type }: DisplayCategoriesProps) => {
   const dispatch = useDispatch();
-  const userId = useSelector((state: ReduxStore) => state.user.userId);
-  const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
+  const userId = useSelector((store: ReduxStore) => store.user.userId);
+  const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   let categories: string[];
   if (type === DEBIT_TYPE) {
     categories = transactionCategories.debit;

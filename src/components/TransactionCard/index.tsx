@@ -12,12 +12,7 @@ const TransactionCard = ({
 }: TransactionCardProps) => {
   const [open, setOpen] = useState(false);
   const { heading, amount } = transaction;
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => setOpen(true);
 
   return (
     <>
@@ -30,7 +25,7 @@ const TransactionCard = ({
         <p className={styles.title}>{heading}</p>
         <p className={styles.amount}>{amount}</p>
       </div>
-      {open && <EditTransactionModal transaction={transaction} handleClose={handleClose} />}
+      {open && <EditTransactionModal transaction={transaction} />}
     </>
   );
 }

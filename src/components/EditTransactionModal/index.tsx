@@ -45,34 +45,18 @@ import styles from './styles.module.scss';
 import { ReduxStore } from 'reducers/interface';
 import { Transaction } from 'interfaces/index.interface';
 
-const deleteTransactionDB = async (transactionId: string) => {
-  const response = await fetch(`${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`, {
-    method: 'POST'
-  });
-  return await response.json();
-}
 
-const editTransactionDB = async (transactionId: string, updatedTransaction: Transaction) => {
-  const updatedTransactionResponse = await fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${transactionId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(updatedTransaction)
-  });
-  const updatedTransactionObject = await updatedTransactionResponse.json();
-  return Promise.resolve(updatedTransactionObject);
-}
-const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
-    transaction,
-    handleClose
-}) => {
+const EditTransactionModal = ({
+    transaction
+}: EditTransactionModalProps) => {
     const dispatch = useDispatch();
+    const [isOpen, setIsOpen] = React.useState(true);
     const [editedTransaction, setEditedTransaction] = useState(transaction);
     const [editLoading, setEditLoading] = useState(false);
     const [deleteLoading, setDeleteLoading] = useState(false);
     const { _id: transactionId, mode, type, amount, heading } = transaction;
-    const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
+    const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
+    const handleClose = () => setIsOpen(false);
     let categories: string[];
 
     if (type === DEBIT_TYPE) {
@@ -85,6 +69,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
             setEditLoading(false);
             setDeleteLoading(false);
             setEditedTransaction(transaction);
+            setIsOpen(false);
         }
     }, []);
 
@@ -119,41 +104,40 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
 
     function handleDeleteTransaction() {
         setDeleteLoading(true);
-      deleteTransactionDB(transactionId)
-            .then(function onFulfilled(res) {
-                const { transactionId } = res;
-                if (type === DEBIT_TYPE) {
-                    if (mode === ONLINE_MODE || mode === undefined) {
-                        // while deleting edited values should not be taken
-                        dispatch(editBankDebitAction(-1 * amount));
+        deleteTransactionDB(transactionId)
+                .then(function onFulfilled(res) {
+                    const { transactionId } = res;
+                    if (type === DEBIT_TYPE) {
+                        if (mode === ONLINE_MODE || mode === undefined) {
+                            // while deleting edited values should not be taken
+                            dispatch(editBankDebitAction(-1 * amount));
+                        } else {
+                            dispatch(editCashDebitAction(-1 * amount));
+                        }
                     } else {
-                        dispatch(editCashDebitAction(-1 * amount));
+                        if (mode === ONLINE_MODE) {
+                            dispatch(editBankCreditAction(-1 * amount));
+                        } else {
+                            dispatch(editCashCreditAction(-1 * amount));
+                        }
                     }
-                } else {
-                    if (mode === ONLINE_MODE) {
-                        dispatch(editBankCreditAction(-1 * amount));
-                    } else {
-                        dispatch(editCashCreditAction(-1 * amount));
-                    }
-                }
-                handleClose();
-                dispatch(deleteTransactionAction(transactionId));
-                dispatch(updateStatusAction({
-                    showFeedBack: true,
-                    msg: DELETE_TRANSACTION_SUCCESS_MSG,
-                    severity: SEVERITY_SUCCESS
-                }))
-            })
-            .catch(function onRejected(error) {
-                dispatch(updateStatusAction({
-                    showFeedBack: true,
-                    msg: DELETE_TRANSACTION_FAIL_ERROR,
-                    severity: SEVERITY_ERROR,
-                }));
-                handleClose();
-                console.error(error);
-            });
-    }
+                    dispatch(deleteTransactionAction(transactionId));
+                    dispatch(updateStatusAction({
+                        showFeedBack: true,
+                        msg: DELETE_TRANSACTION_SUCCESS_MSG,
+                        severity: SEVERITY_SUCCESS
+                    }))
+                })
+                .catch(function onRejected(error) {
+                    dispatch(updateStatusAction({
+                        showFeedBack: true,
+                        msg: DELETE_TRANSACTION_FAIL_ERROR,
+                        severity: SEVERITY_ERROR,
+                    }));
+                    console.error(error);
+                })
+                .finally(handleClose);
+        }
 
     function handleEditTransaction() {
         const { amount: updatedAmount, heading: editedHeading } = editedTransaction;
@@ -214,7 +198,7 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
     return (
         <Dialog
             maxWidth={'sm'}
-            open={true}
+            open={isOpen}
             onClose={handleClose}
             aria-labelledby="max-width-dialog-heading"
         >
@@ -309,5 +293,22 @@ const EditTransactionModal: React.FC<EditTransactionModalProps> = ({
         </Dialog>
     )
 }
+async function deleteTransactionDB (transactionId: string) {
+    const response = await fetch(`${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`, {
+        method: 'POST'
+    });
+    return await response.json();
+}   
 
+async function editTransactionDB (transactionId: string, updatedTransaction: Transaction) {
+    const updatedTransactionResponse = await fetch(`${url.API_URL_EDIT_TRANSACTION}/?id=${transactionId}`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedTransaction)
+    });
+    const updatedTransactionObject = await updatedTransactionResponse.json();
+    return Promise.resolve(updatedTransactionObject);
+}
 export default EditTransactionModal;

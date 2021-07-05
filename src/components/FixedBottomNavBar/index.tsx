@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './style.module.scss';
@@ -6,7 +6,7 @@ import { ROUTES } from 'Constants';
 import { FixedBottomNavBarProps } from './interface';
 import AddTransactionModal from 'components/AddTransactionModal';
 
-const FixedBottomNavBar: FC<FixedBottomNavBarProps> = ({ userId }) => {
+const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);

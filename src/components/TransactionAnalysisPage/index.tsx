@@ -1,36 +1,31 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
-import { useSelector } from 'react-redux';
-
 import DayTransactionsCard from 'components/TransactionCardWrapper';
 import { DEBIT_TYPE } from 'Constants';
 import {
-  checkDebitTypeTransaction,
+  isDebitTypeTransaction,
   getTransactionCategoriesFromDB,
   getTransactionsFromDB,
 } from 'helper';
-import { CategoryAmountArray, Transaction } from 'interfaces/index.interface';
+import { TransactionAnalysisPageProps, TransactionsGroupedByCategories, CategoryAmount } from './interface';
+import { Transaction } from 'interfaces/index.interface';
 
 import styles from './styles.module.scss';
 import { getTransactionCategories, getTransactionsAction } from 'actions/actionCreator';
-import { TransactionAnalysisPage as TransactionAnalyisisPageProps, TransactionsGroupedByCategories } from './interface';
 import Loader from 'components/Loader';
 import { ReduxStore } from 'reducers/interface';
 
-const sortCategoriesDescByTotalAmount = (transactionsGroupedByCategories: TransactionsGroupedByCategories) => {
-  const categoryAmountArray: CategoryAmountArray[] = [];
-  Object.keys(transactionsGroupedByCategories).forEach((category: string) => {
-    categoryAmountArray.push({
-      category,
-      totalAmount: transactionsGroupedByCategories[category]['totalAmount'],
-    });
-  });
+const getCategoryNamesSortedByTotalAmount = (transactionsGroupedByCategories: TransactionsGroupedByCategories) => {
+   const categoryTotalAmountObjectArray: CategoryAmount[] = Object.keys(transactionsGroupedByCategories).map((category: string) => ({
+    category,
+    totalAmount: transactionsGroupedByCategories[category]['totalAmount'],
+  }));
 
-  categoryAmountArray.sort((a, b) => {
+  categoryTotalAmountObjectArray.sort((a, b) => {
     return b.totalAmount - a.totalAmount;
   });
-  return categoryAmountArray.map((categoryAmount) => categoryAmount.category);
+  return categoryTotalAmountObjectArray.map(({category}) => category);
 }
 
 const createTransactionsGroupedByCategories = (
@@ -66,11 +61,13 @@ const createTransactionsGroupedByCategories = (
   return transactionsGroupedByCategories;
 }
 
-const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ userId }): ReactElement => {
+const getDebitTransactions = (transactions: Transaction[]) => transactions.filter(isDebitTypeTransaction)
+
+const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
   const dispatch = useDispatch();
-  const transactions = useSelector((state: ReduxStore) => state.transactions.transactions);
+  const transactions = useSelector((store: ReduxStore) => store.transactions.transactions);
   const transactionsEmpty = transactions.length === 0;
-  let transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
+  let transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   const transactionCategoriesEmpty = transactionCategories.credit.length === 0 && transactionCategories.debit.length === 0;
 
   const [loader, setLoader] = useState(() => transactionsEmpty || transactionCategoriesEmpty);
@@ -98,7 +95,7 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
         // links:- https://codesandbox.io/s/suspicious-merkle-0kzcg?file=/src/index.js
         // The below code shows No Transactions First then shown the analysiss which is bug
 
-        setLoader(() => loader && false);
+        setLoader((loader) => !loader);
       });
   }, []);
 
@@ -135,8 +132,8 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
 
   const type = DEBIT_TYPE;
   let componentToRender;
-
-  let filteredTransactions = transactions.filter(checkDebitTypeTransaction)
+  transactions.filter(isDebitTypeTransaction)
+  let filteredTransactions = getDebitTransactions(transactions);
   categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
 
   if (loader) {
@@ -147,9 +144,9 @@ const TransactionAnalysisPage: React.FC<TransactionAnalyisisPageProps> = ({ user
     const transactionsGroupedByCategories: TransactionsGroupedByCategories =
       createTransactionsGroupedByCategories(filteredTransactions, categories);
 
-    const categoriesSortedDescTotalAmount = sortCategoriesDescByTotalAmount(transactionsGroupedByCategories);
+    const categoryNamesSortedByTotalAmountDescending = getCategoryNamesSortedByTotalAmount(transactionsGroupedByCategories);
 
-    const TransactionAnalysisCards: ReactElement[] = categoriesSortedDescTotalAmount.map((category) => (
+    const TransactionAnalysisCards = categoryNamesSortedByTotalAmountDescending.map((category) => (
       <motion.li
         key={category}
         layout

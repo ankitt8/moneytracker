@@ -49,28 +49,34 @@ const addTransactionDB = async (transaction: AddTransaction) => {
   return Promise.resolve(transactionObject);
 }
 
-const constructTodayDate = () => {
-  let todayFormattedDate = "";
+const constructTodayDate = (): string => {
   const todayDate = new Date();
-  const year = todayDate.getFullYear();
-  todayFormattedDate += `${year}`;
-  todayFormattedDate += "-";
-
-  let month = todayDate.getMonth();
-  if (month + 1 < 10) todayFormattedDate += `0${month + 1}`;
-  else todayFormattedDate += `${month + 1}`;
-  todayFormattedDate += "-";
-
-  const date = todayDate.getDate();
-  if (date < 10) todayFormattedDate += `0${date}`;
-  else todayFormattedDate += `${date}`;
-  return todayFormattedDate;
+  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
+  const appendMonth = (str: string) => {
+      const month = todayDate.getMonth();
+      const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
+      return str + result;
+  }
+  const appendSeperator = (str: string) => str + "-";
+  const appendDate = (str: string) => {
+      const date = todayDate.getDate();
+      const result = date < 10 ? `0${date}` : date.toString();
+      return str + result;
+  }
+  const pipe = (...fns: Function[]) => (x: string) => fns.reduce((currVal, currFunc) => currFunc(currVal), x);
+  return pipe(
+      appendYear,
+      appendSeperator,
+      appendMonth,
+      appendSeperator,
+      appendDate
+  )('');
 }
 
-const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
+const AddTransactionModal = ({
   userId,
   handleClose,
-}) => {
+}: AddTransactionModalProps) => {
   const dispatch = useDispatch();
   const [heading, setHeading] = useState('');
   const [amount, setAmount] = useState('');
@@ -80,7 +86,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const [mode, setMode] = React.useState(ONLINE_MODE);
   const [type, setType] = React.useState(DEBIT_TYPE);
 
-  const transactionCategories = useSelector((state: ReduxStore) => state.transactions.categories);
+  const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   const categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
   const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
     // data is of redux store transactionCategories
@@ -97,12 +103,14 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         if (checkTransactionCategoriesChanged(dbTransactionCategories)) {
           dispatch(getTransactionCategories(dbTransactionCategories));
         }
+      })
+      .catch(() => {
+        
       });
   }, [])
   useEffect(() => {
     loadTransactionCategories();
     return function setFieldsEmpty() {
-      // console.log('cleanup called add transaction modal');
       setHeading('');
       setAmount('');
       setDate(constructTodayDate());

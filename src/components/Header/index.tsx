@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -60,9 +60,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Header: FC<HeaderProps> = ({
+const Header = ({
   username
-}): ReactElement => {
+}: HeaderProps) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);

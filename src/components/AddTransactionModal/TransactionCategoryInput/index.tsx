@@ -1,4 +1,4 @@
-import React, { ReactElement, FC } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.scss';
 import cn from 'classnames';
@@ -10,11 +10,11 @@ import { ROUTES } from 'Constants';
   The component provides AddCategory link
   The component shows different transaction categories and allows user to select one of them
 */
-const TransactionCategoryInput: FC<TransactionCategoryInputProps> = ({
+const TransactionCategoryInput = ({
   categories,
   categorySelected,
   handleCategoryChange,
-}): ReactElement => {
+}: TransactionCategoryInputProps) => {
   return (
     <>
       <div className={styles.transactionCategoryInput}>

@@ -2,11 +2,11 @@ import React from 'react';
 import './styles.scss';
 import { CreditDebitSummaryProps } from './interface';
 
-const CreditDebitSummary: React.FC<CreditDebitSummaryProps> = ({
+const CreditDebitSummary = ({
   title,
   creditAmount,
   debitAmount
-}) => {
+}: CreditDebitSummaryProps) => {
   return (
     <>
       <div className="credit-debit-summary">

@@ -1,4 +1,4 @@
-import { TransactionCategories, TransactionCategory, TransactionCategoryInputProps } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
+import { TransactionCategories, TransactionCategory } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { Transaction } from 'interfaces/index.interface';
 import { Status } from 'reducers/transactions/interface';
 import {

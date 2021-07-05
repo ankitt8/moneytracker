@@ -37,7 +37,7 @@ const AddCategory = ({
   title,
   type,
 }: AddCategoryProps) => {
-  const userId = useSelector((state: ReduxStore) => state.user.userId);
+  const userId = useSelector((store: ReduxStore) => store.user.userId);
   const dispatch = useDispatch();
   const [newCategory, setNewCategory] = useState('');
   const [loader, setLoader] = useState(false);

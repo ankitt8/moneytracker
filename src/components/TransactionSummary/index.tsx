@@ -6,7 +6,7 @@ import CreditDebitSummary from './CreditDebitSummary';
 import styles from './styles.module.scss';
 
 const TransactionSummary = () => {
-  const { bank, cash } = useSelector((state: ReduxStore) => state.transactions.transactionSummary);
+  const { bank, cash } = useSelector((store: ReduxStore) => store.transactions.transactionSummary);
   const { debit: bankDebit, credit: bankCredit } = bank;
   const { debit: cashDebit, credit: cashCredit } = cash;
   const daysRemaining = getNoOfDaysRemainingCurrentMonth();

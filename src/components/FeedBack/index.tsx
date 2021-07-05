@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { OFFLINE_ERROR, SEVERITY_ERROR } from 'Constants';
-import { useSelector } from 'react-redux';
 import { updateStatusAction } from 'actions/actionCreator';
 import styles from './style.module.scss';
 import { ReduxStore } from 'reducers/interface';
@@ -15,7 +14,7 @@ function Alert(props: any) {
 export default function SnackBarFeedback() {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
-  const status = useSelector((state: ReduxStore) => state.transactions.status);
+  const status = useSelector((store: ReduxStore) => store.transactions.status);
   let { severity, msg } = status;
 
   useEffect(() => {

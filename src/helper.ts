@@ -22,13 +22,7 @@ export function getNoOfDaysRemainingCurrentMonth(): number {
 }
 
 export async function getTransactionsFromDB(userId: string): Promise<any> {
-  const res = await fetch(url.API_URL_GET_TRANSACTIONS, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ "userId": userId })
-  });
+  const res = await fetch(url.API_URL_GET_TRANSACTIONS + `/${userId}`)
   return await res.json();
 }
 
@@ -43,7 +37,7 @@ export async function getTransactionCategoriesFromDB(userId: string): Promise<an
   return await res.json();
 }
 
-export const checkDebitTypeTransaction = (transaction: Transaction) => {
+export const isDebitTypeTransaction = (transaction: Transaction) => {
   // to handle the transactions where type debit or credit is not stored
   // adding undefined match also
   return transaction.type === DEBIT_TYPE || transaction.type === undefined;

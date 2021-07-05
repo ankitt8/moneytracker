@@ -18,7 +18,7 @@ const dev = {
 const prod = {
   url: {
     API_URL: 'https://moneytrackerbackend.herokuapp.com/api/',
-    API_URL_GET_TRANSACTIONS: 'https://moneytrackerbackend.herokuapp.com/api/get-transactions/',
+    API_URL_GET_TRANSACTIONS: 'https://moneytrackerbackend.herokuapp.com/api/get-transactions',
     API_URL_ADD_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/add-transaction',
     API_URL_EDIT_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/edit-transaction',
     API_URL_DELETE_TRANSACTION: 'https://moneytrackerbackend.herokuapp.com/api/delete-transaction',

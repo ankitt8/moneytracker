@@ -9,13 +9,15 @@ import {
   editCashDebitAction,
   getTransactionsAction,
   updateStatusAction,
+  getTransactionCategories,
 } from 'actions/actionCreator';
 import { CASH_MODE, CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, SEVERITY_ERROR } from 'Constants';
 import DayTransactionsCard from 'components/TransactionCardWrapper';
 import {
   getNoOfDaysCurrentMonth,
   isDebitTypeTransaction,
-  getTransactionsFromDB
+  getTransactionsFromDB,
+  getTransactionCategoriesFromDB
 } from 'helper';
 import { Transaction } from 'interfaces/index.interface';
 import { ReduxStore } from 'reducers/interface';
@@ -29,55 +31,59 @@ const isCashModeTransaction = (transaction: Transaction) => transaction.mode ===
 const calculateTransactionsTotalAmount = (transactions: Transaction[]) => {
   return transactions.length === 0 ? 0 : transactions.reduce((acc, curr) => acc + curr.amount, 0);
 }
-
+export const checkTransactionsChanged = (recentTransactions: Transaction[], storeTransactions: Transaction[]) => {
+  // if length is same then check if values have changed
+  // fields of transaction can be changed by doing edit operation
+  if (recentTransactions.length === storeTransactions.length) {
+    for (let i = 0; i < storeTransactions.length; i += 1) {
+      for (const key of Object.keys(storeTransactions[i])) {
+        // @ts-ignore
+        if (storeTransactions[i][key] !== recentTransactions[i][key]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+  // if length is different implies new transactions have been added
+  return true;
+}
 const Transactions = ({ userId }: TransactionsProps) => {
   const dispatch = useDispatch();
   const transactions = useSelector((store: ReduxStore) => store.transactions.transactions);
   const [offline, setOffline] = useState(false);
-  const isTransactionsChanged = (recentTransactions: Transaction[]) => {
-    // if length is same then check if values have changed
-    // fields of transaction can be changed by doing edit operation
-    if (recentTransactions.length === transactions.length) {
-      for (let i = 0; i < transactions.length; i += 1) {
-        for (const key of Object.keys(transactions[i])) {
-          // @ts-ignore
-          if (transactions[i][key] !== recentTransactions[i][key]) {
-            return true;
-          }
-        }
-      }
-      return false;
-    }
-    // if length is different implies new transactions have been added
-    return true;
+  
+
+  const processTransactions = (transactions: Transaction[]) => {
+    dispatch(setCreditDebitZero());
+    const debitTransactions = transactions.filter(isDebitTypeTransaction);
+    const creditTransactions = transactions.filter(isCreditTypeTransaction);
+
+    const bankCreditTransactions = creditTransactions.filter(isOnlineModeTransaction);
+    const cashCreditTransactions = creditTransactions.filter(isCashModeTransaction);
+    const bankDebitTransactions = debitTransactions.filter(isOnlineModeTransaction);
+    const cashDebitTransactions = debitTransactions.filter(isCashModeTransaction);
+
+    const bankCredit = calculateTransactionsTotalAmount(bankCreditTransactions);
+    const bankDebit = calculateTransactionsTotalAmount(bankDebitTransactions);
+    const cashCredit = calculateTransactionsTotalAmount(cashCreditTransactions);
+    const cashDebit = calculateTransactionsTotalAmount(cashDebitTransactions);
+
+    dispatch(editBankCreditAction(bankCredit));
+    dispatch(editBankDebitAction(bankDebit));
+
+    dispatch(editCashCreditAction(cashCredit));
+    dispatch(editCashDebitAction(cashDebit));
+
+    dispatch(getTransactionsAction(transactions));
   }
+
   const loadTransactions = useCallback(
     async () => {
       try {
-        const transactions: Transaction[] = await getTransactionsFromDB(userId);
-        if (isTransactionsChanged(transactions)) {
-          dispatch(setCreditDebitZero())
-
-          const debitTransactions = transactions.filter(isDebitTypeTransaction);
-          const creditTransactions = transactions.filter(isCreditTypeTransaction);
-
-          const bankCreditTransactions = creditTransactions.filter(isOnlineModeTransaction);
-          const cashCreditTransactions = creditTransactions.filter(isCashModeTransaction);
-          const bankDebitTransactions = debitTransactions.filter(isOnlineModeTransaction);
-          const cashDebitTransactions = debitTransactions.filter(isCashModeTransaction);
-
-          const bankCredit = calculateTransactionsTotalAmount(bankCreditTransactions);
-          const bankDebit = calculateTransactionsTotalAmount(bankDebitTransactions);
-          const cashCredit = calculateTransactionsTotalAmount(cashCreditTransactions);
-          const cashDebit = calculateTransactionsTotalAmount(cashDebitTransactions);
-
-          dispatch(editBankCreditAction(bankCredit));
-          dispatch(editBankDebitAction(bankDebit));
-
-          dispatch(editCashCreditAction(cashCredit));
-          dispatch(editCashDebitAction(cashDebit));
-
-          dispatch(getTransactionsAction(transactions));
+        const dbTransactions: Transaction[] = await getTransactionsFromDB(userId);
+        if (checkTransactionsChanged(dbTransactions, transactions)) {
+          processTransactions(dbTransactions);
         }
       } catch (err) {
         // console.error(err);
@@ -94,19 +100,25 @@ const Transactions = ({ userId }: TransactionsProps) => {
     [],
   );
   useEffect(() => {
-    loadTransactions();
-  }, []);
+    !offline && loadTransactions();
+    !offline &&  getTransactionCategoriesFromDB(userId)
+    .then(({ transactionCategories: dbTransactionCategories }) => {
+      dispatch(getTransactionCategories(dbTransactionCategories));
+      // need to figure out later and dig deep why the loader was set before the 
+      // https://github.com/reduxjs/react-redux/issues/1298
+      // https://github.com/reduxjs/react-redux/issues/1428
+      // links:- https://codesandbox.io/s/suspicious-merkle-0kzcg?file=/src/index.js
+      // The below code shows No Transactions First then shown the analysiss which is bug
+
+      // setLoader((loader) => !loader);
+    });
+  }, [offline]);
   let componentToRender;
 
   try {
     const individualDayTransactions2DArray = createIndividualDayTransactions2DArray(transactions);
     const individualDayTransactionsUIArray = createIndividualDayTransactionsUIArray(individualDayTransactions2DArray);
-    
-    if (offline) {
-      componentToRender = <h2>Please check your internet connection or our servers our down :(</h2>;
-    } else {
-    componentToRender = <ul className={styles.transactionsList}>{individualDayTransactionsUIArray}</ul>
-    }
+    componentToRender = <ul className={styles.transactionsList}>{individualDayTransactionsUIArray}</ul>;
   } catch (error) {
     console.error(error);
     componentToRender = <h2>Something Broke From Our End</h2>

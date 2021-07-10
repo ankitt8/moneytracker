@@ -35,7 +35,13 @@ const deleteTransactionCategoryFromDB = async (userId: string, categories: strin
     })
   });
 }
-
+export const checkTransactionCategoriesChanged = (data: TransactionCategories, storeTransactionCategories: TransactionCategories) => {
+  const { credit, debit } = storeTransactionCategories;
+  const { credit: dbCredit, debit: dbDebit } = data;
+  if (credit.length !== dbCredit.length) return true;
+  if (debit.length !== dbDebit.length) return true;
+  return false;
+}
 const DisplayCategories = ({ type }: DisplayCategoriesProps) => {
   const dispatch = useDispatch();
   const userId = useSelector((store: ReduxStore) => store.user.userId);
@@ -46,13 +52,7 @@ const DisplayCategories = ({ type }: DisplayCategoriesProps) => {
   } else {
     categories = transactionCategories.credit;
   }
-  const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
-    const { credit, debit } = transactionCategories;
-    const { credit: dbCredit, debit: dbDebit } = data;
-    if (credit.length !== dbCredit.length) return true;
-    if (debit.length !== dbDebit.length) return true;
-    return false;
-  }
+  
 
   const handleDeleteCategory = (category: string) => {
     // belwo line is weird I am getting empty array
@@ -86,9 +86,9 @@ const DisplayCategories = ({ type }: DisplayCategoriesProps) => {
   }
 
   const loadTransactionCategories = useCallback(() => {
-    getTransactionCategoriesFromDB(userId)
+    window.navigator.onLine && getTransactionCategoriesFromDB(userId)
       .then(({ transactionCategories: dbTransactionCategories }) => {
-        if (checkTransactionCategoriesChanged(dbTransactionCategories)) {
+        if (checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
           dispatch(getTransactionCategories(dbTransactionCategories));
         }
       });

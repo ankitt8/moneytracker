@@ -34,8 +34,8 @@ import {
 } from 'Constants';
 
 import { getTransactionCategoriesFromDB } from 'helper';
-import { TransactionCategories } from './TransactionCategoryInput/interface';
 import { ReduxStore } from 'reducers/interface';
+import { checkTransactionCategoriesChanged } from 'components/TransactionCategoriesPage/DisplayCategories';
 
 const addTransactionDB = async (transaction: AddTransaction) => {
   const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
@@ -88,26 +88,15 @@ const AddTransactionModal = ({
 
   const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   const categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
-  const checkTransactionCategoriesChanged = (data: TransactionCategories) => {
-    // data is of redux store transactionCategories
-    const { credit, debit } = transactionCategories;
-    // db implies database
-    const { credit: dbCredit, debit: dbDebit } = data;
-    if (credit.length !== dbCredit.length) return true;
-    if (debit.length !== dbDebit.length) return true;
-    return false;
-  }
   const loadTransactionCategories = useCallback(() => {
-    getTransactionCategoriesFromDB(userId)
+    window.navigator.onLine && getTransactionCategoriesFromDB(userId)
       .then(({ transactionCategories: dbTransactionCategories }) => {
-        if (checkTransactionCategoriesChanged(dbTransactionCategories)) {
+        if (checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
           dispatch(getTransactionCategories(dbTransactionCategories));
         }
-      })
-      .catch(() => {
-        
       });
-  }, [])
+  }, []);
+  
   useEffect(() => {
     loadTransactionCategories();
     return function setFieldsEmpty() {

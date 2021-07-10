@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import DayTransactionsCard from 'components/TransactionCardWrapper';
-import { DEBIT_TYPE } from 'Constants';
+import { DEBIT_TYPE, SEVERITY_ERROR } from 'Constants';
 import {
   isDebitTypeTransaction,
   getTransactionCategoriesFromDB,
@@ -12,9 +12,11 @@ import { TransactionAnalysisPageProps, TransactionsGroupedByCategories, Category
 import { Transaction } from 'interfaces/index.interface';
 
 import styles from './styles.module.scss';
-import { getTransactionCategories, getTransactionsAction } from 'actions/actionCreator';
+import { getTransactionCategories, getTransactionsAction, updateStatusAction } from 'actions/actionCreator';
 import Loader from 'components/Loader';
 import { ReduxStore } from 'reducers/interface';
+import { checkTransactionCategoriesChanged } from 'components/TransactionCategoriesPage/DisplayCategories';
+import { checkTransactionsChanged } from 'components/Transactions';
 
 const getCategoryNamesSortedByTotalAmount = (transactionsGroupedByCategories: TransactionsGroupedByCategories) => {
    const categoryTotalAmountObjectArray: CategoryAmount[] = Object.keys(transactionsGroupedByCategories).map((category: string) => ({
@@ -80,53 +82,43 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
 
   const loadTransactions = useCallback(() => {
     getTransactionsFromDB(userId)
-      .then((transactions) => {
-        dispatch(getTransactionsAction(transactions));
+      .then((dbTransactions) => {
+        if(checkTransactionsChanged(dbTransactions, transactions)) {
+          dispatch(getTransactionsAction(transactions));
+        }
       })
   }, []);
-
+  
   const loadTransactionCategories = useCallback(() => {
-    getTransactionCategoriesFromDB(userId)
+    window.navigator.onLine && getTransactionCategoriesFromDB(userId)
       .then(({ transactionCategories: dbTransactionCategories }) => {
-        dispatch(getTransactionCategories(dbTransactionCategories));
-        // need to figure out later and dig deep why the loader was set before the 
-        // https://github.com/reduxjs/react-redux/issues/1298
-        // https://github.com/reduxjs/react-redux/issues/1428
-        // links:- https://codesandbox.io/s/suspicious-merkle-0kzcg?file=/src/index.js
-        // The below code shows No Transactions First then shown the analysiss which is bug
-
-        setLoader((loader) => !loader);
+        if(checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
+          dispatch(getTransactionCategories(dbTransactionCategories));
+        }
       });
   }, []);
 
 
   useEffect(() => {
-    // if the redux store transaction categoires are empty then fetch the
-    // transaction categories
-    // this will happen when analysis page is visited before categoires page is visited
-
-    /* TODO */
-    // If transactions are added in different device
-    // and user visits transaction analysis page directly in other device
-    // the transactions will not be in sync 
-    // because I am loading the transactions or categories only when
-    // the redux store categories or transactions are empty
-    if (transactionsEmpty) {
-      loadTransactions();
-    }
-    if (transactionCategoriesEmpty) {
-      loadTransactionCategories();
+    if(window.navigator.onLine) {
+      // if user directly visits transaction analysis page 
+      // transactions and categories might not be in sync if user adds transactions in other device
+      try {
+        loadTransactions();
+        loadTransactionCategories();
+      } catch {
+        dispatch(updateStatusAction({
+          showFeedBack: true,
+          msg: 'Failed to fetch Transactions and Transaction Categories',
+          severity: SEVERITY_ERROR
+        }));
+      } finally {
+        setLoader(false);
+      }
+      
     }
 
   }, []);
-
-
-  // If user directly visits the analysis page then he will not see updated transactions
-  // reason the store gets updated when home page is visited
-  // so suppose user changes transaction on say laptop and he visits 
-  // analysis page on mobile without going to homepage he will not see the refreshed contents
-  // If I need to get the transactions for each page then will probably will have to rethink if 
-  // storing transactions in redux store is actually required
 
   // in future will give filters where based on filter applied type will be choose
 

@@ -1,5 +1,4 @@
 import {
-  url,
   DEBIT_TYPE,
 } from 'Constants';
 import { Transaction } from 'interfaces/index.interface';
@@ -15,26 +14,6 @@ export function getNoOfDaysCurrentMonth(): number {
     dateFirstDay.setDate(dateFirstDay.getDate() + 1);
   }
   return noOfDays;
-}
-
-export function getNoOfDaysRemainingCurrentMonth(): number {
-  return getNoOfDaysCurrentMonth() - new Date().getDate();
-}
-
-export async function getTransactionsFromDB(userId: string): Promise<any> {
-  const res = await fetch(url.API_URL_GET_TRANSACTIONS + `/${userId}`)
-  return await res.json();
-}
-
-export async function getTransactionCategoriesFromDB(userId: string): Promise<any> {
-  const res = await fetch(url.API_URL_GET_TRANSACTION_CATEGORIES, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ "userId": userId })
-  })
-  return await res.json();
 }
 
 export const isDebitTypeTransaction = (transaction: Transaction) => {

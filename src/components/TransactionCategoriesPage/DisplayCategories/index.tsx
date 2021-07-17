@@ -14,7 +14,7 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { deleteTransactionCategory, getTransactionCategories, updateStatusAction } from 'actions/actionCreator';
-import { getTransactionCategoriesFromDB } from 'helper';
+import { getTransactionCategoriesFromDB } from 'api-services/api.service';
 import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { motion } from 'framer-motion';
 import { ReduxStore } from 'reducers/interface';

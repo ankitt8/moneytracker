@@ -17,7 +17,7 @@ import { Transaction } from 'interfaces/index.interface';
 import styles from './styles.module.scss';
 import { getTransactionCategories, getTransactionsAction, updateStatusAction } from 'actions/actionCreator';
 import { ReduxStore } from 'reducers/interface';
-import { checkTransactionCategoriesChanged } from 'components/TransactionCategoriesPage/DisplayCategories';
+import { checkTransactionCategoriesChanged } from 'helper';
 import { checkTransactionsChanged } from 'components/Transactions';
 import { fetchingStatusReducer, fetchingStatusInitialState, FETCHING_STATES } from 'reducers/fetchingState';
 

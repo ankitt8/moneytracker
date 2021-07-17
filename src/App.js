@@ -4,9 +4,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import './App.css';
 
 import SnackBarFeedback from 'components/FeedBack';
-import Transactions from 'components/Transactions';
-import TransactionSummary from 'components/TransactionSummary'
-import Login from 'components/Login';
+import HomePage from 'pages/HomePage';
+import LoginPage from 'pages/LoginPage';
 import Header from 'components/Header';
 import Loader from 'components/Loader';
 import FixedBottomNavBar from 'components/FixedBottomNavBar';
@@ -16,16 +15,16 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faHome, faChartBar, faSignOutAlt, faFilter, faPlus } from '@fortawesome/free-solid-svg-icons';
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
-const UpcomingFeature = lazy(() => import('components/UpcomingFeature'));
-const TransactionAnalysisPage = lazy(() => import('components/TransactionAnalysisPage'));
-const TransactionCategoriesPage = lazy(() => import('components/TransactionCategoriesPage'));
-const BankAccountsPage = lazy(() => import('components/BankAccountsPage'));
+const UpcomingFeaturePage = lazy(() => import('pages/UpcomingFeaturePage'));
+const TransactionAnalysisPage = lazy(() => import('pages/TransactionAnalysisPage'));
+const TransactionCategoriesPage = lazy(() => import('pages/TransactionCategoriesPage'));
+const BankAccountsPage = lazy(() => import('pages/BankAccountsPage'));
 
 function App() {
   const userId = useSelector((state) => state.user.userId);
   const username = useSelector((state) => state.user.username)
   if (userId === '') {
-    return <Login />
+    return <LoginPage />
   }
   return (
     <Router>
@@ -34,7 +33,7 @@ function App() {
       <Suspense fallback={<Loader />}>
         <Switch >
           <Route path={ROUTES.LOGIN}>
-            <Login />
+            <LoginPage />
           </Route>
           <Route path={ROUTES.TRANSACTION_CATEGORIES}>
             <div className='desktop-view'>
@@ -46,10 +45,10 @@ function App() {
             <BankAccountsPage />
           </Route>
           <Route path={ROUTES.INVESTMENT}>
-            <UpcomingFeature />
+            <UpcomingFeaturePage />
           </Route>
           <Route path={ROUTES.BUDGET}>
-            <UpcomingFeature />
+            <UpcomingFeaturePage />
           </Route>
           <Route path={ROUTES.SPEND_ANALYSIS}>
             <div className='desktop-view'>
@@ -58,14 +57,10 @@ function App() {
             </div>
           </Route>
           <Route path={ROUTES.FOOD_TRACKER}>
-            <UpcomingFeature />
+            <UpcomingFeaturePage />
           </Route>
           <Route path={ROUTES.HOME}>
-            <div className='desktop-view'>
-              <TransactionSummary />
-              <Transactions userId={userId} />
-              <SnackBarFeedback />
-            </div>
+            <HomePage userId={userId}/>
           </Route>
         </Switch>
       </Suspense>

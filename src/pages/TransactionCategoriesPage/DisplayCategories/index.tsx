@@ -18,6 +18,7 @@ import { getTransactionCategoriesFromDB } from 'api-services/api.service';
 import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { motion } from 'framer-motion';
 import { ReduxStore } from 'reducers/interface';
+import { checkTransactionCategoriesChanged } from 'helper';
 
 const deleteTransactionCategoryFromDB = async (userId: string, categories: string[], type: string) => {
   let typeUrl = url.API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY;
@@ -35,13 +36,7 @@ const deleteTransactionCategoryFromDB = async (userId: string, categories: strin
     })
   });
 }
-export const checkTransactionCategoriesChanged = (data: TransactionCategories, storeTransactionCategories: TransactionCategories) => {
-  const { credit, debit } = storeTransactionCategories;
-  const { credit: dbCredit, debit: dbDebit } = data;
-  if (credit.length !== dbCredit.length) return true;
-  if (debit.length !== dbDebit.length) return true;
-  return false;
-}
+
 const DisplayCategories = ({ type }: DisplayCategoriesProps) => {
   const dispatch = useDispatch();
   const userId = useSelector((store: ReduxStore) => store.user.userId);

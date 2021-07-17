@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import Slide from '@material-ui/core/Slide';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from 'components/Loader';
 import TransactionCategoryInput from './TransactionCategoryInput'
 import { AddTransaction, AddTransactionModalProps } from './interface';
+import { FETCHING_STATES, fetchingStatusReducer, fetchingStatusInitialState } from 'reducers/fetchingState';
 
 import styles from './styles.module.scss';
 
@@ -30,48 +31,12 @@ import {
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
-  url,
 } from 'Constants';
 
-import { getTransactionCategoriesFromDB } from 'helper';
+import { addTransactionDB, getTransactionCategoriesFromDB } from 'api-services/api.service';
 import { ReduxStore } from 'reducers/interface';
 import { checkTransactionCategoriesChanged } from 'components/TransactionCategoriesPage/DisplayCategories';
 
-const addTransactionDB = async (transaction: AddTransaction) => {
-  const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(transaction),
-  });
-  const transactionObject = await addTransactionResponse.json();
-  return Promise.resolve(transactionObject);
-}
-
-const constructTodayDate = (): string => {
-  const todayDate = new Date();
-  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
-  const appendMonth = (str: string) => {
-      const month = todayDate.getMonth();
-      const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
-      return str + result;
-  }
-  const appendSeperator = (str: string) => str + "-";
-  const appendDate = (str: string) => {
-      const date = todayDate.getDate();
-      const result = date < 10 ? `0${date}` : date.toString();
-      return str + result;
-  }
-  const pipe = (...fns: Function[]) => (x: string) => fns.reduce((currVal, currFunc) => currFunc(currVal), x);
-  return pipe(
-      appendYear,
-      appendSeperator,
-      appendMonth,
-      appendSeperator,
-      appendDate
-  )('');
-}
 
 const AddTransactionModal = ({
   userId,
@@ -85,20 +50,25 @@ const AddTransactionModal = ({
   const [loadingState, setLoadingState] = useState(false);
   const [mode, setMode] = React.useState(ONLINE_MODE);
   const [type, setType] = React.useState(DEBIT_TYPE);
-
+  const [state, fetchingStatusReducerDispatch] = useReducer(fetchingStatusReducer, fetchingStatusInitialState);
   const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   const categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
-  const loadTransactionCategories = useCallback(() => {
-    window.navigator.onLine && getTransactionCategoriesFromDB(userId)
-      .then(({ transactionCategories: dbTransactionCategories }) => {
-        if (checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
-          dispatch(getTransactionCategories(dbTransactionCategories));
-        }
-      });
+  const loadTransactionCategories = useCallback(async () => {
+    try {
+      fetchingStatusReducerDispatch({type: FETCHING_STATES.PENDING});
+      const { transactionCategories: dbTransactionCategories } = await getTransactionCategoriesFromDB(userId);
+      fetchingStatusReducerDispatch({type: FETCHING_STATES.RESOLVED});
+      if(checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
+        dispatch(getTransactionCategories(dbTransactionCategories));
+      }
+    } catch (error) {
+      fetchingStatusReducerDispatch({type: FETCHING_STATES.REJECTED});
+    }
+    
   }, []);
   
   useEffect(() => {
-    loadTransactionCategories();
+    window.navigator.onLine && loadTransactionCategories();
     return function setFieldsEmpty() {
       setHeading('');
       setAmount('');
@@ -134,7 +104,7 @@ const AddTransactionModal = ({
   const handleCategoryChange = (category: string) => {
     setCategory(category);
   }
-  function handleTransactionSubmit(event: any) {
+  const handleTransactionSubmit = async (event: any) => {
     event.preventDefault();
     if (amount === '' || parseInt(amount) <= 0 || heading === '') {
       const msg = (heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING);
@@ -155,38 +125,38 @@ const AddTransactionModal = ({
       type,
       category,
     };
-    addTransactionDB(transaction)
-      .then(function onFulfilled(transactionObject) {
-        dispatch(addTransactionAction(transactionObject));
-        const { amount, mode } = transactionObject;
-        if (type === DEBIT_TYPE) {
-          if (mode === CASH_MODE) {
-            dispatch(editCashDebitAction(amount));
-          } else if (mode === ONLINE_MODE) {
-            dispatch(editBankDebitAction(amount));
-          }
-        } else {
-          if (mode === CASH_MODE) {
-            dispatch(editCashCreditAction(amount));
-          } else if (mode === ONLINE_MODE) {
-            dispatch(editBankCreditAction(amount));
-          }
+    try {
+      const transactionObjectStored = await addTransactionDB(transaction);
+      dispatch(addTransactionAction(transactionObjectStored));
+      const { amount, mode } = transactionObjectStored;
+      if (type === DEBIT_TYPE) {
+        if (mode === CASH_MODE) {
+          dispatch(editCashDebitAction(amount));
+        } else if (mode === ONLINE_MODE) {
+          dispatch(editBankDebitAction(amount));
         }
-        dispatch(updateStatusAction({
-          showFeedBack: true,
-          msg: ADD_TRANSACTION_SUCCESS_MSG,
-          severity: SEVERITY_SUCCESS
-        }));
-      })
-      .catch(function onRejected(error) {
-        console.error(error);
-        dispatch(updateStatusAction({
-          showFeedBack: true,
-          msg: ADD_TRANSACTION_FAIL_ERROR,
-          severity: SEVERITY_ERROR
-        }));
-      })
-      .finally(handleClose);
+      } else {
+        if (mode === CASH_MODE) {
+          dispatch(editCashCreditAction(amount));
+        } else if (mode === ONLINE_MODE) {
+          dispatch(editBankCreditAction(amount));
+        }
+      }
+      dispatch(updateStatusAction({
+        showFeedBack: true,
+        msg: ADD_TRANSACTION_SUCCESS_MSG,
+        severity: SEVERITY_SUCCESS
+      }));
+    } catch (error) {
+      console.error(error);
+      dispatch(updateStatusAction({
+        showFeedBack: true,
+        msg: ADD_TRANSACTION_FAIL_ERROR,
+        severity: SEVERITY_ERROR
+      }));
+    } finally {
+      handleClose();
+    }
   }
   return (
     <Dialog
@@ -197,6 +167,7 @@ const AddTransactionModal = ({
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
     >
+      {state.fetching === FETCHING_STATES.PENDING && <LinearProgress />}
       <div className={styles.modalWrapper}>
         <h3 className={styles.modalTitle}>Add Transaction</h3>
         <form onSubmit={handleTransactionSubmit}>
@@ -279,5 +250,29 @@ const AddTransactionModal = ({
     </Dialog>
   )
 };
+
+function constructTodayDate(): string {
+  const todayDate = new Date();
+  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
+  const appendMonth = (str: string) => {
+      const month = todayDate.getMonth();
+      const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
+      return str + result;
+  }
+  const appendSeperator = (str: string) => str + "-";
+  const appendDate = (str: string) => {
+      const date = todayDate.getDate();
+      const result = date < 10 ? `0${date}` : date.toString();
+      return str + result;
+  }
+  const pipe = (...fns: Function[]) => (x: string) => fns.reduce((currVal, currFunc) => currFunc(currVal), x);
+  return pipe(
+      appendYear,
+      appendSeperator,
+      appendMonth,
+      appendSeperator,
+      appendDate
+  )('');
+}
 
 export default AddTransactionModal;

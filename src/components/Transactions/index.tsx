@@ -1,5 +1,6 @@
-import React, { ReactElement, useCallback, useEffect, useState } from 'react'
+import React, { useReducer, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { motion } from 'framer-motion';
 import {
   setCreditDebitZero,
@@ -16,13 +17,16 @@ import DayTransactionsCard from 'components/TransactionCardWrapper';
 import {
   getNoOfDaysCurrentMonth,
   isDebitTypeTransaction,
+} from 'helper';
+import {
   getTransactionsFromDB,
   getTransactionCategoriesFromDB
-} from 'helper';
+} from 'api-services/api.service';
 import { Transaction } from 'interfaces/index.interface';
 import { ReduxStore } from 'reducers/interface';
 import styles from './styles.module.scss';
 import { TransactionsProps } from './interface';
+import { FETCHING_STATES, fetchingStatusReducer, fetchingStatusInitialState } from 'reducers/fetchingState';
 
 const isCreditTypeTransaction = (transaction: Transaction) => transaction.type === CREDIT_TYPE;
 const isDebitTransaction = (transaction: Transaction) => (transaction.type === DEBIT_TYPE || transaction.type === undefined);
@@ -52,7 +56,7 @@ const Transactions = ({ userId }: TransactionsProps) => {
   const dispatch = useDispatch();
   const transactions = useSelector((store: ReduxStore) => store.transactions.transactions);
   const [offline, setOffline] = useState(false);
-  
+  const [state, fetchingStatusReducerDispatch] = useReducer(fetchingStatusReducer, fetchingStatusInitialState);
 
   const processTransactions = (transactions: Transaction[]) => {
     dispatch(setCreditDebitZero());
@@ -81,14 +85,16 @@ const Transactions = ({ userId }: TransactionsProps) => {
   const loadTransactions = useCallback(
     async () => {
       try {
+        fetchingStatusReducerDispatch({type: FETCHING_STATES.PENDING});
         const dbTransactions: Transaction[] = await getTransactionsFromDB(userId);
-        if (checkTransactionsChanged(dbTransactions, transactions)) {
-          processTransactions(dbTransactions);
-        }
+        fetchingStatusReducerDispatch({type: FETCHING_STATES.RESOLVED});
+
+        checkTransactionsChanged(dbTransactions, transactions) && processTransactions(dbTransactions);
       } catch (err) {
         // console.error(err);
         // console.log('Either your internet is disconnected or issue from our side');
         // assuming the error will happen only if failed to get the transactions
+        fetchingStatusReducerDispatch({type: FETCHING_STATES.REJECTED});
         dispatch(updateStatusAction({
           showFeedBack: true,
           msg: 'Failed to fetch Transactions',
@@ -99,6 +105,7 @@ const Transactions = ({ userId }: TransactionsProps) => {
     },
     [],
   );
+
   useEffect(() => {
     !offline && loadTransactions();
     !offline &&  getTransactionCategoriesFromDB(userId)
@@ -125,22 +132,24 @@ const Transactions = ({ userId }: TransactionsProps) => {
     // console.error(error)
   }
 
-  return componentToRender;
+  return (
+    <>
+      {state.fetching === FETCHING_STATES.PENDING && <LinearProgress />}
+      {componentToRender}
+    </>
+  );
 }
 
 function createIndividualDayTransactions2DArray(transactions: Transaction[]) {
   const noOfDaysCurrentMonth = getNoOfDaysCurrentMonth();
   const individualDayTransactions2DArray: Transaction[][] = [];
-
   for (let day = 0; day <= noOfDaysCurrentMonth; day += 1) {
     individualDayTransactions2DArray[day] = [];
   }
-
   transactions.forEach((transaction) => {
     const dayOfMonth = new Date(transaction.date).getDate();
     individualDayTransactions2DArray[dayOfMonth].push(transaction);
   });
-  
   return individualDayTransactions2DArray;
 }
 
@@ -151,9 +160,10 @@ function getIndividualDayTransactionsTotalDebitAmount(individualDayTransactions:
 }
 
 function createIndividualDayTransactionsUIArray(individualDayTransactions2DArray: Transaction[][]) {
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth();
-  const todayDate = new Date().getDate();
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const todayDate = date.getDate();
   const dayTransactionsCard = [];
   for (let i = todayDate; i >= 1; --i) {
     const title = new Date(year, month, i).toDateString()

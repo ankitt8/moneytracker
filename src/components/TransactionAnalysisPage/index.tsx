@@ -1,32 +1,32 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
+import LinearProgress from '@material-ui/core/LinearProgress';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'framer-motion';
 import DayTransactionsCard from 'components/TransactionCardWrapper';
 import { DEBIT_TYPE, SEVERITY_ERROR } from 'Constants';
 import {
-  isDebitTypeTransaction,
   getTransactionCategoriesFromDB,
   getTransactionsFromDB,
+} from 'api-services/api.service';
+import {
+  isDebitTypeTransaction
 } from 'helper';
 import { TransactionAnalysisPageProps, TransactionsGroupedByCategories, CategoryAmount } from './interface';
 import { Transaction } from 'interfaces/index.interface';
 
 import styles from './styles.module.scss';
 import { getTransactionCategories, getTransactionsAction, updateStatusAction } from 'actions/actionCreator';
-import Loader from 'components/Loader';
 import { ReduxStore } from 'reducers/interface';
 import { checkTransactionCategoriesChanged } from 'components/TransactionCategoriesPage/DisplayCategories';
 import { checkTransactionsChanged } from 'components/Transactions';
+import { fetchingStatusReducer, fetchingStatusInitialState, FETCHING_STATES } from 'reducers/fetchingState';
 
 const getCategoryNamesSortedByTotalAmount = (transactionsGroupedByCategories: TransactionsGroupedByCategories) => {
    const categoryTotalAmountObjectArray: CategoryAmount[] = Object.keys(transactionsGroupedByCategories).map((category: string) => ({
     category,
     totalAmount: transactionsGroupedByCategories[category]['totalAmount'],
   }));
-
-  categoryTotalAmountObjectArray.sort((a, b) => {
-    return b.totalAmount - a.totalAmount;
-  });
+  categoryTotalAmountObjectArray.sort((a, b) => b.totalAmount - a.totalAmount);
   return categoryTotalAmountObjectArray.map(({category}) => category);
 }
 
@@ -67,57 +67,42 @@ const getDebitTransactions = (transactions: Transaction[]) => transactions.filte
 
 const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
   const dispatch = useDispatch();
+  const [state, fetchingStatusReducerDispatch] = useReducer(fetchingStatusReducer, fetchingStatusInitialState);
   const transactions = useSelector((store: ReduxStore) => store.transactions.transactions);
-  const transactionsEmpty = transactions.length === 0;
-  let transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
-  const transactionCategoriesEmpty = transactionCategories.credit.length === 0 && transactionCategories.debit.length === 0;
-
-  const [loader, setLoader] = useState(() => transactionsEmpty || transactionCategoriesEmpty);
-  // if either no transactions are present in the store
-  // or if no categoires are present in the store set the loader true
-  // fetch the data set loader false
-
-
+  const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   let categories: string[];
 
-  const loadTransactions = useCallback(() => {
-    getTransactionsFromDB(userId)
-      .then((dbTransactions) => {
-        if(checkTransactionsChanged(dbTransactions, transactions)) {
-          dispatch(getTransactionsAction(transactions));
-        }
-      })
+  const loadData = useCallback(async () => {
+    try {
+      fetchingStatusReducerDispatch({type: FETCHING_STATES.PENDING});
+      const [dbTransactions, { transactionCategories: dbTransactionCategories }] = await Promise.all([
+        getTransactionsFromDB(userId),
+        getTransactionCategoriesFromDB(userId)
+      ]);
+      fetchingStatusReducerDispatch({type: FETCHING_STATES.RESOLVED});
+      if(checkTransactionsChanged(dbTransactions, transactions)) {
+        dispatch(getTransactionsAction(transactions));
+      }
+      if(checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
+        dispatch(getTransactionCategories(dbTransactionCategories));
+      }
+    } catch(error) {
+      fetchingStatusReducerDispatch({type: FETCHING_STATES.REJECTED});
+      dispatch(updateStatusAction({
+        showFeedBack: true,
+        msg: 'Failed to fetch Transactions and Transaction Categories',
+        severity: SEVERITY_ERROR
+      }));
+    } 
+    
   }, []);
-  
-  const loadTransactionCategories = useCallback(() => {
-    window.navigator.onLine && getTransactionCategoriesFromDB(userId)
-      .then(({ transactionCategories: dbTransactionCategories }) => {
-        if(checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
-          dispatch(getTransactionCategories(dbTransactionCategories));
-        }
-      });
-  }, []);
-
 
   useEffect(() => {
     if(window.navigator.onLine) {
       // if user directly visits transaction analysis page 
       // transactions and categories might not be in sync if user adds transactions in other device
-      try {
-        loadTransactions();
-        loadTransactionCategories();
-      } catch {
-        dispatch(updateStatusAction({
-          showFeedBack: true,
-          msg: 'Failed to fetch Transactions and Transaction Categories',
-          severity: SEVERITY_ERROR
-        }));
-      } finally {
-        setLoader(false);
-      }
-      
+      loadData();
     }
-
   }, []);
 
   // in future will give filters where based on filter applied type will be choose
@@ -128,16 +113,12 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
   let filteredTransactions = getDebitTransactions(transactions);
   categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
 
-  if (loader) {
-    componentToRender = <Loader />;
-  } else if (filteredTransactions.length === 0) {
+  if(filteredTransactions.length === 0) {
     componentToRender = <p className={styles.noData}>!!No Transactions Found!!</p>
   } else {
     const transactionsGroupedByCategories: TransactionsGroupedByCategories =
       createTransactionsGroupedByCategories(filteredTransactions, categories);
-
     const categoryNamesSortedByTotalAmountDescending = getCategoryNamesSortedByTotalAmount(transactionsGroupedByCategories);
-
     const TransactionAnalysisCards = categoryNamesSortedByTotalAmountDescending.map((category) => (
       <motion.li
         key={category}
@@ -150,10 +131,12 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
         />
       </motion.li>
     ))
-
     componentToRender = <ul className={styles.transactionAnalysisPage}>{TransactionAnalysisCards}</ul>
   }
-  return componentToRender;
+  return <>
+    {state.fetching === FETCHING_STATES.PENDING && <LinearProgress />}
+    {componentToRender}
+    </>;
 }
 
 export default TransactionAnalysisPage;

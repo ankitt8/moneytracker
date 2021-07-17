@@ -1,5 +1,5 @@
+import { getNoOfDaysCurrentMonth } from 'helper';
 import React from 'react';
-import { getNoOfDaysRemainingCurrentMonth } from 'helper';
 import { useSelector } from 'react-redux';
 import { ReduxStore } from 'reducers/interface';
 import CreditDebitSummary from './CreditDebitSummary';
@@ -29,5 +29,7 @@ const TransactionSummary = () => {
     </div>
   )
 }
-
+function getNoOfDaysRemainingCurrentMonth(): number {
+  return getNoOfDaysCurrentMonth() - new Date().getDate();
+}
 export default TransactionSummary;

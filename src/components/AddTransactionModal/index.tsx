@@ -35,7 +35,7 @@ import {
 
 import { addTransactionDB, getTransactionCategoriesFromDB } from 'api-services/api.service';
 import { ReduxStore } from 'reducers/interface';
-import { checkTransactionCategoriesChanged } from 'components/TransactionCategoriesPage/DisplayCategories';
+import { checkTransactionCategoriesChanged } from 'helper';
 
 
 const AddTransactionModal = ({

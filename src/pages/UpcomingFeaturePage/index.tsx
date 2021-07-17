@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.scss';
 
-const UpcomingFeature = () => {
+const UpcomingFeaturePage = () => {
   return (
     <div className={styles.newFeature}>
       This feature will be live soon :)!
@@ -10,4 +10,4 @@ const UpcomingFeature = () => {
   )
 }
 
-export default UpcomingFeature;
+export default UpcomingFeaturePage;

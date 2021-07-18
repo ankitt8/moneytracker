@@ -1,47 +1,31 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTransactionCategory, updateStatusAction } from 'actions/actionCreator';
 import {
   ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
-  CREDIT_TYPE,
   INVALID_CATEGORY_WARNING,
   SEVERITY_SUCCESS,
-  SEVERITY_WARNING,
-  url
-} from 'Constants';
+  SEVERITY_WARNING} from 'Constants';
 import { AddCategoryProps } from './interface';
 import Loader from 'components/Loader';
 
 import styles from './styles.module.scss';
 import { ReduxStore } from 'reducers/interface';
-
-const addTransactionCategoryToDB = async (userId: string, category: string, type: string) => {
-  let typeUrl = url.API_URL_ADD_DEBIT_TRANSACTION_CATEGORY;
-  if (type === CREDIT_TYPE) {
-    typeUrl = url.API_URL_ADD_CREDIT_TRANSACTION_CATEGORY;
-  }
-  return await fetch(typeUrl, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      "userId": userId,
-      "category": category,
-    })
-  });
-
-}
+import { addTransactionCategoryToDB } from 'api-services/api.service';
 
 const AddCategory = ({
   title,
   type,
 }: AddCategoryProps) => {
-  const userId = useSelector((store: ReduxStore) => store.user.userId);
   const dispatch = useDispatch();
+  const userId = useSelector((store: ReduxStore) => store.user.userId);
   const [newCategory, setNewCategory] = useState('');
   const [loader, setLoader] = useState(false);
-
+  const [isComponentMounted, setIsComponentMounted] = useState(false);
+  useEffect(() => {
+    setIsComponentMounted(true);
+    return () => setIsComponentMounted(false);
+  })
   const handleAddCategory = () => {
     if (newCategory === '') {
       dispatch(updateStatusAction({
@@ -51,7 +35,6 @@ const AddCategory = ({
       }))
       return;
     }
-
     setLoader(true);
     addTransactionCategoryToDB(userId, newCategory, type)
       .then((res: any) => {
@@ -65,10 +48,11 @@ const AddCategory = ({
         }
       })
       .finally(() => {
-        setNewCategory('');
-        setLoader(false);
+        if(isComponentMounted) {
+          setNewCategory('');
+          setLoader(false);
+        }
       })
-
   };
 
   const handleCategoryChange = (e: any) => {

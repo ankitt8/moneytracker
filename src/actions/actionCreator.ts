@@ -106,7 +106,7 @@ export function editCashBalanceAction(amount: number) {
 export function getTransactionCategories(transactionCategories: TransactionCategories) {
   return {
     type: GET_TRANSACTION_CATEGORIES,
-    payload: { transactionCategories },
+    payload: transactionCategories,
   }
 }
 

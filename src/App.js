@@ -29,7 +29,6 @@ function App() {
   return (
     <Router>
       <Header username={username} />
-      <FixedBottomNavBar userId={userId} />
       <Suspense fallback={<Loader />}>
         <Switch >
           <Route path={ROUTES.LOGIN}>
@@ -37,7 +36,7 @@ function App() {
           </Route>
           <Route path={ROUTES.TRANSACTION_CATEGORIES}>
             <div className='desktop-view'>
-              <TransactionCategoriesPage />
+              <TransactionCategoriesPage userId={userId}/>
               <SnackBarFeedback />
             </div>
           </Route>
@@ -51,10 +50,10 @@ function App() {
             <UpcomingFeaturePage />
           </Route>
           <Route path={ROUTES.SPEND_ANALYSIS}>
-            <div className='desktop-view'>
+            <>
               <TransactionAnalysisPage userId={userId} />
               <SnackBarFeedback />
-            </div>
+            </>
           </Route>
           <Route path={ROUTES.FOOD_TRACKER}>
             <UpcomingFeaturePage />
@@ -64,6 +63,7 @@ function App() {
           </Route>
         </Switch>
       </Suspense>
+      <FixedBottomNavBar userId={userId} />   
     </Router>
   );
 }

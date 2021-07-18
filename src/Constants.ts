@@ -70,5 +70,8 @@ export const ONLINE_MODE = 'online';
 export const CREDIT_TYPE = 'credit';
 export const DEBIT_TYPE = 'debit';
 
+export const GET_TRANSACTIONS_FAILURE_MSG = 'Failed to get latest transactions';
+export const GET_TRANSACTION_CATEGORIES_FAILURE_MSG = 'Failed to get latest categories';
+
 export const PASSWORD_REQUIREMENT = 'Password must be between 7 to 15 characters ' +
   'which contain at least one numeric digit and a special character.';

@@ -1,12 +1,10 @@
-import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from 'components/Loader';
 import TransactionCategoryInput from './TransactionCategoryInput'
 import { AddTransaction, AddTransactionModalProps } from './interface';
-import { FETCHING_STATES, fetchingStatusReducer, fetchingStatusInitialState } from 'reducers/fetchingState';
-
 import styles from './styles.module.scss';
 
 import {
@@ -25,6 +23,7 @@ import {
   CASH_MODE,
   CREDIT_TYPE,
   DEBIT_TYPE,
+  GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
   ONLINE_MODE,
@@ -33,9 +32,10 @@ import {
   SEVERITY_WARNING,
 } from 'Constants';
 
-import { addTransactionDB, getTransactionCategoriesFromDB } from 'api-services/api.service';
+import { addTransactionDB, getTransactionCategoriesFromDB, getTransactionsFromDB } from 'api-services/api.service';
 import { ReduxStore } from 'reducers/interface';
-import { checkTransactionCategoriesChanged } from 'helper';
+import useFetchData from 'customHooks/useFetchData';
+import { FETCH_STATES } from 'reducers/DataReducer';
 
 
 const AddTransactionModal = ({
@@ -50,25 +50,16 @@ const AddTransactionModal = ({
   const [loadingState, setLoadingState] = useState(false);
   const [mode, setMode] = React.useState(ONLINE_MODE);
   const [type, setType] = React.useState(DEBIT_TYPE);
-  const [state, fetchingStatusReducerDispatch] = useReducer(fetchingStatusReducer, fetchingStatusInitialState);
+  const state = useFetchData(
+    getTransactionCategoriesFromDB,
+    GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
+    getTransactionCategories,
+    userId
+  );
   const transactionCategories = useSelector((store: ReduxStore) => store.transactions.categories);
   const categories = type === DEBIT_TYPE ? transactionCategories.debit : transactionCategories.credit;
-  const loadTransactionCategories = useCallback(async () => {
-    try {
-      fetchingStatusReducerDispatch({type: FETCHING_STATES.PENDING});
-      const { transactionCategories: dbTransactionCategories } = await getTransactionCategoriesFromDB(userId);
-      fetchingStatusReducerDispatch({type: FETCHING_STATES.RESOLVED});
-      if(checkTransactionCategoriesChanged(dbTransactionCategories, transactionCategories)) {
-        dispatch(getTransactionCategories(dbTransactionCategories));
-      }
-    } catch (error) {
-      fetchingStatusReducerDispatch({type: FETCHING_STATES.REJECTED});
-    }
-    
-  }, []);
-  
+ 
   useEffect(() => {
-    window.navigator.onLine && loadTransactionCategories();
     return function setFieldsEmpty() {
       setHeading('');
       setAmount('');
@@ -167,7 +158,7 @@ const AddTransactionModal = ({
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
     >
-      {state.fetching === FETCHING_STATES.PENDING && <LinearProgress />}
+      {state.fetching === FETCH_STATES.PENDING && <LinearProgress />}
       <div className={styles.modalWrapper}>
         <h3 className={styles.modalTitle}>Add Transaction</h3>
         <form onSubmit={handleTransactionSubmit}>

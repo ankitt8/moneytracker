@@ -4,11 +4,11 @@ import Transactions from 'components/Transactions'
 import TransactionSummary from 'components/TransactionSummary'
 const HomePage = ({userId}: {userId: string}) => {
     return (
-        <div className='desktop-view'>
+        <>
             <TransactionSummary />
             <Transactions userId={userId} />
             <SnackBarFeedback />
-        </div>
+        </>
     )
 }
 

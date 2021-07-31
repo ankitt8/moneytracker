@@ -32,20 +32,20 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   drawer: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: drawerWidth,
       flexShrink: 0,
     },
   },
   appBar: {
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       width: `calc(100% - ${drawerWidth}px)`,
       marginLeft: drawerWidth,
     },
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
       display: 'none',
     },
   },
@@ -61,10 +61,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = ({
-  username
+  username,
+  children
 }: HeaderProps) => {
   const classes = useStyles();
-  const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -159,8 +159,7 @@ const Header = ({
       </div>
     </div>
   );
-
-
+  const container = window !== undefined ? () => window.document.body : undefined;
   return (
     <>
       <AppBar position="sticky" className={classes.appBar}>
@@ -180,10 +179,11 @@ const Header = ({
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">
-        <Hidden smUp implementation="css">
+        <Hidden mdUp implementation="css">
           <Drawer
+            container={container}
             variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+            anchor="left"
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
@@ -196,7 +196,7 @@ const Header = ({
             {drawer}
           </Drawer>
         </Hidden>
-        <Hidden xsDown implementation="css">
+        <Hidden smDown implementation="css">
           <Drawer
             classes={{
               paper: classes.drawerPaper,
@@ -208,6 +208,9 @@ const Header = ({
           </Drawer>
         </Hidden>
       </nav>
+      <main className={classes.appBar}>
+        {children}
+      </main>
     </>
   );
 }

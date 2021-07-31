@@ -28,42 +28,43 @@ function App() {
   }
   return (
     <Router>
-      <Header username={username} />
-      <Suspense fallback={<Loader />}>
-        <Switch >
-          <Route path={ROUTES.LOGIN}>
-            <LoginPage />
-          </Route>
-          <Route path={ROUTES.TRANSACTION_CATEGORIES}>
-            <div className='desktop-view'>
-              <TransactionCategoriesPage userId={userId}/>
-              <SnackBarFeedback />
-            </div>
-          </Route>
-          <Route path={ROUTES.BANK}>
-            <BankAccountsPage />
-          </Route>
-          <Route path={ROUTES.INVESTMENT}>
-            <UpcomingFeaturePage />
-          </Route>
-          <Route path={ROUTES.BUDGET}>
-            <UpcomingFeaturePage />
-          </Route>
-          <Route path={ROUTES.SPEND_ANALYSIS}>
-            <>
-              <TransactionAnalysisPage userId={userId} />
-              <SnackBarFeedback />
-            </>
-          </Route>
-          <Route path={ROUTES.FOOD_TRACKER}>
-            <UpcomingFeaturePage />
-          </Route>
-          <Route path={ROUTES.HOME}>
-            <HomePage userId={userId}/>
-          </Route>
-        </Switch>
-      </Suspense>
-      <FixedBottomNavBar userId={userId} />   
+      <Header username={username}>
+        <Suspense fallback={<Loader />}>
+          <Switch>
+            <Route path={ROUTES.LOGIN}>
+              <LoginPage />
+            </Route>
+            <Route path={ROUTES.TRANSACTION_CATEGORIES}>
+              <div>
+                <TransactionCategoriesPage userId={userId}/>
+                <SnackBarFeedback />
+              </div>
+            </Route>
+            <Route path={ROUTES.BANK}>
+              <BankAccountsPage />
+            </Route>
+            <Route path={ROUTES.INVESTMENT}>
+              <UpcomingFeaturePage />
+            </Route>
+            <Route path={ROUTES.BUDGET}>
+              <UpcomingFeaturePage />
+            </Route>
+            <Route path={ROUTES.SPEND_ANALYSIS}>
+              <>
+                <TransactionAnalysisPage userId={userId} />
+                <SnackBarFeedback />
+              </>
+            </Route>
+            <Route path={ROUTES.FOOD_TRACKER}>
+              <UpcomingFeaturePage />
+            </Route>
+            <Route path={ROUTES.HOME}>
+              <HomePage userId={userId}/>
+            </Route>
+          </Switch>
+        </Suspense>
+        <FixedBottomNavBar userId={userId} />
+      </Header>
     </Router>
   );
 }

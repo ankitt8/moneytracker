@@ -1,57 +1,63 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './style.module.scss';
 import { ROUTES } from 'Constants';
 import { FixedBottomNavBarProps } from './interface';
 import AddTransactionModal from 'components/AddTransactionModal';
+import { IFixedBottomNavBarItem } from "./interface";
 
 const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] = useState(false);
+  const handleClose = () => setIsAddTransactionModalOpen(false);
+  const history = useHistory();
+  const fixedBottomNavBarItemList = [
+    {
+      text: "Home",
+      icon: <FontAwesomeIcon icon='home' size='lg' />,
+      handleClick: () => history.push(ROUTES.HOME),
+    },
+    {
+      text: "Analysis",
+      icon: <FontAwesomeIcon icon='chart-bar' size='lg' />,
+      handleClick: () => history.push(ROUTES.SPEND_ANALYSIS)
+    },
+    {
+      text: "Categories",
+      icon: <FontAwesomeIcon icon='filter' size='lg' />,
+      handleClick: () => history.push(ROUTES.TRANSACTION_CATEGORIES)
+    },
+    {
+      text: "Add",
+      icon: <FontAwesomeIcon icon='plus' size='lg' />,
+      handleClick: () => setIsAddTransactionModalOpen(true)
+    }
+  ];
 
   return (
     <div className={styles.fixedBottomNavBar}>
-      <Link to={ROUTES.HOME} className={styles.link}>
-        <div className={styles.wrapper}>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon='home' size='lg' />
-          </div>
-          <div className={styles.text}>Home</div>
-        </div>
-      </Link>
-      <Link to={ROUTES.SPEND_ANALYSIS} className={styles.link}>
-        <div className={styles.wrapper}>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon='chart-bar' size='lg' />
-          </div>
-          <div className={styles.text}>Analysis</div>
-        </div>
-      </Link>
-      <Link to={ROUTES.TRANSACTION_CATEGORIES} className={styles.link}>
-        <div className={styles.wrapper}>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon='filter' size='lg' />
-          </div>
-          <div className={styles.text}>Categories</div>
-        </div>
-      </Link>
-      <div className={styles.link} onClick={() => setOpen(true)}>
-        <div className={styles.wrapper}>
-          <div className={styles.icon}>
-            <FontAwesomeIcon icon='plus' size='lg' />
-          </div>
-          <div className={styles.text}>Add</div>
-        </div>
-      </div>
-      {open && <AddTransactionModal
-        userId={userId}
-        handleClose={handleClose}
-      />}
+      {
+        fixedBottomNavBarItemList.map((item) => (<FixedBottomNavBarItem key={item.text} {...item} />))
+      }
+      {
+        isAddTransactionModalOpen && <AddTransactionModal
+          userId={userId}
+          handleClose={handleClose}
+        />
+      }
     </div>
   )
 }
+
+const FixedBottomNavBarItem = (({icon, text, handleClick}: IFixedBottomNavBarItem) => (
+  <button onClick={handleClick}>
+    <div className={styles.wrapper}>
+      <div className={styles.icon}>
+        {icon}
+      </div>
+      <div className={styles.text}>{text}</div>
+    </div>
+  </button>
+));
 
 export default FixedBottomNavBar;

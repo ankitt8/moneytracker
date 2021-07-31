@@ -4,21 +4,22 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
+import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
 import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
 import PaymentIcon from '@material-ui/icons/Payment';
 import FastfoodIcon from '@material-ui/icons/Fastfood';
-
+import {IDrawerItem} from './interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { HeaderProps } from './interface';
 
 import styles from './styles.module.scss';
@@ -67,9 +68,7 @@ const Header = ({
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const handleDrawerToggle = () => setMobileOpen((mobileOpen) => !mobileOpen);
 
   const handleLogout = () => {
     localStorage.clear();
@@ -95,65 +94,43 @@ const Header = ({
     window.deferredPrompt = null;
     document.getElementById('installBtn')?.classList.toggle('hidden', true);
   }
-
+  const history = useHistory();
   const drawer = (
     <div className={styles.drawer}>
       <div>
         <div className={classes.toolbar} />
-        <ListItem button key="username">
-          <div className={styles.flexWrapper}>
+        <div className={styles.flexWrapper}>
             <p className={styles.username}>{`Hi ${username}`}</p>
-            <button id="installBtn" className={styles.installBtn} onClick={handleInstallAppClick}>Install App</button>
+            <button
+              id="installBtn"
+              className={styles.installBtn}
+              onClick={handleInstallAppClick}
+            >
+              Install App
+            </button>
           </div>
-        </ListItem>
         <Divider />
-        <Link className={styles.headerLink} to={ROUTES.HOME}>
-          <ListItem button key="home" onClick={handleDrawerToggle}>
-            <ListItemIcon><FontAwesomeIcon icon='home' size='lg' /></ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-        </Link>
-        <Link className={styles.headerLink} to={ROUTES.TRANSACTION_CATEGORIES}>
-          <ListItem button key="transactionCategory" onClick={handleDrawerToggle}>
-            <ListItemIcon><FontAwesomeIcon icon='filter' size='lg' /></ListItemIcon>
-            <ListItemText primary="Add Category" />
-          </ListItem>
-        </Link>
-        <Link className={styles.headerLink} to={ROUTES.BANK}>
-          <ListItem button key="bankaccount" onClick={handleDrawerToggle}>
-            <ListItemIcon><AccountBalanceIcon /></ListItemIcon>
-            <ListItemText primary="Bank Accounts" />
-          </ListItem>
-        </Link>
-        <Link className={styles.headerLink} to={ROUTES.INVESTMENT}>
-          <ListItem button key="investments" onClick={handleDrawerToggle}>
-            <ListItemIcon><PaymentIcon /></ListItemIcon>
-            <ListItemText primary="Investments" />
-          </ListItem>
-        </Link>
-        <Link className={styles.headerLink} to={ROUTES.BUDGET}>
-          <ListItem button key="budget" onClick={handleDrawerToggle}>
-            <ListItemIcon><PaymentIcon /></ListItemIcon>
-            <ListItemText primary="Budget" />
-          </ListItem>
-        </Link>
-        <Link className={styles.headerLink} to={ROUTES.FOOD_TRACKER}>
-          <ListItem button key="foodtracker" onClick={handleDrawerToggle}>
-            <ListItemIcon><FastfoodIcon /></ListItemIcon>
-            <ListItemText primary="Food Tracker" />
-          </ListItem>
-        </Link>
-        <Link className={styles.headerLink} to={ROUTES.SPEND_ANALYSIS}>
-          <ListItem button key="analysis" onClick={handleDrawerToggle}>
-            <ListItemIcon><FontAwesomeIcon icon='chart-bar' size='lg' /></ListItemIcon>
-            <ListItemText primary="Spend Analysis" />
-          </ListItem>
-        </Link>
-        <Divider />
+        <List>
+          {
+            drawerItemList.map(({url, icon, text}) => (
+              <DrawerItem
+                key={text}
+                handleClick={() => {
+                  history.push(url);
+                  setMobileOpen(false);
+                }}
+                icon={icon}
+                text={text}
+              />)
+            )
+          }
+        </List>
       </div>
       <div>
         <ListItem button key="logout" onClick={handleLogout}>
-          <ListItemIcon><FontAwesomeIcon icon='sign-out-alt' /></ListItemIcon>
+          <ListItemIcon>
+            <FontAwesomeIcon icon='sign-out-alt' />
+          </ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItem>
       </div>
@@ -162,7 +139,7 @@ const Header = ({
   const container = window !== undefined ? () => window.document.body : undefined;
   return (
     <>
-      <AppBar position="sticky" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -209,10 +186,60 @@ const Header = ({
         </Hidden>
       </nav>
       <main className={classes.appBar}>
+        <div className={classes.toolbar} />
         {children}
       </main>
     </>
   );
 }
+const drawerItemList = [
+  {
+    text: "Home",
+    icon: <FontAwesomeIcon icon='home' size='lg' />,
+    url: ROUTES.HOME,
+  },
+  {
+    text: "Analysis",
+    icon: <FontAwesomeIcon icon='chart-bar' size='lg' />,
+    url: ROUTES.SPEND_ANALYSIS
+  },
+  {
+    text: "Categories",
+    icon: <FontAwesomeIcon icon='filter' size='lg' />,
+    url: ROUTES.TRANSACTION_CATEGORIES
+  },
+  {
+    text: "Bank Accounts",
+    icon: <AccountBalanceIcon />,
+    url: ROUTES.BANK,
+  },
+  {
+    text: "Investments",
+    icon: <PaymentIcon />,
+    url: ROUTES.INVESTMENT
+  },
+  {
+    text: "Budget",
+    icon: <PaymentIcon />,
+    url: ROUTES.BUDGET,
+  },
+  {
+    text: "Food Tracker",
+    icon: <FastfoodIcon />,
+    url: ROUTES.FOOD_TRACKER
+  },
+
+];
+const DrawerItem = ({
+  text,
+  icon,
+  handleClick
+}: IDrawerItem) => (
+  <ListItem button key={text} onClick={handleClick}
+  >
+    <ListItemIcon>{icon}</ListItemIcon>
+    <ListItemText primary={text} />
+  </ListItem>
+)
 
 export default Header;

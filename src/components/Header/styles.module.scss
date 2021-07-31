@@ -8,6 +8,9 @@
 .flexWrapper {
   display: flex;
   flex-direction: column;
+  padding-left: 16px;
+  justify-content: space-around;
+  margin-bottom: 26px;
 }
 
 .username {
@@ -16,6 +19,7 @@
 
 .installBtn {
   @include button;
+  height: 40px;
   width: fit-content;
 }
 

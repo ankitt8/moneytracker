@@ -6,39 +6,31 @@
   height: 10vh;
   justify-content: space-around;
   background-color:white;
-  border: 1px solid lightgray;
-  border-radius: 15px 15px 0 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   font-weight: normal;
   font-size: 16px;
   @media screen and (max-device-width: 960px){
     width: 100vw;
   }
-  .link {
+  button {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .wrapper {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    text-decoration: none;
-    border: 3px solid white;
 
-    &:active {
-      border-top: 3px solid blue;
+    .icon {
+      color: black;
     }
-    //}
 
-    .wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      
-      .icon {
-        color: black;
-      }
-
-      .text {
-        font-size: 18px;
-        color: black;
-        line-height: 22px;
-        font-weight: 400;
-      }
+    .text {
+      font-size: 18px;
+      color: black;
+      line-height: 22px;
+      font-weight: 400;
     }
-  } 
+  }
 }

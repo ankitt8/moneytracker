@@ -1,15 +1,15 @@
-import React, { useState, lazy } from 'react';
+import React, { useState, lazy } from "react";
 
-import { CREDIT_TYPE } from 'Constants';
-import cn from 'classnames';
-import styles from './styles.module.scss';
-import { TransactionCardProps } from './interface';
+import { CREDIT_TYPE } from "Constants";
+import cn from "classnames";
+import styles from "./styles.module.scss";
+import { TransactionCardProps } from "./interface";
 
-const EditTransactionModal = lazy(() => import('components/EditTransactionModal'));
+const EditTransactionModal = lazy(
+  () => import("components/EditTransactionModal")
+);
 
-const TransactionCard = ({
-  transaction
-}: TransactionCardProps) => {
+const TransactionCard = ({ transaction }: TransactionCardProps) => {
   const [open, setOpen] = useState(false);
   const { heading, amount } = transaction;
   const handleClickOpen = () => setOpen(true);
@@ -18,7 +18,7 @@ const TransactionCard = ({
     <>
       <div
         className={cn(styles.transactionCard, {
-          [styles.transactionCardCredit]: transaction.type === CREDIT_TYPE
+          [styles.transactionCardCredit]: transaction.type === CREDIT_TYPE,
         })}
         onClick={handleClickOpen}
       >
@@ -28,6 +28,6 @@ const TransactionCard = ({
       {open && <EditTransactionModal transaction={transaction} />}
     </>
   );
-}
+};
 
 export default React.memo(TransactionCard);

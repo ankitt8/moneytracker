@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { OFFLINE_ERROR, SEVERITY_ERROR } from 'Constants';
-import { updateStatusAction } from 'actions/actionCreator';
-import styles from './style.module.scss';
-import { ReduxStore } from 'reducers/interface';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { OFFLINE_ERROR, SEVERITY_ERROR } from "Constants";
+import { updateStatusAction } from "actions/actionCreator";
+import styles from "./style.module.scss";
+import { ReduxStore } from "reducers/interface";
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -35,16 +35,18 @@ export default function SnackBarFeedback() {
   function handleClose() {
     setOpen(false);
     // the below code sets everythin gto null
-    //  so that when page is changed the Snackbar feedback 
+    //  so that when page is changed the Snackbar feedback
     //  doesn't render with the existing messages
     // want to make severity null but it require some props
     //  anyways is msg is empty string then nothing will be shown;;
-    dispatch(updateStatusAction({
-      showFeedBack: null,
-      msg: null,
-      severity: null,
-    }));
-  };
+    dispatch(
+      updateStatusAction({
+        showFeedBack: null,
+        msg: null,
+        severity: null,
+      })
+    );
+  }
 
   return (
     <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>

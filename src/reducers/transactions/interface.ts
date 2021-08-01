@@ -1,5 +1,5 @@
-import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
-import { Transaction } from 'interfaces/index.interface';
+import { TransactionCategories } from "components/AddTransactionModal/TransactionCategoryInput/interface";
+import { Transaction } from "interfaces/index.interface";
 
 export interface TransactionsStoreInitialState {
   transactions: Transaction[] | [];

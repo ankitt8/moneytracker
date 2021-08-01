@@ -1,16 +1,15 @@
-import { DisplayCategoriesProps } from './interface';
-import styles from './styles.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
-import { motion } from 'framer-motion';
+import { DisplayCategoriesProps } from "./interface";
+import styles from "./styles.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
 
-const DisplayCategories = ({ 
+const DisplayCategories = ({
   categories,
-  handleDeleteCategory
+  handleDeleteCategory,
 }: DisplayCategoriesProps) => {
-  
   if (categories.length === 0) {
-    return <p className={styles.noData}>!!No Categories Found!!</p>
+    return <p className={styles.noData}>!!No Categories Found!!</p>;
   }
   return (
     <div className={styles.categoriesWrapper}>
@@ -25,12 +24,15 @@ const DisplayCategories = ({
           >
             <div>{category}</div>
             <div>|</div>
-            <FontAwesomeIcon icon={faWindowClose} onClick={() => handleDeleteCategory(category)} />
+            <FontAwesomeIcon
+              icon={faWindowClose}
+              onClick={() => handleDeleteCategory(category)}
+            />
           </motion.div>
-        )
+        );
       })}
     </div>
-  )
-}
+  );
+};
 
 export default DisplayCategories;

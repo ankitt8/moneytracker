@@ -1,7 +1,7 @@
-@import 'src/styles/mixins';
-@import 'src/styles/colors';
-@import 'src/styles/fonts';
-@import 'src/styles/spacing';
+@import "src/styles/mixins";
+@import "src/styles/colors";
+@import "src/styles/fonts";
+@import "src/styles/spacing";
 
 .transactionCategoryInput {
   display: flex;
@@ -41,5 +41,3 @@
   @include noData;
   width: 100vw;
 }
-
-

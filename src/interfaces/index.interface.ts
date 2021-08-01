@@ -8,8 +8,7 @@ export interface Transaction {
   category?: string;
 }
 
-
-
 export interface CategoryAmountArray {
-  category: string, totalAmount: number
-};
+  category: string;
+  totalAmount: number;
+}

@@ -1,3 +1,3 @@
 export interface TransactionCategoriesPageProps {
-    userId: string;
+  userId: string;
 }

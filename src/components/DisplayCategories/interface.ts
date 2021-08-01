@@ -1,4 +1,4 @@
 export interface DisplayCategoriesProps {
   categories: string[];
-  handleDeleteCategory: (category: string) => void; 
+  handleDeleteCategory: (category: string) => void;
 }

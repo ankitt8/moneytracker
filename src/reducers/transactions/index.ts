@@ -14,10 +14,9 @@ import {
   GET_TRANSACTIONS,
   GET_TRANSACTION_CATEGORIES,
   UPDATE_STATUS,
-} from 'actions/actionTypes';
-import { DEBIT_TYPE } from 'Constants';
-import { TransactionsStoreInitialState, Action } from './interface';
-
+} from "actions/actionTypes";
+import { DEBIT_TYPE } from "Constants";
+import { TransactionsStoreInitialState, Action } from "./interface";
 
 const initialState: TransactionsStoreInitialState = {
   transactions: [],
@@ -31,7 +30,7 @@ const initialState: TransactionsStoreInitialState = {
       credit: 0,
       debit: 0,
       balance: 0,
-    }
+    },
   },
   status: {
     showFeedBack: null,
@@ -41,11 +40,13 @@ const initialState: TransactionsStoreInitialState = {
   categories: {
     credit: [],
     debit: [],
-  }
+  },
 };
 
-
-const transactions = (state = initialState, action: Action) : TransactionsStoreInitialState => {
+const transactions = (
+  state = initialState,
+  action: Action
+): TransactionsStoreInitialState => {
   switch (action.type) {
     case SET_CREDIT_DEBIT_ZERO: {
       return {
@@ -60,9 +61,9 @@ const transactions = (state = initialState, action: Action) : TransactionsStoreI
             credit: 0,
             debit: 0,
             balance: 0,
-          }
-        }
-      }
+          },
+        },
+      };
     }
     case ADD_TRANSACTION: {
       return {
@@ -73,107 +74,139 @@ const transactions = (state = initialState, action: Action) : TransactionsStoreI
     case GET_TRANSACTION_CATEGORIES: {
       return {
         ...state,
-        categories: { ...action.payload.transactionCategories }
-      }
+        categories: { ...action.payload.transactionCategories },
+      };
     }
     case ADD_TRANSACTION_CATEGORY: {
       let { debit, credit } = state.categories;
       if (action.payload.transactionType === DEBIT_TYPE) {
-        debit = [...debit, action.payload.category]
+        debit = [...debit, action.payload.category];
       } else {
-        credit = [...credit, action.payload.category]
+        credit = [...credit, action.payload.category];
       }
       return {
         ...state,
-        categories: { debit, credit }
-      }
+        categories: { debit, credit },
+      };
     }
     case DELETE_TRANSACTION_CATEGORY: {
       const { debit, credit } = state.categories;
       const category = action.payload.category;
       if (action.payload.transactionType === DEBIT_TYPE) {
-        debit.splice(debit.findIndex((debitCategory) => debitCategory === category), 1)
+        debit.splice(
+          debit.findIndex((debitCategory) => debitCategory === category),
+          1
+        );
       } else {
-        credit.splice(credit.findIndex((creditCategory) => creditCategory === category), 1)
+        credit.splice(
+          credit.findIndex((creditCategory) => creditCategory === category),
+          1
+        );
       }
       return {
         ...state,
-        categories: { ...state.categories, debit, credit }
-      }
+        categories: { ...state.categories, debit, credit },
+      };
     }
     case GET_TRANSACTIONS: {
       return {
         ...state,
-        transactions: [...action.payload.transactions]
-      }
+        transactions: [...action.payload.transactions],
+      };
     }
     case EDIT_TRANSACTION: {
       const transactions = state.transactions;
-      const index = transactions.findIndex((transaction) => transaction._id === action.payload.transactionId);
+      const index = transactions.findIndex(
+        (transaction) => transaction._id === action.payload.transactionId
+      );
       transactions[index] = action.payload.updatedTransaction;
       return {
         ...state,
-        transactions: [...transactions]
-      }
+        transactions: [...transactions],
+      };
     }
     case DELETE_TRANSACTION: {
       const transactionId = action.payload.transactionId;
       const transactions = state.transactions;
-      const index = transactions.findIndex(transaction => transaction._id === transactionId);
+      const index = transactions.findIndex(
+        (transaction) => transaction._id === transactionId
+      );
       transactions.splice(index, 1);
       return {
         ...state,
         transactions: [...transactions],
-      }
+      };
     }
     case UPDATE_STATUS: {
       return {
         ...state,
         // @ts-ignore
-        status: action.payload
-      }
+        status: action.payload,
+      };
     }
     case EDIT_BANK_CREDIT: {
-      const credit = state.transactionSummary.bank.credit + action.payload.amount;
+      const credit =
+        state.transactionSummary.bank.credit + action.payload.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, credit } }
-      }
+        transactionSummary: {
+          ...state.transactionSummary,
+          bank: { ...state.transactionSummary.bank, credit },
+        },
+      };
     }
     case EDIT_BANK_DEBIT: {
       const debit = state.transactionSummary.bank.debit + action.payload.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, debit } }
-      }
+        transactionSummary: {
+          ...state.transactionSummary,
+          bank: { ...state.transactionSummary.bank, debit },
+        },
+      };
     }
     case EDIT_BANK_BALANCE: {
-      const balance = state.transactionSummary.bank.balance + action.payload.amount;
+      const balance =
+        state.transactionSummary.bank.balance + action.payload.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, bank: { ...state.transactionSummary.bank, balance } }
-      }
+        transactionSummary: {
+          ...state.transactionSummary,
+          bank: { ...state.transactionSummary.bank, balance },
+        },
+      };
     }
     case EDIT_CASH_CREDIT: {
-      const credit = state.transactionSummary.cash.credit + action.payload.amount;
+      const credit =
+        state.transactionSummary.cash.credit + action.payload.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, cash: { ...state.transactionSummary.cash, credit } }
-      }
+        transactionSummary: {
+          ...state.transactionSummary,
+          cash: { ...state.transactionSummary.cash, credit },
+        },
+      };
     }
     case EDIT_CASH_DEBIT: {
       const debit = state.transactionSummary.cash.debit + action.payload.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, cash: { ...state.transactionSummary.cash, debit } }
-      }
+        transactionSummary: {
+          ...state.transactionSummary,
+          cash: { ...state.transactionSummary.cash, debit },
+        },
+      };
     }
     case EDIT_CASH_BALANCE: {
-      const balance = state.transactionSummary.cash.balance + action.payload.amount;
+      const balance =
+        state.transactionSummary.cash.balance + action.payload.amount;
       return {
         ...state,
-        transactionSummary: { ...state.transactionSummary, cash: { ...state.transactionSummary.cash, balance } }
-      }
+        transactionSummary: {
+          ...state.transactionSummary,
+          cash: { ...state.transactionSummary.cash, balance },
+        },
+      };
     }
     default: {
       return state;

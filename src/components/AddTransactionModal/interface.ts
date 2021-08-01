@@ -1,6 +1,6 @@
 export interface AddTransactionModalProps {
-    userId: string;
-    handleClose: () => void;
+  userId: string;
+  handleClose: () => void;
 }
 
 export interface AddTransaction {

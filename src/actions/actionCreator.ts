@@ -1,6 +1,9 @@
-import { TransactionCategories, TransactionCategory } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
-import { Transaction } from 'interfaces/index.interface';
-import { Status } from 'reducers/transactions/interface';
+import {
+  TransactionCategories,
+  TransactionCategory,
+} from "components/AddTransactionModal/TransactionCategoryInput/interface";
+import { Transaction } from "interfaces/index.interface";
+import { Status } from "reducers/transactions/interface";
 import {
   SET_CREDIT_DEBIT_ZERO,
   ADD_TRANSACTION,
@@ -17,15 +20,15 @@ import {
   ADD_TRANSACTION_CATEGORY,
   DELETE_TRANSACTION_CATEGORY,
   GET_TRANSACTION_CATEGORIES,
-  USER_AUTHENTICATED
-} from './actionTypes';
+  USER_AUTHENTICATED,
+} from "./actionTypes";
 
 type TransactionType = string;
 
 export function setCreditDebitZero() {
   return {
-    type: SET_CREDIT_DEBIT_ZERO
-  }
+    type: SET_CREDIT_DEBIT_ZERO,
+  };
 }
 
 export function addTransactionAction(transaction: Transaction) {
@@ -37,97 +40,108 @@ export function addTransactionAction(transaction: Transaction) {
 export function getTransactionsAction(transactions: Transaction[]) {
   return {
     type: GET_TRANSACTIONS,
-    payload: { transactions }
+    payload: { transactions },
   };
 }
-export function editTransactionAction(transactionId: string, updatedTransaction: Transaction) {
+export function editTransactionAction(
+  transactionId: string,
+  updatedTransaction: Transaction
+) {
   return {
     type: EDIT_TRANSACTION,
-    payload: { transactionId, updatedTransaction }
-  }
+    payload: { transactionId, updatedTransaction },
+  };
 }
 export function deleteTransactionAction(transactionId: string) {
   return {
     type: DELETE_TRANSACTION,
     payload: { transactionId },
-  }
+  };
 }
 export function updateStatusAction(status: Status) {
   return {
     type: UPDATE_STATUS,
     payload: {
-      ...status
+      ...status,
     },
-  }
+  };
 }
 
 export function editBankCreditAction(amount: number) {
   return {
     type: EDIT_BANK_CREDIT,
-    payload: { amount }
-  }
+    payload: { amount },
+  };
 }
 
 export function editBankDebitAction(amount: number) {
   return {
     type: EDIT_BANK_DEBIT,
-    payload: { amount }
-  }
+    payload: { amount },
+  };
 }
 
 export function editBankBalanceAction(amount: number) {
   return {
     type: EDIT_BANK_BALANCE,
-    payload: { amount }
-  }
+    payload: { amount },
+  };
 }
 
 export function editCashCreditAction(amount: number) {
   return {
     type: EDIT_CASH_CREDIT,
-    payload: { amount }
-  }
+    payload: { amount },
+  };
 }
 
 export function editCashDebitAction(amount: number) {
   return {
     type: EDIT_CASH_DEBIT,
-    payload: { amount }
-  }
+    payload: { amount },
+  };
 }
 
 export function editCashBalanceAction(amount: number) {
   return {
     type: EDIT_CASH_BALANCE,
-    payload: { amount }
-  }
+    payload: { amount },
+  };
 }
 
-export function getTransactionCategories(transactionCategories: TransactionCategories) {
+export function getTransactionCategories(
+  transactionCategories: TransactionCategories
+) {
   return {
     type: GET_TRANSACTION_CATEGORIES,
     payload: transactionCategories,
-  }
+  };
 }
 
-export function addTransactionCategory(category: TransactionCategory, transactionType: TransactionType) {
+export function addTransactionCategory(
+  category: TransactionCategory,
+  transactionType: TransactionType
+) {
   return {
     type: ADD_TRANSACTION_CATEGORY,
     payload: {
       category,
       transactionType,
-    }
-  }
+    },
+  };
 }
 
-export function deleteTransactionCategory(category: TransactionCategory, transactionType: TransactionType) {
+export function deleteTransactionCategory(
+  category: TransactionCategory,
+  transactionType: TransactionType
+) {
   return {
     type: DELETE_TRANSACTION_CATEGORY,
     payload: {
       category,
-      transactionType
-    }
-  }
+      transactionType,
+    },
+  };
 }
 
 export function newUserLoggedIn(userId: string, username: string) {
@@ -135,7 +149,7 @@ export function newUserLoggedIn(userId: string, username: string) {
     type: USER_AUTHENTICATED,
     payload: {
       userId,
-      username
-    }
-  }
+      username,
+    },
+  };
 }

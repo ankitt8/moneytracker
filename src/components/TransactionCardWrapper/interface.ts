@@ -1,4 +1,4 @@
-import { Transaction } from 'interfaces/index.interface';
+import { Transaction } from "interfaces/index.interface";
 
 export interface TransactionCardWrapperProps {
   transactions: Transaction[];

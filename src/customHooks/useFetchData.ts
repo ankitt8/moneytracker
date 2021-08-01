@@ -1,15 +1,11 @@
-import React, { useReducer, useEffect } from 'react'
-import { updateStatusAction } from 'actions/actionCreator'
-import { SEVERITY_ERROR } from 'Constants'
-import {useDispatch} from 'react-redux'
-import {
-     dataReducer,
-     initialState,
-     ACTION_TYPES
-} from 'reducers/DataReducer'
+import React, { useReducer, useEffect } from "react";
+import { updateStatusAction } from "actions/actionCreator";
+import { SEVERITY_ERROR } from "Constants";
+import { useDispatch } from "react-redux";
+import { dataReducer, initialState, ACTION_TYPES } from "reducers/DataReducer";
 
 /**
- * 
+ *
  * @param fetchCallback function which perform asyc operation and returns response
  * @param messageOnRejected message to show when fetch is rejected
  * @param actionToDispatchOnResolved action to be dispatched when fetch is resolved
@@ -17,39 +13,41 @@ import {
  * @returns void
  */
 const useFetchData = (
-    fetchCallback: Function,
-    messageOnRejected: string,
-    actionToDispatchOnResolved: Function,
-    ...args: string[]
+  fetchCallback: Function,
+  messageOnRejected: string,
+  actionToDispatchOnResolved: Function,
+  ...args: string[]
 ) => {
-    const dispatch = useDispatch();
-    const [state, dataReducerDispatch] = useReducer(dataReducer, initialState);
-  
-    const fetchData = async () => {
-        dataReducerDispatch({
-            type: ACTION_TYPES.FETCH_DATA_START
-        });
-        const data  = await fetchCallback(...args);
-        if(data === null) {
-            dataReducerDispatch({
-                type: ACTION_TYPES.FETCH_DATA_REJECTED,
-            });
-            dispatch(updateStatusAction({
-                showFeedBack: true,
-                msg: messageOnRejected,
-                severity: SEVERITY_ERROR
-              }));
-        } else {
-            dataReducerDispatch({
-                type: ACTION_TYPES.FETCH_DATA_RESOLVED,
-            });
-            dispatch(actionToDispatchOnResolved(data));
-        }
-    }
-    useEffect(() => {
-        fetchData();
-    }, []);
-    return state;
-}
+  const dispatch = useDispatch();
+  const [state, dataReducerDispatch] = useReducer(dataReducer, initialState);
 
-export default useFetchData
+  const fetchData = async () => {
+    dataReducerDispatch({
+      type: ACTION_TYPES.FETCH_DATA_START,
+    });
+    const data = await fetchCallback(...args);
+    if (data === null) {
+      dataReducerDispatch({
+        type: ACTION_TYPES.FETCH_DATA_REJECTED,
+      });
+      dispatch(
+        updateStatusAction({
+          showFeedBack: true,
+          msg: messageOnRejected,
+          severity: SEVERITY_ERROR,
+        })
+      );
+    } else {
+      dataReducerDispatch({
+        type: ACTION_TYPES.FETCH_DATA_RESOLVED,
+      });
+      dispatch(actionToDispatchOnResolved(data));
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+  return state;
+};
+
+export default useFetchData;

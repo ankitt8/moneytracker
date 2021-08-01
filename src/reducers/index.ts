@@ -1,23 +1,23 @@
-import { createStore, combineReducers } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import storage from 'redux-persist/lib/storage';
-import transactions from './transactions';
-import user from './user';
+import { createStore, combineReducers } from "redux";
+import { persistReducer, persistStore } from "redux-persist";
+import { composeWithDevTools } from "redux-devtools-extension";
+import storage from "redux-persist/lib/storage";
+import transactions from "./transactions";
+import user from "./user";
 
 const rootPersistConfig = {
-  key: 'root',
+  key: "root",
   storage,
   whitelist: [],
 };
 
 const transactionsPersistConfig = {
-  key: 'transactions',
+  key: "transactions",
   storage,
   // whitelist: ['categories']
 };
 const userPersistConfig = {
-  key: 'user',
+  key: "user",
   storage,
 };
 
@@ -38,4 +38,3 @@ const storeCreator = () => {
 };
 
 export default storeCreator;
-

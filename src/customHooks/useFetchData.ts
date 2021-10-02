@@ -2,7 +2,11 @@ import React, { useReducer, useEffect } from "react";
 import { updateStatusAction } from "actions/actionCreator";
 import { SEVERITY_ERROR } from "Constants";
 import { useDispatch } from "react-redux";
-import { dataReducer, initialState, ACTION_TYPES } from "reducers/DataReducer";
+import {
+  apiStatusReducer,
+  initialState,
+  ACTION_TYPES,
+} from "reactReducers/apiStatus";
 
 /**
  *
@@ -19,7 +23,10 @@ const useFetchData = (
   ...args: string[]
 ) => {
   const dispatch = useDispatch();
-  const [state, dataReducerDispatch] = useReducer(dataReducer, initialState);
+  const [state, dataReducerDispatch] = useReducer(
+    apiStatusReducer,
+    initialState
+  );
 
   const fetchData = async () => {
     dataReducerDispatch({

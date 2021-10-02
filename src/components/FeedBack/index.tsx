@@ -5,7 +5,7 @@ import MuiAlert from "@material-ui/lab/Alert";
 import { OFFLINE_ERROR, SEVERITY_ERROR } from "Constants";
 import { updateStatusAction } from "actions/actionCreator";
 import styles from "./style.module.scss";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

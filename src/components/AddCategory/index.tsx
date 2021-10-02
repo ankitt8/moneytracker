@@ -14,7 +14,7 @@ import { AddCategoryProps } from "./interface";
 import Loader from "components/Loader";
 
 import styles from "./styles.module.scss";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 import { addTransactionCategoryToDB } from "api-services/api.service";
 
 const AddCategory = ({ title, type }: AddCategoryProps) => {

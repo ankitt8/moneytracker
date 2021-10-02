@@ -42,7 +42,7 @@ import {
 } from "actions/actionCreator";
 import { EditTransactionModalProps } from "./interface";
 import styles from "./styles.module.scss";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 import { Transaction } from "interfaces/index.interface";
 
 const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {

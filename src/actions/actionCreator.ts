@@ -3,7 +3,7 @@ import {
   TransactionCategory,
 } from "components/AddTransactionModal/TransactionCategoryInput/interface";
 import { Transaction } from "interfaces/index.interface";
-import { Status } from "reducers/transactions/interface";
+import { Status } from "features/transactions/interface";
 import {
   SET_CREDIT_DEBIT_ZERO,
   ADD_TRANSACTION,

@@ -13,7 +13,7 @@ export const FETCH_STATES = {
 export const initialState = {
   fetching: FETCH_STATES.IDLE,
 };
-export const dataReducer = (state = initialState, action: IAction) => {
+export const apiStatusReducer = (state = initialState, action: IAction) => {
   switch (action.type) {
     case ACTION_TYPES.FETCH_DATA_START: {
       return {

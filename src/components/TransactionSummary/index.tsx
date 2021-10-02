@@ -10,7 +10,7 @@ import { getNoOfDaysCurrentMonth, isDebitTypeTransaction } from "helper";
 import { Transaction } from "interfaces/index.interface";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 import CreditDebitSummary from "./CreditDebitSummary";
 import styles from "./styles.module.scss";
 import { CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, CASH_MODE } from "Constants";

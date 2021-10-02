@@ -24,9 +24,9 @@ import {
   getTransactionCategories,
   getTransactionsAction,
 } from "actions/actionCreator";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 import useFetchData from "customHooks/useFetchData";
-import { FETCH_STATES } from "reducers/DataReducer";
+import { FETCH_STATES } from "reactReducers/apiStatus";
 
 const getCategoryNamesSortedByTotalAmount = (
   transactionsGroupedByCategories: TransactionsGroupedByCategories

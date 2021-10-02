@@ -43,7 +43,7 @@ const initialState: TransactionsStoreInitialState = {
   },
 };
 
-const transactions = (
+const transactionsReducers = (
   state = initialState,
   action: Action
 ): TransactionsStoreInitialState => {
@@ -213,4 +213,4 @@ const transactions = (
     }
   }
 };
-export default transactions;
+export default transactionsReducers;

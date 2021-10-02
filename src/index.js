@@ -9,8 +9,7 @@ import Loader from "components/Loader";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
-import storeCreator from "./reducers/index";
-const { store, persistor } = storeCreator();
+import { store, persistor } from "./store";
 export default store;
 
 ReactDOM.render(

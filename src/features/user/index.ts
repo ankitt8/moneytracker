@@ -1,11 +1,11 @@
-import { Action } from "reducers/transactions/interface";
+import { Action } from "features/transactions/interface";
 import { UserStoreInitialState } from "./interface";
 
 const initialState: UserStoreInitialState = {
   userId: "",
   username: "",
 };
-const user = (
+const userReducer = (
   state: UserStoreInitialState = initialState,
   action: Action
 ): UserStoreInitialState => {
@@ -23,4 +23,4 @@ const user = (
   }
 };
 
-export default user;
+export default userReducer;

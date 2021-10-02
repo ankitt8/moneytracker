@@ -22,9 +22,9 @@ import {
 } from "api-services/api.service";
 import useFetchData from "customHooks/useFetchData";
 import { useSelector, useDispatch } from "react-redux";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 import { TransactionCategoriesPageProps } from "./interface";
-import { FETCH_STATES } from "reducers/DataReducer";
+import { FETCH_STATES } from "reactReducers/apiStatus";
 import { LinearProgress } from "@material-ui/core";
 
 const TransactionCategoriesPage = ({

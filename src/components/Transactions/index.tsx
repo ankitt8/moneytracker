@@ -6,11 +6,11 @@ import DayTransactionsCard from "components/TransactionCardWrapper";
 import { getNoOfDaysCurrentMonth } from "helper";
 import { getTransactionsFromDB } from "api-services/api.service";
 import { Transaction } from "interfaces/index.interface";
-import { ReduxStore } from "reducers/interface";
+import { ReduxStore } from "features/interface";
 import styles from "./styles.module.scss";
 import { TransactionsProps } from "./interface";
 import useFetchData from "customHooks/useFetchData";
-import { FETCH_STATES } from "reducers/DataReducer";
+import { FETCH_STATES } from "reactReducers/apiStatus";
 import { getTransactionsAction } from "actions/actionCreator";
 
 const Transactions = ({ userId }: TransactionsProps) => {

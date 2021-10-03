@@ -5,28 +5,28 @@ import DayTransactionsCard from "components/TransactionCardWrapper";
 import {
   DEBIT_TYPE,
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-  GET_TRANSACTIONS_FAILURE_MSG,
+  GET_TRANSACTIONS_FAILURE_MSG
 } from "Constants";
 import {
   getTransactionCategoriesFromDB,
-  getTransactionsFromDB,
+  getTransactionsFromDB
 } from "api-services/api.service";
 import { isDebitTypeTransaction } from "helper";
-import {
-  TransactionAnalysisPageProps,
-  TransactionsGroupedByCategories,
-  CategoryAmount,
-} from "./interface";
 import { Transaction } from "interfaces/index.interface";
 
-import styles from "./styles.module.scss";
 import {
   getTransactionCategories,
-  getTransactionsAction,
+  getTransactionsAction
 } from "actions/actionCreator";
 import { ReduxStore } from "reducers/interface";
 import useFetchData from "customHooks/useFetchData";
 import { FETCH_STATES } from "reducers/DataReducer";
+import styles from "./styles.module.scss";
+import {
+  TransactionAnalysisPageProps,
+  TransactionsGroupedByCategories,
+  CategoryAmount
+} from "./interface";
 
 const getCategoryNamesSortedByTotalAmount = (
   transactionsGroupedByCategories: TransactionsGroupedByCategories
@@ -35,7 +35,7 @@ const getCategoryNamesSortedByTotalAmount = (
     transactionsGroupedByCategories
   ).map((category: string) => ({
     category,
-    totalAmount: transactionsGroupedByCategories[category]["totalAmount"],
+    totalAmount: transactionsGroupedByCategories[category].totalAmount
   }));
   categoryTotalAmountObjectArray.sort((a, b) => b.totalAmount - a.totalAmount);
   return categoryTotalAmountObjectArray.map(({ category }) => category);
@@ -45,25 +45,25 @@ const createTransactionsGroupedByCategories = (
   transactions: Transaction[],
   categories: string[]
 ) => {
-  let transactionsGroupedByCategories: TransactionsGroupedByCategories = {
+  const transactionsGroupedByCategories: TransactionsGroupedByCategories = {
     "No Category": {
       transactions: [],
-      totalAmount: 0,
-    },
+      totalAmount: 0
+    }
   };
 
   categories &&
     categories.forEach((category: string) => {
       transactionsGroupedByCategories[category] = {
         transactions: [],
-        totalAmount: 0,
+        totalAmount: 0
       };
     });
 
   transactions.forEach((transaction) => {
     const { category, amount } = transaction;
     if (!category) {
-      transactionsGroupedByCategories["No Category"]["transactions"].push(
+      transactionsGroupedByCategories["No Category"].transactions.push(
         transaction
       );
       transactionsGroupedByCategories["No Category"].totalAmount += amount;
@@ -71,7 +71,7 @@ const createTransactionsGroupedByCategories = (
       // for now user can add transaction without category
       // reason have not yet made category required
       if (transactionsGroupedByCategories[category]) {
-        transactionsGroupedByCategories[category]["transactions"].push(
+        transactionsGroupedByCategories[category].transactions.push(
           transaction
         );
         transactionsGroupedByCategories[category].totalAmount += amount;
@@ -111,7 +111,7 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
   const type = DEBIT_TYPE;
   let componentToRender;
   transactions.filter(isDebitTypeTransaction);
-  let filteredTransactions = getDebitTransactions(transactions);
+  const filteredTransactions = getDebitTransactions(transactions);
   categories =
     type === DEBIT_TYPE
       ? transactionCategories.debit
@@ -132,11 +132,9 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
           <DayTransactionsCard
             title={category}
             transactions={
-              transactionsGroupedByCategories[category]["transactions"]
+              transactionsGroupedByCategories[category].transactions
             }
-            totalAmount={
-              transactionsGroupedByCategories[category]["totalAmount"]
-            }
+            totalAmount={transactionsGroupedByCategories[category].totalAmount}
           />
         </motion.li>
       ));

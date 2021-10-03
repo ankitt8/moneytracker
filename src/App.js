@@ -17,8 +17,9 @@ import {
   faChartBar,
   faSignOutAlt,
   faFilter,
-  faPlus,
+  faPlus
 } from "@fortawesome/free-solid-svg-icons";
+
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
 const UpcomingFeaturePage = lazy(() => import("pages/UpcomingFeaturePage"));

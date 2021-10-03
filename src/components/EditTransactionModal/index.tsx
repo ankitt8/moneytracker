@@ -9,7 +9,6 @@ import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import Input from "@material-ui/core/Input";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Loader from "../Loader";
 import { KeyboardDatePicker } from "@material-ui/pickers";
 import FormLabel from "@material-ui/core/FormLabel";
 import cn from "classnames";
@@ -29,7 +28,7 @@ import {
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
-  url,
+  url
 } from "Constants";
 import {
   deleteTransactionAction,
@@ -38,12 +37,13 @@ import {
   editCashCreditAction,
   editCashDebitAction,
   editTransactionAction,
-  updateStatusAction,
+  updateStatusAction
 } from "actions/actionCreator";
-import { EditTransactionModalProps } from "./interface";
-import styles from "./styles.module.scss";
 import { ReduxStore } from "reducers/interface";
 import { Transaction } from "interfaces/index.interface";
+import { EditTransactionModalProps } from "./interface";
+import styles from "./styles.module.scss";
+import Loader from "../Loader";
 
 const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   }, []);
 
   const handleModeChange = (event: any) => {
-    //For now not changing the mode will do it later
+    // For now not changing the mode will do it later
     // setEditedTransaction({...editedTransaction, mode: event.target.value});
   };
   const handleHeadingChange = (event: any) => {
@@ -97,7 +97,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const handleCategoryChange = (category: string) => {
     setEditedTransaction({
       ...editedTransaction,
-      category,
+      category
     });
   };
 
@@ -113,19 +113,17 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           } else {
             dispatch(editCashDebitAction(-1 * amount));
           }
+        } else if (mode === ONLINE_MODE) {
+          dispatch(editBankCreditAction(-1 * amount));
         } else {
-          if (mode === ONLINE_MODE) {
-            dispatch(editBankCreditAction(-1 * amount));
-          } else {
-            dispatch(editCashCreditAction(-1 * amount));
-          }
+          dispatch(editCashCreditAction(-1 * amount));
         }
         dispatch(deleteTransactionAction(transactionId));
         dispatch(
           updateStatusAction({
             showFeedBack: true,
             msg: DELETE_TRANSACTION_SUCCESS_MSG,
-            severity: SEVERITY_SUCCESS,
+            severity: SEVERITY_SUCCESS
           })
         );
       })
@@ -134,7 +132,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           updateStatusAction({
             showFeedBack: true,
             msg: DELETE_TRANSACTION_FAIL_ERROR,
-            severity: SEVERITY_ERROR,
+            severity: SEVERITY_ERROR
           })
         );
         console.error(error);
@@ -157,7 +155,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
         updateStatusAction({
           showFeedBack: true,
           msg,
-          severity: SEVERITY_WARNING,
+          severity: SEVERITY_WARNING
         })
       );
       return;
@@ -172,24 +170,22 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
         const { type: editedType, mode: editedMode } = updatedTransactionObject;
         const changedAmount = updatedAmount - transaction.amount;
         if (editedType === DEBIT_TYPE) {
-          //if changedAmount negative implies less spent, increase in balance
+          // if changedAmount negative implies less spent, increase in balance
           if (editedMode === CASH_MODE) {
             dispatch(editCashDebitAction(changedAmount));
           } else if (editedMode === ONLINE_MODE) {
             dispatch(editBankDebitAction(changedAmount));
           }
-        } else {
-          if (editedMode === CASH_MODE) {
-            dispatch(editCashCreditAction(changedAmount));
-          } else if (editedMode === ONLINE_MODE) {
-            dispatch(editBankCreditAction(changedAmount));
-          }
+        } else if (editedMode === CASH_MODE) {
+          dispatch(editCashCreditAction(changedAmount));
+        } else if (editedMode === ONLINE_MODE) {
+          dispatch(editBankCreditAction(changedAmount));
         }
         dispatch(
           updateStatusAction({
             showFeedBack: true,
             msg: EDIT_TRANSACTION_SUCCESS_MSG,
-            severity: SEVERITY_SUCCESS,
+            severity: SEVERITY_SUCCESS
           })
         );
       })
@@ -199,7 +195,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           updateStatusAction({
             showFeedBack: true,
             msg: EDIT_TRANSACTION_FAIL_ERROR,
-            severity: SEVERITY_ERROR,
+            severity: SEVERITY_ERROR
           })
         );
       })
@@ -208,7 +204,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
 
   return (
     <Dialog
-      maxWidth={"sm"}
+      maxWidth="sm"
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
@@ -324,7 +320,7 @@ async function deleteTransactionDB(transactionId: string) {
   const response = await fetch(
     `${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`,
     {
-      method: "POST",
+      method: "POST"
     }
   );
   return await response.json();
@@ -339,9 +335,9 @@ async function editTransactionDB(
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify(updatedTransaction),
+      body: JSON.stringify(updatedTransaction)
     }
   );
   const updatedTransactionObject = await updatedTransactionResponse.json();

@@ -2,20 +2,20 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addTransactionCategory,
-  updateStatusAction,
+  updateStatusAction
 } from "actions/actionCreator";
 import {
   ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
   INVALID_CATEGORY_WARNING,
   SEVERITY_SUCCESS,
-  SEVERITY_WARNING,
+  SEVERITY_WARNING
 } from "Constants";
-import { AddCategoryProps } from "./interface";
 import Loader from "components/Loader";
 
-import styles from "./styles.module.scss";
 import { ReduxStore } from "reducers/interface";
 import { addTransactionCategoryToDB } from "api-services/api.service";
+import styles from "./styles.module.scss";
+import { AddCategoryProps } from "./interface";
 
 const AddCategory = ({ title, type }: AddCategoryProps) => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const AddCategory = ({ title, type }: AddCategoryProps) => {
         updateStatusAction({
           showFeedBack: true,
           msg: INVALID_CATEGORY_WARNING,
-          severity: SEVERITY_WARNING,
+          severity: SEVERITY_WARNING
         })
       );
       return;
@@ -47,7 +47,7 @@ const AddCategory = ({ title, type }: AddCategoryProps) => {
             updateStatusAction({
               showFeedBack: true,
               msg: ADD_TRANSACTION_CATEGORY_SUCCESS_MSG,
-              severity: SEVERITY_SUCCESS,
+              severity: SEVERITY_SUCCESS
             })
           );
         }

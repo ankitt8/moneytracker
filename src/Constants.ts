@@ -16,8 +16,8 @@ const dev = {
     API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY:
       "http://localhost:8080/api/delete-debit-transaction-category",
     API_URL_GET_TRANSACTION_CATEGORIES:
-      "http://localhost:8080/api/get-transaction-categories",
-  },
+      "http://localhost:8080/api/get-transaction-categories"
+  }
 };
 
 const prod = {
@@ -42,8 +42,8 @@ const prod = {
     API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY:
       "https://moneytrackerbackend.herokuapp.com/api/delete-debit-transaction-category",
     API_URL_GET_TRANSACTION_CATEGORIES:
-      "https://moneytrackerbackend.herokuapp.com/api/get-transaction-categories",
-  },
+      "https://moneytrackerbackend.herokuapp.com/api/get-transaction-categories"
+  }
 };
 
 export const url = process.env.NODE_ENV === `development` ? dev.url : prod.url;
@@ -56,7 +56,7 @@ export const ROUTES = {
   BANK: "/bank",
   INVESTMENT: "/investment",
   FOOD_TRACKER: "/food-tracker",
-  BUDGET: "/budget",
+  BUDGET: "/budget"
 };
 
 export const SEVERITY_SUCCESS = "success";

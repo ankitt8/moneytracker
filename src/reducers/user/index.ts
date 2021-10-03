@@ -3,7 +3,7 @@ import { UserStoreInitialState } from "./interface";
 
 const initialState: UserStoreInitialState = {
   userId: "",
-  username: "",
+  username: ""
 };
 const user = (
   state: UserStoreInitialState = initialState,
@@ -15,7 +15,7 @@ const user = (
       return {
         ...state,
         userId,
-        username,
+        username
       };
     }
     default:

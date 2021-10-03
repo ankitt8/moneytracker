@@ -4,16 +4,15 @@ import {
   editBankCreditAction,
   editBankDebitAction,
   editCashCreditAction,
-  editCashDebitAction,
+  editCashDebitAction
 } from "actions/actionCreator";
 import { getNoOfDaysCurrentMonth, isDebitTypeTransaction } from "helper";
 import { Transaction } from "interfaces/index.interface";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { ReduxStore } from "reducers/interface";
+import { CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, CASH_MODE } from "Constants";
 import CreditDebitSummary from "./CreditDebitSummary";
 import styles from "./styles.module.scss";
-import { CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, CASH_MODE } from "Constants";
 
 const isCreditTypeTransaction = (transaction: Transaction) =>
   transaction.type === CREDIT_TYPE;

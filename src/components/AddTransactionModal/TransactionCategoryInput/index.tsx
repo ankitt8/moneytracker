@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import styles from "./styles.module.scss";
 import cn from "classnames";
-import { TransactionCategoryInputProps } from "./interface";
 import { ROUTES } from "Constants";
+import styles from "./styles.module.scss";
+import { TransactionCategoryInputProps } from "./interface";
 
 /*
   TransactionCategoryInput Component is rendered in AddTransactionModal
@@ -13,7 +13,7 @@ import { ROUTES } from "Constants";
 const TransactionCategoryInput = ({
   categories,
   categorySelected,
-  handleCategoryChange,
+  handleCategoryChange
 }: TransactionCategoryInputProps) => {
   return (
     <>
@@ -28,7 +28,7 @@ const TransactionCategoryInput = ({
               key={category}
               className={cn(styles.transactionCategory, {
                 [styles.transactionCategorySelected]:
-                  category === categorySelected,
+                  category === categorySelected
               })}
               onClick={() => handleCategoryChange(category)}
             >

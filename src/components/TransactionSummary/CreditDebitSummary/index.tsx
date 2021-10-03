@@ -5,7 +5,7 @@ import { CreditDebitSummaryProps } from "./interface";
 const CreditDebitSummary = ({
   title,
   creditAmount,
-  debitAmount,
+  debitAmount
 }: CreditDebitSummaryProps) => {
   return (
     <>

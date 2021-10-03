@@ -26,7 +26,7 @@ const Login = () => {
   const [signupLoader, setSignUpLoader] = useState(false);
   const handleSignIn = (e: any) => {
     e.preventDefault();
-    let error = singInValidate(username, password);
+    const error = singInValidate(username, password);
     if (error) {
       setError(error);
       return;
@@ -50,7 +50,7 @@ const Login = () => {
   };
   const handleSignUp = (e: any) => {
     e.preventDefault();
-    let error = singUpValidate(username, password);
+    const error = singUpValidate(username, password);
     if (error) {
       setError(error);
       return;
@@ -99,11 +99,7 @@ const Login = () => {
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <div
-            onClick={() =>
-              setPasswordVisible(() => (passwordVisible ? false : true))
-            }
-          >
+          <div onClick={() => setPasswordVisible(() => !passwordVisible)}>
             {passwordVisible ? eyeOpen : eyeClosed}
           </div>
         </div>
@@ -149,9 +145,9 @@ async function signup(user: UserObject) {
   const res = await fetch(url.API_URL_SIGNUP, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(user)
   });
   return await res.json();
 }
@@ -160,9 +156,9 @@ async function signin(user: UserObject) {
   const res = await fetch(url.API_URL_SIGNIN, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(user)
   });
   return await res.json();
 }

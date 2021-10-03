@@ -16,49 +16,46 @@ import { makeStyles } from "@material-ui/core/styles";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import PaymentIcon from "@material-ui/icons/Payment";
 import FastfoodIcon from "@material-ui/icons/Fastfood";
-import { IDrawerItem } from "./interface";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { useHistory } from "react-router-dom";
-import { HeaderProps } from "./interface";
+import { ROUTES } from "Constants";
+import { IDrawerItem, HeaderProps } from "./interface";
 
 import styles from "./styles.module.scss";
-
-import { ROUTES } from "Constants";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
+    display: "flex"
   },
   drawer: {
     [theme.breakpoints.up("md")]: {
       width: drawerWidth,
-      flexShrink: 0,
-    },
+      flexShrink: 0
+    }
   },
   appBar: {
     [theme.breakpoints.up("md")]: {
       width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
+      marginLeft: drawerWidth
+    }
   },
   menuButton: {
     marginRight: theme.spacing(2),
     [theme.breakpoints.up("md")]: {
-      display: "none",
-    },
+      display: "none"
+    }
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth,
+    width: drawerWidth
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
-  },
+    padding: theme.spacing(3)
+  }
 }));
 
 const Header = ({ username, children }: HeaderProps) => {
@@ -160,10 +157,10 @@ const Header = ({ username, children }: HeaderProps) => {
             open={mobileOpen}
             onClose={handleDrawerToggle}
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true // Better open performance on mobile.
             }}
           >
             {drawer}
@@ -172,7 +169,7 @@ const Header = ({ username, children }: HeaderProps) => {
         <Hidden smDown implementation="css">
           <Drawer
             classes={{
-              paper: classes.drawerPaper,
+              paper: classes.drawerPaper
             }}
             variant="permanent"
             open
@@ -192,38 +189,38 @@ const drawerItemList = [
   {
     text: "Home",
     icon: <FontAwesomeIcon icon="home" size="lg" />,
-    url: ROUTES.HOME,
+    url: ROUTES.HOME
   },
   {
     text: "Analysis",
     icon: <FontAwesomeIcon icon="chart-bar" size="lg" />,
-    url: ROUTES.SPEND_ANALYSIS,
+    url: ROUTES.SPEND_ANALYSIS
   },
   {
     text: "Categories",
     icon: <FontAwesomeIcon icon="filter" size="lg" />,
-    url: ROUTES.TRANSACTION_CATEGORIES,
+    url: ROUTES.TRANSACTION_CATEGORIES
   },
   {
     text: "Bank Accounts",
     icon: <AccountBalanceIcon />,
-    url: ROUTES.BANK,
+    url: ROUTES.BANK
   },
   {
     text: "Investments",
     icon: <PaymentIcon />,
-    url: ROUTES.INVESTMENT,
+    url: ROUTES.INVESTMENT
   },
   {
     text: "Budget",
     icon: <PaymentIcon />,
-    url: ROUTES.BUDGET,
+    url: ROUTES.BUDGET
   },
   {
     text: "Food Tracker",
     icon: <FastfoodIcon />,
-    url: ROUTES.FOOD_TRACKER,
-  },
+    url: ROUTES.FOOD_TRACKER
+  }
 ];
 const DrawerItem = ({ text, icon, handleClick }: IDrawerItem) => (
   <ListItem button key={text} onClick={handleClick}>

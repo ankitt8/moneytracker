@@ -8,23 +8,23 @@ import user from "./user";
 const rootPersistConfig = {
   key: "root",
   storage,
-  whitelist: [],
+  whitelist: []
 };
 
 const transactionsPersistConfig = {
   key: "transactions",
-  storage,
+  storage
   // whitelist: ['categories']
 };
 const userPersistConfig = {
   key: "user",
-  storage,
+  storage
 };
 
 const rootReducer = combineReducers({
   transactions: persistReducer(transactionsPersistConfig, transactions),
   // transactions,
-  user: persistReducer(userPersistConfig, user),
+  user: persistReducer(userPersistConfig, user)
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);

@@ -3,9 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import Dialog from "@material-ui/core/Dialog";
 import Loader from "components/Loader";
-import TransactionCategoryInput from "./TransactionCategoryInput";
-import { AddTransaction, AddTransactionModalProps } from "./interface";
-import styles from "./styles.module.scss";
 
 import {
   addTransactionAction,
@@ -14,7 +11,7 @@ import {
   editCashCreditAction,
   editCashDebitAction,
   getTransactionCategories,
-  updateStatusAction,
+  updateStatusAction
 } from "actions/actionCreator";
 
 import {
@@ -29,21 +26,24 @@ import {
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
-  SEVERITY_WARNING,
+  SEVERITY_WARNING
 } from "Constants";
 
 import {
   addTransactionDB,
   getTransactionCategoriesFromDB,
-  getTransactionsFromDB,
+  getTransactionsFromDB
 } from "api-services/api.service";
 import { ReduxStore } from "reducers/interface";
 import useFetchData from "customHooks/useFetchData";
 import { FETCH_STATES } from "reducers/DataReducer";
+import styles from "./styles.module.scss";
+import { AddTransaction, AddTransactionModalProps } from "./interface";
+import TransactionCategoryInput from "./TransactionCategoryInput";
 
 const AddTransactionModal = ({
   userId,
-  handleClose,
+  handleClose
 }: AddTransactionModalProps) => {
   const dispatch = useDispatch();
   const [heading, setHeading] = useState("");
@@ -112,7 +112,7 @@ const AddTransactionModal = ({
         updateStatusAction({
           showFeedBack: true,
           msg,
-          severity: SEVERITY_WARNING,
+          severity: SEVERITY_WARNING
         })
       );
       return;
@@ -125,7 +125,7 @@ const AddTransactionModal = ({
       date: new Date(date),
       mode,
       type,
-      category,
+      category
     };
     try {
       const transactionObjectStored = await addTransactionDB(transaction);
@@ -137,18 +137,16 @@ const AddTransactionModal = ({
         } else if (mode === ONLINE_MODE) {
           dispatch(editBankDebitAction(amount));
         }
-      } else {
-        if (mode === CASH_MODE) {
-          dispatch(editCashCreditAction(amount));
-        } else if (mode === ONLINE_MODE) {
-          dispatch(editBankCreditAction(amount));
-        }
+      } else if (mode === CASH_MODE) {
+        dispatch(editCashCreditAction(amount));
+      } else if (mode === ONLINE_MODE) {
+        dispatch(editBankCreditAction(amount));
       }
       dispatch(
         updateStatusAction({
           showFeedBack: true,
           msg: ADD_TRANSACTION_SUCCESS_MSG,
-          severity: SEVERITY_SUCCESS,
+          severity: SEVERITY_SUCCESS
         })
       );
     } catch (error) {
@@ -157,7 +155,7 @@ const AddTransactionModal = ({
         updateStatusAction({
           showFeedBack: true,
           msg: ADD_TRANSACTION_FAIL_ERROR,
-          severity: SEVERITY_ERROR,
+          severity: SEVERITY_ERROR
         })
       );
     } finally {
@@ -166,8 +164,8 @@ const AddTransactionModal = ({
   };
   return (
     <Dialog
-      maxWidth={"sm"}
-      open={true}
+      maxWidth="sm"
+      open
       // if I add transition and change the categories then whole modal appears again from bottom
       // TransitionComponent={Transition}
       onClose={handleClose}
@@ -290,7 +288,7 @@ function constructTodayDate(): string {
     const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
     return str + result;
   };
-  const appendSeperator = (str: string) => str + "-";
+  const appendSeperator = (str: string) => `${str}-`;
   const appendDate = (str: string) => {
     const date = todayDate.getDate();
     const result = date < 10 ? `0${date}` : date.toString();

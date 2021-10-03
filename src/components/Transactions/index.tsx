@@ -7,11 +7,11 @@ import { getNoOfDaysCurrentMonth } from "helper";
 import { getTransactionsFromDB } from "api-services/api.service";
 import { Transaction } from "interfaces/index.interface";
 import { ReduxStore } from "reducers/interface";
-import styles from "./styles.module.scss";
-import { TransactionsProps } from "./interface";
 import useFetchData from "customHooks/useFetchData";
 import { FETCH_STATES } from "reducers/DataReducer";
 import { getTransactionsAction } from "actions/actionCreator";
+import { TransactionsProps } from "./interface";
+import styles from "./styles.module.scss";
 
 const Transactions = ({ userId }: TransactionsProps) => {
   const transactions = useSelector(

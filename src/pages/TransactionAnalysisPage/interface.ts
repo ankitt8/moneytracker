@@ -7,8 +7,8 @@ export interface TransactionAnalysisPageProps {
 export type TransactionsGroupedByCategories = Record<
   string,
   {
-    transactions: Transaction[];
-    totalAmount: number;
+    transactions: Transaction[],
+    totalAmount: number
   }
 >;
 

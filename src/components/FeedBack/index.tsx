@@ -4,8 +4,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { OFFLINE_ERROR, SEVERITY_ERROR } from "Constants";
 import { updateStatusAction } from "actions/actionCreator";
-import styles from "./style.module.scss";
 import { ReduxStore } from "reducers/interface";
+import styles from "./style.module.scss";
 
 function Alert(props: any) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -43,7 +43,7 @@ export default function SnackBarFeedback() {
       updateStatusAction({
         showFeedBack: null,
         msg: null,
-        severity: null,
+        severity: null
       })
     );
   }

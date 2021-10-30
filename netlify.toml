@@ -1,0 +1,11 @@
+[[headers]]
+  # Define which paths this specific [[headers]] block will cover.
+  for = "/rupee.png"
+
+  [headers.values]
+
+    # Multi-value headers are expressed with multi-line strings.
+	cache-control = '''
+	max-age=31104000,
+	public,
+	must-revalidate'''

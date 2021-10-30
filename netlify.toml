@@ -7,7 +7,7 @@
 	max-age=31104000,
 	public,
 	must-revalidate'''
-
+[[headers]]
   for = "/manifest.json"
     [headers.values]
     # Multi-value headers are expressed with multi-line strings.

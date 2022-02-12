@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
-import Loader from "components/Loader";
-import reportWebVitals from "./reportWebVitals";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import storeCreator from "./reducers/index";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
+import Loader from 'components/Loader';
+import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import storeCreator from './reducers/index';
 const { store, persistor } = storeCreator();
 export default store;
 
@@ -21,7 +21,7 @@ ReactDOM.render(
       </MuiPickersUtilsProvider>
     </PersistGate>
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change

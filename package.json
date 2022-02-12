@@ -12,29 +12,28 @@
     "@material-ui/lab": "^4.0.0-alpha.56",
     "@material-ui/pickers": "^3.2.10",
     "@reduxjs/toolkit": "^1.5.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/classnames": "^2.2.11",
-    "@types/react-redux": "^7.1.16",
-    "@types/react-router-dom": "^5.1.7",
-    "@types/styled-components": "^5.1.7",
-    "classnames": "^2.2.6",
+    "@svgr/webpack": "5.5.0",
+    "bfj": "^7.0.2",
     "date-fns": "^2.16.1",
+    "dotenv": "8.2.0",
+    "dotenv-expand": "5.1.0",
     "firebase": "^8.6.8",
     "framer-motion": "^4.0.0",
+    "fs-extra": "^9.0.1",
+    "html-webpack-plugin": "^5.5.0",
+    "identity-obj-proxy": "3.0.0",
+    "prompts": "2.4.0",
     "react": "^17.0.1",
+    "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
     "redux": "^4.0.5",
     "redux-devtools": "^3.7.0",
     "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
-    "sass": "^1.32.8",
+    "resolve": "1.18.1",
     "styled-components": "^5.2.1",
-    "typescript": "^4.1.3",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.3",
     "workbox-broadcast-update": "^5.1.3",
@@ -47,13 +46,13 @@
     "workbox-range-requests": "^5.1.3",
     "workbox-routing": "^5.1.3",
     "workbox-strategies": "^5.1.3",
-    "workbox-streams": "^5.1.3"
+    "workbox-streams": "^5.1.3",
+    "workbox-webpack-plugin": "^6.4.2"
   },
   "scripts": {
-    "start": "ESLINT_NO_DEV_ERRORS='true' react-scripts start",
-    "build": "DISABLE_ESLINT_PLUGIN='true' GENERATE_SOURCEMAP=false react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "ESLINT_NO_DEV_ERRORS='true' node scripts/start.js",
+    "build": "DISABLE_ESLINT_PLUGIN='true' GENERATE_SOURCEMAP=false node scripts/build.js",
+    "test": "node scripts/test.js",
     "_lint": "eslint --config ./.eslintrc.json --ext js --ext jsx --ext tsx --ext ts",
     "lint": "npm run _lint -- ./src/",
     "lint:fix": "npm run _lint -- --fix ./src/",
@@ -85,18 +84,128 @@
     ]
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.32.0",
-    "@typescript-eslint/parser": "^4.32.0",
-    "eslint": "^7.32.0",
+    "@babel/core": "7.12.3",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/classnames": "^2.2.11",
+    "@types/react-redux": "^7.1.16",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/styled-components": "^5.1.7",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^26.6.0",
+    "babel-loader": "8.1.0",
+    "babel-plugin-named-asset-import": "^0.3.7",
+    "babel-preset-react-app": "^10.0.0",
+    "camelcase": "^6.1.0",
+    "case-sensitive-paths-webpack-plugin": "^2.4.0",
+    "classnames": "^2.2.6",
+    "css-loader": "4.3.0",
+    "css-minimizer-webpack-plugin": "^3.4.1",
+    "eslint": "^8.9.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-import": "^2.24.2",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-config-react-app": "^6.0.0",
+    "eslint-plugin-flowtype": "^5.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.1.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testing-library": "^3.9.2",
+    "eslint-webpack-plugin": "^3.1.1",
+    "file-loader": "6.1.1",
     "husky": "^7.0.1",
+    "jest": "26.6.0",
+    "jest-circus": "26.6.0",
+    "jest-resolve": "26.6.0",
+    "jest-watch-typeahead": "0.6.1",
     "lint-staged": "^11.1.1",
-    "prettier": "^2.4.1"
+    "mini-css-extract-plugin": "^2.5.3",
+    "pnp-webpack-plugin": "1.6.4",
+    "postcss-flexbugs-fixes": "4.2.1",
+    "postcss-loader": "3.0.0",
+    "postcss-normalize": "8.0.1",
+    "postcss-preset-env": "6.7.0",
+    "postcss-safe-parser": "5.0.2",
+    "prettier": "^2.4.1",
+    "react-dev-utils": "^11.0.3",
+    "react-refresh": "^0.11.0",
+    "resolve-url-loader": "^3.1.2",
+    "sass": "^1.32.8",
+    "sass-loader": "^10.0.5",
+    "semver": "7.3.2",
+    "speed-measure-webpack-plugin": "^1.5.0",
+    "style-loader": "1.3.0",
+    "terser-webpack-plugin": "^5.3.1",
+    "ts-pnp": "1.2.0",
+    "typescript": "^4.1.3",
+    "url-loader": "4.1.1",
+    "webpack": "^5.68.0",
+    "webpack-dev-server": "3.11.1",
+    "webpack-manifest-plugin": "^4.1.1"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/src/setupTests.js"
+    ],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jsdom",
+    "testRunner": "/Users/apple/personal/money_tracker_frontend/node_modules/jest-circus/runner.js",
+    "transform": {
+      "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|mjs|cjs|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|mjs|cjs|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "modulePaths": [
+      "/Users/apple/personal/money_tracker_frontend/src"
+    ],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ],
+    "resetMocks": true
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
   }
 }

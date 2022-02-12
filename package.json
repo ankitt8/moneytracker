@@ -29,10 +29,8 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "ESLINT_NO_DEV_ERRORS='true' react-scripts start",
-    "build": "DISABLE_ESLINT_PLUGIN='true' GENERATE_SOURCEMAP=false react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "webpack serve --config webpack/webpack.config.js --env env=dev --open",
+    "build": "webpack --config webpack/webpack.config.js --env env=prod",
     "_lint": "eslint --config ./.eslintrc.json --ext js --ext jsx --ext tsx --ext ts",
     "lint": "npm run _lint -- ./src/",
     "lint:fix": "npm run _lint -- --fix ./src/",
@@ -77,6 +75,7 @@
     "@types/styled-components": "^5.1.7",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
+    "css-loader": "^6.6.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -85,8 +84,13 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.1",
     "lint-staged": "^11.1.1",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.68.0",
+    "webpack-dev-server": "^4.7.4",
+    "webpack-merge": "^5.8.0"
   }
 }

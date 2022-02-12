@@ -5,6 +5,7 @@
 	"parser": "babel",
 	"semi": true,
 	"htmlWhitespaceSensitivity": "css",
+  "singleQuote": true,
 	"quoteProps": "as-needed",
   "overrides": [
     {

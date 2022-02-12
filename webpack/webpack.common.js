@@ -1,16 +1,14 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, "..", "./src/index.tsx"),
+  entry: path.resolve(__dirname, '..', './src/index.tsx'),
   output: {
-    filename: "[name].js",
-    path: path.resolve(__dirname, "..", "./build")
+    filename: '[name].js',
+    path: path.resolve(__dirname, '..', './build')
   },
   resolve: {
-    extensions: [
-      "tsx", ".ts", ".jsx", ".js"
-    ]
+    extensions: ['tsx', '.ts', '.jsx', '.js']
   },
   module: {
     rules: [

@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const zlib = require('zlib');
 let mode = 'development';
 if (process.env.NODE_ENV === 'production') {
@@ -14,8 +15,9 @@ module.exports = {
     devtool: "cheap-module-source-map",
     devServer: {
       hot: true,
-      open: true,
-      port: 3000
+      port: 3000,
+      liveReload: false,
+      compress: false
     },
   },
   output: {
@@ -69,7 +71,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './public/index.html')
     }),
-    new CompressionPlugin({
+    mode === 'production' && new CompressionPlugin({
       filename: "[path][base].br",
       algorithm: "brotliCompress",
       test: /\.(js|css|html|svg)$/,
@@ -78,6 +80,7 @@ module.exports = {
           [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
         },
       },
-    })
-  ]
+    }),
+    mode === 'development' && new ReactRefreshWebpackPlugin()
+  ].filter(Boolean)
 };

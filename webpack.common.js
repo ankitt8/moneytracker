@@ -1,23 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-let mode = 'development';
-if (process.env.NODE_ENV === 'production') {
-  mode = 'production';
-}
+
 
 module.exports = {
-  mode: mode,
   entry: path.resolve(__dirname, './src/index.tsx'),
-  ...(mode === 'development') && {
-    devtool: "cheap-module-source-map",
-    devServer: {
-      hot: true,
-      port: 3000,
-      liveReload: false,
-      compress: false
-    },
-  },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, './build')
@@ -68,7 +54,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, './public/index.html')
-    }),
-    mode === 'development' && new ReactRefreshWebpackPlugin()
-  ].filter(Boolean)
+    })
+  ]
 };

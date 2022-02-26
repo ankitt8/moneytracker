@@ -85,5 +85,8 @@
     "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
       "prettier --write"
     ]
+  },
+  "engines": {
+    "node": ">=12.20.0 <=14"
   }
 }

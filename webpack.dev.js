@@ -10,7 +10,8 @@ module.exports = merge(common, {
     hot: true,
     port: 3000,
     liveReload: false,
-    compress: false
+    compress: false,
+    historyApiFallback: true
   },
   plugins: [
     new ReactRefreshWebpackPlugin(),

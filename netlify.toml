@@ -8,7 +8,6 @@
 	max-age=31104000,
 	public,
 	must-revalidate'''
-
 # Cache header for manifest.json file
 [[headers]]
   for = "/manifest.json"
@@ -18,7 +17,6 @@
     max-age=31104000,
     public,
     must-revalidate'''
-
 # Redirect all 404s to index.html
 [[redirects]]
   /* /index.html 404

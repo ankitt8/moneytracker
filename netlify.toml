@@ -19,6 +19,9 @@
     public,
     must-revalidate'''
 
-# Redirect all 404s to index.html
-# [[redirects]]
-#  /* /index.html 404
+# Redirect all requests to index.html
+[[redirects]]
+  from = '/*'
+  to = '/index.html'
+  status = 200
+  force = true

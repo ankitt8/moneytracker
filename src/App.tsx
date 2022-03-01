@@ -13,10 +13,10 @@ import {
   faFilter,
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
+import LoginPage from 'pages/LoginPage';
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
 const HomePage = lazy(() => import('pages/HomePage'));
-const LoginPage = lazy(() => import('pages/LoginPage'));
 const UpcomingFeaturePage = lazy(() => import('pages/UpcomingFeaturePage'));
 const TransactionAnalysisPage = lazy(
   () => import('pages/TransactionAnalysisPage')

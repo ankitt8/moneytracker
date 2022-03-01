@@ -19,6 +19,6 @@
     public,
     must-revalidate'''
 
-# Redirect all 404s to /index.html
+# Redirect all 404s to index.html
 [[redirects]]
   /* /index.html 404

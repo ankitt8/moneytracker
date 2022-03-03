@@ -1,17 +1,17 @@
-import { useSelector } from "react-redux";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import { motion } from "framer-motion";
-import { DEBIT_TYPE, GET_TRANSACTIONS_FAILURE_MSG } from "Constants";
-import DayTransactionsCard from "components/TransactionCardWrapper";
-import { getNoOfDaysCurrentMonth } from "helper";
-import { getTransactionsFromDB } from "api-services/api.service";
-import { Transaction } from "interfaces/index.interface";
-import { ReduxStore } from "reducers/interface";
-import styles from "./styles.module.scss";
-import { TransactionsProps } from "./interface";
-import useFetchData from "customHooks/useFetchData";
-import { FETCH_STATES } from "reducers/DataReducer";
-import { getTransactionsAction } from "actions/actionCreator";
+import { useSelector } from 'react-redux';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import { motion } from 'framer-motion';
+import { DEBIT_TYPE, GET_TRANSACTIONS_FAILURE_MSG } from 'Constants';
+import DayTransactionsCard from 'components/TransactionCardWrapper';
+import { getNoOfDaysCurrentMonth } from 'helper';
+import { getTransactionsFromDB } from 'api-services/api.service';
+import { Transaction } from 'interfaces/index.interface';
+import { ReduxStore } from 'reducers/interface';
+import styles from './styles.module.scss';
+import { TransactionsProps } from './interface';
+import useFetchData from 'customHooks/useFetchData';
+import { FETCH_STATES } from 'reducers/DataReducer';
+import { getTransactionsAction } from 'actions/actionCreator';
 
 const Transactions = ({ userId }: TransactionsProps) => {
   const transactions = useSelector(
@@ -58,7 +58,11 @@ function createIndividualDayTransactions2DArray(transactions: Transaction[]) {
     individualDayTransactions2DArray[day] = [];
   }
   transactions.forEach((transaction) => {
-    const dayOfMonth = new Date(transaction.date).getDate();
+    const transactionDate = new Date(transaction.date);
+    const isTransactionDateInCurrentYear =
+      transactionDate.getFullYear() === new Date().getFullYear();
+    if (!isTransactionDateInCurrentYear) return;
+    const dayOfMonth = transactionDate.getDate();
     individualDayTransactions2DArray[dayOfMonth].push(transaction);
   });
   return individualDayTransactions2DArray;

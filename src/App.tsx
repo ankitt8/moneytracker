@@ -45,7 +45,6 @@ function App() {
           <Route path={ROUTES.TRANSACTION_CATEGORIES}>
             <div>
               <TransactionCategoriesPage userId={userId} />
-              <SnackBarFeedback />
             </div>
           </Route>
           <Route path={ROUTES.BANK}>
@@ -60,7 +59,6 @@ function App() {
           <Route path={ROUTES.SPEND_ANALYSIS}>
             <>
               <TransactionAnalysisPage userId={userId} />
-              <SnackBarFeedback />
             </>
           </Route>
           <Route path={ROUTES.FOOD_TRACKER}>
@@ -71,6 +69,7 @@ function App() {
           </Route>
         </Switch>
         <FixedBottomNavBar userId={userId} />
+        <SnackBarFeedback />
       </Header>
     </Router>
   );

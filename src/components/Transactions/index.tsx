@@ -110,7 +110,6 @@ export const checkTransactionsChanged = (
   if (recentTransactions.length === storeTransactions.length) {
     for (let i = 0; i < storeTransactions.length; i += 1) {
       for (const key of Object.keys(storeTransactions[i])) {
-        // @ts-ignore
         if (storeTransactions[i][key] !== recentTransactions[i][key]) {
           return true;
         }

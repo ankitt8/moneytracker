@@ -1,4 +1,4 @@
-import React, { useState, lazy } from 'react';
+import { memo, useState, lazy } from 'react';
 
 import { CREDIT_TYPE } from 'Constants';
 import cn from 'classnames';
@@ -30,4 +30,4 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
   );
 };
 
-export default React.memo(TransactionCard);
+export default memo(TransactionCard);

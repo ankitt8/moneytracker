@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -47,7 +47,7 @@ import { Transaction } from 'interfaces/index.interface';
 
 const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const dispatch = useDispatch();
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = useState(true);
   const [editedTransaction, setEditedTransaction] = useState(transaction);
   const [editLoading, setEditLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);

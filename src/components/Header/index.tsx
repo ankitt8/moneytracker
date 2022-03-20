@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = ({ username, children }: HeaderProps) => {
   const classes = useStyles();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   const handleDrawerToggle = () => setMobileOpen((mobileOpen) => !mobileOpen);
 

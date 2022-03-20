@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   CREDIT_TYPE,
   DEBIT_TYPE,

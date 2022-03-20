@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import { useReducer, useEffect } from 'react';
 import { updateStatusAction } from 'actions/actionCreator';
 import { SEVERITY_ERROR } from 'Constants';
 import { useDispatch } from 'react-redux';

@@ -1,4 +1,3 @@
-import React from 'react';
 import Transactions from 'components/Transactions';
 import TransactionSummary from 'components/TransactionSummary';
 const HomePage = ({ userId }: { userId: string }) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import TransactionCard from 'components/TransactionCard';
 import { TransactionCardWrapperProps } from './interface';
 import styles from './styles.module.scss';
@@ -39,4 +39,4 @@ const TransactionCardWrapper = ({
   );
 };
 
-export default React.memo(TransactionCardWrapper, areEqual);
+export default memo(TransactionCardWrapper, areEqual);

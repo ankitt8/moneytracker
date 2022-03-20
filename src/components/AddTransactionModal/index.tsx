@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
@@ -51,8 +51,8 @@ const AddTransactionModal = ({
   const [date, setDate] = useState(constructTodayDate());
   const [category, setCategory] = useState('');
   const [loadingState, setLoadingState] = useState(false);
-  const [mode, setMode] = React.useState(ONLINE_MODE);
-  const [type, setType] = React.useState(DEBIT_TYPE);
+  const [mode, setMode] = useState(ONLINE_MODE);
+  const [type, setType] = useState(DEBIT_TYPE);
   const state = useFetchData(
     getTransactionCategoriesFromDB,
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,

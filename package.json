@@ -29,7 +29,7 @@
     "dev": "webpack serve --config webpack.dev.js",
     "build": "rm -rf build &&  webpack --config webpack.prod.js",
     "_lint": "eslint './src/**/*.{js,jsx,ts,tsx,json}' --config ./.eslintrc.json",
-    "lint": "yarn lint",
+    "lint": "yarn _lint",
     "lint:fix": "yarn lint -- --fix",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc",
     "prepare": "husky install"

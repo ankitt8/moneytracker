@@ -1,8 +1,8 @@
-import React, { useReducer, useEffect } from "react";
-import { updateStatusAction } from "actions/actionCreator";
-import { SEVERITY_ERROR } from "Constants";
-import { useDispatch } from "react-redux";
-import { dataReducer, initialState, ACTION_TYPES } from "reducers/DataReducer";
+import React, { useReducer, useEffect } from 'react';
+import { updateStatusAction } from 'actions/actionCreator';
+import { SEVERITY_ERROR } from 'Constants';
+import { useDispatch } from 'react-redux';
+import { dataReducer, initialState, ACTION_TYPES } from 'reducers/DataReducer';
 
 /**
  *
@@ -13,9 +13,9 @@ import { dataReducer, initialState, ACTION_TYPES } from "reducers/DataReducer";
  * @returns void
  */
 const useFetchData = (
-  fetchCallback: Function,
+  fetchCallback: (userId: string) => any,
   messageOnRejected: string,
-  actionToDispatchOnResolved: Function,
+  actionToDispatchOnResolved: () => any,
   ...args: string[]
 ) => {
   const dispatch = useDispatch();
@@ -23,23 +23,23 @@ const useFetchData = (
 
   const fetchData = async () => {
     dataReducerDispatch({
-      type: ACTION_TYPES.FETCH_DATA_START,
+      type: ACTION_TYPES.FETCH_DATA_START
     });
     const data = await fetchCallback(...args);
     if (data === null) {
       dataReducerDispatch({
-        type: ACTION_TYPES.FETCH_DATA_REJECTED,
+        type: ACTION_TYPES.FETCH_DATA_REJECTED
       });
       dispatch(
         updateStatusAction({
           showFeedBack: true,
           msg: messageOnRejected,
-          severity: SEVERITY_ERROR,
+          severity: SEVERITY_ERROR
         })
       );
     } else {
       dataReducerDispatch({
-        type: ACTION_TYPES.FETCH_DATA_RESOLVED,
+        type: ACTION_TYPES.FETCH_DATA_RESOLVED
       });
       dispatch(actionToDispatchOnResolved(data));
     }

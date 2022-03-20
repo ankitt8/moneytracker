@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import LinearProgress from "@material-ui/core/LinearProgress";
-import Dialog from "@material-ui/core/Dialog";
-import Loader from "components/Loader";
-import TransactionCategoryInput from "./TransactionCategoryInput";
-import { AddTransaction, AddTransactionModalProps } from "./interface";
-import styles from "./styles.module.scss";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Dialog from '@material-ui/core/Dialog';
+import Loader from 'components/Loader';
+import TransactionCategoryInput from './TransactionCategoryInput';
+import { AddTransaction, AddTransactionModalProps } from './interface';
+import styles from './styles.module.scss';
 
 import {
   addTransactionAction,
@@ -14,8 +14,8 @@ import {
   editCashCreditAction,
   editCashDebitAction,
   getTransactionCategories,
-  updateStatusAction,
-} from "actions/actionCreator";
+  updateStatusAction
+} from 'actions/actionCreator';
 
 import {
   ADD_TRANSACTION_FAIL_ERROR,
@@ -29,27 +29,27 @@ import {
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
-  SEVERITY_WARNING,
-} from "Constants";
+  SEVERITY_WARNING
+} from 'Constants';
 
 import {
   addTransactionDB,
   getTransactionCategoriesFromDB,
-  getTransactionsFromDB,
-} from "api-services/api.service";
-import { ReduxStore } from "reducers/interface";
-import useFetchData from "customHooks/useFetchData";
-import { FETCH_STATES } from "reducers/DataReducer";
+  getTransactionsFromDB
+} from 'api-services/api.service';
+import { ReduxStore } from 'reducers/interface';
+import useFetchData from 'customHooks/useFetchData';
+import { FETCH_STATES } from 'reducers/DataReducer';
 
 const AddTransactionModal = ({
   userId,
-  handleClose,
+  handleClose
 }: AddTransactionModalProps) => {
   const dispatch = useDispatch();
-  const [heading, setHeading] = useState("");
-  const [amount, setAmount] = useState("");
+  const [heading, setHeading] = useState('');
+  const [amount, setAmount] = useState('');
   const [date, setDate] = useState(constructTodayDate());
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState('');
   const [loadingState, setLoadingState] = useState(false);
   const [mode, setMode] = React.useState(ONLINE_MODE);
   const [type, setType] = React.useState(DEBIT_TYPE);
@@ -69,22 +69,22 @@ const AddTransactionModal = ({
 
   useEffect(() => {
     return function setFieldsEmpty() {
-      setHeading("");
-      setAmount("");
+      setHeading('');
+      setAmount('');
       setDate(constructTodayDate());
-      setCategory("");
+      setCategory('');
       setLoadingState(false);
     };
   }, []);
   const isRadioModeChecked = (value: string) => {
-    if (mode === "") return value === ONLINE_MODE;
+    if (mode === '') return value === ONLINE_MODE;
     return mode === value;
   };
   const handleModeChange = (event: any) => {
     setMode(event.target.value);
   };
   const isRadioTypeChecked = (value: string) => {
-    if (type === "") return value === DEBIT_TYPE;
+    if (type === '') return value === DEBIT_TYPE;
     return type === value;
   };
   const handleTypeChange = (event: any) => {
@@ -105,14 +105,14 @@ const AddTransactionModal = ({
   };
   const handleTransactionSubmit = async (event: any) => {
     event.preventDefault();
-    if (amount === "" || parseInt(amount) <= 0 || heading === "") {
+    if (amount === '' || parseInt(amount) <= 0 || heading === '') {
       const msg =
-        heading === "" ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
+        heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
       dispatch(
         updateStatusAction({
           showFeedBack: true,
           msg,
-          severity: SEVERITY_WARNING,
+          severity: SEVERITY_WARNING
         })
       );
       return;
@@ -125,7 +125,7 @@ const AddTransactionModal = ({
       date: new Date(date),
       mode,
       type,
-      category,
+      category
     };
     try {
       const transactionObjectStored = await addTransactionDB(transaction);
@@ -148,7 +148,7 @@ const AddTransactionModal = ({
         updateStatusAction({
           showFeedBack: true,
           msg: ADD_TRANSACTION_SUCCESS_MSG,
-          severity: SEVERITY_SUCCESS,
+          severity: SEVERITY_SUCCESS
         })
       );
     } catch (error) {
@@ -157,7 +157,7 @@ const AddTransactionModal = ({
         updateStatusAction({
           showFeedBack: true,
           msg: ADD_TRANSACTION_FAIL_ERROR,
-          severity: SEVERITY_ERROR,
+          severity: SEVERITY_ERROR
         })
       );
     } finally {
@@ -166,7 +166,7 @@ const AddTransactionModal = ({
   };
   return (
     <Dialog
-      maxWidth={"sm"}
+      maxWidth={'sm'}
       open={true}
       // if I add transition and change the categories then whole modal appears again from bottom
       // TransitionComponent={Transition}
@@ -194,7 +194,7 @@ const AddTransactionModal = ({
                   name="transactionMode"
                   id="bankmode"
                   value={ONLINE_MODE}
-                  checked={isRadioModeChecked("online")}
+                  checked={isRadioModeChecked('online')}
                   onChange={handleModeChange}
                 />
                 <label htmlFor="bankmode">Bank</label>
@@ -205,7 +205,7 @@ const AddTransactionModal = ({
                   name="transactionMode"
                   id="cashmode"
                   value={CASH_MODE}
-                  checked={isRadioModeChecked("cash")}
+                  checked={isRadioModeChecked('cash')}
                   onChange={handleModeChange}
                 />
                 <label htmlFor="cashmode">Cash</label>
@@ -223,7 +223,7 @@ const AddTransactionModal = ({
                   name="transactionType"
                   id="credittype"
                   value={CREDIT_TYPE}
-                  checked={isRadioTypeChecked("credit")}
+                  checked={isRadioTypeChecked('credit')}
                   onChange={handleTypeChange}
                 />
                 <label htmlFor="credittype">Credit</label>
@@ -234,7 +234,7 @@ const AddTransactionModal = ({
                   name="transactionType"
                   id="debittype"
                   value={DEBIT_TYPE}
-                  checked={isRadioTypeChecked("debit")}
+                  checked={isRadioTypeChecked('debit')}
                   onChange={handleTypeChange}
                 />
                 <label htmlFor="debittype">Debit</label>
@@ -290,14 +290,14 @@ function constructTodayDate(): string {
     const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
     return str + result;
   };
-  const appendSeperator = (str: string) => str + "-";
+  const appendSeperator = (str: string) => str + '-';
   const appendDate = (str: string) => {
     const date = todayDate.getDate();
     const result = date < 10 ? `0${date}` : date.toString();
     return str + result;
   };
   const pipe =
-    (...fns: Function[]) =>
+    (...fns: ((str: string) => any)[]) =>
     (x: string) =>
       fns.reduce((currVal, currFunc) => currFunc(currVal), x);
   return pipe(
@@ -306,7 +306,7 @@ function constructTodayDate(): string {
     appendMonth,
     appendSeperator,
     appendDate
-  )("");
+  )('');
 }
 
 export default AddTransactionModal;

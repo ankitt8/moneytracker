@@ -105,14 +105,14 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
-  let categories: string[];
+
   // in future will give filters where based on filter applied type will be choose
 
   const type = DEBIT_TYPE;
   let componentToRender;
   transactions.filter(isDebitTypeTransaction);
   const filteredTransactions = getDebitTransactions(transactions);
-  categories =
+  const categories: string[] =
     type === DEBIT_TYPE
       ? transactionCategories.debit
       : transactionCategories.credit;

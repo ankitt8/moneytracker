@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { PASSWORD_REQUIREMENT, url } from "Constants";
-import { useDispatch } from "react-redux";
-import { newUserLoggedIn } from "actions/actionCreator";
-import Loader from "components/Loader";
+import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { PASSWORD_REQUIREMENT, url } from 'Constants';
+import { useDispatch } from 'react-redux';
+import { newUserLoggedIn } from 'actions/actionCreator';
+import Loader from 'components/Loader';
 
-import styles from "./styles.module.scss";
+import styles from './styles.module.scss';
 
 const eyeOpen = <FontAwesomeIcon icon={faEye} />;
 const eyeClosed = <FontAwesomeIcon icon={faEyeSlash} />;
@@ -18,15 +18,15 @@ interface UserObject {
 
 const Login = () => {
   const dispatch = useDispatch();
-  const [error, setError] = useState("");
-  const [username, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [error, setError] = useState('');
+  const [username, setUserName] = useState('');
+  const [password, setPassword] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [signinLoader, setSigninLoader] = useState(false);
   const [signupLoader, setSignUpLoader] = useState(false);
   const handleSignIn = (e: any) => {
     e.preventDefault();
-    let error = singInValidate(username, password);
+    const error = singInValidate(username, password);
     if (error) {
       setError(error);
       return;
@@ -50,7 +50,7 @@ const Login = () => {
   };
   const handleSignUp = (e: any) => {
     e.preventDefault();
-    let error = singUpValidate(username, password);
+    const error = singUpValidate(username, password);
     if (error) {
       setError(error);
       return;
@@ -92,7 +92,7 @@ const Login = () => {
         <div className={styles.inputWrapper}>
           <input
             className={styles.loginInput}
-            type={passwordVisible ? "text" : "password"}
+            type={passwordVisible ? 'text' : 'password'}
             name="password"
             id="password"
             placeholder="Password"
@@ -132,37 +132,37 @@ const Login = () => {
 const singUpValidate = (userName: string, password: string) => {
   const passwordRegex =
     /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
-  let error = "";
-  if (userName === "") error = "Username can't be empty!";
-  else if (password === "") error = "Password can't be empty!";
-  else if (!passwordRegex.test(password)) error = "Invalid Password!";
+  let error = '';
+  if (userName === '') error = "Username can't be empty!";
+  else if (password === '') error = "Password can't be empty!";
+  else if (!passwordRegex.test(password)) error = 'Invalid Password!';
   return error;
 };
 const singInValidate = (userName: string, password: string) => {
-  let error = "";
-  if (userName === "") error = "Username can't be empty!";
-  else if (password === "") error = "Password can't be empty!";
+  let error = '';
+  if (userName === '') error = "Username can't be empty!";
+  else if (password === '') error = "Password can't be empty!";
   return error;
 };
 
 async function signup(user: UserObject) {
   const res = await fetch(url.API_URL_SIGNUP, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(user)
   });
   return await res.json();
 }
 
 async function signin(user: UserObject) {
   const res = await fetch(url.API_URL_SIGNIN, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(user)
   });
   return await res.json();
 }

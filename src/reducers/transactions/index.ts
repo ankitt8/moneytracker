@@ -13,10 +13,10 @@ import {
   EDIT_TRANSACTION,
   GET_TRANSACTIONS,
   GET_TRANSACTION_CATEGORIES,
-  UPDATE_STATUS,
-} from "actions/actionTypes";
-import { DEBIT_TYPE } from "Constants";
-import { TransactionsStoreInitialState, Action } from "./interface";
+  UPDATE_STATUS
+} from 'actions/actionTypes';
+import { DEBIT_TYPE } from 'Constants';
+import { TransactionsStoreInitialState, Action, Status } from './interface';
 
 const initialState: TransactionsStoreInitialState = {
   transactions: [],
@@ -24,23 +24,23 @@ const initialState: TransactionsStoreInitialState = {
     bank: {
       credit: 0,
       debit: 0,
-      balance: 0,
+      balance: 0
     },
     cash: {
       credit: 0,
       debit: 0,
-      balance: 0,
-    },
+      balance: 0
+    }
   },
   status: {
     showFeedBack: null,
     msg: null,
-    severity: null,
+    severity: null
   },
   categories: {
     credit: [],
-    debit: [],
-  },
+    debit: []
+  }
 };
 
 const transactions = (
@@ -55,26 +55,26 @@ const transactions = (
           bank: {
             credit: 0,
             debit: 0,
-            balance: 0,
+            balance: 0
           },
           cash: {
             credit: 0,
             debit: 0,
-            balance: 0,
-          },
-        },
+            balance: 0
+          }
+        }
       };
     }
     case ADD_TRANSACTION: {
       return {
         ...state,
-        transactions: [...state.transactions, action.payload.transaction],
+        transactions: [...state.transactions, action.payload.transaction]
       };
     }
     case GET_TRANSACTION_CATEGORIES: {
       return {
         ...state,
-        categories: { ...action.payload.transactionCategories },
+        categories: { ...action.payload.transactionCategories }
       };
     }
     case ADD_TRANSACTION_CATEGORY: {
@@ -86,7 +86,7 @@ const transactions = (
       }
       return {
         ...state,
-        categories: { debit, credit },
+        categories: { debit, credit }
       };
     }
     case DELETE_TRANSACTION_CATEGORY: {
@@ -105,13 +105,13 @@ const transactions = (
       }
       return {
         ...state,
-        categories: { ...state.categories, debit, credit },
+        categories: { ...state.categories, debit, credit }
       };
     }
     case GET_TRANSACTIONS: {
       return {
         ...state,
-        transactions: [...action.payload.transactions],
+        transactions: [...action.payload.transactions]
       };
     }
     case EDIT_TRANSACTION: {
@@ -122,7 +122,7 @@ const transactions = (
       transactions[index] = action.payload.updatedTransaction;
       return {
         ...state,
-        transactions: [...transactions],
+        transactions: [...transactions]
       };
     }
     case DELETE_TRANSACTION: {
@@ -134,14 +134,13 @@ const transactions = (
       transactions.splice(index, 1);
       return {
         ...state,
-        transactions: [...transactions],
+        transactions: [...transactions]
       };
     }
     case UPDATE_STATUS: {
       return {
         ...state,
-        // @ts-ignore
-        status: action.payload,
+        status: action.payload as Status
       };
     }
     case EDIT_BANK_CREDIT: {
@@ -151,8 +150,8 @@ const transactions = (
         ...state,
         transactionSummary: {
           ...state.transactionSummary,
-          bank: { ...state.transactionSummary.bank, credit },
-        },
+          bank: { ...state.transactionSummary.bank, credit }
+        }
       };
     }
     case EDIT_BANK_DEBIT: {
@@ -161,8 +160,8 @@ const transactions = (
         ...state,
         transactionSummary: {
           ...state.transactionSummary,
-          bank: { ...state.transactionSummary.bank, debit },
-        },
+          bank: { ...state.transactionSummary.bank, debit }
+        }
       };
     }
     case EDIT_BANK_BALANCE: {
@@ -172,8 +171,8 @@ const transactions = (
         ...state,
         transactionSummary: {
           ...state.transactionSummary,
-          bank: { ...state.transactionSummary.bank, balance },
-        },
+          bank: { ...state.transactionSummary.bank, balance }
+        }
       };
     }
     case EDIT_CASH_CREDIT: {
@@ -183,8 +182,8 @@ const transactions = (
         ...state,
         transactionSummary: {
           ...state.transactionSummary,
-          cash: { ...state.transactionSummary.cash, credit },
-        },
+          cash: { ...state.transactionSummary.cash, credit }
+        }
       };
     }
     case EDIT_CASH_DEBIT: {
@@ -193,8 +192,8 @@ const transactions = (
         ...state,
         transactionSummary: {
           ...state.transactionSummary,
-          cash: { ...state.transactionSummary.cash, debit },
-        },
+          cash: { ...state.transactionSummary.cash, debit }
+        }
       };
     }
     case EDIT_CASH_BALANCE: {
@@ -204,8 +203,8 @@ const transactions = (
         ...state,
         transactionSummary: {
           ...state.transactionSummary,
-          cash: { ...state.transactionSummary.cash, balance },
-        },
+          cash: { ...state.transactionSummary.cash, balance }
+        }
       };
     }
     default: {

@@ -1,12 +1,12 @@
-import React, { useState, lazy } from "react";
+import React, { useState, lazy } from 'react';
 
-import { CREDIT_TYPE } from "Constants";
-import cn from "classnames";
-import styles from "./styles.module.scss";
-import { TransactionCardProps } from "./interface";
+import { CREDIT_TYPE } from 'Constants';
+import cn from 'classnames';
+import styles from './styles.module.scss';
+import { TransactionCardProps } from './interface';
 
 const EditTransactionModal = lazy(
-  () => import("components/EditTransactionModal")
+  () => import('components/EditTransactionModal')
 );
 
 const TransactionCard = ({ transaction }: TransactionCardProps) => {
@@ -18,7 +18,7 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
     <>
       <div
         className={cn(styles.transactionCard, {
-          [styles.transactionCardCredit]: transaction.type === CREDIT_TYPE,
+          [styles.transactionCardCredit]: transaction.type === CREDIT_TYPE
         })}
         onClick={handleClickOpen}
       >

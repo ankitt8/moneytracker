@@ -1,6 +1,6 @@
-import { TransactionCategories } from "components/AddTransactionModal/TransactionCategoryInput/interface";
-import { DEBIT_TYPE } from "Constants";
-import { Transaction } from "interfaces/index.interface";
+import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
+import { DEBIT_TYPE } from 'Constants';
+import { Transaction } from 'interfaces/index.interface';
 
 export function getNoOfDaysCurrentMonth(): number {
   const date = new Date();

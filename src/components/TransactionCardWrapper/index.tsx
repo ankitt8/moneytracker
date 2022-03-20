@@ -1,7 +1,7 @@
-import React from "react";
-import TransactionCard from "components/TransactionCard";
-import { TransactionCardWrapperProps } from "./interface";
-import styles from "./styles.module.scss";
+import React from 'react';
+import TransactionCard from 'components/TransactionCard';
+import { TransactionCardWrapperProps } from './interface';
+import styles from './styles.module.scss';
 const areEqual = (prevProps: any, nextProps: any) => {
   if (prevProps.transactions.length !== nextProps.transactions.length)
     return false;
@@ -13,7 +13,7 @@ const areEqual = (prevProps: any, nextProps: any) => {
 const TransactionCardWrapper = ({
   transactions,
   title,
-  totalAmount,
+  totalAmount
 }: TransactionCardWrapperProps) => {
   const transactionsList = transactions.map((transaction) => {
     const { _id: transactionId } = transaction;

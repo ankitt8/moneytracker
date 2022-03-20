@@ -1,19 +1,19 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from 'react';
 import {
   setCreditDebitZero,
   editBankCreditAction,
   editBankDebitAction,
   editCashCreditAction,
-  editCashDebitAction,
-} from "actions/actionCreator";
-import { getNoOfDaysCurrentMonth, isDebitTypeTransaction } from "helper";
-import { Transaction } from "interfaces/index.interface";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { ReduxStore } from "reducers/interface";
-import CreditDebitSummary from "./CreditDebitSummary";
-import styles from "./styles.module.scss";
-import { CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, CASH_MODE } from "Constants";
+  editCashDebitAction
+} from 'actions/actionCreator';
+import { getNoOfDaysCurrentMonth, isDebitTypeTransaction } from 'helper';
+import { Transaction } from 'interfaces/index.interface';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { ReduxStore } from 'reducers/interface';
+import CreditDebitSummary from './CreditDebitSummary';
+import styles from './styles.module.scss';
+import { CREDIT_TYPE, DEBIT_TYPE, ONLINE_MODE, CASH_MODE } from 'Constants';
 
 const isCreditTypeTransaction = (transaction: Transaction) =>
   transaction.type === CREDIT_TYPE;

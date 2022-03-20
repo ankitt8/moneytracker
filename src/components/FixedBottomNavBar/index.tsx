@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./style.module.scss";
-import { ROUTES } from "Constants";
-import { FixedBottomNavBarProps } from "./interface";
-import AddTransactionModal from "components/AddTransactionModal";
-import { IFixedBottomNavBarItem } from "./interface";
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from './style.module.scss';
+import { ROUTES } from 'Constants';
+import { FixedBottomNavBarProps } from './interface';
+import AddTransactionModal from 'components/AddTransactionModal';
+import { IFixedBottomNavBarItem } from './interface';
 
 const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
   const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
@@ -14,25 +14,25 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
   const history = useHistory();
   const fixedBottomNavBarItemList = [
     {
-      text: "Home",
+      text: 'Home',
       icon: <FontAwesomeIcon icon="home" size="lg" />,
-      handleClick: () => history.push(ROUTES.HOME),
+      handleClick: () => history.push(ROUTES.HOME)
     },
     {
-      text: "Analysis",
+      text: 'Analysis',
       icon: <FontAwesomeIcon icon="chart-bar" size="lg" />,
-      handleClick: () => history.push(ROUTES.SPEND_ANALYSIS),
+      handleClick: () => history.push(ROUTES.SPEND_ANALYSIS)
     },
     {
-      text: "Categories",
+      text: 'Categories',
       icon: <FontAwesomeIcon icon="filter" size="lg" />,
-      handleClick: () => history.push(ROUTES.TRANSACTION_CATEGORIES),
+      handleClick: () => history.push(ROUTES.TRANSACTION_CATEGORIES)
     },
     {
-      text: "Add",
+      text: 'Add',
       icon: <FontAwesomeIcon icon="plus" size="lg" />,
-      handleClick: () => setIsAddTransactionModalOpen(true),
-    },
+      handleClick: () => setIsAddTransactionModalOpen(true)
+    }
   ];
 
   return (
@@ -50,7 +50,7 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
 const FixedBottomNavBarItem = ({
   icon,
   text,
-  handleClick,
+  handleClick
 }: IFixedBottomNavBarItem) => (
   <button onClick={handleClick}>
     <div className={styles.wrapper}>

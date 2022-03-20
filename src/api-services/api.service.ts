@@ -1,5 +1,5 @@
-import { AddTransaction } from "components/AddTransactionModal/interface";
-import { CREDIT_TYPE, url } from "Constants";
+import { AddTransaction } from 'components/AddTransactionModal/interface';
+import { CREDIT_TYPE, url } from 'Constants';
 
 export async function getTransactionsFromDB(userId: string): Promise<any> {
   try {
@@ -16,11 +16,11 @@ export async function getTransactionCategoriesFromDB(
 ): Promise<any> {
   try {
     const res = await fetch(url.API_URL_GET_TRANSACTION_CATEGORIES, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId: userId }),
+      body: JSON.stringify({ userId: userId })
     });
     return await res.json();
   } catch (error) {
@@ -31,11 +31,11 @@ export async function getTransactionCategoriesFromDB(
 
 export const addTransactionDB = async (transaction: AddTransaction) => {
   const addTransactionResponse = await fetch(url.API_URL_ADD_TRANSACTION, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(transaction),
+    body: JSON.stringify(transaction)
   });
   const transactionObject = await addTransactionResponse.json();
   return Promise.resolve(transactionObject);
@@ -51,14 +51,14 @@ export const addTransactionCategoryToDB = async (
     typeUrl = url.API_URL_ADD_CREDIT_TRANSACTION_CATEGORY;
   }
   return await fetch(typeUrl, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       userId: userId,
-      category: category,
-    }),
+      category: category
+    })
   });
 };
 
@@ -72,13 +72,13 @@ export const deleteTransactionCategoryFromDB = async (
     typeUrl = url.API_URL_DELETE_CREDIT_TRANSACTION_CATEGORY;
   }
   return await fetch(typeUrl, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
     body: JSON.stringify({
       userId: userId,
-      categories: categories,
-    }),
+      categories: categories
+    })
   });
 };

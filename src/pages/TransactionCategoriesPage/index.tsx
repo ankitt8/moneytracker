@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   CREDIT_TYPE,
   DEBIT_TYPE,
@@ -6,29 +6,29 @@ import {
   DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   SEVERITY_ERROR,
-  SEVERITY_SUCCESS,
-} from "Constants";
-import AddCategory from "components/AddCategory";
-import DisplayCategories from "components/DisplayCategories";
-import styles from "./styles.module.scss";
+  SEVERITY_SUCCESS
+} from 'Constants';
+import AddCategory from 'components/AddCategory';
+import DisplayCategories from 'components/DisplayCategories';
+import styles from './styles.module.scss';
 import {
   deleteTransactionCategory,
   getTransactionCategories,
-  updateStatusAction,
-} from "actions/actionCreator";
+  updateStatusAction
+} from 'actions/actionCreator';
 import {
   deleteTransactionCategoryFromDB,
-  getTransactionCategoriesFromDB,
-} from "api-services/api.service";
-import useFetchData from "customHooks/useFetchData";
-import { useSelector, useDispatch } from "react-redux";
-import { ReduxStore } from "reducers/interface";
-import { TransactionCategoriesPageProps } from "./interface";
-import { FETCH_STATES } from "reducers/DataReducer";
-import { LinearProgress } from "@material-ui/core";
+  getTransactionCategoriesFromDB
+} from 'api-services/api.service';
+import useFetchData from 'customHooks/useFetchData';
+import { useSelector, useDispatch } from 'react-redux';
+import { ReduxStore } from 'reducers/interface';
+import { TransactionCategoriesPageProps } from './interface';
+import { FETCH_STATES } from 'reducers/DataReducer';
+import { LinearProgress } from '@material-ui/core';
 
 const TransactionCategoriesPage = ({
-  userId,
+  userId
 }: TransactionCategoriesPageProps) => {
   const dispatch = useDispatch();
   const transactionCategories = useSelector(
@@ -63,7 +63,7 @@ const TransactionCategoriesPage = ({
               updateStatusAction({
                 showFeedBack: true,
                 msg: DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
-                severity: SEVERITY_SUCCESS,
+                severity: SEVERITY_SUCCESS
               })
             );
           } else {
@@ -71,7 +71,7 @@ const TransactionCategoriesPage = ({
               updateStatusAction({
                 showFeedBack: true,
                 msg: DELETE_TRANSACTION_CATEGORY_ERROR_MSG,
-                severity: SEVERITY_ERROR,
+                severity: SEVERITY_ERROR
               })
             );
           }

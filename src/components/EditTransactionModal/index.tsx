@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import Input from "@material-ui/core/Input";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Loader from "../Loader";
-import { KeyboardDatePicker } from "@material-ui/pickers";
-import FormLabel from "@material-ui/core/FormLabel";
-import cn from "classnames";
-import CategoryFormInput from "components/AddTransactionModal/TransactionCategoryInput";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Input from '@material-ui/core/Input';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Loader from '../Loader';
+import { KeyboardDatePicker } from '@material-ui/pickers';
+import FormLabel from '@material-ui/core/FormLabel';
+import cn from 'classnames';
+import CategoryFormInput from 'components/AddTransactionModal/TransactionCategoryInput';
 
 import {
   CASH_MODE,
@@ -29,8 +29,8 @@ import {
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
-  url,
-} from "Constants";
+  url
+} from 'Constants';
 import {
   deleteTransactionAction,
   editBankCreditAction,
@@ -38,12 +38,12 @@ import {
   editCashCreditAction,
   editCashDebitAction,
   editTransactionAction,
-  updateStatusAction,
-} from "actions/actionCreator";
-import { EditTransactionModalProps } from "./interface";
-import styles from "./styles.module.scss";
-import { ReduxStore } from "reducers/interface";
-import { Transaction } from "interfaces/index.interface";
+  updateStatusAction
+} from 'actions/actionCreator';
+import { EditTransactionModalProps } from './interface';
+import styles from './styles.module.scss';
+import { ReduxStore } from 'reducers/interface';
+import { Transaction } from 'interfaces/index.interface';
 
 const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const dispatch = useDispatch();
@@ -81,7 +81,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   };
   const handleAmountChange = (event: any) => {
     let amount;
-    if (event.target.value === "") {
+    if (event.target.value === '') {
       amount = 0;
     } else {
       amount = parseInt(event.target.value);
@@ -97,7 +97,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const handleCategoryChange = (category: string) => {
     setEditedTransaction({
       ...editedTransaction,
-      category,
+      category
     });
   };
 
@@ -125,7 +125,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           updateStatusAction({
             showFeedBack: true,
             msg: DELETE_TRANSACTION_SUCCESS_MSG,
-            severity: SEVERITY_SUCCESS,
+            severity: SEVERITY_SUCCESS
           })
         );
       })
@@ -134,7 +134,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           updateStatusAction({
             showFeedBack: true,
             msg: DELETE_TRANSACTION_FAIL_ERROR,
-            severity: SEVERITY_ERROR,
+            severity: SEVERITY_ERROR
           })
         );
         console.error(error);
@@ -144,9 +144,9 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
 
   function handleEditTransaction() {
     const { amount: updatedAmount, heading: editedHeading } = editedTransaction;
-    if (updatedAmount <= 0 || editedHeading === "") {
+    if (updatedAmount <= 0 || editedHeading === '') {
       let msg;
-      if (editedHeading === "") {
+      if (editedHeading === '') {
         msg = INVALID_TITLE_WARNING;
         setEditedTransaction({ ...editedTransaction, heading });
       } else {
@@ -157,7 +157,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
         updateStatusAction({
           showFeedBack: true,
           msg,
-          severity: SEVERITY_WARNING,
+          severity: SEVERITY_WARNING
         })
       );
       return;
@@ -189,7 +189,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           updateStatusAction({
             showFeedBack: true,
             msg: EDIT_TRANSACTION_SUCCESS_MSG,
-            severity: SEVERITY_SUCCESS,
+            severity: SEVERITY_SUCCESS
           })
         );
       })
@@ -199,7 +199,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           updateStatusAction({
             showFeedBack: true,
             msg: EDIT_TRANSACTION_FAIL_ERROR,
-            severity: SEVERITY_ERROR,
+            severity: SEVERITY_ERROR
           })
         );
       })
@@ -208,7 +208,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
 
   return (
     <Dialog
-      maxWidth={"sm"}
+      maxWidth={'sm'}
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
@@ -235,25 +235,25 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           </FormControl>
           <FormControl>
             <KeyboardDatePicker
-              style={{ marginTop: "20px" }}
+              style={{ marginTop: '20px' }}
               required
               autoOk
               variant="inline"
               inputVariant="standard"
               format="dd/MM/yyyy"
               value={editedTransaction.date}
-              InputAdornmentProps={{ position: "start" }}
+              InputAdornmentProps={{ position: 'start' }}
               onChange={(date) => handleDateChange(date)}
             />
           </FormControl>
-          <FormControl component="fieldset" style={{ marginTop: "20px" }}>
+          <FormControl component="fieldset" style={{ marginTop: '20px' }}>
             <FormLabel component="legend">Mode</FormLabel>
             <RadioGroup
               aria-label="Mode"
               name="mode"
               value={editedTransaction.mode}
               onChange={handleModeChange}
-              style={{ flexDirection: "row" }}
+              style={{ flexDirection: 'row' }}
             >
               <FormControlLabel
                 value={ONLINE_MODE}
@@ -267,14 +267,14 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
               />
             </RadioGroup>
           </FormControl>
-          <FormControl component="fieldset" style={{ marginTop: "20px" }}>
+          <FormControl component="fieldset" style={{ marginTop: '20px' }}>
             <FormLabel component="legend">Type</FormLabel>
             <RadioGroup
               aria-label="Type"
               name="type"
               value={editedTransaction.type || DEBIT_TYPE}
               onChange={handleTypeChange}
-              style={{ flexDirection: "row" }}
+              style={{ flexDirection: 'row' }}
             >
               <FormControlLabel
                 value={DEBIT_TYPE}
@@ -290,7 +290,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
           </FormControl>
           <CategoryFormInput
             categories={categories}
-            categorySelected={editedTransaction.category || ""}
+            categorySelected={editedTransaction.category || ''}
             handleCategoryChange={handleCategoryChange}
           />
         </form>
@@ -324,7 +324,7 @@ async function deleteTransactionDB(transactionId: string) {
   const response = await fetch(
     `${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`,
     {
-      method: "POST",
+      method: 'POST'
     }
   );
   return await response.json();
@@ -337,11 +337,11 @@ async function editTransactionDB(
   const updatedTransactionResponse = await fetch(
     `${url.API_URL_EDIT_TRANSACTION}/?id=${transactionId}`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(updatedTransaction),
+      body: JSON.stringify(updatedTransaction)
     }
   );
   const updatedTransactionObject = await updatedTransactionResponse.json();

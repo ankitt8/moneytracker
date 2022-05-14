@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "webpack serve --config webpack.dev.js",
     "build": "rm -rf build &&  webpack --config webpack.prod.js",
-    "_lint": "eslint './src/**/*.{js,jsx,ts,tsx,json}' --config ./.eslintrc.json",
+    "_lint": "eslint './src/**/*.{js,jsx,ts,tsx}' --config ./.eslintrc.json",
     "lint": "yarn _lint",
     "lint:fix": "yarn lint -- --fix",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc",
@@ -83,8 +83,11 @@
     "webpack-merge": "^5.8.0"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+    "src/**/*.{js,jsx,ts,tsx}": [
       "yarn lint:fix"
+    ],
+    "src/**/*.{json,css,scss,md}": [
+      "prettier --write"
     ]
   },
   "engines": {

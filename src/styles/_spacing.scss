@@ -1,4 +1,7 @@
 $base-spacing: 5px;
+@media only screen and (max-width: 480px) {
+  $base-spacing: 8px;
+}
 $spacing-1: $base-spacing;
 $spacing-2: $base-spacing * 2;
 $spacing-8: $base-spacing * 8;

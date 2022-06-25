@@ -1,6 +1,6 @@
 const urlsToCache = ['/', 'rupee.png'];
 console.log('test');
-const staticAssetsCacheName = 'static-assets-v10';
+const staticAssetsCacheName = 'static-assets-v11';
 console.log('test');
 self.addEventListener('install', (e) => {
   console.log('install');
@@ -34,7 +34,7 @@ self.addEventListener('fetch', (e) => {
       if (e.request.destination === 'image') {
         return cachedResponse;
       }
-      if (e.request.destination.includes('api')) {
+      if (e.request.url.includes('api')) {
         return fetch(e.request);
       }
       // if(!event)

@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0" />
-  <meta name="theme-color" content="#000000" />
-  <meta name="description" content="Money Tracker App" />
-  <link rel="apple-touch-icon" href="rupee.png" />
-  <link rel="icon" href="rupee.png">
-  <!--
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0"
+    />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Money Tracker App" />
+    <link rel="apple-touch-icon" href="rupee.png" />
+    <link rel="icon" href="rupee.png" />
+    <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-  <link rel="manifest" href="manifest.json" />
+    <link rel="manifest" href="manifest.json" />
 
-  <!--
+    <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -23,27 +25,69 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-  <title>Money Tracker</title>
-  <script>
-    if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          console.log('Service worker registered.');
-        })
-        .catch((err) => {
-          console.log('Service worker registration failed: ', err);
+    <title>Money Tracker</title>
+    <script>
+      function showToastNotification (worker) {
+        // TODO
+        // show actual toast notification
+        console.log('giving option for user to refresh app and see latest changes');
+        let userClicksRefresh = true;
+        if(userClicksRefresh) {
+          worker.postMessage({
+            action: 'skipWaiting'
+          });
+        }
+      }
+       function trackInstalling(worker) {
+        worker.addEventListener('statechange', function () {
+          if (worker.state === 'installed') {
+            showToastNotification(worker);
+            
+          }
         });
-    });
-  }
-  </script>
-</head>
+      }
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          if (navigator.serviceWorker) {
+            navigator.serviceWorker
+              .register('/sw.js')
+              .then((reg) => {
+                console.log('Service worker registered.');
+                if (!navigator.serviceWorker.controller) {
+                  return;
+                }
+                if (reg.waiting) {
+                  console.log('sw state: waiting');
+                  showToastNotification(reg.waiting);
+                  return;
+                }
+                if (reg.installing) {
+                  console.log('sw state: installing');
+                  trackInstalling(reg.installing);
+                  return;
+                }
+                reg.addEventListener('updatefound', () => {
+                  console.log('new worker found');
+                  trackInstalling(reg.installing);
+                });
+              })
+              .catch((err) => {
+                console.log('Service worker registration failed: ', err);
+              });
 
-<body>
-  <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-  <!--
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              window.location.reload();
+            });
+          }
+        });
+      }
+    </script>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
 
@@ -53,6 +97,5 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-</body>
-
+  </body>
 </html>

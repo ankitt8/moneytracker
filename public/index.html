@@ -24,6 +24,20 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
   <title>Money Tracker</title>
+  <script>
+    if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((registration) => {
+          console.log('Service worker registered.');
+        })
+        .catch((err) => {
+          console.log('Service worker registration failed: ', err);
+        });
+    });
+  }
+  </script>
 </head>
 
 <body>

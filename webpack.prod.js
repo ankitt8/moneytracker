@@ -3,6 +3,7 @@ const path = require('path');
 const { merge } = require('webpack-merge');
 const CopyPlugin = require('copy-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { InjectManifest } = require('workbox-webpack-plugin');
 const common = require('./webpack.common.js');
 
 module.exports = merge(common, {
@@ -29,6 +30,9 @@ module.exports = merge(common, {
       analyzerMode: 'disabled',
       generateStatsFile: true,
       openAnalyzer: false
+    }),
+    new InjectManifest({
+      swSrc: './src/sw.js'
     })
   ]
 });

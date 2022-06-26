@@ -9,20 +9,22 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import storeCreator from './reducers/index';
+import { ErrorBoundary } from 'components/ErrorBoundary';
 const { store, persistor } = storeCreator();
-
 export default store;
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={<Loader />} persistor={persistor}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Suspense fallback={<Loader />}>
-          <App />
-        </Suspense>
-      </MuiPickersUtilsProvider>
-    </PersistGate>
-  </Provider>,
+  <ErrorBoundary>
+    <Provider store={store}>
+      <PersistGate loading={<Loader />} persistor={persistor}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <Suspense fallback={<Loader />}>
+            <App />
+          </Suspense>
+        </MuiPickersUtilsProvider>
+      </PersistGate>
+    </Provider>
+  </ErrorBoundary>,
   document.getElementById('root')
 );
 // If you want to start measuring performance in your app, pass a function

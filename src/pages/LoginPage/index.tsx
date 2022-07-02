@@ -112,12 +112,22 @@ const Login = () => {
           {signupLoader ? (
             <Loader />
           ) : (
-            <button onClick={(e) => handleSignUp(e)}>Sign Up</button>
+            <button
+              className={styles.loginPageButton}
+              onClick={(e) => handleSignUp(e)}
+            >
+              Sign Up
+            </button>
           )}
           {signinLoader ? (
             <Loader />
           ) : (
-            <button onClick={(e) => handleSignIn(e)}>Sign In</button>
+            <button
+              className={styles.loginPageButton}
+              onClick={(e) => handleSignIn(e)}
+            >
+              Sign In
+            </button>
           )}
         </div>
 

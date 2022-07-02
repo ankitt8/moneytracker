@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './style.module.scss';
-import { ROUTES } from 'Constants';
+import { ROUTES, bottomNavBarText } from 'Constants';
 import { FixedBottomNavBarProps } from './interface';
 import AddTransactionModal from 'components/AddTransactionModal';
 import { IFixedBottomNavBarItem } from './interface';
@@ -11,34 +11,50 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
   const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
     useState(false);
   const handleClose = () => setIsAddTransactionModalOpen(false);
+  const [activeItem, setActiveItem] = useState<string>(bottomNavBarText.home);
   const history = useHistory();
   const fixedBottomNavBarItemList = [
     {
-      text: 'Home',
+      text: bottomNavBarText.home,
       icon: <FontAwesomeIcon icon="home" size="lg" />,
-      handleClick: () => history.push(ROUTES.HOME)
+      handleClick: () => {
+        setActiveItem(bottomNavBarText.home);
+        history.push(ROUTES.HOME);
+      }
     },
     {
-      text: 'Analysis',
+      text: bottomNavBarText.analysis,
       icon: <FontAwesomeIcon icon="chart-bar" size="lg" />,
-      handleClick: () => history.push(ROUTES.SPEND_ANALYSIS)
+      handleClick: () => {
+        setActiveItem(bottomNavBarText.analysis);
+        history.push(ROUTES.SPEND_ANALYSIS);
+      }
     },
     {
-      text: 'Categories',
+      text: bottomNavBarText.categories,
       icon: <FontAwesomeIcon icon="filter" size="lg" />,
-      handleClick: () => history.push(ROUTES.TRANSACTION_CATEGORIES)
+      handleClick: () => {
+        setActiveItem(bottomNavBarText.categories);
+        history.push(ROUTES.TRANSACTION_CATEGORIES);
+      }
     },
     {
-      text: 'Add',
+      text: bottomNavBarText.add,
       icon: <FontAwesomeIcon icon="plus" size="lg" />,
-      handleClick: () => setIsAddTransactionModalOpen(true)
+      handleClick: () => {
+        setIsAddTransactionModalOpen(true);
+      }
     }
   ];
 
   return (
     <div className={styles.fixedBottomNavBar}>
       {fixedBottomNavBarItemList.map((item) => (
-        <FixedBottomNavBarItem key={item.text} {...item} />
+        <FixedBottomNavBarItem
+          key={item.text}
+          {...item}
+          isActive={item.text === activeItem}
+        />
       ))}
       {isAddTransactionModalOpen && (
         <AddTransactionModal userId={userId} handleClose={handleClose} />
@@ -50,13 +66,15 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
 const FixedBottomNavBarItem = ({
   icon,
   text,
-  handleClick
+  handleClick,
+  isActive
 }: IFixedBottomNavBarItem) => (
-  <button onClick={handleClick}>
-    <div className={styles.wrapper}>
-      <div className={styles.icon}>{icon}</div>
-      <div className={styles.text}>{text}</div>
-    </div>
+  <button
+    onClick={handleClick}
+    className={`${styles.wrapper} ${isActive && styles.activeItem}`}
+  >
+    <div className={styles.icon}>{icon}</div>
+    <div className={styles.text}>{text}</div>
   </button>
 );
 

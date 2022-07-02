@@ -93,3 +93,10 @@ export const GET_TRANSACTION_CATEGORIES_FAILURE_MSG =
 export const PASSWORD_REQUIREMENT =
   'Password must be between 7 to 15 characters ' +
   'which contain at least one numeric digit and a special character.';
+
+export const bottomNavBarText = {
+  home: 'Home',
+  analysis: 'Analysis',
+  categories: 'Categories',
+  add: 'Add'
+};

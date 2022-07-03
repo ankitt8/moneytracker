@@ -5,7 +5,7 @@ import styles from './style.module.scss';
 import { ROUTES, bottomNavBarText } from 'Constants';
 import { FixedBottomNavBarProps } from './interface';
 import AddTransactionModal from 'components/AddTransactionModal';
-import { IFixedBottomNavBarItem } from './interface';
+import { FixedBottomNavBarItem } from 'components/FixedBottomNavBarItem';
 
 const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
   const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
@@ -62,20 +62,5 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
     </div>
   );
 };
-
-const FixedBottomNavBarItem = ({
-  icon,
-  text,
-  handleClick,
-  isActive
-}: IFixedBottomNavBarItem) => (
-  <button
-    onClick={handleClick}
-    className={`${styles.wrapper} ${isActive && styles.activeItem}`}
-  >
-    <div className={styles.icon}>{icon}</div>
-    <div className={styles.text}>{text}</div>
-  </button>
-);
 
 export default FixedBottomNavBar;

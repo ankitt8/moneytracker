@@ -12,7 +12,7 @@ const FixedBottomNavBarItem = ({
     className={`${styles.wrapper} ${isActive && styles.activeItem}`}
   >
     <div className={styles.icon}>{icon}</div>
-    <div className={styles.text}>{text}</div>
+    {/* <div className={styles.text}>{text}</div> */}
   </button>
 );
 

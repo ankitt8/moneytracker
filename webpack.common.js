@@ -19,7 +19,8 @@ module.exports = {
       reducers: path.resolve(__dirname, 'src/reducers'),
       styles: path.resolve(__dirname, 'src/styles'),
       customHooks: path.resolve(__dirname, 'src/customHooks'),
-      'api-services': path.resolve(__dirname, 'src/api-services')
+      'api-services': path.resolve(__dirname, 'src/api-services'),
+      icons: path.resolve(__dirname, 'src/icons')
     }
   },
   module: {
@@ -28,12 +29,12 @@ module.exports = {
         test: /\.s[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
-          "style-loader",
+          'style-loader',
           // Translates CSS into CommonJS
-          "css-loader",
+          'css-loader',
           // Compiles Sass to CSS
-          "sass-loader",
-        ],
+          'sass-loader'
+        ]
       },
       {
         test: /\.(ts|js)x?$/,

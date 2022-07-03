@@ -11,7 +11,7 @@ function AddTransactionButton({ userId }: IAddTransactionButtonProps) {
     setIsAddTransactionModalOpen(true);
   };
   const handleClose = (e) => {
-    e.stopPropagation();
+    e && e.stopPropagation();
     setIsAddTransactionModalOpen(() => false);
   };
   return (

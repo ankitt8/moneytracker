@@ -46,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 import { ROUTES } from 'Constants';
+import { icons } from 'icons';
 function SideNavBarDrawer({ setMobileOpen, username }: ISideNavBarDrawerProps) {
   const history = useHistory();
   const classes = useStyles();
@@ -80,9 +81,7 @@ function SideNavBarDrawer({ setMobileOpen, username }: ISideNavBarDrawerProps) {
       </div>
       <div>
         <ListItem button key="logout" onClick={handleLogout}>
-          <ListItemIcon>
-            <FontAwesomeIcon icon="sign-out-alt" />
-          </ListItemIcon>
+          <ListItemIcon>{icons.logout}</ListItemIcon>
           <ListItemText primary="Logout" />
         </ListItem>
       </div>

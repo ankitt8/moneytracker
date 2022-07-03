@@ -98,5 +98,6 @@ export const bottomNavBarText = {
   home: 'Home',
   analysis: 'Analysis',
   categories: 'Categories',
-  add: 'Add'
+  add: 'Add',
+  other: 'Other'
 };

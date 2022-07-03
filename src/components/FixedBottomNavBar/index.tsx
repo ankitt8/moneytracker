@@ -3,20 +3,21 @@ import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './style.module.scss';
 import { ROUTES, bottomNavBarText } from 'Constants';
-import { FixedBottomNavBarProps } from './interface';
-import AddTransactionModal from 'components/AddTransactionModal';
+// import { FixedBottomNavBarProps } from './interface';
+// import AddTransactionModal from 'components/AddTransactionModal';
 import { FixedBottomNavBarItem } from 'components/FixedBottomNavBarItem';
-
-const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
-  const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
-    useState(false);
-  const handleClose = () => setIsAddTransactionModalOpen(false);
+import { homeIcon } from './home.js';
+import { icons } from 'icons';
+const FixedBottomNavBar = () => {
+  // const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
+  //   useState(false);
+  // const handleClose = () => setIsAddTransactionModalOpen(false);
   const [activeItem, setActiveItem] = useState<string>(bottomNavBarText.home);
   const history = useHistory();
   const fixedBottomNavBarItemList = [
     {
       text: bottomNavBarText.home,
-      icon: <FontAwesomeIcon icon="home" size="lg" />,
+      icon: icons.home,
       handleClick: () => {
         setActiveItem(bottomNavBarText.home);
         history.push(ROUTES.HOME);
@@ -24,7 +25,7 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
     },
     {
       text: bottomNavBarText.analysis,
-      icon: <FontAwesomeIcon icon="chart-bar" size="lg" />,
+      icon: icons.analysis,
       handleClick: () => {
         setActiveItem(bottomNavBarText.analysis);
         history.push(ROUTES.SPEND_ANALYSIS);
@@ -32,19 +33,26 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
     },
     {
       text: bottomNavBarText.categories,
-      icon: <FontAwesomeIcon icon="filter" size="lg" />,
+      icon: icons.filter,
       handleClick: () => {
         setActiveItem(bottomNavBarText.categories);
         history.push(ROUTES.TRANSACTION_CATEGORIES);
       }
     },
     {
-      text: bottomNavBarText.add,
-      icon: <FontAwesomeIcon icon="plus" size="lg" />,
+      text: bottomNavBarText.other,
+      icon: icons.hamburger,
       handleClick: () => {
-        setIsAddTransactionModalOpen(true);
+        /**todo */
       }
     }
+    // {
+    //   text: bottomNavBarText.add,
+    //   icon: <FontAwesomeIcon icon="plus" size="lg" />,
+    //   handleClick: () => {
+    //     setIsAddTransactionModalOpen(true);
+    //   }
+    // }
   ];
 
   return (
@@ -56,9 +64,9 @@ const FixedBottomNavBar = ({ userId }: FixedBottomNavBarProps) => {
           isActive={item.text === activeItem}
         />
       ))}
-      {isAddTransactionModalOpen && (
+      {/* {isAddTransactionModalOpen && (
         <AddTransactionModal userId={userId} handleClose={handleClose} />
-      )}
+      )} */}
     </div>
   );
 };

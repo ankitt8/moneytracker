@@ -1,0 +1,14 @@
+.addTransactionButtonWrapper {
+  position: fixed;
+  right: 10px;
+  bottom: 80px;
+
+  background-color: white;
+}
+.addTransactionButton {
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  box-shadow: 2px 2px 5px;
+}

@@ -14,6 +14,7 @@ import {
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
 import LoginPage from 'pages/LoginPage';
+import { AddTransactionButton } from 'components/AddTransactionButton';
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
 const HomePage = lazy(() => import('pages/HomePage'));
@@ -71,6 +72,7 @@ function App() {
         <FixedBottomNavBar userId={userId} />
         <SnackBarFeedback />
       </Header>
+      <AddTransactionButton userId={userId} />
     </Router>
   );
 }

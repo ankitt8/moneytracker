@@ -24,7 +24,7 @@ import { HeaderProps } from './interface';
 
 import styles from './styles.module.scss';
 
-import { ROUTES } from 'Constants';
+import { SideNavBar } from 'components/SideNavBar';
 
 const drawerWidth = 240;
 
@@ -89,45 +89,7 @@ const Header = ({ username, children }: HeaderProps) => {
     document.getElementById('installBtn')?.classList.toggle('hidden', true);
   };
   const history = useHistory();
-  const drawer = (
-    <div className={styles.drawer}>
-      <div>
-        <div className={classes.toolbar} />
-        <div className={styles.flexWrapper}>
-          <p className={styles.username}>{`Hi ${username}`}</p>
-          <button
-            id="installBtn"
-            className={styles.installBtn}
-            onClick={handleInstallAppClick}
-          >
-            Install App
-          </button>
-        </div>
-        <Divider />
-        <List>
-          {drawerItemList.map(({ url, icon, text }) => (
-            <DrawerItem
-              key={text}
-              handleClick={() => {
-                history.push(url);
-                setMobileOpen(false);
-              }}
-              icon={icon}
-              text={text}
-            />
-          ))}
-        </List>
-      </div>
-      <div>
-        <ListItem button key="logout" onClick={handleLogout}>
-          <ListItemIcon>
-            <FontAwesomeIcon icon="sign-out-alt" />
-          </ListItemIcon>
-          <ListItemText primary="Logout" />
-        </ListItem>
-      </div>
-    </div>
-  );
+  // const drawer = ;
   const container =
     window !== undefined ? () => window.document.body : undefined;
   return (
@@ -148,36 +110,12 @@ const Header = ({ username, children }: HeaderProps) => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        <Hidden mdUp implementation="css">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor="left"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper
-            }}
-            ModalProps={{
-              keepMounted: true // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden smDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
+      <SideNavBar
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
+        handleDrawerToggle={handleDrawerToggle}
+        username={username}
+      />
       <main className={classes.appBar}>
         <div className={classes.toolbar} />
         {children}
@@ -185,48 +123,5 @@ const Header = ({ username, children }: HeaderProps) => {
     </>
   );
 };
-const drawerItemList = [
-  {
-    text: 'Home',
-    icon: <FontAwesomeIcon icon="home" size="lg" />,
-    url: ROUTES.HOME
-  },
-  {
-    text: 'Analysis',
-    icon: <FontAwesomeIcon icon="chart-bar" size="lg" />,
-    url: ROUTES.SPEND_ANALYSIS
-  },
-  {
-    text: 'Categories',
-    icon: <FontAwesomeIcon icon="filter" size="lg" />,
-    url: ROUTES.TRANSACTION_CATEGORIES
-  },
-  {
-    text: 'Bank Accounts',
-    icon: <AccountBalanceIcon />,
-    url: ROUTES.BANK
-  },
-  {
-    text: 'Investments',
-    icon: <PaymentIcon />,
-    url: ROUTES.INVESTMENT
-  },
-  {
-    text: 'Budget',
-    icon: <PaymentIcon />,
-    url: ROUTES.BUDGET
-  },
-  {
-    text: 'Food Tracker',
-    icon: <FastfoodIcon />,
-    url: ROUTES.FOOD_TRACKER
-  }
-];
-const DrawerItem = ({ text, icon, handleClick }: IDrawerItem) => (
-  <ListItem button key={text} onClick={handleClick}>
-    <ListItemIcon>{icon}</ListItemIcon>
-    <ListItemText primary={text} />
-  </ListItem>
-);
 
 export default Header;

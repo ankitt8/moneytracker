@@ -1,4 +1,4 @@
-@import "src/styles/mixins";
+@import 'src/styles/mixins';
 
 .categoriesWrapper {
   display: flex;
@@ -9,13 +9,14 @@
 .categoryWrapper {
   display: flex;
   color: black;
-  padding: 5px;
+  padding: 8px;
   border: 1px solid gray;
-  margin: 0px 7px 7px 0;
+  margin: 0px 15px 10px 0;
   border-radius: 10px;
   > div {
     margin-right: 5px;
   }
+  align-items: center;
 }
 
 .noData {

@@ -23,7 +23,7 @@ const DisplayCategories = ({
             className={styles.categoryWrapper}
           >
             <div>{category}</div>
-            <div>|</div>
+            {/* <div>|</div> */}
             <FontAwesomeIcon
               icon={faWindowClose}
               onClick={() => handleDeleteCategory(category)}

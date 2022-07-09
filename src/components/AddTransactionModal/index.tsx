@@ -53,10 +53,11 @@ const AddTransactionModal = ({
   const [loadingState, setLoadingState] = useState(false);
   const [mode, setMode] = useState(ONLINE_MODE);
   const [type, setType] = useState(DEBIT_TYPE);
-  const state = useFetchData(
+  const { fetchStatus } = useFetchData(
     getTransactionCategoriesFromDB,
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
     getTransactionCategories,
+    null,
     userId
   );
   const transactionCategories = useSelector(
@@ -173,7 +174,7 @@ const AddTransactionModal = ({
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
     >
-      {state.fetching === FETCH_STATES.PENDING && <LinearProgress />}
+      {fetchStatus.fetching === FETCH_STATES.PENDING && <LinearProgress />}
       <div className={styles.modalWrapper}>
         <h3 className={styles.modalTitle}>Add Transaction</h3>
         <form onSubmit={handleTransactionSubmit}>

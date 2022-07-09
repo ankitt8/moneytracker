@@ -1,4 +1,4 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect, useState } from 'react';
 import { updateStatusAction } from 'actions/actionCreator';
 import { SEVERITY_ERROR } from 'Constants';
 import { useDispatch } from 'react-redux';
@@ -15,18 +15,38 @@ import { dataReducer, initialState, ACTION_TYPES } from 'reducers/DataReducer';
 const useFetchData = (
   fetchCallback: (userId: string) => any,
   messageOnRejected: string,
-  actionToDispatchOnResolved: () => any,
+  actionToDispatchOnResolved: () => void,
+  refetchData = null,
   ...args: string[]
 ) => {
   const dispatch = useDispatch();
-  const [state, dataReducerDispatch] = useReducer(dataReducer, initialState);
+  const [fetchStatus, dataReducerDispatch] = useReducer(
+    dataReducer,
+    initialState
+  );
+  const [data, setData] = useState(null);
 
   const fetchData = async () => {
     dataReducerDispatch({
       type: ACTION_TYPES.FETCH_DATA_START
     });
-    const data = await fetchCallback(...args);
-    if (data === null) {
+    try {
+      const data = await fetchCallback(...args);
+      console.log(data);
+      if (data === null) {
+        handleErrorCase();
+        return;
+      }
+      setData(data);
+      dataReducerDispatch({
+        type: ACTION_TYPES.FETCH_DATA_RESOLVED
+      });
+      actionToDispatchOnResolved && dispatch(actionToDispatchOnResolved(data));
+    } catch (e) {
+      handleErrorCase(e);
+    }
+    function handleErrorCase(e) {
+      console.log(e);
       dataReducerDispatch({
         type: ACTION_TYPES.FETCH_DATA_REJECTED
       });
@@ -37,17 +57,12 @@ const useFetchData = (
           severity: SEVERITY_ERROR
         })
       );
-    } else {
-      dataReducerDispatch({
-        type: ACTION_TYPES.FETCH_DATA_RESOLVED
-      });
-      dispatch(actionToDispatchOnResolved(data));
     }
   };
   useEffect(() => {
     fetchData();
-  }, []);
-  return state;
+  }, [refetchData]);
+  return { fetchStatus, data };
 };
 
 export default useFetchData;

@@ -37,6 +37,7 @@ const TransactionCategoriesPage = ({
     getTransactionCategoriesFromDB,
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
     getTransactionCategories,
+    null,
     userId
   );
   const debitCategories = transactionCategories.debit;

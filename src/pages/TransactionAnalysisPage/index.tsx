@@ -86,17 +86,19 @@ const getDebitTransactions = (transactions: Transaction[]) =>
   transactions.filter(isDebitTypeTransaction);
 
 const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
-  const getTransactionState = useFetchData(
+  const { fetchStatus: getTransactionState } = useFetchData(
     getTransactionsFromDB,
     GET_TRANSACTIONS_FAILURE_MSG,
     getTransactionsAction,
-    userId
+    null,
+    { userId }
   );
 
-  const getTransactionCategoriesState = useFetchData(
+  const { fetchStatus: getTransactionCategoriesState } = useFetchData(
     getTransactionCategoriesFromDB,
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
     getTransactionCategories,
+    false,
     userId
   );
   const transactions = useSelector(

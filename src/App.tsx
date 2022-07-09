@@ -16,6 +16,7 @@ import {
 import LoginPage from 'pages/LoginPage';
 import { AddTransactionButton } from 'components/AddTransactionButton';
 import { OthersPage } from 'pages/OthersPage';
+import { History } from 'pages/History';
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
 const HomePage = lazy(() => import('pages/HomePage'));
@@ -37,6 +38,7 @@ function App() {
   if (userId === '') {
     return <LoginPage />;
   }
+  window.userId = userId;
   return (
     <Router>
       <Header username={username}>
@@ -68,6 +70,9 @@ function App() {
           </Route>
           <Route path={ROUTES.OTHERS}>
             <OthersPage />
+          </Route>
+          <Route path={ROUTES.HISTORY}>
+            <History />
           </Route>
           <Route path={ROUTES.HOME}>
             <HomePage userId={userId} />

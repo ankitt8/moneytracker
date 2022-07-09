@@ -15,5 +15,9 @@ export const cardList = [
   {
     text: 'Food Tracker',
     url: ROUTES.FOOD_TRACKER
+  },
+  {
+    text: 'History',
+    url: ROUTES.HISTORY
   }
 ];

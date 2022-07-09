@@ -1,9 +1,24 @@
 import { AddTransaction } from 'components/AddTransactionModal/interface';
 import { CREDIT_TYPE, url } from 'Constants';
 
-export async function getTransactionsFromDB(userId: string): Promise<any> {
+export async function getTransactionsFromDB({
+  userId,
+  startDate,
+  endDate,
+  month,
+  year
+}: {
+  userId: string;
+  startDate?: string;
+  endDate?: string;
+  month?: string;
+  year?: string;
+}): Promise<any> {
   try {
-    const res = await fetch(url.API_URL_GET_TRANSACTIONS + `/${userId}`);
+    const res = await fetch(
+      url.API_URL_GET_TRANSACTIONS +
+        `/${userId}/${startDate}/${endDate}/${month}/${year}`
+    );
     return await res.json();
   } catch (error) {
     console.error(error);

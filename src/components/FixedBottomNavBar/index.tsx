@@ -43,7 +43,8 @@ const FixedBottomNavBar = () => {
       text: bottomNavBarText.other,
       icon: icons.hamburger,
       handleClick: () => {
-        /**todo */
+        setActiveItem(bottomNavBarText.other);
+        history.push(ROUTES.OTHERS);
       }
     }
     // {

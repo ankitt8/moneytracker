@@ -56,7 +56,8 @@ export const ROUTES = {
   BANK: '/bank',
   INVESTMENT: '/investment',
   FOOD_TRACKER: '/food-tracker',
-  BUDGET: '/budget'
+  BUDGET: '/budget',
+  OTHERS: '/others'
 };
 
 export const SEVERITY_SUCCESS = 'success';

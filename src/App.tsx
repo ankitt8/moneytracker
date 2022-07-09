@@ -15,6 +15,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import LoginPage from 'pages/LoginPage';
 import { AddTransactionButton } from 'components/AddTransactionButton';
+import { OthersPage } from 'pages/OthersPage';
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
 
 const HomePage = lazy(() => import('pages/HomePage'));
@@ -64,6 +65,9 @@ function App() {
           </Route>
           <Route path={ROUTES.FOOD_TRACKER}>
             <UpcomingFeaturePage />
+          </Route>
+          <Route path={ROUTES.OTHERS}>
+            <OthersPage />
           </Route>
           <Route path={ROUTES.HOME}>
             <HomePage userId={userId} />

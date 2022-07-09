@@ -1,3 +1,4 @@
+@import './_fonts.scss';
 @mixin page {
   margin: 0 0 10vh 0;
   padding: 0 5px;
@@ -18,4 +19,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+label {
+  font-size: $form-label-font-size;
 }

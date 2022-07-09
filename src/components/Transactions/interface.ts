@@ -1,3 +1,9 @@
+import { Transaction } from 'interfaces/index.interface';
+
 export interface TransactionsProps {
-  userId: string;
+  transactions: Transaction[];
+  fetching: string;
+  month: number;
+  year?: number;
+  showTransactionsInAscendingOrder?: boolean;
 }

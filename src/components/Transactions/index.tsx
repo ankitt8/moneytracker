@@ -1,35 +1,37 @@
-import { useSelector } from 'react-redux';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { motion } from 'framer-motion';
-import { DEBIT_TYPE, GET_TRANSACTIONS_FAILURE_MSG } from 'Constants';
+import { DEBIT_TYPE } from 'Constants';
 import DayTransactionsCard from 'components/TransactionCardWrapper';
-import { getNoOfDaysCurrentMonth } from 'helper';
-import { getTransactionsFromDB } from 'api-services/api.service';
+import { getNoOfDaysMonth } from 'helper';
 import { Transaction } from 'interfaces/index.interface';
-import { ReduxStore } from 'reducers/interface';
 import styles from './styles.module.scss';
 import { TransactionsProps } from './interface';
-import useFetchData from 'customHooks/useFetchData';
 import { FETCH_STATES } from 'reducers/DataReducer';
-import { getTransactionsAction } from 'actions/actionCreator';
+import { useEffect } from 'react';
 
-const Transactions = ({ userId }: TransactionsProps) => {
-  const transactions = useSelector(
-    (store: ReduxStore) => store.transactions.transactions
-  );
-  const state = useFetchData(
-    getTransactionsFromDB,
-    GET_TRANSACTIONS_FAILURE_MSG,
-    getTransactionsAction,
-    userId
-  );
+const Transactions = ({
+  transactions,
+  month,
+  year = new Date().getFullYear(),
+  fetching,
+  showTransactionsInAscendingOrder = false
+}: TransactionsProps) => {
   let componentToRender;
-
+  useEffect(() => {
+    return () => {
+      componentToRender = null;
+    };
+  }, [transactions]);
   try {
     const individualDayTransactions2DArray =
-      createIndividualDayTransactions2DArray(transactions);
+      createIndividualDayTransactions2DArray(transactions, month);
     const individualDayTransactionsUIArray =
-      createIndividualDayTransactionsUIArray(individualDayTransactions2DArray);
+      createIndividualDayTransactionsUIArray(
+        individualDayTransactions2DArray,
+        month,
+        year,
+        showTransactionsInAscendingOrder
+      );
     componentToRender = (
       <ul className={styles.transactionsList}>
         {individualDayTransactionsUIArray}
@@ -42,7 +44,7 @@ const Transactions = ({ userId }: TransactionsProps) => {
 
   return (
     <>
-      {state.fetching === FETCH_STATES.PENDING && <LinearProgress />}
+      {fetching === FETCH_STATES.PENDING && <LinearProgress />}
       {componentToRender}
     </>
   );
@@ -51,10 +53,13 @@ const Transactions = ({ userId }: TransactionsProps) => {
 const isDebitTransaction = (transaction: Transaction) =>
   transaction.type === DEBIT_TYPE || transaction.type === undefined;
 
-function createIndividualDayTransactions2DArray(transactions: Transaction[]) {
-  const noOfDaysCurrentMonth = getNoOfDaysCurrentMonth();
+function createIndividualDayTransactions2DArray(
+  transactions: Transaction[],
+  month: number
+) {
+  const noOfDaysMonth = getNoOfDaysMonth(month);
   const individualDayTransactions2DArray: Transaction[][] = [];
-  for (let day = 0; day <= noOfDaysCurrentMonth; day += 1) {
+  for (let day = 0; day <= noOfDaysMonth; day += 1) {
     individualDayTransactions2DArray[day] = [];
   }
   transactions.forEach((transaction) => {
@@ -77,16 +82,21 @@ function getIndividualDayTransactionsTotalDebitAmount(
 }
 
 function createIndividualDayTransactionsUIArray(
-  individualDayTransactions2DArray: Transaction[][]
+  individualDayTransactions2DArray: Transaction[][],
+  month: number,
+  year: number,
+  showTransactionsInAscendingOrder: boolean
 ) {
   const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth();
   const todayDate = date.getDate();
+
+  let lastDateToShow = todayDate;
+  if (month !== date.getMonth()) {
+    lastDateToShow = getNoOfDaysMonth(month);
+  }
   const dayTransactionsCard = [];
-  for (let i = todayDate; i >= 1; --i) {
-    const title = new Date(year, month, i).toDateString();
-    dayTransactionsCard.push(
+  function createDayTransactionsCard(title: string, i: number) {
+    return (
       <motion.li layout key={i}>
         <DayTransactionsCard
           title={title}
@@ -98,6 +108,18 @@ function createIndividualDayTransactionsUIArray(
       </motion.li>
     );
   }
+  if (showTransactionsInAscendingOrder) {
+    for (let i = 1; i <= lastDateToShow; i++) {
+      const title = new Date(year, month, i).toDateString();
+      dayTransactionsCard.push(createDayTransactionsCard(title, i));
+    }
+  } else {
+    for (let i = lastDateToShow; i >= 1; --i) {
+      const title = new Date(year, month, i).toDateString();
+      dayTransactionsCard.push(createDayTransactionsCard(title, i));
+    }
+  }
+
   return dayTransactionsCard;
 }
 

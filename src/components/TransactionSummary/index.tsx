@@ -6,7 +6,7 @@ import {
   editCashCreditAction,
   editCashDebitAction
 } from 'actions/actionCreator';
-import { getNoOfDaysCurrentMonth, isDebitTypeTransaction } from 'helper';
+import { getNoOfDaysMonth, isDebitTypeTransaction } from 'helper';
 import { Transaction } from 'interfaces/index.interface';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -91,6 +91,6 @@ const TransactionSummary = () => {
   );
 };
 function getNoOfDaysRemainingCurrentMonth(): number {
-  return getNoOfDaysCurrentMonth() - new Date().getDate();
+  return getNoOfDaysMonth() - new Date().getDate();
 }
 export default TransactionSummary;

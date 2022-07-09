@@ -2,10 +2,10 @@ import { TransactionCategories } from 'components/AddTransactionModal/Transactio
 import { DEBIT_TYPE } from 'Constants';
 import { Transaction } from 'interfaces/index.interface';
 
-export function getNoOfDaysCurrentMonth(): number {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth();
+export function getNoOfDaysMonth(
+  month = new Date().getMonth(),
+  year = new Date().getFullYear()
+): number {
   let noOfDays = 0;
   const dateFirstDay = new Date(year, month, 1);
   while (dateFirstDay.getMonth() === month) {
@@ -13,6 +13,12 @@ export function getNoOfDaysCurrentMonth(): number {
     dateFirstDay.setDate(dateFirstDay.getDate() + 1);
   }
   return noOfDays;
+}
+
+export function getCurrentMonth() {
+  const date = new Date();
+  const month = date.getMonth();
+  return month;
 }
 
 export const isDebitTypeTransaction = (transaction: Transaction) => {

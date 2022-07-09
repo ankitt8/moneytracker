@@ -13,14 +13,6 @@
   @media screen and (min-device-width: 960px) {
     width: calc(100vw - 240px);
   }
-  button {
-    background: none;
-    outline: none;
-    border: none;
-    // border-right: 1px solid rgba(0, 0, 0, 0.12);
-    flex: 1;
-    border-radius: none;
-  }
   .wrapper {
     display: flex;
     flex-direction: column;

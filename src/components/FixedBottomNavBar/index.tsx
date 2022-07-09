@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './style.module.scss';
 import { ROUTES, bottomNavBarText } from 'Constants';
 // import { FixedBottomNavBarProps } from './interface';
 // import AddTransactionModal from 'components/AddTransactionModal';
 import { FixedBottomNavBarItem } from 'components/FixedBottomNavBarItem';
-import { homeIcon } from './home.js';
 import { icons } from 'icons';
 const FixedBottomNavBar = () => {
   // const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =

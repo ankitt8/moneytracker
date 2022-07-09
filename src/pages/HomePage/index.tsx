@@ -1,10 +1,10 @@
-import Transactions from 'components/Transactions';
+import { TransactionsContainer } from 'components/Transactions/TransactionsContainer';
 import TransactionSummary from 'components/TransactionSummary';
 const HomePage = ({ userId }: { userId: string }) => {
   return (
     <>
       <TransactionSummary />
-      <Transactions userId={userId} />
+      <TransactionsContainer userId={userId} />
     </>
   );
 };

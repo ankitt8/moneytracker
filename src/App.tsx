@@ -18,7 +18,7 @@ import { AddTransactionButton } from 'components/AddTransactionButton';
 import { OthersPage } from 'pages/OthersPage';
 import { History } from 'pages/History';
 library.add(faHome, faChartBar, faSignOutAlt, faFilter, faPlus);
-
+console.log('test');
 const HomePage = lazy(() => import('pages/HomePage'));
 const UpcomingFeaturePage = lazy(() => import('pages/UpcomingFeaturePage'));
 const TransactionAnalysisPage = lazy(

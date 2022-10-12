@@ -85,7 +85,10 @@ const createTransactionsGroupedByCategories = (
 const getDebitTransactions = (transactions: Transaction[]) =>
   transactions.filter(isDebitTypeTransaction);
 
-const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
+const TransactionAnalysisPage = ({
+  userId,
+  transactionsProps
+}: TransactionAnalysisPageProps) => {
   const { fetchStatus: getTransactionState } = useFetchData(
     getTransactionsFromDB,
     GET_TRANSACTIONS_FAILURE_MSG,
@@ -101,9 +104,12 @@ const TransactionAnalysisPage = ({ userId }: TransactionAnalysisPageProps) => {
     false,
     userId
   );
-  const transactions = useSelector(
-    (store: ReduxStore) => store.transactions.transactions
-  );
+  let transactions = transactionsProps;
+  if (!transactions) {
+    transactions = useSelector(
+      (store: ReduxStore) => store.transactions.transactions
+    );
+  }
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );

@@ -33,7 +33,7 @@ const useFetchData = (
     try {
       const data = await fetchCallback(...args);
       console.log(data);
-      if (data === null) {
+      if (data.error || data == null) {
         handleErrorCase();
         return;
       }

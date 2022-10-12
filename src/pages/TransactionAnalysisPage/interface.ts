@@ -1,7 +1,8 @@
 import { Transaction } from 'interfaces/index.interface';
 
 export interface TransactionAnalysisPageProps {
-  userId: string;
+  userId?: string;
+  transactionsProps: Transaction[];
 }
 
 export type TransactionsGroupedByCategories = Record<

@@ -26,11 +26,14 @@ const calculateTransactionsTotalAmount = (transactions: Transaction[]) => {
     ? 0
     : transactions.reduce((acc, curr) => acc + curr.amount, 0);
 };
-const TransactionSummary = () => {
+const TransactionSummary = ({ transactions: transactionsProps }) => {
   const dispatch = useDispatch();
-  const transactions = useSelector(
-    (store: ReduxStore) => store.transactions.transactions
-  );
+  let transactions = transactionsProps;
+  if (!transactions) {
+    transactions = useSelector(
+      (store: ReduxStore) => store.transactions.transactions
+    );
+  }
   const { bank, cash } = useSelector(
     (store: ReduxStore) => store.transactions.transactionSummary
   );

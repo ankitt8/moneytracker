@@ -1,5 +1,6 @@
 import { getTransactionsFromDB } from 'api-services/api.service';
 import Transactions from 'components/Transactions';
+import TransactionSummary from 'components/TransactionSummary';
 import useFetchData from 'customHooks/useFetchData';
 import { getCurrentMonth, getNoOfDaysMonth } from 'helper';
 import { useEffect, useState } from 'react';
@@ -63,6 +64,7 @@ function History() {
           </select>
         </div>
       </div>
+      {data && <TransactionSummary transactions={data} />}
       <Transactions
         month={monthSelectedIndex}
         transactions={data || []}

@@ -351,29 +351,33 @@ function getMostRecentCategories(debitCategoriesFromDB: string[]) {
       localStorage.getItem(MOST_RECENT_TRANSACTION_CATEGORIES)
     );
     // don't show the category from db which is in mostRecentCategoriesLocalStorage
-    const dbCategoriesNotInMostRecent = [];
+    // DB = database
+    const categoriesFromDBNotInMostRecentCategories = [];
+    let mostRecentCategories = [];
     if (
       mostRecentCategoriesLocalStorage &&
       mostRecentCategoriesLocalStorage.length > 0
     ) {
-      for (let i = 0; i < debitCategoriesFromDB.length; i++) {
-        if (
-          !mostRecentCategoriesLocalStorage.find(
-            (mostRecentCategoryLocalStorage) => {
-              return mostRecentCategoryLocalStorage == debitCategoriesFromDB[i];
-            }
-          )
-        ) {
-          dbCategoriesNotInMostRecent.push(debitCategoriesFromDB[i]);
+      const mostRecentCategoriesLocalStorageObj = {};
+      mostRecentCategoriesLocalStorage.forEach(
+        (mostRecentCategoryLocalStorage: string) => {
+          mostRecentCategoriesLocalStorageObj[
+            mostRecentCategoryLocalStorage
+          ] = 1;
         }
-      }
+      );
+      debitCategoriesFromDB.forEach((debitCategoryFromDB) => {
+        if (mostRecentCategoriesLocalStorageObj[debitCategoryFromDB] !== 1) {
+          categoriesFromDBNotInMostRecentCategories.push(debitCategoryFromDB);
+        }
+      });
+      mostRecentCategories = [
+        ...mostRecentCategoriesLocalStorage.reverse(),
+        ...categoriesFromDBNotInMostRecentCategories
+      ];
+    } else {
+      mostRecentCategories = debitCategoriesFromDB;
     }
-    const mostRecentCategories = mostRecentCategoriesLocalStorage
-      ? [
-          ...mostRecentCategoriesLocalStorage.reverse(),
-          ...dbCategoriesNotInMostRecent
-        ]
-      : debitCategoriesFromDB;
     return mostRecentCategories;
   } catch (e) {
     return debitCategoriesFromDB;

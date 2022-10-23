@@ -9,7 +9,7 @@ import { dataReducer, initialState, ACTION_TYPES } from 'reducers/DataReducer';
  * @param fetchCallback function which perform asyc operation and returns response
  * @param messageOnRejected message to show when fetch is rejected
  * @param actionToDispatchOnResolved action to be dispatched when fetch is resolved
- * @param args argument taken by fetchCallback
+ * @param fetchCallbackArgs argument taken by fetchCallback
  * @returns void
  */
 const useFetchData = (
@@ -17,7 +17,7 @@ const useFetchData = (
   messageOnRejected: string,
   actionToDispatchOnResolved: () => void,
   refetchData = null,
-  ...args: string[]
+  ...fetchCallbackArgs: string[]
 ) => {
   const dispatch = useDispatch();
   const [fetchStatus, dataReducerDispatch] = useReducer(
@@ -31,8 +31,7 @@ const useFetchData = (
       type: ACTION_TYPES.FETCH_DATA_START
     });
     try {
-      const data = await fetchCallback(...args);
-      console.log(data);
+      const data = await fetchCallback(...fetchCallbackArgs);
       if (data.error || data == null) {
         handleErrorCase();
         return;

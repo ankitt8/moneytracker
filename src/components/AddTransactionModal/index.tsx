@@ -41,6 +41,8 @@ import { ReduxStore } from 'reducers/interface';
 import useFetchData from 'customHooks/useFetchData';
 import { FETCH_STATES } from 'reducers/DataReducer';
 
+const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
+
 const AddTransactionModal = ({
   userId,
   handleClose
@@ -63,10 +65,12 @@ const AddTransactionModal = ({
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
+
   const categories =
     type === DEBIT_TYPE
       ? transactionCategories.debit
       : transactionCategories.credit;
+  const mostRecentCategories = getMostRecentCategories(categories);
 
   useEffect(() => {
     return function setFieldsEmpty() {
@@ -98,7 +102,6 @@ const AddTransactionModal = ({
     setAmount(event.target.value);
   };
   const handleDateChange = (event: any) => {
-    console.log(event.target.value);
     setDate(event.target.value);
   };
   const handleCategoryChange = (category: string) => {
@@ -130,6 +133,38 @@ const AddTransactionModal = ({
     };
     try {
       const transactionObjectStored = await addTransactionDB(transaction);
+      const mostRecentCategoriesLocalStorage = JSON.parse(
+        localStorage.getItem(MOST_RECENT_TRANSACTION_CATEGORIES)
+      );
+      const MOST_RECENT_CATEGORIES_NUM = 2;
+      if (mostRecentCategoriesLocalStorage) {
+        if (
+          mostRecentCategoriesLocalStorage.length < MOST_RECENT_CATEGORIES_NUM
+        ) {
+          localStorage.setItem(
+            MOST_RECENT_TRANSACTION_CATEGORIES,
+            JSON.stringify([...mostRecentCategoriesLocalStorage, category])
+          );
+        } else {
+          const newMostRecentCategoriesLocalStorage = [];
+          for (let i = 1; i < MOST_RECENT_CATEGORIES_NUM; i++) {
+            newMostRecentCategoriesLocalStorage.push(
+              mostRecentCategoriesLocalStorage[i]
+            );
+          }
+          mostRecentCategoriesLocalStorage[MOST_RECENT_CATEGORIES_NUM - 1] =
+            category;
+          localStorage.setItem(
+            MOST_RECENT_TRANSACTION_CATEGORIES,
+            JSON.stringify(mostRecentCategoriesLocalStorage)
+          );
+        }
+      } else {
+        localStorage.setItem(
+          MOST_RECENT_TRANSACTION_CATEGORIES,
+          JSON.stringify([category])
+        );
+      }
       dispatch(addTransactionAction(transactionObjectStored));
       const { amount, mode } = transactionObjectStored;
       if (type === DEBIT_TYPE) {
@@ -180,7 +215,7 @@ const AddTransactionModal = ({
         <form onSubmit={handleTransactionSubmit}>
           {/* Categories */}
           <TransactionCategoryInput
-            categories={categories}
+            categories={mostRecentCategories || []}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
           />
@@ -310,4 +345,38 @@ function constructTodayDate(): string {
   )('');
 }
 
+function getMostRecentCategories(debitCategoriesFromDB: string[]) {
+  try {
+    const mostRecentCategoriesLocalStorage = JSON.parse(
+      localStorage.getItem(MOST_RECENT_TRANSACTION_CATEGORIES)
+    );
+    // don't show the category from db which is in mostRecentCategoriesLocalStorage
+    const dbCategoriesNotInMostRecent = [];
+    if (
+      mostRecentCategoriesLocalStorage &&
+      mostRecentCategoriesLocalStorage.length > 0
+    ) {
+      for (let i = 0; i < debitCategoriesFromDB.length; i++) {
+        if (
+          !mostRecentCategoriesLocalStorage.find(
+            (mostRecentCategoryLocalStorage) => {
+              return mostRecentCategoryLocalStorage == debitCategoriesFromDB[i];
+            }
+          )
+        ) {
+          dbCategoriesNotInMostRecent.push(debitCategoriesFromDB[i]);
+        }
+      }
+    }
+    const mostRecentCategories = mostRecentCategoriesLocalStorage
+      ? [
+          ...mostRecentCategoriesLocalStorage.reverse(),
+          ...dbCategoriesNotInMostRecent
+        ]
+      : debitCategoriesFromDB;
+    return mostRecentCategories;
+  } catch (e) {
+    return debitCategoriesFromDB;
+  }
+}
 export default AddTransactionModal;

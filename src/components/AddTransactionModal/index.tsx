@@ -136,7 +136,7 @@ const AddTransactionModal = ({
       const mostRecentCategoriesLocalStorage = JSON.parse(
         localStorage.getItem(MOST_RECENT_TRANSACTION_CATEGORIES)
       );
-      const MOST_RECENT_CATEGORIES_NUM = 2;
+      const MOST_RECENT_CATEGORIES_NUM = 10;
       if (mostRecentCategoriesLocalStorage) {
         if (
           mostRecentCategoriesLocalStorage.length < MOST_RECENT_CATEGORIES_NUM

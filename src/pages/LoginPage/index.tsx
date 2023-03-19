@@ -19,13 +19,11 @@ interface UserObject {
 const Login = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState('');
-  // const [username, setUserName] = useState('');
-  // const [password, setPassword] = useState('');
   const userNameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const [signinLoader, setSigninLoader] = useState(false);
-  const [signupLoader, setSignUpLoader] = useState(false);
+  const [signInLoader, setSignInLoader] = useState(false);
+  const [signUpLoader, setSignUpLoader] = useState(false);
   const handleSignIn = (e: any) => {
     e.preventDefault();
     const username = userNameRef?.current?.value;
@@ -35,10 +33,10 @@ const Login = () => {
       setError(error);
       return;
     }
-    setSigninLoader(true);
-    signin({ username, password }).then(
+    setSignInLoader(true);
+    signIn({ username, password }).then(
       (userSavedDetails) => {
-        setSigninLoader(false);
+        setSignInLoader(false);
         const { userId, username } = userSavedDetails;
         if (userSavedDetails.error) {
           setError(userSavedDetails.error);
@@ -47,7 +45,7 @@ const Login = () => {
         }
       },
       (err) => {
-        setSigninLoader(false);
+        setSignInLoader(false);
         console.error(err);
       }
     );
@@ -115,7 +113,7 @@ const Login = () => {
         </div>
 
         <div className={styles.buttonWrapper}>
-          {signupLoader ? (
+          {signUpLoader ? (
             <Loader />
           ) : (
             <button
@@ -125,7 +123,7 @@ const Login = () => {
               Sign Up
             </button>
           )}
-          {signinLoader ? (
+          {signInLoader ? (
             <Loader />
           ) : (
             <button
@@ -182,7 +180,7 @@ async function signup(user: UserObject) {
   return await res.json();
 }
 
-async function signin(user: UserObject) {
+async function signIn(user: UserObject) {
   const res = await fetch(url.API_URL_SIGNIN, {
     method: 'POST',
     headers: {

@@ -57,11 +57,14 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
     (store: ReduxStore) => store.transactions.categories
   );
   const handleClose = () => setIsOpen(false);
-  let categories: string[];
+  let categories: string[] = [];
 
-  if (type === DEBIT_TYPE) categories = transactionCategories.debit;
-  if (type === CREDIT_TYPE) categories = transactionCategories.credit;
-  if (type === LENT_TYPE) categories = transactionCategories.lent;
+  if (editedTransaction.type === DEBIT_TYPE)
+    categories = transactionCategories.debit;
+  if (editedTransaction.type === CREDIT_TYPE)
+    categories = transactionCategories.credit;
+  if (editedTransaction.type === LENT_TYPE)
+    categories = transactionCategories.lent;
 
   useEffect(() => {
     return function cleanUp() {
@@ -89,7 +92,7 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
     setEditedTransaction({ ...editedTransaction, amount });
   };
   const handleTypeChange = (event: any) => {
-    // setEditedTransaction({...editedTransaction, type: event.target.value});
+    setEditedTransaction({ ...editedTransaction, type: event.target.value });
   };
   const handleDateChange = (date: any) => {
     setEditedTransaction({ ...transaction, date });

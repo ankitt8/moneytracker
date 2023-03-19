@@ -26,6 +26,7 @@ import {
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
+  LENT_TYPE,
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
@@ -65,11 +66,10 @@ const AddTransactionModal = ({
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
+  let categories = transactionCategories.debit;
+  if (type === CREDIT_TYPE) categories = transactionCategories.credit;
+  else if (type === LENT_TYPE) categories = transactionCategories.lent;
 
-  const categories =
-    type === DEBIT_TYPE
-      ? transactionCategories.debit
-      : transactionCategories.credit;
   const mostRecentCategories = getMostRecentCategories(categories);
 
   useEffect(() => {
@@ -252,28 +252,43 @@ const AddTransactionModal = ({
           <div className={styles.fieldSet}>
             <div className={styles.fieldSetLabel}>Type</div>
             {/* Type radio group */}
-            <div className={styles.radioGroupWrapper}>
-              <div className={styles.radio}>
-                <input
-                  type="radio"
-                  name="transactionType"
-                  id="credittype"
-                  value={CREDIT_TYPE}
-                  checked={isRadioTypeChecked('credit')}
-                  onChange={handleTypeChange}
-                />
-                <label htmlFor="credittype">Credit</label>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div className={styles.radioGroupWrapper}>
+                <div className={styles.radio}>
+                  <input
+                    type="radio"
+                    name="transactionType"
+                    id="credittype"
+                    value={CREDIT_TYPE}
+                    checked={isRadioTypeChecked(CREDIT_TYPE)}
+                    onChange={handleTypeChange}
+                  />
+                  <label htmlFor="credittype">Credit</label>
+                </div>
+                <div className={styles.radio}>
+                  <input
+                    type="radio"
+                    name="transactionType"
+                    id="debittype"
+                    value={DEBIT_TYPE}
+                    checked={isRadioTypeChecked(DEBIT_TYPE)}
+                    onChange={handleTypeChange}
+                  />
+                  <label htmlFor="debittype">Debit</label>
+                </div>
               </div>
-              <div className={styles.radio}>
-                <input
-                  type="radio"
-                  name="transactionType"
-                  id="debittype"
-                  value={DEBIT_TYPE}
-                  checked={isRadioTypeChecked('debit')}
-                  onChange={handleTypeChange}
-                />
-                <label htmlFor="debittype">Debit</label>
+              <div className={styles.radioGroupWrapper}>
+                <div className={styles.radio}>
+                  <input
+                    type="radio"
+                    name="transactionType"
+                    id="lenttype"
+                    value={LENT_TYPE}
+                    checked={isRadioTypeChecked(LENT_TYPE)}
+                    onChange={handleTypeChange}
+                  />
+                  <label htmlFor="lenttype">Lent</label>
+                </div>
               </div>
             </div>
           </div>

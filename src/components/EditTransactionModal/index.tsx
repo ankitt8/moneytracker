@@ -25,6 +25,7 @@ import {
   EDIT_TRANSACTION_SUCCESS_MSG,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
+  LENT_TYPE,
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
@@ -58,11 +59,10 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const handleClose = () => setIsOpen(false);
   let categories: string[];
 
-  if (type === DEBIT_TYPE) {
-    categories = transactionCategories.debit;
-  } else {
-    categories = transactionCategories.credit;
-  }
+  if (type === DEBIT_TYPE) categories = transactionCategories.debit;
+  if (type === CREDIT_TYPE) categories = transactionCategories.credit;
+  if (type === LENT_TYPE) categories = transactionCategories.lent;
+
   useEffect(() => {
     return function cleanUp() {
       setEditLoading(false);

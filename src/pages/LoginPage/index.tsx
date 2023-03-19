@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { PASSWORD_REQUIREMENT, url } from 'Constants';
@@ -12,20 +12,24 @@ const eyeOpen = <FontAwesomeIcon icon={faEye} />;
 const eyeClosed = <FontAwesomeIcon icon={faEyeSlash} />;
 
 interface UserObject {
-  username: string;
-  password: string;
+  username: string | undefined;
+  password: string | undefined;
 }
 
 const Login = () => {
   const dispatch = useDispatch();
   const [error, setError] = useState('');
-  const [username, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  // const [username, setUserName] = useState('');
+  // const [password, setPassword] = useState('');
+  const userNameRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [signinLoader, setSigninLoader] = useState(false);
   const [signupLoader, setSignUpLoader] = useState(false);
   const handleSignIn = (e: any) => {
     e.preventDefault();
+    const username = userNameRef?.current?.value;
+    const password = passwordRef?.current?.value;
     const error = singInValidate(username, password);
     if (error) {
       setError(error);
@@ -50,6 +54,8 @@ const Login = () => {
   };
   const handleSignUp = (e: any) => {
     e.preventDefault();
+    const username = userNameRef?.current?.value;
+    const password = passwordRef?.current?.value;
     const error = singUpValidate(username, password);
     if (error) {
       setError(error);
@@ -85,7 +91,7 @@ const Login = () => {
             id="userid"
             placeholder="User Name"
             autoComplete="username"
-            onChange={(e) => setUserName(e.target.value)}
+            ref={userNameRef}
           />
         </div>
 
@@ -97,11 +103,11 @@ const Login = () => {
             id="password"
             placeholder="Password"
             autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
+            ref={passwordRef}
           />
           <div
             onClick={() =>
-              setPasswordVisible(() => (passwordVisible ? false : true))
+              setPasswordVisible((passwordVisible) => !passwordVisible)
             }
           >
             {passwordVisible ? eyeOpen : eyeClosed}
@@ -139,21 +145,31 @@ const Login = () => {
   );
 };
 
-const singUpValidate = (userName: string, password: string) => {
+const singUpValidate = (
+  userName: string | undefined,
+  password: string | undefined
+) => {
   const passwordRegex =
     /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{7,15}$/;
   let error = '';
-  if (userName === '') error = "Username can't be empty!";
-  else if (password === '') error = "Password can't be empty!";
-  else if (!passwordRegex.test(password)) error = 'Invalid Password!';
+  if (checkEmptyField(userName)) error = "Username can't be empty!";
+  else if (checkEmptyField(password)) error = "Password can't be empty!";
+  else if (password && !passwordRegex.test(password))
+    error = 'Invalid Password!';
   return error;
 };
-const singInValidate = (userName: string, password: string) => {
+const singInValidate = (
+  userName: string | undefined,
+  password: string | undefined
+) => {
   let error = '';
-  if (userName === '') error = "Username can't be empty!";
-  else if (password === '') error = "Password can't be empty!";
+  if (checkEmptyField(userName)) error = "Username can't be empty!";
+  else if (checkEmptyField(password)) error = "Password can't be empty!";
   return error;
 };
+function checkEmptyField(val: string | undefined) {
+  return !val || val === '';
+}
 
 async function signup(user: UserObject) {
   const res = await fetch(url.API_URL_SIGNUP, {

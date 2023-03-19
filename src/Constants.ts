@@ -87,7 +87,7 @@ export const CASH_MODE = 'cash';
 export const ONLINE_MODE = 'online';
 export const CREDIT_TYPE = 'credit';
 export const DEBIT_TYPE = 'debit';
-export const LENT_TYPE = 'lent';
+export const BORROWED_TYPE = 'borrowed';
 
 export const GET_TRANSACTIONS_FAILURE_MSG = 'Failed to get latest transactions';
 export const GET_TRANSACTION_CATEGORIES_FAILURE_MSG =

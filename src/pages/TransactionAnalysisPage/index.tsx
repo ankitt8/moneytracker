@@ -5,7 +5,7 @@ import {
   DEBIT_TYPE,
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   GET_TRANSACTIONS_FAILURE_MSG,
-  LENT_TYPE
+  BORROWED_TYPE
 } from 'Constants';
 import {
   getTransactionCategoriesFromDB,
@@ -60,7 +60,7 @@ const TransactionAnalysisPage = ({
         getTransactionCategoriesState.fetching === FETCH_STATES.PENDING) && (
         <LinearProgress />
       )}
-      {[CREDIT_TYPE, LENT_TYPE, DEBIT_TYPE].map((type) => (
+      {[CREDIT_TYPE, BORROWED_TYPE, DEBIT_TYPE].map((type) => (
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <h3>{type.toUpperCase()} Transactions</h3>

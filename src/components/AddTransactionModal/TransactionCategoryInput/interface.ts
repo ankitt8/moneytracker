@@ -7,7 +7,7 @@ export interface TransactionCategoryInputProps {
 export interface TransactionCategories {
   credit: string[];
   debit: string[];
-  lent: string[];
+  borrowed: string[];
 }
 
 export type TransactionCategory = string;

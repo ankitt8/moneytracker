@@ -4,7 +4,7 @@ import {
   DELETE_TRANSACTION_CATEGORY_ERROR_MSG,
   DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-  LENT_TYPE,
+  BORROWED_TYPE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS
 } from 'Constants';
@@ -43,13 +43,13 @@ const TransactionCategoriesPage = ({
   );
   const debitCategories = transactionCategories.debit;
   const creditCategories = transactionCategories.credit;
-  const lentCategories = transactionCategories.lent;
+  const borrowedCategories = transactionCategories.borrowed;
 
   const handleDeleteCategory = (type: string) => {
     return (categoryToDelete: string) => {
       let existingCategories = debitCategories;
       if (type === CREDIT_TYPE) existingCategories = creditCategories;
-      if (type === LENT_TYPE) existingCategories = lentCategories;
+      if (type === BORROWED_TYPE) existingCategories = borrowedCategories;
       const updatedCategories: string[] = [...existingCategories];
       updatedCategories.splice(
         existingCategories.findIndex(
@@ -102,10 +102,13 @@ const TransactionCategoriesPage = ({
       </div>
 
       <div className={styles.transactionCategoryCard}>
-        <AddCategory title="Lent Transaction Category" type={LENT_TYPE} />
+        <AddCategory
+          title="Borrowed Transaction Category"
+          type={BORROWED_TYPE}
+        />
         <DisplayCategories
-          categories={lentCategories}
-          handleDeleteCategory={handleDeleteCategory(LENT_TYPE)}
+          categories={borrowedCategories}
+          handleDeleteCategory={handleDeleteCategory(BORROWED_TYPE)}
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { CREDIT_TYPE, LENT_TYPE } from '../../Constants';
+import { CREDIT_TYPE, BORROWED_TYPE } from '../../Constants';
 import styles from './styles.module.scss';
 import { TransactionsGroupedByCategories } from './interface';
 import DayTransactionsCard from '../../components/TransactionCardWrapper';
@@ -24,7 +24,7 @@ export function TransactionCards({
   const filteredTransactions = getFilteredTransactions(transactions, type);
   let categories: string[] = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
-  if (type === LENT_TYPE) categories = transactionCategories.lent;
+  if (type === BORROWED_TYPE) categories = transactionCategories.borrowed;
 
   if (filteredTransactions.length === 0) {
     return <p>!!No Transactions Found!!</p>;

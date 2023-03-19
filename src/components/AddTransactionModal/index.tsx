@@ -26,7 +26,7 @@ import {
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
-  LENT_TYPE,
+  BORROWED_TYPE,
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
@@ -67,7 +67,7 @@ const AddTransactionModal = ({
   );
   let categories = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
-  else if (type === LENT_TYPE) categories = transactionCategories.lent;
+  else if (type === BORROWED_TYPE) categories = transactionCategories.borrowed;
 
   const mostRecentCategories = getMostRecentCategories(categories, type);
 
@@ -299,12 +299,12 @@ const AddTransactionModal = ({
                   <input
                     type="radio"
                     name="transactionType"
-                    id="lenttype"
-                    value={LENT_TYPE}
-                    checked={isRadioTypeChecked(LENT_TYPE)}
+                    id="borrowedtype"
+                    value={BORROWED_TYPE}
+                    checked={isRadioTypeChecked(BORROWED_TYPE)}
                     onChange={handleTypeChange}
                   />
-                  <label htmlFor="lenttype">Lent</label>
+                  <label htmlFor="borrowedtype">Borrowed</label>
                 </div>
               </div>
             </div>

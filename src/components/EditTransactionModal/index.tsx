@@ -25,7 +25,7 @@ import {
   EDIT_TRANSACTION_SUCCESS_MSG,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
-  LENT_TYPE,
+  BORROWED_TYPE,
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
@@ -63,8 +63,8 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
     categories = transactionCategories.debit;
   if (editedTransaction.type === CREDIT_TYPE)
     categories = transactionCategories.credit;
-  if (editedTransaction.type === LENT_TYPE)
-    categories = transactionCategories.lent;
+  if (editedTransaction.type === BORROWED_TYPE)
+    categories = transactionCategories.borrowed;
 
   useEffect(() => {
     return function cleanUp() {

@@ -4,6 +4,7 @@ import {
   DELETE_TRANSACTION_CATEGORY_ERROR_MSG,
   DELETE_TRANSACTION_CATEGORY_SUCCESS_MSG,
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
+  LENT_TYPE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS
 } from 'Constants';
@@ -42,15 +43,17 @@ const TransactionCategoriesPage = ({
   );
   const debitCategories = transactionCategories.debit;
   const creditCategories = transactionCategories.credit;
+  const lentCategories = transactionCategories.lent;
 
   const handleDeleteCategory = (type: string) => {
-    return (category: string) => {
-      const existingCategories =
-        type === DEBIT_TYPE ? debitCategories : creditCategories;
+    return (categoryToDelete: string) => {
+      let existingCategories = debitCategories;
+      if (type === CREDIT_TYPE) existingCategories = creditCategories;
+      if (type === LENT_TYPE) existingCategories = lentCategories;
       const updatedCategories: string[] = [...existingCategories];
       updatedCategories.splice(
         existingCategories.findIndex(
-          (categoryExisting: string) => categoryExisting === category
+          (existingCategory: string) => existingCategory === categoryToDelete
         ),
         1
       );
@@ -58,7 +61,7 @@ const TransactionCategoriesPage = ({
       deleteTransactionCategoryFromDB(userId, updatedCategories, type).then(
         (res: any) => {
           if (res.ok) {
-            dispatch(deleteTransactionCategory(category, type));
+            dispatch(deleteTransactionCategory(categoryToDelete, type));
             dispatch(
               updateStatusAction({
                 showFeedBack: true,
@@ -95,6 +98,14 @@ const TransactionCategoriesPage = ({
         <DisplayCategories
           categories={debitCategories}
           handleDeleteCategory={handleDeleteCategory(DEBIT_TYPE)}
+        />
+      </div>
+
+      <div className={styles.transactionCategoryCard}>
+        <AddCategory title="Lent Transaction Category" type={LENT_TYPE} />
+        <DisplayCategories
+          categories={lentCategories}
+          handleDeleteCategory={handleDeleteCategory(LENT_TYPE)}
         />
       </div>
     </div>

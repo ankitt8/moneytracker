@@ -10,8 +10,10 @@ const dev = {
     API_URL_SIGNIN: `${devUrl}/api/signin`,
     API_URL_ADD_CREDIT_TRANSACTION_CATEGORY: `${devUrl}/api/add-credit-transaction-category`,
     API_URL_ADD_DEBIT_TRANSACTION_CATEGORY: `${devUrl}/api/add-debit-transaction-category`,
+    API_URL_ADD_TRANSACTION_CATEGORY: `${devUrl}/api/add-transaction-category`,
     API_URL_DELETE_CREDIT_TRANSACTION_CATEGORY: `${devUrl}/api/delete-credit-transaction-category`,
     API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY: `${devUrl}/api/delete-debit-transaction-category`,
+    API_URL_DELETE_TRANSACTION_CATEGORY: `${devUrl}/api/delete-transaction-category`,
     API_URL_GET_TRANSACTION_CATEGORIES: `${devUrl}/api/get-transaction-categories`,
     API_URL_ADD_BANK_ACCOUNT: `${devUrl}/api/add-bank-account`,
     API_URL_EDIT_BANK_ACCOUNT: `${devUrl}/api/edit-bank-account`,
@@ -32,8 +34,10 @@ const prod = {
     API_URL_SIGNIN: `${prodUrl}/api/signin`,
     API_URL_ADD_CREDIT_TRANSACTION_CATEGORY: `${prodUrl}/api/add-credit-transaction-category`,
     API_URL_ADD_DEBIT_TRANSACTION_CATEGORY: `${prodUrl}/api/add-debit-transaction-category`,
+    API_URL_ADD_TRANSACTION_CATEGORY: `${devUrl}/api/add-transaction-category`,
     API_URL_DELETE_CREDIT_TRANSACTION_CATEGORY: `${prodUrl}/api/delete-credit-transaction-category`,
     API_URL_DELETE_DEBIT_TRANSACTION_CATEGORY: `${prodUrl}/api/delete-debit-transaction-category`,
+    API_URL_DELETE_TRANSACTION_CATEGORY: `${devUrl}/api/delete-transaction-category`,
     API_URL_GET_TRANSACTION_CATEGORIES: `${prodUrl}/api/get-transaction-categories`,
     API_URL_ADD_BANK_ACCOUNT: `${prodUrl}/api/add-bank-account`,
     API_URL_EDIT_BANK_ACCOUNT: `${prodUrl}/api/edit-bank-account`,
@@ -83,6 +87,7 @@ export const CASH_MODE = 'cash';
 export const ONLINE_MODE = 'online';
 export const CREDIT_TYPE = 'credit';
 export const DEBIT_TYPE = 'debit';
+export const LENT_TYPE = 'lent';
 
 export const GET_TRANSACTIONS_FAILURE_MSG = 'Failed to get latest transactions';
 export const GET_TRANSACTION_CATEGORIES_FAILURE_MSG =

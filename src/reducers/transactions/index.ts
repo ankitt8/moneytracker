@@ -15,7 +15,7 @@ import {
   GET_TRANSACTION_CATEGORIES,
   UPDATE_STATUS
 } from 'actions/actionTypes';
-import { DEBIT_TYPE } from 'Constants';
+import { CREDIT_TYPE, DEBIT_TYPE, LENT_TYPE } from 'Constants';
 import { TransactionsStoreInitialState, Action, Status } from './interface';
 
 const initialState: TransactionsStoreInitialState = {
@@ -39,7 +39,8 @@ const initialState: TransactionsStoreInitialState = {
   },
   categories: {
     credit: [],
-    debit: []
+    debit: [],
+    lent: []
   }
 };
 
@@ -78,34 +79,45 @@ const transactions = (
       };
     }
     case ADD_TRANSACTION_CATEGORY: {
-      let { debit, credit } = state.categories;
+      // TODO  its difficult to add a type so many changes are required at
+      // different places
+      // store category as a object with type and name key params
+      //
+      let { debit, credit, lent } = state.categories;
       if (action.payload.transactionType === DEBIT_TYPE) {
         debit = [...debit, action.payload.category];
+      } else if (action.payload.transactionType === LENT_TYPE) {
+        lent = [...lent, action.payload.category];
       } else {
         credit = [...credit, action.payload.category];
       }
       return {
         ...state,
-        categories: { debit, credit }
+        categories: { debit, credit, lent }
       };
     }
     case DELETE_TRANSACTION_CATEGORY: {
-      const { debit, credit } = state.categories;
+      const { debit, credit, lent } = state.categories;
       const category = action.payload.category;
       if (action.payload.transactionType === DEBIT_TYPE) {
         debit.splice(
           debit.findIndex((debitCategory) => debitCategory === category),
           1
         );
-      } else {
+      } else if (action.payload.transactionType === CREDIT_TYPE) {
         credit.splice(
           credit.findIndex((creditCategory) => creditCategory === category),
+          1
+        );
+      } else {
+        lent.splice(
+          lent.findIndex((lentCategory) => lentCategory === category),
           1
         );
       }
       return {
         ...state,
-        categories: { ...state.categories, debit, credit }
+        categories: { ...state.categories, debit, credit, lent }
       };
     }
     case GET_TRANSACTIONS: {

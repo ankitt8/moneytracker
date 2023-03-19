@@ -1,8 +1,8 @@
-import { useReducer, useEffect, useState } from "react";
-import { updateStatusAction } from "actions/actionCreator";
-import { SEVERITY_ERROR } from "Constants";
-import { useDispatch } from "react-redux";
-import { dataReducer, initialState, ACTION_TYPES } from "reducers/DataReducer";
+import { useReducer, useEffect, useState } from 'react';
+import { updateStatusAction } from 'actions/actionCreator';
+import { SEVERITY_ERROR } from 'Constants';
+import { useDispatch } from 'react-redux';
+import { dataReducer, initialState, ACTION_TYPES } from 'reducers/DataReducer';
 
 /**
  *
@@ -28,7 +28,7 @@ const useFetchData = (
 
   const fetchData = async () => {
     dataReducerDispatch({
-      type: ACTION_TYPES.FETCH_DATA_START,
+      type: ACTION_TYPES.FETCH_DATA_START
     });
     try {
       const data = await fetchCallback(...fetchCallbackArgs);
@@ -40,7 +40,7 @@ const useFetchData = (
       }
       setData(data);
       dataReducerDispatch({
-        type: ACTION_TYPES.FETCH_DATA_RESOLVED,
+        type: ACTION_TYPES.FETCH_DATA_RESOLVED
       });
       actionToDispatchOnResolved && dispatch(actionToDispatchOnResolved(data));
     } catch (e) {
@@ -49,13 +49,13 @@ const useFetchData = (
     function handleErrorCase(e) {
       console.log(e);
       dataReducerDispatch({
-        type: ACTION_TYPES.FETCH_DATA_REJECTED,
+        type: ACTION_TYPES.FETCH_DATA_REJECTED
       });
       dispatch(
         updateStatusAction({
           showFeedBack: true,
           msg: messageOnRejected,
-          severity: SEVERITY_ERROR,
+          severity: SEVERITY_ERROR
         })
       );
     }

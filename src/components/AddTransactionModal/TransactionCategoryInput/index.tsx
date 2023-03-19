@@ -22,18 +22,23 @@ const TransactionCategoryInput = ({
       </div>
       <div className={styles.transactionCategories}>
         {categories.length !== 0 ? (
-          categories.map((category) => (
-            <div
-              key={category}
-              className={cn(styles.transactionCategory, {
-                [styles.transactionCategorySelected]:
-                  category === categorySelected
-              })}
-              onClick={() => handleCategoryChange(category)}
-            >
-              {category}
-            </div>
-          ))
+          categories.map((category) => {
+            const categoryParsed = category?.category
+              ? category?.category
+              : category;
+            return (
+              <div
+                key={category}
+                className={cn(styles.transactionCategory, {
+                  [styles.transactionCategorySelected]:
+                    categoryParsed === categorySelected
+                })}
+                onClick={() => handleCategoryChange(categoryParsed)}
+              >
+                {categoryParsed}
+              </div>
+            );
+          })
         ) : (
           <div className={styles.noData}>!!No Categoires Found!!</div>
         )}

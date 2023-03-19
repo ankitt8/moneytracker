@@ -1,6 +1,9 @@
-import { TransactionCategories } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
 import { DEBIT_TYPE } from 'Constants';
 import { Transaction } from 'interfaces/index.interface';
+import {
+  CategoryAmount,
+  TransactionsGroupedByCategories
+} from './pages/TransactionAnalysisPage/interface';
 
 export function getNoOfDaysMonth(
   month = new Date().getMonth(),
@@ -17,8 +20,7 @@ export function getNoOfDaysMonth(
 
 export function getCurrentMonth() {
   const date = new Date();
-  const month = date.getMonth();
-  return month;
+  return date.getMonth();
 }
 
 export const isDebitTypeTransaction = (transaction: Transaction) => {
@@ -27,13 +29,64 @@ export const isDebitTypeTransaction = (transaction: Transaction) => {
   return transaction.type === DEBIT_TYPE || transaction.type === undefined;
 };
 
-export const checkTransactionCategoriesChanged = (
-  data: TransactionCategories,
-  storeTransactionCategories: TransactionCategories
+// TODO use here enum
+export const getFilteredTransactions = (
+  transactions: Transaction[],
+  type: string
 ) => {
-  const { credit, debit } = storeTransactionCategories;
-  const { credit: dbCredit, debit: dbDebit } = data;
-  if (credit.length !== dbCredit.length) return true;
-  if (debit.length !== dbDebit.length) return true;
-  return false;
+  return transactions.filter((transaction) => transaction?.type === type);
+};
+
+export const createTransactionsGroupedByCategories = (
+  transactions: Transaction[],
+  categories: string[]
+) => {
+  const transactionsGroupedByCategories: TransactionsGroupedByCategories = {
+    'No Category': {
+      transactions: [],
+      totalAmount: 0
+    }
+  };
+
+  categories &&
+    categories.forEach((category: string) => {
+      transactionsGroupedByCategories[category] = {
+        transactions: [],
+        totalAmount: 0
+      };
+    });
+
+  transactions.forEach((transaction) => {
+    const { category, amount } = transaction;
+    if (!category) {
+      transactionsGroupedByCategories['No Category']['transactions'].push(
+        transaction
+      );
+      transactionsGroupedByCategories['No Category'].totalAmount += amount;
+    } else {
+      // for now user can add transaction without category
+      // reason have not yet made category required
+      if (transactionsGroupedByCategories[category]) {
+        transactionsGroupedByCategories[category]['transactions'].push(
+          transaction
+        );
+        transactionsGroupedByCategories[category].totalAmount += amount;
+      }
+    }
+  });
+
+  return transactionsGroupedByCategories;
+};
+
+export const getCategoryNamesSortedByTotalAmount = (
+  transactionsGroupedByCategories: TransactionsGroupedByCategories
+) => {
+  const categoryTotalAmountObjectArray: CategoryAmount[] = Object.keys(
+    transactionsGroupedByCategories
+  ).map((category: string) => ({
+    category,
+    totalAmount: transactionsGroupedByCategories[category]['totalAmount']
+  }));
+  categoryTotalAmountObjectArray.sort((a, b) => b.totalAmount - a.totalAmount);
+  return categoryTotalAmountObjectArray.map(({ category }) => category);
 };

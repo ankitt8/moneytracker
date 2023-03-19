@@ -11,7 +11,7 @@ import {
   getTransactionCategoriesFromDB,
   getTransactionsFromDB
 } from 'api-services/api.service';
-import { TransactionAnalysisPageProps, CategoryAmount } from './interface';
+import { TransactionAnalysisPageProps } from './interface';
 
 import styles from './styles.module.scss';
 import {
@@ -52,7 +52,7 @@ const TransactionAnalysisPage = ({
     (store: ReduxStore) => store.transactions.categories
   );
 
-  // in future will give filters where based on filter applied type will be choose
+  // in future will give filters where based on filter applied type will be chosen
 
   return (
     <div className={styles.transactionAnalysisPage}>
@@ -62,7 +62,19 @@ const TransactionAnalysisPage = ({
       )}
       {[CREDIT_TYPE, LENT_TYPE, DEBIT_TYPE].map((type) => (
         <>
-          <h3>{type.toUpperCase()} Transactions</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <h3>{type.toUpperCase()} Transactions</h3>
+            <h3>
+              {transactions
+                .filter((transaction) => transaction.type === type)
+                .reduce(
+                  (totalAmount, currentTransactionObj) =>
+                    totalAmount + currentTransactionObj.amount,
+                  0
+                )}
+            </h3>
+          </div>
+
           <TransactionCards
             transactions={transactions}
             transactionCategories={transactionCategories}

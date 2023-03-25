@@ -289,6 +289,11 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
                 control={<Radio color="primary" />}
                 label="Credit"
               />
+              <FormControlLabel
+                value={BORROWED_TYPE}
+                control={<Radio color="primary" />}
+                label="Borrowed"
+              />
             </RadioGroup>
           </FormControl>
           <CategoryFormInput

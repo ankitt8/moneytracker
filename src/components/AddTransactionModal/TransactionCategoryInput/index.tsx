@@ -27,7 +27,7 @@ const TransactionCategoryInput = ({
               ? category?.category
               : category;
             return (
-              <div
+              <p
                 key={category}
                 className={cn(styles.transactionCategory, {
                   [styles.transactionCategorySelected]:
@@ -36,7 +36,7 @@ const TransactionCategoryInput = ({
                 onClick={() => handleCategoryChange(categoryParsed)}
               >
                 {categoryParsed}
-              </div>
+              </p>
             );
           })
         ) : (

@@ -1,4 +1,4 @@
-@import "src/styles/mixins";
+@import 'src/styles/mixins';
 
 .transactionCardWrapper {
   margin-top: 20px;
@@ -8,9 +8,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 8px;
   padding: 0 10px;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
 
   > p {
@@ -20,6 +20,7 @@
 
 .noData {
   @include noData;
+  font-size: 10px;
 }
 
 .list {

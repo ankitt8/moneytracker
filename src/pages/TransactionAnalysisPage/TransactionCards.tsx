@@ -27,12 +27,13 @@ export function TransactionCards({
   if (type === BORROWED_TYPE) categories = transactionCategories.borrowed;
 
   if (filteredTransactions.length === 0) {
-    return <p>!!No Transactions Found!!</p>;
+    return <p style={{ fontSize: 12 }}>!!No Transactions Found!!</p>;
   } else {
     const transactionsGroupedByCategories: TransactionsGroupedByCategories =
       createTransactionsGroupedByCategories(filteredTransactions, categories);
     const categoryNamesSortedByTotalAmountDescending =
       getCategoryNamesSortedByTotalAmount(transactionsGroupedByCategories);
+    console.log(categoryNamesSortedByTotalAmountDescending);
     const TransactionAnalysisCards =
       categoryNamesSortedByTotalAmountDescending.map((category) => (
         <DayTransactionsCard

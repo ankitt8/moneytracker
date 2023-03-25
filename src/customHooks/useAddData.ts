@@ -13,7 +13,7 @@ interface IUseAddDataReturnType {
 export default function useAddData(
   addDataApiSuccessHandler: (response: any) => void,
   addDataApiErrorHandler: (error: any) => void,
-  addDataApiFinalHandler: () => void
+  addDataApiFinalHandler?: () => void
 ): IUseAddDataReturnType {
   const [apiAddDataState, setApiAddDataState] = useState<IApiAddDataState>({
     loading: false,
@@ -25,14 +25,14 @@ export default function useAddData(
     try {
       const res = await addDataApiCallback();
       setApiAddDataState({ loading: false, result: res, error: '' });
-      addDataApiSuccessHandler(res);
+      addDataApiSuccessHandler && addDataApiSuccessHandler(res);
     } catch (error: any) {
       if (typeof error === 'string') {
         setApiAddDataState({ loading: false, result: null, error });
       } else {
         setApiAddDataState({ loading: false, result: null, error: '' });
       }
-      addDataApiErrorHandler(error);
+      addDataApiErrorHandler && addDataApiErrorHandler(error);
     } finally {
       addDataApiFinalHandler && addDataApiFinalHandler();
     }

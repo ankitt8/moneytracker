@@ -40,6 +40,8 @@ import {
 import { ReduxStore } from 'reducers/interface';
 import useFetchData from 'customHooks/useFetchData';
 import { FETCH_STATES } from 'reducers/DataReducer';
+import useAddData from '../../customHooks/useAddData';
+import { Transaction } from '../../interfaces/index.interface';
 
 const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
 
@@ -80,6 +82,95 @@ const AddTransactionModal = ({
       setLoadingState(false);
     };
   }, []);
+  const addTransactionSuccessHandler = (transactionResponse: Transaction) => {
+    const localStorageMostRecentTransactionCategories = localStorage.getItem(
+      MOST_RECENT_TRANSACTION_CATEGORIES
+    );
+    let mostRecentCategoriesLocalStorage: {
+      category: string;
+      type: string;
+    }[] = [];
+    if (localStorageMostRecentTransactionCategories) {
+      mostRecentCategoriesLocalStorage = JSON.parse(
+        localStorageMostRecentTransactionCategories
+      );
+    }
+    const MOST_RECENT_CATEGORIES_NUM = 10;
+    if (!mostRecentCategoriesLocalStorage) {
+      localStorage.setItem(
+        MOST_RECENT_TRANSACTION_CATEGORIES,
+        JSON.stringify([{ category, type }])
+      );
+    }
+    if (mostRecentCategoriesLocalStorage) {
+      if (
+        mostRecentCategoriesLocalStorage.length < MOST_RECENT_CATEGORIES_NUM
+      ) {
+        localStorage.setItem(
+          MOST_RECENT_TRANSACTION_CATEGORIES,
+          JSON.stringify([
+            { category, type },
+            ...mostRecentCategoriesLocalStorage.filter(
+              (categoryLocalStorage) =>
+                categoryLocalStorage?.category !== category
+            )
+          ])
+        );
+      } else {
+        const newMostRecentCategoriesLocalStorage = [];
+        for (let i = 1; i < MOST_RECENT_CATEGORIES_NUM; i++) {
+          newMostRecentCategoriesLocalStorage.push(
+            mostRecentCategoriesLocalStorage[i]
+          );
+        }
+        newMostRecentCategoriesLocalStorage[0] = {
+          category,
+          type
+        };
+        localStorage.setItem(
+          MOST_RECENT_TRANSACTION_CATEGORIES,
+          JSON.stringify(newMostRecentCategoriesLocalStorage)
+        );
+      }
+    }
+    dispatch(addTransactionAction(transactionResponse));
+    const { amount, mode } = transactionResponse;
+    if (type === DEBIT_TYPE) {
+      if (mode === CASH_MODE) {
+        dispatch(editCashDebitAction(amount));
+      } else if (mode === ONLINE_MODE) {
+        dispatch(editBankDebitAction(amount));
+      }
+    } else {
+      if (mode === CASH_MODE) {
+        dispatch(editCashCreditAction(amount));
+      } else if (mode === ONLINE_MODE) {
+        dispatch(editBankCreditAction(amount));
+      }
+    }
+    dispatch(
+      updateStatusAction({
+        showFeedBack: true,
+        msg: ADD_TRANSACTION_SUCCESS_MSG,
+        severity: SEVERITY_SUCCESS
+      })
+    );
+  };
+  const addTransactionApiErrorHandler = (error: any) => {
+    console.error(error);
+    dispatch(
+      updateStatusAction({
+        showFeedBack: true,
+        msg: ADD_TRANSACTION_FAIL_ERROR,
+        severity: SEVERITY_ERROR
+      })
+    );
+  };
+  const { addDataApiCall, state } = useAddData(
+    addTransactionSuccessHandler,
+    addTransactionApiErrorHandler,
+    handleClose
+  );
   const isRadioModeChecked = (value: string) => {
     if (mode === '') return value === ONLINE_MODE;
     return mode === value;
@@ -120,7 +211,6 @@ const AddTransactionModal = ({
       );
       return;
     }
-    setLoadingState(true);
     const transaction: AddTransaction = {
       userId,
       heading,
@@ -130,92 +220,7 @@ const AddTransactionModal = ({
       type,
       category
     };
-    try {
-      const transactionObjectStored = await addTransactionDB(transaction);
-      const localStorageMostRecentTransactionCategories = localStorage.getItem(
-        MOST_RECENT_TRANSACTION_CATEGORIES
-      );
-      let mostRecentCategoriesLocalStorage: {
-        category: string;
-        type: string;
-      }[] = [];
-      if (localStorageMostRecentTransactionCategories) {
-        mostRecentCategoriesLocalStorage = JSON.parse(
-          localStorageMostRecentTransactionCategories
-        );
-      }
-      const MOST_RECENT_CATEGORIES_NUM = 10;
-      if (!mostRecentCategoriesLocalStorage) {
-        localStorage.setItem(
-          MOST_RECENT_TRANSACTION_CATEGORIES,
-          JSON.stringify([{ category, type }])
-        );
-      }
-      if (mostRecentCategoriesLocalStorage) {
-        if (
-          mostRecentCategoriesLocalStorage.length < MOST_RECENT_CATEGORIES_NUM
-        ) {
-          localStorage.setItem(
-            MOST_RECENT_TRANSACTION_CATEGORIES,
-            JSON.stringify([
-              { category, type },
-              ...mostRecentCategoriesLocalStorage.filter(
-                (categoryLocalStorage) =>
-                  categoryLocalStorage?.category !== category
-              )
-            ])
-          );
-        } else {
-          const newMostRecentCategoriesLocalStorage = [];
-          for (let i = 1; i < MOST_RECENT_CATEGORIES_NUM; i++) {
-            newMostRecentCategoriesLocalStorage.push(
-              mostRecentCategoriesLocalStorage[i]
-            );
-          }
-          newMostRecentCategoriesLocalStorage[0] = {
-            category,
-            type
-          };
-          localStorage.setItem(
-            MOST_RECENT_TRANSACTION_CATEGORIES,
-            JSON.stringify(newMostRecentCategoriesLocalStorage)
-          );
-        }
-      }
-      dispatch(addTransactionAction(transactionObjectStored));
-      const { amount, mode } = transactionObjectStored;
-      if (type === DEBIT_TYPE) {
-        if (mode === CASH_MODE) {
-          dispatch(editCashDebitAction(amount));
-        } else if (mode === ONLINE_MODE) {
-          dispatch(editBankDebitAction(amount));
-        }
-      } else {
-        if (mode === CASH_MODE) {
-          dispatch(editCashCreditAction(amount));
-        } else if (mode === ONLINE_MODE) {
-          dispatch(editBankCreditAction(amount));
-        }
-      }
-      dispatch(
-        updateStatusAction({
-          showFeedBack: true,
-          msg: ADD_TRANSACTION_SUCCESS_MSG,
-          severity: SEVERITY_SUCCESS
-        })
-      );
-    } catch (error) {
-      console.error(error);
-      dispatch(
-        updateStatusAction({
-          showFeedBack: true,
-          msg: ADD_TRANSACTION_FAIL_ERROR,
-          severity: SEVERITY_ERROR
-        })
-      );
-    } finally {
-      handleClose();
-    }
+    addDataApiCall(() => addTransactionDB(transaction));
   };
   return (
     <Dialog
@@ -338,7 +343,7 @@ const AddTransactionModal = ({
             >
               Close
             </button>
-            {loadingState ? (
+            {state.loading ? (
               <Loader />
             ) : (
               <input type="submit" className={styles.button} value="Add" />

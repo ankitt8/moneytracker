@@ -18,7 +18,7 @@ const dev = {
     API_URL_ADD_BANK_ACCOUNT: `${devUrl}/api/add-bank-account`,
     API_URL_EDIT_BANK_ACCOUNT: `${devUrl}/api/edit-bank-account`,
     API_URL_DELETE_BANK_ACCOUNT: `${devUrl}/api/delete-bank-account`,
-    API_URL_GET_ALL_BANK_ACCOUNTS: `${devUrl}/api/get-bank-account`
+    API_URL_GET_BANK_ACCOUNTS: `${devUrl}/api/get-bank-accounts`
   }
 };
 const prodUrl = 'https://moneytrackerbackend.onrender.com';
@@ -42,7 +42,7 @@ const prod = {
     API_URL_ADD_BANK_ACCOUNT: `${prodUrl}/api/add-bank-account`,
     API_URL_EDIT_BANK_ACCOUNT: `${prodUrl}/api/edit-bank-account`,
     API_URL_DELETE_BANK_ACCOUNT: `${prodUrl}/api/delete-bank-account`,
-    API_URL_GET_ALL_BANK_ACCOUNTS: `${prodUrl}/api/get-bank-account`
+    API_URL_GET_BANK_ACCOUNTS: `${prodUrl}/api/get-bank-accounts`
   }
 };
 

@@ -13,7 +13,7 @@ import { dataReducer, initialState, ACTION_TYPES } from 'reducers/DataReducer';
  * @returns void
  */
 const useFetchData = (
-  fetchCallback: (userId: string) => any,
+  fetchCallback: (userId: string) => Promise<any>,
   messageOnRejected: string,
   actionToDispatchOnResolved: () => void,
   refetchData = null,
@@ -31,7 +31,7 @@ const useFetchData = (
       type: ACTION_TYPES.FETCH_DATA_START
     });
     try {
-      const data = await fetchCallback(...fetchCallbackArgs);
+      const data = await fetchCallback(window.userId, ...fetchCallbackArgs);
       // console.log(data);
       // const dataJson = await data.json();
       if (data?.error || data == null) {

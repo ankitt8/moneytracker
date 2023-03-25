@@ -20,7 +20,8 @@ import {
   ADD_TRANSACTION_CATEGORY,
   DELETE_TRANSACTION_CATEGORY,
   GET_TRANSACTION_CATEGORIES,
-  USER_AUTHENTICATED
+  USER_AUTHENTICATED,
+  SET_USER_BANK_ACCOUNTS
 } from './actionTypes';
 
 type TransactionType = string;
@@ -115,6 +116,14 @@ export function getTransactionCategories(
   return {
     type: GET_TRANSACTION_CATEGORIES,
     payload: transactionCategories
+  };
+}
+
+export function setUserBankAccountsAction(bankAccounts: string[]) {
+  console.log(bankAccounts);
+  return {
+    type: SET_USER_BANK_ACCOUNTS,
+    payload: bankAccounts
   };
 }
 

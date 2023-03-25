@@ -103,8 +103,7 @@ export const deleteTransactionCategoryFromDB = async (
   });
 };
 interface IBankAccountDetails {
-  name: string;
-  balance: number;
+  bankName: string;
 }
 
 export const addBankAccountDB = async (
@@ -129,12 +128,18 @@ export const editBankAccountDB = async (bankAccountId: string) => {
   });
 };
 
-export const getBankAccountsDB = async ({ userId }: { userId: string }) => {
-  console.log(userId);
-  return await fetch(`${url.API_URL_GET_ALL_BANK_ACCOUNTS}/${userId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-};
+export async function getBankAccountsFromDB(userId: string): Promise<any> {
+  try {
+    const res = await fetch(url.API_URL_GET_BANK_ACCOUNTS, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userId: userId })
+    });
+    return await res.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}

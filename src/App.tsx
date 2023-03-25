@@ -52,7 +52,7 @@ function App() {
             </div>
           </Route>
           <Route path={ROUTES.BANK}>
-            <BankAccountsPage />
+            <BankAccountsPage userId={userId} />
           </Route>
           <Route path={ROUTES.INVESTMENT}>
             <UpcomingFeaturePage />

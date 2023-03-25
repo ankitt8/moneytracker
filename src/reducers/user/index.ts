@@ -1,9 +1,11 @@
 import { Action } from 'reducers/transactions/interface';
 import { UserStoreInitialState } from './interface';
+import { SET_USER_BANK_ACCOUNTS } from '../../actions/actionTypes';
 
 const initialState: UserStoreInitialState = {
   userId: '',
-  username: ''
+  username: '',
+  bankAccounts: []
 };
 const user = (
   state: UserStoreInitialState = initialState,
@@ -16,6 +18,12 @@ const user = (
         ...state,
         userId,
         username
+      };
+    }
+    case SET_USER_BANK_ACCOUNTS: {
+      return {
+        ...state,
+        bankAccounts: action.payload
       };
     }
     default:

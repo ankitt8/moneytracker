@@ -21,7 +21,7 @@ function History({ userId }: IHistoryPageProps) {
     startDate: null,
     endDate: null
   };
-  const getTransactionsBasedOnRange = (e) => {
+  const transactionHistoryFormSubmitHandler = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     for (const [key, value] of formData) {
@@ -41,7 +41,7 @@ function History({ userId }: IHistoryPageProps) {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <form onSubmit={getTransactionsBasedOnRange}>
+        <form onSubmit={transactionHistoryFormSubmitHandler}>
           <label htmlFor="startDate">From</label>
           {/* <select
             id="selectMonth"

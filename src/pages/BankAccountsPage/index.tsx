@@ -29,7 +29,9 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
   useFetchData(
     getBankAccountsFromDB,
     GET_BANK_ACCOUNTS_FAILURE_MSG,
-    setUserBankAccountsAction
+    setUserBankAccountsAction,
+    null,
+    userId
   );
   const addBankApiSuccessHandler = (res: { bankAdded: string }) => {
     console.log(res);

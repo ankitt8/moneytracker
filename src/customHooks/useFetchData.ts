@@ -31,7 +31,7 @@ const useFetchData = (
       type: ACTION_TYPES.FETCH_DATA_START
     });
     try {
-      const data = await fetchCallback(window.userId, ...fetchCallbackArgs);
+      const data = await fetchCallback(...fetchCallbackArgs);
       // console.log(data);
       // const dataJson = await data.json();
       if (data?.error || data == null) {

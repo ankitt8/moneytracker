@@ -15,7 +15,7 @@ import { dataReducer, initialState, ACTION_TYPES } from 'reducers/DataReducer';
 const useFetchData = (
   fetchCallback: (userId: string) => Promise<any>,
   messageOnRejected: string,
-  actionToDispatchOnResolved: () => void,
+  actionToDispatchOnResolved: () => { type: string; payload: any },
   refetchData = null,
   ...fetchCallbackArgs: string[]
 ) => {

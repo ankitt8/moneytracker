@@ -110,13 +110,18 @@ export const addBankAccountDB = async (
   userId: string,
   bankAccountDetails: IBankAccountDetails
 ) => {
-  return await fetch(url.API_URL_ADD_BANK_ACCOUNT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ userId, ...bankAccountDetails })
-  });
+  try {
+    const res = await fetch(url.API_URL_ADD_BANK_ACCOUNT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ userId, ...bankAccountDetails })
+    });
+    return await res.json();
+  } catch (e) {
+    return null;
+  }
 };
 export const editBankAccountDB = async (bankAccountId: string) => {
   return await fetch(url.API_URL_EDIT_BANK_ACCOUNT, {
@@ -126,6 +131,20 @@ export const editBankAccountDB = async (bankAccountId: string) => {
     },
     body: JSON.stringify({ bankAccountId: bankAccountId })
   });
+};
+
+export const deleteBankAccountDB = async (
+  userId: string,
+  newBankAccounts: string[]
+) => {
+  const res = await fetch(url.API_URL_DELETE_BANK_ACCOUNT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ userId, newBankAccounts })
+  });
+  return await res.json();
 };
 
 export async function getBankAccountsFromDB(userId: string): Promise<any> {

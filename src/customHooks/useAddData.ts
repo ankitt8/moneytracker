@@ -12,7 +12,7 @@ interface IUseAddDataReturnType {
 }
 export default function useAddData(
   addDataApiSuccessHandler: (response: any) => void,
-  addDataApiErrorHandler: (error: any) => void,
+  addDataApiErrorHandler?: (error: any) => void,
   addDataApiFinalHandler?: () => void
 ): IUseAddDataReturnType {
   const [apiAddDataState, setApiAddDataState] = useState<IApiAddDataState>({

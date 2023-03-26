@@ -61,8 +61,7 @@ export const addTransactionDB = async (transaction: AddTransaction) => {
     },
     body: JSON.stringify(transaction)
   });
-  const transactionObject = await addTransactionResponse.json();
-  return Promise.resolve(transactionObject);
+  return await addTransactionResponse.json();
 };
 
 export const addTransactionCategoryToDB = async (

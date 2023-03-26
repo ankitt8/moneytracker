@@ -59,9 +59,22 @@ function History({ userId }: IHistoryPageProps) {
           <input type="date" id="startDate" name="startDate" />
           <label htmlFor="endDate">To</label>
           <input type="date" id="endDate" name="endDate" />
-          {/*{transactionTypes.map((transactionType) =>(*/}
-          {/*    <input type="checkbox">*/}
-          {/*)}*/}
+          <fieldset>
+            <legend>Transaction Type</legend>
+            <div>
+              {transactionTypes.map((transactionType) => (
+                <label key={transactionType}>
+                  <input
+                    type="checkbox"
+                    id={transactionType}
+                    name="transactionType"
+                    value={transactionType}
+                  />
+                  {transactionType}
+                </label>
+              ))}
+            </div>
+          </fieldset>
           <button>Go</button>
         </form>
       </div>

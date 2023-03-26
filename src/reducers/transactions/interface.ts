@@ -27,5 +27,5 @@ export interface Status {
 
 export interface Action {
   type: string;
-  payload: Record<string, any>;
+  payload: Record<string, any> | string | string[];
 }

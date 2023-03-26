@@ -21,7 +21,9 @@ import {
   DELETE_TRANSACTION_CATEGORY,
   GET_TRANSACTION_CATEGORIES,
   USER_AUTHENTICATED,
-  SET_USER_BANK_ACCOUNTS
+  SET_USER_BANK_ACCOUNTS,
+  ADD_USER_BANK_ACCOUNT,
+  DELETE_USER_BANK_ACCOUNT
 } from './actionTypes';
 
 type TransactionType = string;
@@ -120,10 +122,22 @@ export function getTransactionCategories(
 }
 
 export function setUserBankAccountsAction(bankAccounts: string[]) {
-  console.log(bankAccounts);
   return {
     type: SET_USER_BANK_ACCOUNTS,
     payload: bankAccounts
+  };
+}
+export function addUserBankAccountAction(bankAccount: string) {
+  return {
+    type: ADD_USER_BANK_ACCOUNT,
+    payload: bankAccount
+  };
+}
+
+export function deleteUserBankAccountAction(bankAccount: string) {
+  return {
+    type: DELETE_USER_BANK_ACCOUNT,
+    payload: bankAccount
   };
 }
 

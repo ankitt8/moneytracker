@@ -2,18 +2,23 @@ import styles from './styles.module.scss';
 import useAddData from 'customHooks/useAddData';
 import {
   addBankAccountDB,
+  deleteBankAccountDB,
   getBankAccountsFromDB
 } from '../../api-services/api.service';
 import useFetchData from '../../customHooks/useFetchData';
 import { GET_BANK_ACCOUNTS_FAILURE_MSG } from '../../Constants';
-import { setUserBankAccountsAction } from '../../actions/actionCreator';
-import { useSelector } from 'react-redux';
+import {
+  addUserBankAccountAction,
+  setUserBankAccountsAction
+} from '../../actions/actionCreator';
+import { useDispatch, useSelector } from 'react-redux';
 import { ReduxStore } from '../../reducers/interface';
 
 interface IBankAccountsPage {
   userId: string;
 }
 const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
+  const dispatch = useDispatch();
   const bankAccounts = useSelector(
     (store: ReduxStore) => store.user.bankAccounts
   );
@@ -26,15 +31,21 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
     GET_BANK_ACCOUNTS_FAILURE_MSG,
     setUserBankAccountsAction
   );
-  const addBankApiSuccessHandler = (res: any) => {
+  const addBankApiSuccessHandler = (res: { bankAdded: string }) => {
     console.log(res);
+    dispatch(addUserBankAccountAction(res.bankAdded));
   };
   const addBankApiErrorHandler = (e: string) => {
     console.log(e);
   };
-  const { addDataApiCall: addBankAccount, state } = useAddData(
-    addBankApiSuccessHandler,
-    addBankApiErrorHandler
+  const { addDataApiCall: addBankAccount, state: addBankAccountApiState } =
+    useAddData(addBankApiSuccessHandler, addBankApiErrorHandler);
+  const deleteBankApiSuccessHandler = (res: { bankAccounts: string[] }) => {
+    dispatch(setUserBankAccountsAction(res.bankAccounts));
+  };
+  // const deleteBankApiErrorHandler = () => {};
+  const { addDataApiCall: deleteBankAccount, state } = useAddData(
+    deleteBankApiSuccessHandler
   );
 
   const addBankFormSubmitHandler = (e: any) => {
@@ -47,17 +58,39 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
         bankName = value;
       }
     }
-    console.log(bankName);
     addBankAccount(() => addBankAccountDB(userId, { bankName }));
   };
+  const deleteBankAccountHandler = (bankAccountToDelete: string) => {
+    const oldBankAccounts = [...bankAccounts];
+    let newBankAccounts: string[] = [];
+    if (oldBankAccounts.length === 1) newBankAccounts = [];
+    else {
+      const bankAccountIndexToDelete = oldBankAccounts.findIndex(
+        (bankAccount) => bankAccount === bankAccountToDelete
+      );
+      oldBankAccounts.splice(bankAccountIndexToDelete, 1);
+      newBankAccounts = oldBankAccounts;
+    }
+
+    deleteBankAccount(() => deleteBankAccountDB(userId, newBankAccounts));
+  };
   return (
-    <>
-      <div className={styles.bankAccounts}>BankAccounts</div>
+    <div className={styles.bankAccountsPage}>
+      <div>BankAccounts</div>
       <form onSubmit={addBankFormSubmitHandler}>
         <input type={'text'} name={'bankName'} />
         <button>Add bank account</button>
       </form>
-    </>
+      {bankAccounts &&
+        bankAccounts.map((bankAccount) => (
+          <div key={bankAccount} className={styles.bankRow}>
+            <p>{bankAccount}</p>
+            <button onClick={() => deleteBankAccountHandler(bankAccount)}>
+              Delete
+            </button>
+          </div>
+        ))}
+    </div>
   );
 };
 

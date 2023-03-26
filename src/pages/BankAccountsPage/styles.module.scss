@@ -1,5 +1,10 @@
-@import "src/styles/mixins";
+@import 'src/styles/mixins';
 
-.bankAccounts {
+.bankAccountsPage {
   @include page;
+}
+
+.bankRow {
+  display: flex;
+  justify-content: space-between;
 }

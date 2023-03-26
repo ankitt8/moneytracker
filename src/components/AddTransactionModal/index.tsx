@@ -156,7 +156,7 @@ const AddTransactionModal = ({
       })
     );
   };
-  const { addDataApiCall: addTransactionApiCall, state } = useApi(
+  const { apiCall: addTransactionApiCall, state } = useApi(
     addTransactionSuccessHandler,
     addTransactionApiErrorHandler,
     handleClose

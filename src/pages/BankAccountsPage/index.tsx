@@ -40,13 +40,15 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
   const addBankApiErrorHandler = (e: string) => {
     console.log(e);
   };
-  const { addDataApiCall: addBankAccount, state: addBankAccountApiState } =
-    useApi(addBankApiSuccessHandler, addBankApiErrorHandler);
+  const { apiCall: addBankAccount, state: addBankAccountApiState } = useApi(
+    addBankApiSuccessHandler,
+    addBankApiErrorHandler
+  );
   const deleteBankApiSuccessHandler = (res: { bankAccounts: string[] }) => {
     dispatch(setUserBankAccountsAction(res.bankAccounts));
   };
   // const deleteBankApiErrorHandler = () => {};
-  const { addDataApiCall: deleteBankAccount, state } = useApi(
+  const { apiCall: deleteBankAccount, state } = useApi(
     deleteBankApiSuccessHandler
   );
 

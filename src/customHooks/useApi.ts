@@ -7,7 +7,7 @@ interface IApiAddDataState {
 }
 
 interface IUseAddDataReturnType {
-  addDataApiCall: (addDataApiCallback: () => Promise<any>) => Promise<any>;
+  apiCall: (addDataApiCallback: () => Promise<any>) => Promise<any>;
   state: IApiAddDataState;
 }
 export default function useApi(
@@ -20,7 +20,7 @@ export default function useApi(
     result: null,
     error: ''
   });
-  const addDataApiCall = async (addDataApiCallback: () => Promise<any>) => {
+  const apiCall = async (addDataApiCallback: () => Promise<any>) => {
     setApiAddDataState({ loading: true, result: null, error: '' });
     try {
       const res = await addDataApiCallback();
@@ -38,5 +38,5 @@ export default function useApi(
     }
   };
 
-  return { addDataApiCall, state: apiAddDataState };
+  return { apiCall, state: apiAddDataState };
 }

@@ -35,7 +35,7 @@ function History({ userId }: IHistoryPageProps) {
     console.log({ transactions });
     setTransactions(transactions);
   };
-  const { addDataApiCall: getTransactionsApi, state } = useApi(
+  const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
   );
   return (

@@ -9,6 +9,7 @@ export interface AddTransaction {
   amount: number;
   date: Date;
   mode: string;
+  bankAccount: string;
   type: string;
   category: string;
 }

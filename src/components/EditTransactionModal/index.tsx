@@ -46,7 +46,10 @@ import styles from './styles.module.scss';
 import { ReduxStore } from 'reducers/interface';
 import { Transaction } from 'interfaces/index.interface';
 
-const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
+const EditTransactionModal = ({
+  transaction,
+  handleCloseProps
+}: EditTransactionModalProps) => {
   const dispatch = useDispatch();
   const [isOpen, setIsOpen] = useState(true);
   const [editedTransaction, setEditedTransaction] = useState(transaction);
@@ -56,7 +59,13 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
-  const handleClose = () => setIsOpen(false);
+  const bankAccounts = useSelector(
+    (store: ReduxStore) => store.user.bankAccounts
+  );
+  const handleClose = () => {
+    handleCloseProps();
+    setIsOpen(false);
+  };
   let categories: string[] = [];
 
   if (editedTransaction.type === DEBIT_TYPE)
@@ -268,6 +277,31 @@ const EditTransactionModal = ({ transaction }: EditTransactionModalProps) => {
                 control={<Radio color="primary" />}
                 label="Cash"
               />
+            </RadioGroup>
+          </FormControl>
+          <FormControl component="fieldset" style={{ marginTop: '20px' }}>
+            {/*bank account*/}
+            <FormLabel component="legend">BankAccount</FormLabel>
+            <RadioGroup
+              aria-label="BankAccount"
+              name="bankAccount"
+              value={editedTransaction.bankAccount}
+              onChange={(e) => {
+                setEditedTransaction((prev) => ({
+                  ...prev,
+                  bankAccount: e.target.value
+                }));
+              }}
+              style={{ flexDirection: 'row' }}
+            >
+              {bankAccounts.map((bankAccount) => (
+                <FormControlLabel
+                  key={bankAccount}
+                  value={bankAccount}
+                  control={<Radio color="primary" />}
+                  label={bankAccount}
+                />
+              ))}
             </RadioGroup>
           </FormControl>
           <FormControl component="fieldset" style={{ marginTop: '20px' }}>

@@ -207,6 +207,7 @@ const AddTransactionModal = ({
       amount: parseInt(amount),
       date: new Date(date),
       mode,
+      bankAccount,
       type,
       category
     };

@@ -79,6 +79,7 @@ const TransactionAnalysisPage = ({
             transactions={transactions}
             transactionCategories={transactionCategories}
             type={type}
+            showDate={true}
           />
         </>
       ))}

@@ -14,12 +14,14 @@ interface ITransactionCardsProps {
   transactions: Transaction[];
   transactionCategories: TransactionCategories;
   type: string;
+  showDate?: boolean;
 }
 
 export function TransactionCards({
   transactions,
   transactionCategories,
-  type
+  type,
+  showDate
 }: ITransactionCardsProps) {
   const filteredTransactions = getFilteredTransactions(transactions, type);
   let categories: string[] = transactionCategories.debit;
@@ -42,6 +44,7 @@ export function TransactionCards({
           }
           totalAmount={transactionsGroupedByCategories[category]['totalAmount']}
           key={category}
+          showDate={showDate}
         />
       ));
     return (

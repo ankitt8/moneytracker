@@ -13,13 +13,14 @@ const areEqual = (prevProps: any, nextProps: any) => {
 const TransactionCardWrapper = ({
   transactions,
   title,
-  totalAmount
+  totalAmount,
+  showDate
 }: TransactionCardWrapperProps) => {
   const transactionsList = transactions.map((transaction) => {
     const { _id: transactionId } = transaction;
     return (
       <li key={transactionId}>
-        <TransactionCard transaction={transaction} />
+        <TransactionCard transaction={transaction} showDate={showDate} />
       </li>
     );
   });

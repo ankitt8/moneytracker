@@ -4,4 +4,5 @@ export interface TransactionCardWrapperProps {
   transactions: Transaction[];
   totalAmount: number;
   title: string;
+  showDate?: boolean;
 }

@@ -9,12 +9,23 @@ const EditTransactionModal = lazy(
   () => import('components/EditTransactionModal')
 );
 
-const TransactionCard = ({ transaction }: TransactionCardProps) => {
+const TransactionCard = ({
+  transaction,
+  showDate = false
+}: TransactionCardProps) => {
   const [open, setOpen] = useState(false);
   const { heading, amount } = transaction;
   const handleClickOpen = () => setOpen(true);
   const handleCloseProps = () => setOpen(false);
-
+  let date = '';
+  if (showDate) {
+    date += `${new Date(transaction.date).getDate()}`;
+    date += '/';
+    date += `${new Date(transaction.date).getMonth()}`;
+    date += '/';
+    date += `${new Date(transaction.date).getFullYear()}`;
+    date += ' ';
+  }
   return (
     <>
       <div
@@ -23,7 +34,10 @@ const TransactionCard = ({ transaction }: TransactionCardProps) => {
         })}
         onClick={handleClickOpen}
       >
-        <p className={styles.title}>{heading}</p>
+        <p className={styles.title}>
+          {date}
+          {heading}
+        </p>
         <p className={styles.amount}>{amount}</p>
       </div>
       {open && (

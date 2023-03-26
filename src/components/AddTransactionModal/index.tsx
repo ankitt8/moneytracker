@@ -50,9 +50,13 @@ const AddTransactionModal = ({
   const [date, setDate] = useState(constructTodayDate());
   const [category, setCategory] = useState('');
   const [mode, setMode] = useState(ONLINE_MODE);
+  const [bankAccount, setBankAccount] = useState('');
   const [type, setType] = useState(DEBIT_TYPE);
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
+  );
+  const bankAccounts = useSelector(
+    (store: ReduxStore) => store.user.bankAccounts
   );
   let categories = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
@@ -247,15 +251,37 @@ const AddTransactionModal = ({
                 <input
                   type="radio"
                   name="transactionMode"
-                  id="bankaccount"
-                  value={ONLINE_MODE}
-                  checked={isRadioModeChecked('online')}
+                  id="cashmode"
+                  value={CASH_MODE}
+                  checked={isRadioModeChecked('cash')}
                   onChange={handleModeChange}
                 />
                 <label htmlFor="cashmode">Cash</label>
               </div>
             </div>
           </div>
+          {/*BANK ACCOUNT */}
+          {mode === ONLINE_MODE ? (
+            <div className={styles.fieldSet}>
+              <div className={styles.fieldSetLabel}>BankAccount</div>
+              <div className={styles.radioGroupWrapper}>
+                {bankAccounts?.length > 0 &&
+                  bankAccounts.map((bankAccountStore) => (
+                    <div key={bankAccountStore} className={styles.radio}>
+                      <input
+                        type="radio"
+                        name="transactionBankAccount"
+                        id="bankaccount"
+                        value={bankAccountStore}
+                        checked={bankAccountStore === bankAccount}
+                        onChange={(e) => setBankAccount(e.target.value)}
+                      />
+                      <label htmlFor="bankaccount">{bankAccountStore}</label>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          ) : null}
           {/* Type */}
           <div className={styles.fieldSet}>
             <div className={styles.fieldSetLabel}>Type</div>

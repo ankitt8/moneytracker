@@ -21,7 +21,7 @@ const TransactionCard = ({
   if (showDate) {
     date += `${new Date(transaction.date).getDate()}`;
     date += '/';
-    date += `${new Date(transaction.date).getMonth()}`;
+    date += `${new Date(transaction.date).getMonth() + 1}`;
     date += '/';
     date += `${new Date(transaction.date).getFullYear()}`;
     date += ' ';

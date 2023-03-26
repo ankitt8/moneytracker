@@ -20,7 +20,7 @@ const userPersistConfig = {
   key: 'user',
   storage
 };
-
+// const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   transactions: persistReducer(transactionsPersistConfig, transactions),
   // transactions,
@@ -28,7 +28,9 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
-const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
+const composeEnhancers =
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
+  composeWithDevTools({ trace: true, traceLimit: 25 });
 
 const storeCreator = () => {
   const store = createStore(persistedReducer, composeEnhancers());

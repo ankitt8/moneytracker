@@ -33,13 +33,8 @@ import {
   SEVERITY_WARNING
 } from 'Constants';
 
-import {
-  addTransactionDB,
-  getTransactionCategoriesFromDB
-} from 'api-services/api.service';
+import { addTransactionDB } from 'api-services/api.service';
 import { ReduxStore } from 'reducers/interface';
-import useFetchData from 'customHooks/useFetchData';
-import { FETCH_STATES } from 'reducers/DataReducer';
 import useAddData from 'customHooks/useAddData';
 import { Transaction } from '../../interfaces/index.interface';
 
@@ -54,16 +49,8 @@ const AddTransactionModal = ({
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(constructTodayDate());
   const [category, setCategory] = useState('');
-  const [loadingState, setLoadingState] = useState(false);
   const [mode, setMode] = useState(ONLINE_MODE);
   const [type, setType] = useState(DEBIT_TYPE);
-  const { fetchStatus } = useFetchData(
-    getTransactionCategoriesFromDB,
-    GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-    getTransactionCategories,
-    null,
-    userId
-  );
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
@@ -79,7 +66,6 @@ const AddTransactionModal = ({
       setAmount('');
       setDate(constructTodayDate());
       setCategory('');
-      setLoadingState(false);
     };
   }, []);
   const addTransactionSuccessHandler = (transactionResponse: Transaction) => {
@@ -231,7 +217,7 @@ const AddTransactionModal = ({
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
     >
-      {fetchStatus.fetching === FETCH_STATES.PENDING && <LinearProgress />}
+      {/*{fetchStatus.fetching === FETCH_STATES.PENDING && <LinearProgress />}*/}
       <div className={styles.modalWrapper}>
         <h3 className={styles.modalTitle}>Add Transaction</h3>
         <form onSubmit={handleTransactionSubmit}>
@@ -251,6 +237,17 @@ const AddTransactionModal = ({
                   type="radio"
                   name="transactionMode"
                   id="bankmode"
+                  value={ONLINE_MODE}
+                  checked={isRadioModeChecked('online')}
+                  onChange={handleModeChange}
+                />
+                <label htmlFor="bankmode">Bank</label>
+              </div>
+              <div className={styles.radio}>
+                <input
+                  type="radio"
+                  name="transactionMode"
+                  id="bankaccount"
                   value={ONLINE_MODE}
                   checked={isRadioModeChecked('online')}
                   onChange={handleModeChange}

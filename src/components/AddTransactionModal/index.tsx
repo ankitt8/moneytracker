@@ -40,7 +40,7 @@ import {
 import { ReduxStore } from 'reducers/interface';
 import useFetchData from 'customHooks/useFetchData';
 import { FETCH_STATES } from 'reducers/DataReducer';
-import useAddData from '../../customHooks/useAddData';
+import useAddData from 'customHooks/useAddData';
 import { Transaction } from '../../interfaces/index.interface';
 
 const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
@@ -166,7 +166,7 @@ const AddTransactionModal = ({
       })
     );
   };
-  const { addDataApiCall, state } = useAddData(
+  const { addDataApiCall: addTransactionApiCall, state } = useAddData(
     addTransactionSuccessHandler,
     addTransactionApiErrorHandler,
     handleClose
@@ -220,7 +220,7 @@ const AddTransactionModal = ({
       type,
       category
     };
-    addDataApiCall(() => addTransactionDB(transaction));
+    addTransactionApiCall(() => addTransactionDB(transaction));
   };
   return (
     <Dialog

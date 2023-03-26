@@ -72,7 +72,7 @@ function App() {
             <OthersPage />
           </Route>
           <Route path={ROUTES.HISTORY}>
-            <History />
+            <History userId={userId} />
           </Route>
           <Route path={ROUTES.HOME}>
             <HomePage userId={userId} />

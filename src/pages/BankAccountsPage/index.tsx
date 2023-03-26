@@ -1,5 +1,5 @@
 import styles from './styles.module.scss';
-import useAddData from 'customHooks/useAddData';
+import useApi from 'customHooks/useApi';
 import {
   addBankAccountDB,
   deleteBankAccountDB,
@@ -41,12 +41,12 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
     console.log(e);
   };
   const { addDataApiCall: addBankAccount, state: addBankAccountApiState } =
-    useAddData(addBankApiSuccessHandler, addBankApiErrorHandler);
+    useApi(addBankApiSuccessHandler, addBankApiErrorHandler);
   const deleteBankApiSuccessHandler = (res: { bankAccounts: string[] }) => {
     dispatch(setUserBankAccountsAction(res.bankAccounts));
   };
   // const deleteBankApiErrorHandler = () => {};
-  const { addDataApiCall: deleteBankAccount, state } = useAddData(
+  const { addDataApiCall: deleteBankAccount, state } = useApi(
     deleteBankApiSuccessHandler
   );
 

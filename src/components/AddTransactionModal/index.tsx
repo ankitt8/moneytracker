@@ -35,7 +35,7 @@ import {
 
 import { addTransactionDB } from 'api-services/api.service';
 import { ReduxStore } from 'reducers/interface';
-import useAddData from 'customHooks/useAddData';
+import useApi from 'customHooks/useApi';
 import { Transaction } from '../../interfaces/index.interface';
 
 const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
@@ -156,7 +156,7 @@ const AddTransactionModal = ({
       })
     );
   };
-  const { addDataApiCall: addTransactionApiCall, state } = useAddData(
+  const { addDataApiCall: addTransactionApiCall, state } = useApi(
     addTransactionSuccessHandler,
     addTransactionApiErrorHandler,
     handleClose

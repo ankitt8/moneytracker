@@ -10,7 +10,7 @@ interface IUseAddDataReturnType {
   addDataApiCall: (addDataApiCallback: () => Promise<any>) => Promise<any>;
   state: IApiAddDataState;
 }
-export default function useAddData(
+export default function useApi(
   addDataApiSuccessHandler: (response: any) => void,
   addDataApiErrorHandler?: (error: any) => void,
   addDataApiFinalHandler?: () => void

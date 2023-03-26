@@ -252,17 +252,6 @@ const AddTransactionModal = ({
                   checked={isRadioModeChecked('online')}
                   onChange={handleModeChange}
                 />
-                <label htmlFor="bankmode">Bank</label>
-              </div>
-              <div className={styles.radio}>
-                <input
-                  type="radio"
-                  name="transactionMode"
-                  id="cashmode"
-                  value={CASH_MODE}
-                  checked={isRadioModeChecked('cash')}
-                  onChange={handleModeChange}
-                />
                 <label htmlFor="cashmode">Cash</label>
               </div>
             </div>

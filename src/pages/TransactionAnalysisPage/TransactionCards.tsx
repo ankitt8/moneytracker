@@ -33,7 +33,6 @@ export function TransactionCards({
       createTransactionsGroupedByCategories(filteredTransactions, categories);
     const categoryNamesSortedByTotalAmountDescending =
       getCategoryNamesSortedByTotalAmount(transactionsGroupedByCategories);
-    console.log(categoryNamesSortedByTotalAmountDescending);
     const TransactionAnalysisCards =
       categoryNamesSortedByTotalAmountDescending.map((category) => (
         <DayTransactionsCard

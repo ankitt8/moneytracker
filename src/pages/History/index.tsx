@@ -25,14 +25,11 @@ function History({ userId }: IHistoryPageProps) {
     e.preventDefault();
     const formData = new FormData(e.target);
     for (const [key, value] of formData) {
-      console.log({ key, value });
       formValues[key] = value;
     }
-    console.log(formValues);
     getTransactionsApi(() => getTransactionsFromDB({ userId, ...formValues }));
   };
   const getTransactionsSuccessHandler = (transactions) => {
-    console.log({ transactions });
     setTransactions(transactions);
   };
   const { apiCall: getTransactionsApi, state } = useApi(

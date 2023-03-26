@@ -32,8 +32,6 @@ const useFetchData = (
     });
     try {
       const data = await fetchCallback(...fetchCallbackArgs);
-      // console.log(data);
-      // const dataJson = await data.json();
       if (data?.error || data == null) {
         handleErrorCase();
         return;

@@ -22,7 +22,6 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
   const bankAccounts = useSelector(
     (store: ReduxStore) => store.user.bankAccounts
   );
-  console.log(bankAccounts);
   // for(const bankAccount of bankAccounts) {
   //   console.log(bankAccount);
   // }
@@ -34,7 +33,6 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
     userId
   );
   const addBankApiSuccessHandler = (res: { bankAdded: string }) => {
-    console.log(res);
     dispatch(addUserBankAccountAction(res.bankAdded));
   };
   const addBankApiErrorHandler = (e: string) => {
@@ -57,7 +55,6 @@ const BankAccountsPage = ({ userId }: IBankAccountsPage) => {
     const formData = new FormData(e.target);
     let bankName = '';
     for (const [key, value] of formData) {
-      console.log({ key, value });
       if (key === 'bankName') {
         bankName = value;
       }

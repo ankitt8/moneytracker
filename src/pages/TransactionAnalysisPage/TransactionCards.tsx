@@ -13,7 +13,7 @@ import { TransactionCategories } from '../../components/AddTransactionModal/Tran
 interface ITransactionCardsProps {
   transactions: Transaction[];
   transactionCategories: TransactionCategories;
-  type: string;
+  type?: string;
   showDate?: boolean;
 }
 
@@ -26,7 +26,14 @@ export function TransactionCards({
   const filteredTransactions = getFilteredTransactions(transactions, type);
   let categories: string[] = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
-  if (type === BORROWED_TYPE) categories = transactionCategories.borrowed;
+  if (!type) {
+    categories = [
+      ...transactionCategories.credit,
+      ...transactionCategories.debit,
+      ...transactionCategories.borrowed
+    ];
+  }
+  // if (type === BORROWED_TYPE) categories = transactionCategories.borrowed;
 
   if (filteredTransactions.length === 0) {
     return <p style={{ fontSize: 12 }}>!!No Transactions Found!!</p>;

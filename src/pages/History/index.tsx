@@ -7,13 +7,13 @@ import styles from './style.module.scss';
 import useApi from '../../customHooks/useApi';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
-
-const currentYear = new Date().getFullYear();
+import Transactions from '../../components/Transactions';
 interface IHistoryPageProps {
   userId: string;
 }
 function History({ userId }: IHistoryPageProps) {
   const [transactions, setTransactions] = useState([]);
+  const [groupByDate, setGroupByDate] = useState(false);
   const transactionTypes: TRANSACTION_TYPE[] = [
     TRANSACTION_TYPE.credit,
     TRANSACTION_TYPE.credit,
@@ -29,6 +29,7 @@ function History({ userId }: IHistoryPageProps) {
     for (const [key, value] of formData) {
       formValues[key] = value;
     }
+    console.log(formValues);
     getTransactionsApi(() => getTransactionsFromDB({ userId, ...formValues }));
   };
   const getTransactionsSuccessHandler = (transactions) => {
@@ -37,26 +38,20 @@ function History({ userId }: IHistoryPageProps) {
   const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
   );
+
   const [type, setType] = useState<TRANSACTION_TYPE>(TRANSACTION_TYPE.debit);
   const [categorySelected, setCategorySelected] = useState('');
+  console.log('hi');
+  console.log(transactions[0]);
+  console.log(transactions[transactions.length - 1]);
+  // console.log(
+  //   new Date(transactions[transactions.length - 1].date).toDateString()
+  // );
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <form onSubmit={transactionHistoryFormSubmitHandler}>
           <label htmlFor="startDate">From</label>
-          {/* <select
-            id="selectMonth"
-            className={styles.dropdown}
-            onChange={handleChange}
-          >
-            {months.map((month) => {
-              return (
-                <option key={month} selected={month === monthSelected}>
-                  {month}
-                </option>
-              );
-            })}
-          </select> */}
           <input type="date" id="startDate" name="startDate" />
           <label htmlFor="endDate">To</label>
           <input type="date" id="endDate" name="endDate" />
@@ -88,20 +83,26 @@ function History({ userId }: IHistoryPageProps) {
           <button>Go</button>
         </form>
       </div>
+      <button onClick={() => setGroupByDate(true)}>Group By Date</button>
+      <button onClick={() => setGroupByDate(false)}>Group By Categories</button>
       {state.loading && <LinearProgress />}
       {transactions && <TransactionSummary transactions={transactions} />}
-      {/* <Transactions
-        month={monthSelectedIndex}
-        transactions={data || []}
-        fetching={fetchStatus.fetching}
-        showTransactionsInAscendingOrder={true}
-      /> */}
-      {transactions && (
+      {groupByDate && transactions.length > 0 ? (
+        <Transactions
+          transactions={transactions || []}
+          showTransactionsInAscendingOrder={true}
+          endDateParam={new Date(
+            transactions[transactions.length - 1].date
+          ).toDateString()}
+          startDateParam={new Date(transactions[0].date).toDateString()}
+        />
+      ) : null}
+      {!groupByDate && transactions?.length > 0 ? (
         <TransactionAnalysisPage
           userId={userId}
           transactionsProps={transactions}
         />
-      )}
+      ) : null}
     </div>
   );
 }

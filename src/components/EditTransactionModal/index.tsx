@@ -285,9 +285,7 @@ const EditTransactionModal = ({
               aria-label="BankAccount"
               name="bankAccount"
               value={
-                editedTransaction.type === BORROWED_TYPE
-                  ? editedTransaction.creditCard
-                  : editedTransaction.bankAccount
+                editedTransaction?.creditCard || editedTransaction?.bankAccount
               }
               onChange={(e) => {
                 setEditedTransaction((prev) => ({

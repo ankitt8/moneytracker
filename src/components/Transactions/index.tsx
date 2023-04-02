@@ -2,8 +2,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { motion } from 'framer-motion';
 import { DEBIT_TYPE } from 'Constants';
 import DayTransactionsCard from 'components/TransactionCardWrapper';
-import { getNoOfDaysMonth } from 'helper';
-import { Transaction } from 'interfaces/index.interface';
+import { Transaction } from 'interfaces';
 import styles from './styles.module.scss';
 import { TransactionsProps } from './interface';
 import { FETCH_STATES } from 'reducers/DataReducer';
@@ -11,9 +10,9 @@ import { useEffect } from 'react';
 
 const Transactions = ({
   transactions,
-  month,
-  year = new Date().getFullYear(),
   fetching,
+  startDateParam,
+  endDateParam,
   showTransactionsInAscendingOrder = false
 }: TransactionsProps) => {
   let componentToRender;
@@ -24,14 +23,18 @@ const Transactions = ({
   }, [transactions]);
   try {
     const individualDayTransactions2DArray =
-      createIndividualDayTransactions2DArray(transactions, month);
+      createIndividualDayTransactions2DArray(
+        transactions,
+        startDateParam,
+        endDateParam
+      );
+    console.log({ individualDayTransactions2DArray });
     const individualDayTransactionsUIArray =
       createIndividualDayTransactionsUIArray(
         individualDayTransactions2DArray,
-        month,
-        year,
         showTransactionsInAscendingOrder
       );
+    console.log({ individualDayTransactionsUIArray });
     componentToRender = (
       <ul className={styles.transactionsList}>
         {individualDayTransactionsUIArray}
@@ -55,20 +58,47 @@ const isDebitTransaction = (transaction: Transaction) =>
 
 function createIndividualDayTransactions2DArray(
   transactions: Transaction[],
-  month: number
+  endDateParam,
+  startDateParam
 ) {
-  const noOfDaysMonth = getNoOfDaysMonth(month);
-  const individualDayTransactions2DArray: Transaction[][] = [];
-  for (let day = 0; day <= noOfDaysMonth; day += 1) {
-    individualDayTransactions2DArray[day] = [];
+  let endDate = endDateParam;
+  let startDate = startDateParam;
+  const currentDate = new Date();
+  if (!endDate) {
+    endDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + 1,
+      0
+    ).toDateString();
+  } else {
+    endDate = new Date(endDateParam).toDateString();
   }
+  if (!startDate) {
+    startDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      1
+    ).toDateString();
+  } else {
+    startDate = new Date(startDateParam).toDateString();
+  }
+  const individualDayTransactions2DArray: Record<string, Transaction[]> = {};
+  // const date = startDate;
+  let date = new Date(startDate);
+  while (date <= new Date(endDate)) {
+    individualDayTransactions2DArray[date.toDateString()] = [];
+    date = new Date(date.getTime() + 1000 * 3600 * 24);
+  }
+  console.log({ individualDayTransactions2DArray });
   transactions.forEach((transaction) => {
     const transactionDate = new Date(transaction.date);
     const isTransactionDateInCurrentYear =
       transactionDate.getFullYear() === new Date().getFullYear();
     if (!isTransactionDateInCurrentYear) return;
-    const dayOfMonth = transactionDate.getDate();
-    individualDayTransactions2DArray[dayOfMonth].push(transaction);
+    // const dayOfMonth = transactionDate.getDate();
+    individualDayTransactions2DArray[transactionDate.toDateString()].push(
+      transaction
+    );
   });
   return individualDayTransactions2DArray;
 }
@@ -82,42 +112,39 @@ function getIndividualDayTransactionsTotalDebitAmount(
 }
 
 function createIndividualDayTransactionsUIArray(
-  individualDayTransactions2DArray: Transaction[][],
-  month: number,
-  year: number,
+  individualDayTransactions2DArray: Record<string, Transaction[]>,
   showTransactionsInAscendingOrder: boolean
 ) {
-  const date = new Date();
-  const todayDate = date.getDate();
-
-  let lastDateToShow = todayDate;
-  if (month !== date.getMonth()) {
-    lastDateToShow = getNoOfDaysMonth(month);
-  }
   const dayTransactionsCard = [];
-  function createDayTransactionsCard(title: string, i: number) {
+  function createDayTransactionsCard(title: string, dateString: string) {
     return (
-      <motion.li layout key={i}>
+      <motion.li layout key={dateString}>
         <DayTransactionsCard
           title={title}
-          transactions={individualDayTransactions2DArray[i]}
+          transactions={individualDayTransactions2DArray[dateString]}
           totalAmount={getIndividualDayTransactionsTotalDebitAmount(
-            individualDayTransactions2DArray[i]
+            individualDayTransactions2DArray[dateString]
           )}
         />
       </motion.li>
     );
   }
   if (showTransactionsInAscendingOrder) {
-    for (let i = 1; i <= lastDateToShow; i++) {
-      const title = new Date(year, month, i).toDateString();
-      dayTransactionsCard.push(createDayTransactionsCard(title, i));
-    }
+    console.log({ individualDayTransactions2DArray });
+    console.log(Object.keys(individualDayTransactions2DArray));
+    Object.keys(individualDayTransactions2DArray)
+      .sort((key1, key2) => new Date(key2) > new Date(key1))
+      .forEach((dateString) => {
+        const title = new Date(dateString).toDateString();
+        dayTransactionsCard.push(createDayTransactionsCard(title, dateString));
+      });
   } else {
-    for (let i = lastDateToShow; i >= 1; --i) {
-      const title = new Date(year, month, i).toDateString();
-      dayTransactionsCard.push(createDayTransactionsCard(title, i));
-    }
+    Object.keys(individualDayTransactions2DArray)
+      .sort((key1, key2) => new Date(key2) < new Date(key1))
+      .forEach((dateString) => {
+        const title = new Date(dateString).toDateString();
+        dayTransactionsCard.push(createDayTransactionsCard(title, dateString));
+      });
   }
 
   return dayTransactionsCard;

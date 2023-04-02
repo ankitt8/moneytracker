@@ -35,8 +35,9 @@ const TransactionCard = ({
         onClick={handleClickOpen}
       >
         <p className={styles.title}>
-          {date}
-          {heading}
+          {`${date} ${heading} ${
+            transaction.bankAccount ?? transaction.creditCard ?? ''
+          }`}
         </p>
         <p className={styles.amount}>{amount}</p>
       </div>

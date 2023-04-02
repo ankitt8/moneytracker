@@ -32,8 +32,9 @@ export const isDebitTypeTransaction = (transaction: Transaction) => {
 // TODO use here enum
 export const getFilteredTransactions = (
   transactions: Transaction[],
-  type: string
+  type?: string
 ) => {
+  if (!type) return transactions;
   return transactions.filter((transaction) => transaction?.type === type);
 };
 

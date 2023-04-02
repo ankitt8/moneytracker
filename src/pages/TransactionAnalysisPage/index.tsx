@@ -1,31 +1,17 @@
-import LinearProgress from '@material-ui/core/LinearProgress';
 import { useSelector } from 'react-redux';
-import {
-  CREDIT_TYPE,
-  DEBIT_TYPE,
-  GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-  GET_TRANSACTIONS_FAILURE_MSG,
-  BORROWED_TYPE
-} from 'Constants';
-import {
-  getTransactionCategoriesFromDB,
-  getTransactionsFromDB
-} from 'api-services/api.service';
+import { BORROWED_TYPE, CREDIT_TYPE, DEBIT_TYPE } from 'Constants';
 import { TransactionAnalysisPageProps } from './interface';
 
 import styles from './styles.module.scss';
-import {
-  getTransactionCategories,
-  getTransactionsAction
-} from 'actions/actionCreator';
 import { ReduxStore } from 'reducers/interface';
-import useFetchData from 'customHooks/useFetchData';
-import { FETCH_STATES } from 'reducers/DataReducer';
 import { TransactionCards } from './TransactionCards';
+import TransactionCard from '../../components/TransactionCard';
+import DayTransactionsCard from '../../components/TransactionCardWrapper';
 
 const TransactionAnalysisPage = ({
   userId,
-  transactionsProps
+  transactionsProps,
+  groupByDate
 }: TransactionAnalysisPageProps) => {
   // const { fetchStatus: getTransactionState } = useFetchData(
   //   getTransactionsFromDB,
@@ -48,6 +34,9 @@ const TransactionAnalysisPage = ({
       (store: ReduxStore) => store.transactions.transactions
     );
   }
+  const creditCards = useSelector(
+    (store: ReduxStore) => store.user.creditCards
+  );
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
@@ -74,15 +63,38 @@ const TransactionAnalysisPage = ({
                 )}
             </h3>
           </div>
-
-          <TransactionCards
-            transactions={transactions}
-            transactionCategories={transactionCategories}
-            type={type}
-            showDate={true}
-          />
+          {type === BORROWED_TYPE
+            ? creditCards.map((creditCard) => {
+                const transactionsGroupedByCreditCard = transactions
+                  .filter(({ type }) => type === BORROWED_TYPE)
+                  .filter(
+                    ({ creditCard: transactionCreditCard }) =>
+                      transactionCreditCard === creditCard
+                  );
+                return (
+                  <DayTransactionsCard
+                    title={creditCard}
+                    transactions={transactionsGroupedByCreditCard}
+                    totalAmount={transactionsGroupedByCreditCard.reduce(
+                      (prev, curr) => prev.amount + curr.amount,
+                      0
+                    )}
+                    key={creditCard}
+                    showDate={true}
+                  />
+                );
+              })
+            : null}
         </>
       ))}
+      <h3>All Transactions</h3>
+      {groupByDate ? (
+        <TransactionCards
+          transactions={transactions}
+          transactionCategories={transactionCategories}
+          showDate={true}
+        />
+      ) : null}
     </div>
   );
 };

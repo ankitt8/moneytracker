@@ -50,7 +50,8 @@ const AddTransactionModal = ({
   const [date, setDate] = useState(constructTodayDate());
   const [category, setCategory] = useState('');
   const [mode, setMode] = useState(ONLINE_MODE);
-  const [bankAccount, setBankAccount] = useState('');
+  const [selectedPaymentInstrument, setSelectedPaymentInstrument] =
+    useState('');
   const [type, setType] = useState(DEBIT_TYPE);
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
@@ -58,9 +59,12 @@ const AddTransactionModal = ({
   const bankAccounts = useSelector(
     (store: ReduxStore) => store.user.bankAccounts
   );
+  const creditCards = useSelector(
+    (store: ReduxStore) => store.user.creditCards
+  );
+  const paymentInstruments = [...bankAccounts, ...creditCards];
   let categories = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
-  else if (type === BORROWED_TYPE) categories = transactionCategories.borrowed;
 
   const mostRecentCategories = getMostRecentCategories(categories, type);
 
@@ -207,7 +211,8 @@ const AddTransactionModal = ({
       amount: parseInt(amount),
       date: new Date(date),
       mode,
-      bankAccount,
+      bankAccount: selectedPaymentInstrument,
+      creditCard: selectedPaymentInstrument,
       type,
       category
     };
@@ -237,7 +242,7 @@ const AddTransactionModal = ({
             <div className={styles.fieldSetLabel}>Mode</div>
             {/* Mode radio group */}
             <div className={styles.radioGroupWrapper}>
-              <div className={styles.radio}>
+              <div>
                 <input
                   type="radio"
                   name="transactionMode"
@@ -248,7 +253,7 @@ const AddTransactionModal = ({
                 />
                 <label htmlFor="bankmode">Bank</label>
               </div>
-              <div className={styles.radio}>
+              <div>
                 <input
                   type="radio"
                   name="transactionMode"
@@ -264,20 +269,26 @@ const AddTransactionModal = ({
           {/*BANK ACCOUNT */}
           {mode === ONLINE_MODE ? (
             <div className={styles.fieldSet}>
-              <div className={styles.fieldSetLabel}>BankAccount</div>
+              <div className={styles.fieldSetLabel}>Payment Instrument</div>
               <div className={styles.radioGroupWrapper}>
-                {bankAccounts?.length > 0 &&
-                  bankAccounts.map((bankAccountStore) => (
-                    <div key={bankAccountStore} className={styles.radio}>
+                {paymentInstruments?.length > 0 &&
+                  paymentInstruments.map((paymentInstrument) => (
+                    <div key={paymentInstrument}>
                       <input
                         type="radio"
-                        name="transactionBankAccount"
-                        id="bankaccount"
-                        value={bankAccountStore}
-                        checked={bankAccountStore === bankAccount}
-                        onChange={(e) => setBankAccount(e.target.value)}
+                        name="transactionInstrument"
+                        id={paymentInstrument}
+                        value={paymentInstrument}
+                        checked={
+                          paymentInstrument === selectedPaymentInstrument
+                        }
+                        onChange={(e) =>
+                          setSelectedPaymentInstrument(e.target.value)
+                        }
                       />
-                      <label htmlFor="bankaccount">{bankAccountStore}</label>
+                      <label htmlFor={paymentInstrument}>
+                        {paymentInstrument}
+                      </label>
                     </div>
                   ))}
               </div>
@@ -289,7 +300,7 @@ const AddTransactionModal = ({
             {/* Type radio group */}
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <div className={styles.radioGroupWrapper}>
-                <div className={styles.radio}>
+                <div>
                   <input
                     type="radio"
                     name="transactionType"
@@ -300,7 +311,7 @@ const AddTransactionModal = ({
                   />
                   <label htmlFor="credittype">Credit</label>
                 </div>
-                <div className={styles.radio}>
+                <div>
                   <input
                     type="radio"
                     name="transactionType"
@@ -311,9 +322,7 @@ const AddTransactionModal = ({
                   />
                   <label htmlFor="debittype">Debit</label>
                 </div>
-              </div>
-              <div className={styles.radioGroupWrapper}>
-                <div className={styles.radio}>
+                <div>
                   <input
                     type="radio"
                     name="transactionType"

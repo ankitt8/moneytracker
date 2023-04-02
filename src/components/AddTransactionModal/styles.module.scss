@@ -17,6 +17,7 @@
   justify-content: space-between;
   height: $spacing-8;
   align-items: center;
+  margin: 16px 0;
 }
 
 .fieldSetLabel {
@@ -26,13 +27,8 @@
 
 .radioGroupWrapper {
   display: flex;
-}
-
-.radio {
-  width: 10vh;
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .buttonWrapper {

@@ -10,6 +10,7 @@ export interface AddTransaction {
   date: Date;
   mode: string;
   bankAccount: string;
+  creditCard: string;
   type: string;
   category: string;
 }

@@ -27,21 +27,21 @@ const TransactionAnalysisPage = ({
   userId,
   transactionsProps
 }: TransactionAnalysisPageProps) => {
-  const { fetchStatus: getTransactionState } = useFetchData(
-    getTransactionsFromDB,
-    GET_TRANSACTIONS_FAILURE_MSG,
-    getTransactionsAction,
-    null,
-    { userId }
-  );
+  // const { fetchStatus: getTransactionState } = useFetchData(
+  //   getTransactionsFromDB,
+  //   GET_TRANSACTIONS_FAILURE_MSG,
+  //   getTransactionsAction,
+  //   null,
+  //   { userId }
+  // );
 
-  const { fetchStatus: getTransactionCategoriesState } = useFetchData(
-    getTransactionCategoriesFromDB,
-    GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-    getTransactionCategories,
-    false,
-    userId
-  );
+  // const { fetchStatus: getTransactionCategoriesState } = useFetchData(
+  //   getTransactionCategoriesFromDB,
+  //   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
+  //   getTransactionCategories,
+  //   false,
+  //   userId
+  // );
   let transactions = transactionsProps;
   if (!transactions) {
     transactions = useSelector(
@@ -56,10 +56,10 @@ const TransactionAnalysisPage = ({
 
   return (
     <div className={styles.transactionAnalysisPage}>
-      {(getTransactionState.fetching === FETCH_STATES.PENDING ||
-        getTransactionCategoriesState.fetching === FETCH_STATES.PENDING) && (
-        <LinearProgress />
-      )}
+      {/*{(getTransactionState.fetching === FETCH_STATES.PENDING ||*/}
+      {/*  getTransactionCategoriesState.fetching === FETCH_STATES.PENDING) && (*/}
+      {/*  <LinearProgress />*/}
+      {/*)}*/}
       {[CREDIT_TYPE, BORROWED_TYPE, DEBIT_TYPE].map((type) => (
         <>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>

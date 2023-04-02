@@ -16,9 +16,11 @@ const dev = {
     API_URL_DELETE_TRANSACTION_CATEGORY: `${devUrl}/api/delete-transaction-category`,
     API_URL_GET_TRANSACTION_CATEGORIES: `${devUrl}/api/get-transaction-categories`,
     API_URL_ADD_BANK_ACCOUNT: `${devUrl}/api/add-bank-account`,
+    API_URL_ADD_PAYMENT_INSTRUMENT: `${devUrl}/api/add-payment-instrument`,
+    API_URL_ADD_CREDIT_CARD: `${devUrl}/api/add-credit-card`,
     API_URL_EDIT_BANK_ACCOUNT: `${devUrl}/api/edit-bank-account`,
-    API_URL_DELETE_BANK_ACCOUNT: `${devUrl}/api/delete-bank-account`,
-    API_URL_GET_BANK_ACCOUNTS: `${devUrl}/api/get-bank-accounts`
+    API_URL_GET_PAYMENT_INSTRUMENTS: `${devUrl}/api/get-payment-instruments`,
+    API_URL_DELETE_PAYMENT_INSTRUMENT: `${devUrl}/api/delete-payment-instrument`
   }
 };
 const prodUrl = 'https://moneytrackerbackend.onrender.com';
@@ -40,9 +42,9 @@ const prod = {
     API_URL_DELETE_TRANSACTION_CATEGORY: `${prodUrl}/api/delete-transaction-category`,
     API_URL_GET_TRANSACTION_CATEGORIES: `${prodUrl}/api/get-transaction-categories`,
     API_URL_ADD_BANK_ACCOUNT: `${prodUrl}/api/add-bank-account`,
-    API_URL_EDIT_BANK_ACCOUNT: `${prodUrl}/api/edit-bank-account`,
-    API_URL_DELETE_BANK_ACCOUNT: `${prodUrl}/api/delete-bank-account`,
-    API_URL_GET_BANK_ACCOUNTS: `${prodUrl}/api/get-bank-accounts`
+    API_URL_ADD_PAYMENT_INSTRUMENT: `${prodUrl}/api/add-payment-instrument`,
+    API_URL_GET_PAYMENT_INSTRUMENTS: `${prodUrl}/api/get-payment-instruments`,
+    API_URL_DELETE_PAYMENT_INSTRUMENT: `${prodUrl}/api/delete-payment-instrument`
   }
 };
 
@@ -58,7 +60,8 @@ export const ROUTES = {
   FOOD_TRACKER: '/food-tracker',
   BUDGET: '/budget',
   OTHERS: '/others',
-  HISTORY: '/history'
+  HISTORY: '/history',
+  CREDIT_CARDS: '/credit-cards'
 };
 
 export const SEVERITY_SUCCESS = 'success';
@@ -89,12 +92,17 @@ export const CREDIT_TYPE = 'credit';
 export const DEBIT_TYPE = 'debit';
 export const BORROWED_TYPE = 'borrowed';
 
+export const BANK_ACCOUNTS = 'bankAccounts';
+export const CREDIT_CARD = 'creditCards';
+
 export const GET_TRANSACTIONS_FAILURE_MSG = 'Failed to get latest transactions';
 export const GET_TRANSACTION_CATEGORIES_FAILURE_MSG =
   'Failed to get latest categories';
 
 export const GET_BANK_ACCOUNTS_FAILURE_MSG =
   'Failed to get latest bank accounts';
+
+export const GET_CREDIT_CARDS_FAILURE_MSG = 'Failed to get credit cards';
 
 export const PASSWORD_REQUIREMENT =
   'Password must be between 7 to 15 characters ' +

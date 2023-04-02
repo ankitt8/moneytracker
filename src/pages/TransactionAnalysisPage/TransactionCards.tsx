@@ -7,7 +7,7 @@ import {
   getCategoryNamesSortedByTotalAmount,
   getFilteredTransactions
 } from '../../helper';
-import { Transaction } from '../../interfaces/index.interface';
+import { Transaction } from '../../interfaces';
 import { TransactionCategories } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
 
 interface ITransactionCardsProps {

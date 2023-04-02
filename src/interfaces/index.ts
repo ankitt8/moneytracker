@@ -13,3 +13,8 @@ export interface CategoryAmountArray {
   category: string;
   totalAmount: number;
 }
+
+export const enum PaymentInstruments {
+  bankAccounts = 'bankAccounts',
+  creditCards = 'creditCards'
+}

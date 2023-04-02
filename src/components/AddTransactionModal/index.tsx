@@ -36,7 +36,7 @@ import {
 import { addTransactionDB } from 'api-services/api.service';
 import { ReduxStore } from 'reducers/interface';
 import useApi from 'customHooks/useApi';
-import { Transaction } from '../../interfaces/index.interface';
+import { Transaction } from '../../interfaces';
 
 const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
 

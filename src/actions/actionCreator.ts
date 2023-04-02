@@ -2,12 +2,17 @@ import {
   TransactionCategories,
   TransactionCategory
 } from 'components/AddTransactionModal/TransactionCategoryInput/interface';
-import { Transaction } from 'interfaces/index.interface';
+import { PaymentInstruments, Transaction } from 'interfaces';
 import { Status } from 'reducers/transactions/interface';
 import {
-  SET_CREDIT_DEBIT_ZERO,
   ADD_TRANSACTION,
+  ADD_TRANSACTION_CATEGORY,
+  ADD_USER_BANK_ACCOUNT,
+  ADD_USER_CREDIT_CARD,
+  ADD_USER_PAYMENT_INSTRUMENT,
   DELETE_TRANSACTION,
+  DELETE_TRANSACTION_CATEGORY,
+  DELETE_USER_BANK_ACCOUNT,
   EDIT_BANK_BALANCE,
   EDIT_BANK_CREDIT,
   EDIT_BANK_DEBIT,
@@ -15,15 +20,14 @@ import {
   EDIT_CASH_CREDIT,
   EDIT_CASH_DEBIT,
   EDIT_TRANSACTION,
-  GET_TRANSACTIONS,
-  UPDATE_STATUS,
-  ADD_TRANSACTION_CATEGORY,
-  DELETE_TRANSACTION_CATEGORY,
   GET_TRANSACTION_CATEGORIES,
-  USER_AUTHENTICATED,
+  GET_TRANSACTIONS,
+  SET_CREDIT_DEBIT_ZERO,
   SET_USER_BANK_ACCOUNTS,
-  ADD_USER_BANK_ACCOUNT,
-  DELETE_USER_BANK_ACCOUNT
+  SET_USER_CREDIT_CARDS,
+  SET_USER_PAYMENT_INSTRUMENTS,
+  UPDATE_STATUS,
+  USER_AUTHENTICATED
 } from './actionTypes';
 
 type TransactionType = string;
@@ -121,26 +125,25 @@ export function getTransactionCategories(
   };
 }
 
-export function setUserBankAccountsAction(bankAccounts: string[]) {
+export function setUserPaymentInstrumentsAction(
+  flag: PaymentInstruments,
+  paymentInstruments: string[]
+) {
+  console.log(flag);
   return {
-    type: SET_USER_BANK_ACCOUNTS,
-    payload: bankAccounts
+    type: SET_USER_PAYMENT_INSTRUMENTS,
+    payload: { flag, paymentInstruments }
   };
 }
-export function addUserBankAccountAction(bankAccount: string) {
+export function addUserPaymentInstrumentAction(
+  flag: PaymentInstruments,
+  paymentInstrumentAdded: string
+) {
   return {
-    type: ADD_USER_BANK_ACCOUNT,
-    payload: bankAccount
+    type: ADD_USER_PAYMENT_INSTRUMENT,
+    payload: { flag, paymentInstrumentAdded }
   };
 }
-
-export function deleteUserBankAccountAction(bankAccount: string) {
-  return {
-    type: DELETE_USER_BANK_ACCOUNT,
-    payload: bankAccount
-  };
-}
-
 export function addTransactionCategory(
   category: TransactionCategory,
   transactionType: TransactionType

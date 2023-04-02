@@ -3,6 +3,8 @@ import styles from './styles.module.scss';
 import cn from 'classnames';
 import { TransactionCategoryInputProps } from './interface';
 import { ROUTES } from 'Constants';
+import { useSelector } from 'react-redux';
+import { ReduxStore } from '../../../reducers/interface';
 
 /*
   TransactionCategoryInput Component is rendered in AddTransactionModal
@@ -10,10 +12,18 @@ import { ROUTES } from 'Constants';
   The component shows different transaction categories and allows user to select one of them
 */
 const TransactionCategoryInput = ({
-  categories,
+  type,
+  categories: categoriesProps,
   categorySelected,
   handleCategoryChange
 }: TransactionCategoryInputProps) => {
+  let categories = categoriesProps;
+  if (!categories && type) {
+    const categoriesStore = useSelector(
+      (store: ReduxStore) => store.transactions.categories
+    );
+    categories = categoriesStore[type];
+  }
   return (
     <>
       <div className={styles.transactionCategoryInput}>
@@ -21,8 +31,8 @@ const TransactionCategoryInput = ({
         <Link to={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
       </div>
       <div className={styles.transactionCategories}>
-        {categories.length !== 0 ? (
-          categories.map((category) => {
+        {categories?.length !== 0 ? (
+          categories?.map((category) => {
             const categoryParsed = category?.category
               ? category?.category
               : category;

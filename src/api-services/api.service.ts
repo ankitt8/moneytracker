@@ -1,5 +1,6 @@
 import { AddTransaction } from 'components/AddTransactionModal/interface';
 import { url } from 'Constants';
+import { PaymentInstruments } from '../interfaces';
 
 export async function getTransactionsFromDB({
   userId,
@@ -104,21 +105,26 @@ export const deleteTransactionCategoryFromDB = async (
     })
   });
 };
-interface IBankAccountDetails {
-  bankName: string;
+interface IPaymentInstrumentDetails {
+  paymentInstrumentName: string;
 }
 
-export const addBankAccountDB = async (
+export const addPaymentInstrumentDB = async (
   userId: string,
-  bankAccountDetails: IBankAccountDetails
+  flag: PaymentInstruments,
+  paymentInstrumentDetails: IPaymentInstrumentDetails
 ) => {
   try {
-    const res = await fetch(url.API_URL_ADD_BANK_ACCOUNT, {
+    const res = await fetch(url.API_URL_ADD_PAYMENT_INSTRUMENT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId, ...bankAccountDetails })
+      body: JSON.stringify({
+        userId,
+        flag,
+        paymentInstrumentName: paymentInstrumentDetails.paymentInstrumentName
+      })
     });
     return await res.json();
   } catch (e) {
@@ -135,28 +141,32 @@ export const editBankAccountDB = async (bankAccountId: string) => {
   });
 };
 
-export const deleteBankAccountDB = async (
+export const deletePaymentInstrumentDB = async (
+  flag: PaymentInstruments,
   userId: string,
-  newBankAccounts: string[]
+  newPaymentInstruments: string[]
 ) => {
-  const res = await fetch(url.API_URL_DELETE_BANK_ACCOUNT, {
+  const res = await fetch(url.API_URL_DELETE_PAYMENT_INSTRUMENT, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({ userId, newBankAccounts })
+    body: JSON.stringify({ userId, flag, newPaymentInstruments })
   });
   return await res.json();
 };
 
-export async function getBankAccountsFromDB(userId: string): Promise<any> {
+export async function getPaymentInstrumentsFromDB(
+  userId: string,
+  flag: PaymentInstruments.creditCards | PaymentInstruments.bankAccounts
+): Promise<any> {
   try {
-    const res = await fetch(url.API_URL_GET_BANK_ACCOUNTS, {
+    const res = await fetch(url.API_URL_GET_PAYMENT_INSTRUMENTS, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ userId: userId })
+      body: JSON.stringify({ userId: userId, flag })
     });
     return await res.json();
   } catch (error) {

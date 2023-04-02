@@ -27,6 +27,7 @@ const TransactionCategoriesPage = lazy(
   () => import('pages/TransactionCategoriesPage')
 );
 const BankAccountsPage = lazy(() => import('pages/BankAccountsPage'));
+const CreditCardsPage = lazy(() => import('pages/CreditCardsPage'));
 const SnackBarFeedback = lazy(() => import('components/FeedBack'));
 const Header = lazy(() => import('components/Header'));
 const FixedBottomNavBar = lazy(() => import('components/FixedBottomNavBar'));
@@ -72,6 +73,9 @@ function App() {
           </Route>
           <Route path={ROUTES.HISTORY}>
             <History userId={userId} />
+          </Route>
+          <Route path={ROUTES.CREDIT_CARDS}>
+            <CreditCardsPage userId={userId} />
           </Route>
           <Route path={ROUTES.HOME}>
             <HomePage userId={userId} />

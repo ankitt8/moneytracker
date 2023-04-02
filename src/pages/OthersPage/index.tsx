@@ -1,4 +1,4 @@
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { cardList } from './constants';
 import styles from './styles.module.scss';
 
@@ -11,13 +11,15 @@ function OthersPage() {
     <div className={styles.container}>
       {cardList.map(({ text, url }) => {
         return (
-          <button
+          <Link
             className={styles.card}
             key={text}
-            onClick={() => handleClick(url)}
+            to={{
+              pathname: url
+            }}
           >
             {text}
-          </button>
+          </Link>
         );
       })}
       <button

@@ -5,6 +5,10 @@ export const cardList = [
     url: ROUTES.BANK
   },
   {
+    text: 'Credit Cards',
+    url: ROUTES.CREDIT_CARDS
+  },
+  {
     text: 'Investments',
     url: ROUTES.INVESTMENT
   },

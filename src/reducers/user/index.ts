@@ -1,15 +1,17 @@
 import { Action } from 'reducers/transactions/interface';
 import { UserStoreInitialState } from './interface';
 import {
-  ADD_USER_BANK_ACCOUNT,
+  ADD_USER_PAYMENT_INSTRUMENT,
   DELETE_USER_BANK_ACCOUNT,
-  SET_USER_BANK_ACCOUNTS
+  SET_USER_PAYMENT_INSTRUMENTS
 } from '../../actions/actionTypes';
+import { PaymentInstruments } from '../../interfaces';
 
 const initialState: UserStoreInitialState = {
   userId: '',
   username: '',
-  bankAccounts: []
+  bankAccounts: [],
+  creditCards: []
 };
 const user = (
   state: UserStoreInitialState = initialState,
@@ -22,16 +24,28 @@ const user = (
         ...action.payload
       };
     }
-    case SET_USER_BANK_ACCOUNTS: {
+    case SET_USER_PAYMENT_INSTRUMENTS: {
       return {
         ...state,
-        bankAccounts: action.payload
+        [action.payload.flag]: action.payload.paymentInstruments
       };
     }
-    case ADD_USER_BANK_ACCOUNT: {
+    case ADD_USER_PAYMENT_INSTRUMENT: {
+      let newPaymentInstruments = [];
+      if (action.payload.flag === PaymentInstruments.bankAccounts) {
+        newPaymentInstruments = [
+          ...state.bankAccounts,
+          action.payload.paymentInstrumentAdded
+        ];
+      } else {
+        newPaymentInstruments = [
+          ...state.creditCards,
+          action.payload.paymentInstrumentAdded
+        ];
+      }
       return {
         ...state,
-        bankAccounts: [...state.bankAccounts, action.payload]
+        [action.payload.flag]: newPaymentInstruments
       };
     }
     case DELETE_USER_BANK_ACCOUNT: {

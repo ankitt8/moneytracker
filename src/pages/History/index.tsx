@@ -1,22 +1,24 @@
 import { LinearProgress } from '@material-ui/core';
 import { getTransactionsFromDB } from 'api-services/api.service';
-import Transactions from 'components/Transactions';
 import TransactionSummary from 'components/TransactionSummary';
-import useFetchData from 'customHooks/useFetchData';
-import { getCurrentMonth, getNoOfDaysMonth } from 'helper';
 import TransactionAnalysisPage from 'pages/TransactionAnalysisPage';
-import { useEffect, useState } from 'react';
-import { FETCH_STATES } from 'reducers/DataReducer';
-import { months } from './constants';
+import { useState } from 'react';
 import styles from './style.module.scss';
 import useApi from '../../customHooks/useApi';
+import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
+import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
+
 const currentYear = new Date().getFullYear();
 interface IHistoryPageProps {
   userId: string;
 }
 function History({ userId }: IHistoryPageProps) {
   const [transactions, setTransactions] = useState([]);
-  const transactionTypes = ['credit', 'debit', 'borrowed'];
+  const transactionTypes: TRANSACTION_TYPE[] = [
+    TRANSACTION_TYPE.credit,
+    TRANSACTION_TYPE.credit,
+    TRANSACTION_TYPE.borrowed
+  ];
   const formValues = {
     startDate: null,
     endDate: null
@@ -35,6 +37,8 @@ function History({ userId }: IHistoryPageProps) {
   const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
   );
+  const [type, setType] = useState<TRANSACTION_TYPE>(TRANSACTION_TYPE.debit);
+  const [categorySelected, setCategorySelected] = useState('');
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -66,11 +70,20 @@ function History({ userId }: IHistoryPageProps) {
                     id={transactionType}
                     name="transactionType"
                     value={transactionType}
+                    onChange={(e) => setType(transactionType)}
                   />
                   {transactionType}
                 </label>
               ))}
             </div>
+          </fieldset>
+          <fieldset>
+            <legend>Category</legend>
+            <TransactionCategoryInput
+              type={type}
+              categorySelected={categorySelected}
+              handleCategoryChange={(category) => setCategorySelected(category)}
+            />
           </fieldset>
           <button>Go</button>
         </form>

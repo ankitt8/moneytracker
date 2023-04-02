@@ -1,5 +1,13 @@
+import { BORROWED_TYPE, CREDIT_TYPE, DEBIT_TYPE } from '../../../Constants';
+
+export enum TRANSACTION_TYPE {
+  credit = 'credit',
+  debit = 'debit',
+  borrowed = 'borrowed'
+}
 export interface TransactionCategoryInputProps {
-  categories: string[];
+  type?: TRANSACTION_TYPE;
+  categories?: string[];
   categorySelected: string;
   handleCategoryChange: (category: TransactionCategory) => void;
 }

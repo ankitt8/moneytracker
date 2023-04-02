@@ -29,7 +29,6 @@ function History({ userId }: IHistoryPageProps) {
     for (const [key, value] of formData) {
       formValues[key] = value;
     }
-    console.log(formValues);
     getTransactionsApi(() =>
       getTransactionsFromDB({
         userId,
@@ -47,12 +46,6 @@ function History({ userId }: IHistoryPageProps) {
 
   const [type, setType] = useState<TRANSACTION_TYPE>(TRANSACTION_TYPE.debit);
   const [categorySelected, setCategorySelected] = useState('');
-  console.log('hi');
-  console.log(transactions[0]);
-  console.log(transactions[transactions.length - 1]);
-  // console.log(
-  //   new Date(transactions[transactions.length - 1].date).toDateString()
-  // );
   return (
     <div className={styles.container}>
       <div className={styles.header}>

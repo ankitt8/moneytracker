@@ -211,8 +211,8 @@ const AddTransactionModal = ({
       amount: parseInt(amount),
       date: new Date(date),
       mode,
-      bankAccount: selectedPaymentInstrument,
-      creditCard: selectedPaymentInstrument,
+      bankAccount: type === DEBIT_TYPE ? selectedPaymentInstrument : '',
+      creditCard: type === BORROWED_TYPE ? selectedPaymentInstrument : '',
       type,
       category
     };

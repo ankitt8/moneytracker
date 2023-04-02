@@ -62,18 +62,17 @@ const EditTransactionModal = ({
   const bankAccounts = useSelector(
     (store: ReduxStore) => store.user.bankAccounts
   );
+  const creditCards = useSelector(
+    (store: ReduxStore) => store.user.creditCards
+  );
+  const paymentInstruments = [...bankAccounts, ...creditCards];
   const handleClose = () => {
     handleCloseProps();
     setIsOpen(false);
   };
-  let categories: string[] = [];
-
-  if (editedTransaction.type === DEBIT_TYPE)
-    categories = transactionCategories.debit;
+  let categories: string[] = transactionCategories.debit;
   if (editedTransaction.type === CREDIT_TYPE)
     categories = transactionCategories.credit;
-  if (editedTransaction.type === BORROWED_TYPE)
-    categories = transactionCategories.borrowed;
 
   useEffect(() => {
     return function cleanUp() {
@@ -281,25 +280,31 @@ const EditTransactionModal = ({
           </FormControl>
           <FormControl component="fieldset" style={{ marginTop: '20px' }}>
             {/*bank account*/}
-            <FormLabel component="legend">BankAccount</FormLabel>
+            <FormLabel component="legend">Payment Instrument</FormLabel>
             <RadioGroup
               aria-label="BankAccount"
               name="bankAccount"
-              value={editedTransaction.bankAccount}
+              value={
+                editedTransaction.type === BORROWED_TYPE
+                  ? editedTransaction.creditCard
+                  : editedTransaction.bankAccount
+              }
               onChange={(e) => {
                 setEditedTransaction((prev) => ({
                   ...prev,
-                  bankAccount: e.target.value
+                  [editedTransaction.type === BORROWED_TYPE
+                    ? 'creditCard'
+                    : 'bankAccount']: e.target.value
                 }));
               }}
               style={{ flexDirection: 'row' }}
             >
-              {bankAccounts.map((bankAccount) => (
+              {paymentInstruments.map((paymentInstrument) => (
                 <FormControlLabel
-                  key={bankAccount}
-                  value={bankAccount}
+                  key={paymentInstrument}
+                  value={paymentInstrument}
                   control={<Radio color="primary" />}
-                  label={bankAccount}
+                  label={paymentInstrument}
                 />
               ))}
             </RadioGroup>

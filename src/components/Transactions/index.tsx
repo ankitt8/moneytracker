@@ -28,13 +28,11 @@ const Transactions = ({
         startDateParam,
         endDateParam
       );
-    console.log({ individualDayTransactions2DArray });
     const individualDayTransactionsUIArray =
       createIndividualDayTransactionsUIArray(
         individualDayTransactions2DArray,
         showTransactionsInAscendingOrder
       );
-    console.log({ individualDayTransactionsUIArray });
     componentToRender = (
       <ul className={styles.transactionsList}>
         {individualDayTransactionsUIArray}
@@ -89,7 +87,6 @@ function createIndividualDayTransactions2DArray(
     individualDayTransactions2DArray[date.toDateString()] = [];
     date = new Date(date.getTime() + 1000 * 3600 * 24);
   }
-  console.log({ individualDayTransactions2DArray });
   transactions.forEach((transaction) => {
     const transactionDate = new Date(transaction.date);
     const isTransactionDateInCurrentYear =
@@ -130,8 +127,6 @@ function createIndividualDayTransactionsUIArray(
     );
   }
   if (showTransactionsInAscendingOrder) {
-    console.log({ individualDayTransactions2DArray });
-    console.log(Object.keys(individualDayTransactions2DArray));
     Object.keys(individualDayTransactions2DArray)
       .sort((key1, key2) => new Date(key2) > new Date(key1))
       .forEach((dateString) => {

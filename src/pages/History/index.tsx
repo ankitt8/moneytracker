@@ -30,7 +30,13 @@ function History({ userId }: IHistoryPageProps) {
       formValues[key] = value;
     }
     console.log(formValues);
-    getTransactionsApi(() => getTransactionsFromDB({ userId, ...formValues }));
+    getTransactionsApi(() =>
+      getTransactionsFromDB({
+        userId,
+        category: categorySelected,
+        ...formValues
+      })
+    );
   };
   const getTransactionsSuccessHandler = (transactions) => {
     setTransactions(transactions);

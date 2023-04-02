@@ -8,6 +8,7 @@ export async function getTransactionsFromDB({
   endDate,
   month,
   year,
+  category,
   transactionType
 }: {
   userId: string;
@@ -15,6 +16,7 @@ export async function getTransactionsFromDB({
   endDate?: string;
   month?: string;
   year?: string;
+  category?: string;
   transactionType?: string;
 }): Promise<any> {
   try {
@@ -29,7 +31,8 @@ export async function getTransactionsFromDB({
         endDate,
         month,
         year,
-        transactionType
+        transactionType,
+        category
       })
     });
     return await res.json();

@@ -1,12 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import styles from './style.module.scss';
 import { ROUTES, bottomNavBarText } from 'Constants';
-// import { FixedBottomNavBarProps } from './interface';
-// import AddTransactionModal from 'components/AddTransactionModal';
-import { FixedBottomNavBarItem } from 'components/FixedBottomNavBarItem';
+import { FixedBottomNavBarItem } from '../FixedBottomNavBarItem';
 import { icons } from 'icons';
-const FixedBottomNavBar = () => {
+import { AddTransactionButton } from '../AddTransactionButton';
+const FixedBottomNavBar = ({ userId }: { userId: string }) => {
   // const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
   //   useState(false);
   // const handleClose = () => setIsAddTransactionModalOpen(false);
@@ -15,7 +14,7 @@ const FixedBottomNavBar = () => {
   const fixedBottomNavBarItemList = [
     {
       text: bottomNavBarText.home,
-      icon: icons.home,
+      component: <div className={styles.icon}>{icons.home}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.home);
         history.push(ROUTES.HOME);
@@ -23,15 +22,20 @@ const FixedBottomNavBar = () => {
     },
     {
       text: bottomNavBarText.analysis,
-      icon: icons.analysis,
+      component: <div className={styles.icon}>{icons.analysis}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.analysis);
         history.push(ROUTES.SPEND_ANALYSIS);
       }
     },
     {
+      text: bottomNavBarText.add,
+      component: <AddTransactionButton userId={userId} />,
+      handleClick: null
+    },
+    {
       text: bottomNavBarText.categories,
-      icon: icons.filter,
+      component: <div className={styles.icon}>{icons.filter}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.categories);
         history.push(ROUTES.TRANSACTION_CATEGORIES);
@@ -39,7 +43,7 @@ const FixedBottomNavBar = () => {
     },
     {
       text: bottomNavBarText.other,
-      icon: icons.hamburger,
+      component: <div className={styles.icon}>{icons.hamburger}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.other);
         history.push(ROUTES.OTHERS);

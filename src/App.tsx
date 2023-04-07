@@ -84,7 +84,6 @@ function App() {
         <FixedBottomNavBar userId={userId} />
         <SnackBarFeedback />
       </Header>
-      <AddTransactionButton userId={userId} />
     </Router>
   );
 }

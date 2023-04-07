@@ -13,7 +13,8 @@ const Transactions = ({
   fetching,
   startDateParam,
   endDateParam,
-  showTransactionsInAscendingOrder = false
+  showTransactionsInAscendingOrder = false,
+  isNoTransactionsDayCardVisible = false
 }: TransactionsProps) => {
   let componentToRender;
   useEffect(() => {
@@ -31,7 +32,8 @@ const Transactions = ({
     const individualDayTransactionsUIArray =
       createIndividualDayTransactionsUIArray(
         individualDayTransactions2DArray,
-        showTransactionsInAscendingOrder
+        showTransactionsInAscendingOrder,
+        isNoTransactionsDayCardVisible
       );
     componentToRender = (
       <ul className={styles.transactionsList}>
@@ -61,6 +63,13 @@ function createIndividualDayTransactions2DArray(
 ) {
   let endDate = endDateParam;
   let startDate = startDateParam;
+  let temp;
+  if (new Date(endDate) < new Date(startDate)) {
+    temp = endDate;
+    endDate = startDate;
+    startDate = temp;
+  }
+
   const currentDate = new Date();
   if (!endDate) {
     endDate = new Date(
@@ -69,7 +78,7 @@ function createIndividualDayTransactions2DArray(
       0
     ).toDateString();
   } else {
-    endDate = new Date(endDateParam).toDateString();
+    endDate = new Date(endDate).toDateString();
   }
   if (!startDate) {
     startDate = new Date(
@@ -78,7 +87,7 @@ function createIndividualDayTransactions2DArray(
       1
     ).toDateString();
   } else {
-    startDate = new Date(startDateParam).toDateString();
+    startDate = new Date(startDate).toDateString();
   }
   const individualDayTransactions2DArray: Record<string, Transaction[]> = {};
   // const date = startDate;
@@ -110,10 +119,16 @@ function getIndividualDayTransactionsTotalDebitAmount(
 
 function createIndividualDayTransactionsUIArray(
   individualDayTransactions2DArray: Record<string, Transaction[]>,
-  showTransactionsInAscendingOrder: boolean
+  showTransactionsInAscendingOrder: boolean,
+  isNoTransactionsDayCardVisible: boolean
 ) {
   const dayTransactionsCard = [];
   function createDayTransactionsCard(title: string, dateString: string) {
+    if (
+      individualDayTransactions2DArray[dateString]?.length === 0 &&
+      isNoTransactionsDayCardVisible
+    )
+      return null;
     return (
       <motion.li layout key={dateString}>
         <DayTransactionsCard

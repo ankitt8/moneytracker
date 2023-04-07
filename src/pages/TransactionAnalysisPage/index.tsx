@@ -5,7 +5,6 @@ import { TransactionAnalysisPageProps } from './interface';
 import styles from './styles.module.scss';
 import { ReduxStore } from 'reducers/interface';
 import { TransactionCards } from './TransactionCards';
-import TransactionCard from '../../components/TransactionCard';
 import DayTransactionsCard from '../../components/TransactionCardWrapper';
 
 const TransactionAnalysisPage = ({
@@ -54,13 +53,23 @@ const TransactionAnalysisPage = ({
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <h3>{type.toUpperCase()} Transactions</h3>
             <h3>
-              {transactions
-                .filter((transaction) => transaction.type === type)
-                .reduce(
-                  (totalAmount, currentTransactionObj) =>
-                    totalAmount + currentTransactionObj.amount,
-                  0
-                )}
+              {type !== BORROWED_TYPE &&
+                transactions
+                  .filter((transaction) => transaction.type === type)
+                  .reduce(
+                    (totalAmount, currentTransactionObj) =>
+                      totalAmount + currentTransactionObj.amount,
+                    0
+                  )}
+              {type === BORROWED_TYPE &&
+                transactions
+                  .filter((transaction) => transaction.type === DEBIT_TYPE)
+                  .filter((transaction) => transaction.category === 'Credit')
+                  .reduce(
+                    (totalAmount, currentTransactionObj) =>
+                      totalAmount + currentTransactionObj.amount,
+                    0
+                  )}
             </h3>
           </div>
           {type === BORROWED_TYPE
@@ -76,7 +85,7 @@ const TransactionAnalysisPage = ({
                     title={creditCard}
                     transactions={transactionsGroupedByCreditCard}
                     totalAmount={transactionsGroupedByCreditCard.reduce(
-                      (prev, curr) => prev.amount + curr.amount,
+                      (totalAmount, curr) => totalAmount + curr.amount,
                       0
                     )}
                     key={creditCard}

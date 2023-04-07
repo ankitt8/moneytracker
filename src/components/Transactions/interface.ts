@@ -6,4 +6,5 @@ export interface TransactionsProps {
   showTransactionsInAscendingOrder?: boolean;
   startDateParam?: string;
   endDateParam?: string;
+  isNoTransactionsDayCardVisible?: boolean;
 }

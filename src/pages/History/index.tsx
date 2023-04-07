@@ -16,7 +16,7 @@ function History({ userId }: IHistoryPageProps) {
   const [groupByDate, setGroupByDate] = useState(false);
   const transactionTypes: TRANSACTION_TYPE[] = [
     TRANSACTION_TYPE.credit,
-    TRANSACTION_TYPE.credit,
+    TRANSACTION_TYPE.debit,
     TRANSACTION_TYPE.borrowed
   ];
   const formValues = {
@@ -89,11 +89,12 @@ function History({ userId }: IHistoryPageProps) {
       {groupByDate && transactions.length > 0 ? (
         <Transactions
           transactions={transactions || []}
-          showTransactionsInAscendingOrder={true}
+          showTransactionsInAscendingOrder={false}
           endDateParam={new Date(
             transactions[transactions.length - 1].date
           ).toDateString()}
           startDateParam={new Date(transactions[0].date).toDateString()}
+          isNoTransactionsDayCardVisible={true}
         />
       ) : null}
       {!groupByDate && transactions?.length > 0 ? (

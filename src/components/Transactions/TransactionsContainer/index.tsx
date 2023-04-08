@@ -20,11 +20,7 @@ function TransactionsContainer({ userId }: TransactionsContainerProps) {
     { userId }
   );
   return (
-    <Transactions
-      month={new Date().getMonth()}
-      transactions={transactions}
-      fetching={fetchStatus.fetching}
-    />
+    <Transactions transactions={transactions} fetching={fetchStatus.fetching} />
   );
 }
 export { TransactionsContainer };

@@ -5,4 +5,5 @@ export interface TransactionCardWrapperProps {
   totalAmount: number;
   title: string;
   showDate?: boolean;
+  isNoTransactionsDateVisible?: boolean;
 }

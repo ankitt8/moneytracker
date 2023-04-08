@@ -1,5 +1,5 @@
 export interface IFixedBottomNavBarItem {
-  icon: JSX.Element;
+  component: () => JSX.Element;
   handleClick: () => void;
   isActive?: boolean;
 }

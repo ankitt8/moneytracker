@@ -1,7 +1,7 @@
 import { CREDIT_TYPE, BORROWED_TYPE } from '../../Constants';
 import styles from './styles.module.scss';
 import { TransactionsGroupedByCategories } from './interface';
-import DayTransactionsCard from '../../components/TransactionCardWrapper';
+import TransactionsGroupedByDateCard from '../../components/TransactionCardWrapper';
 import {
   createTransactionsGroupedByCategories,
   getCategoryNamesSortedByTotalAmount,
@@ -44,7 +44,7 @@ export function TransactionCards({
       getCategoryNamesSortedByTotalAmount(transactionsGroupedByCategories);
     const TransactionAnalysisCards =
       categoryNamesSortedByTotalAmountDescending.map((category) => (
-        <DayTransactionsCard
+        <TransactionsGroupedByDateCard
           title={category}
           transactions={
             transactionsGroupedByCategories[category]['transactions']

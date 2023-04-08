@@ -5,7 +5,7 @@ import { TransactionAnalysisPageProps } from './interface';
 import styles from './styles.module.scss';
 import { ReduxStore } from 'reducers/interface';
 import { TransactionCards } from './TransactionCards';
-import DayTransactionsCard from '../../components/TransactionCardWrapper';
+import TransactionsGroupedByDateCard from '../../components/TransactionCardWrapper';
 
 const TransactionAnalysisPage = ({
   userId,
@@ -81,7 +81,7 @@ const TransactionAnalysisPage = ({
                       transactionCreditCard === creditCard
                   );
                 return (
-                  <DayTransactionsCard
+                  <TransactionsGroupedByDateCard
                     title={creditCard}
                     transactions={transactionsGroupedByCreditCard}
                     totalAmount={transactionsGroupedByCreditCard.reduce(

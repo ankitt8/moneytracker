@@ -94,7 +94,7 @@ function History({ userId }: IHistoryPageProps) {
             transactions[transactions.length - 1].date
           ).toDateString()}
           startDateParam={new Date(transactions[0].date).toDateString()}
-          isNoTransactionsDayCardVisible={true}
+          isNoTransactionsDateVisible={true}
         />
       ) : null}
       {!groupByDate && transactions?.length > 0 ? (

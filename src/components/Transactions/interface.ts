@@ -6,5 +6,17 @@ export interface TransactionsProps {
   showTransactionsInAscendingOrder?: boolean;
   startDateParam?: string;
   endDateParam?: string;
-  isNoTransactionsDayCardVisible?: boolean;
+  isNoTransactionsDateVisible?: boolean;
+}
+
+export interface IArgs {
+  transactions: Transaction[];
+  startDateParam?: string;
+  endDateParam?: string;
+  showTransactionsInAscendingOrder?: boolean;
+}
+
+export interface ITransactionsGroupedByDateUIProps {
+  transactionsGroupedByDate: Record<string, Transaction[]>;
+  isNoTransactionsDateVisible: boolean;
 }

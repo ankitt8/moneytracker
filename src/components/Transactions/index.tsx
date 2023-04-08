@@ -1,10 +1,14 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
-import { motion } from 'framer-motion';
+
 import { DEBIT_TYPE } from 'Constants';
-import DayTransactionsCard from 'components/TransactionCardWrapper';
+import TransactionsGroupedByDateCard from 'components/TransactionCardWrapper';
 import { Transaction } from 'interfaces';
 import styles from './styles.module.scss';
-import { TransactionsProps } from './interface';
+import {
+  IArgs,
+  ITransactionsGroupedByDateUIProps,
+  TransactionsProps
+} from './interface';
 import { FETCH_STATES } from 'reducers/DataReducer';
 import { useEffect } from 'react';
 
@@ -14,8 +18,9 @@ const Transactions = ({
   startDateParam,
   endDateParam,
   showTransactionsInAscendingOrder = false,
-  isNoTransactionsDayCardVisible = false
+  isNoTransactionsDateVisible = false
 }: TransactionsProps) => {
+  console.log({ transactions });
   let componentToRender;
   useEffect(() => {
     return () => {
@@ -23,21 +28,19 @@ const Transactions = ({
     };
   }, [transactions]);
   try {
-    const individualDayTransactions2DArray =
-      createIndividualDayTransactions2DArray(
-        transactions,
-        startDateParam,
-        endDateParam
-      );
-    const individualDayTransactionsUIArray =
-      createIndividualDayTransactionsUIArray(
-        individualDayTransactions2DArray,
-        showTransactionsInAscendingOrder,
-        isNoTransactionsDayCardVisible
-      );
+    const transactionsGroupedByDate = getTransactionsGroupedByDate({
+      transactions,
+      startDateParam,
+      endDateParam,
+      showTransactionsInAscendingOrder
+    });
+
     componentToRender = (
       <ul className={styles.transactionsList}>
-        {individualDayTransactionsUIArray}
+        <TransactionsGroupedByDate
+          transactionsGroupedByDate={transactionsGroupedByDate}
+          isNoTransactionsDateVisible={isNoTransactionsDateVisible}
+        />
       </ul>
     );
   } catch (error) {
@@ -55,21 +58,10 @@ const Transactions = ({
 
 const isDebitTransaction = (transaction: Transaction) =>
   transaction.type === DEBIT_TYPE || transaction.type === undefined;
-
-function createIndividualDayTransactions2DArray(
-  transactions: Transaction[],
-  endDateParam,
-  startDateParam
-) {
+const getFilterDate = (startDateParam?: string, endDateParam?: string) => {
   let endDate = endDateParam;
   let startDate = startDateParam;
   let temp;
-  if (new Date(endDate) < new Date(startDate)) {
-    temp = endDate;
-    endDate = startDate;
-    startDate = temp;
-  }
-
   const currentDate = new Date();
   if (!endDate) {
     endDate = new Date(
@@ -89,94 +81,80 @@ function createIndividualDayTransactions2DArray(
   } else {
     startDate = new Date(startDate).toDateString();
   }
-  const individualDayTransactions2DArray: Record<string, Transaction[]> = {};
-  // const date = startDate;
+  if (new Date(endDate) < new Date(startDate)) {
+    temp = endDate;
+    endDate = startDate;
+    startDate = temp;
+  }
+  return { startDate, endDate };
+};
+function getTransactionsGroupedByDate({
+  transactions,
+  startDateParam,
+  endDateParam,
+  showTransactionsInAscendingOrder
+}: IArgs) {
+  const { startDate, endDate } = getFilterDate(startDateParam, endDateParam);
+  const transactionsGroupedByDate: Record<string, Transaction[]> = {};
   let date = new Date(startDate);
-  while (date <= new Date(endDate)) {
-    individualDayTransactions2DArray[date.toDateString()] = [];
-    date = new Date(date.getTime() + 1000 * 3600 * 24);
+  if (showTransactionsInAscendingOrder) {
+    while (date <= new Date(endDate)) {
+      transactionsGroupedByDate[date.toDateString()] = [];
+      date = new Date(date.getTime() + 1000 * 3600 * 24);
+    }
+  } else {
+    date = new Date(endDate);
+    while (date >= new Date(startDate)) {
+      transactionsGroupedByDate[date.toDateString()] = [];
+      date = new Date(date.getTime() - 1000 * 3600 * 24);
+    }
   }
   transactions.forEach((transaction) => {
     const transactionDate = new Date(transaction.date);
+    console.log(transaction.date);
+    if (transactionDate.getTime() > new Date().getTime()) return;
     const isTransactionDateInCurrentYear =
       transactionDate.getFullYear() === new Date().getFullYear();
     if (!isTransactionDateInCurrentYear) return;
     // const dayOfMonth = transactionDate.getDate();
-    individualDayTransactions2DArray[transactionDate.toDateString()].push(
-      transaction
-    );
+    transactionsGroupedByDate[transactionDate.toDateString()].push(transaction);
   });
-  return individualDayTransactions2DArray;
+  return transactionsGroupedByDate;
 }
 
-function getIndividualDayTransactionsTotalDebitAmount(
-  individualDayTransactions: Transaction[]
-) {
+function getDebitAmount(individualDayTransactions: Transaction[]) {
   return individualDayTransactions
     .filter(isDebitTransaction)
     .reduce((acc: number, curr: Transaction) => acc + curr.amount, 0);
 }
 
-function createIndividualDayTransactionsUIArray(
-  individualDayTransactions2DArray: Record<string, Transaction[]>,
-  showTransactionsInAscendingOrder: boolean,
-  isNoTransactionsDayCardVisible: boolean
-) {
-  const dayTransactionsCard = [];
-  function createDayTransactionsCard(title: string, dateString: string) {
-    if (
-      individualDayTransactions2DArray[dateString]?.length === 0 &&
-      isNoTransactionsDayCardVisible
-    )
-      return null;
-    return (
-      <motion.li layout key={dateString}>
-        <DayTransactionsCard
-          title={title}
-          transactions={individualDayTransactions2DArray[dateString]}
-          totalAmount={getIndividualDayTransactionsTotalDebitAmount(
-            individualDayTransactions2DArray[dateString]
-          )}
-        />
-      </motion.li>
-    );
-  }
-  if (showTransactionsInAscendingOrder) {
-    Object.keys(individualDayTransactions2DArray)
-      .sort((key1, key2) => new Date(key2) > new Date(key1))
-      .forEach((dateString) => {
-        const title = new Date(dateString).toDateString();
-        dayTransactionsCard.push(createDayTransactionsCard(title, dateString));
-      });
-  } else {
-    Object.keys(individualDayTransactions2DArray)
-      .sort((key1, key2) => new Date(key2) < new Date(key1))
-      .forEach((dateString) => {
-        const title = new Date(dateString).toDateString();
-        dayTransactionsCard.push(createDayTransactionsCard(title, dateString));
-      });
-  }
-
-  return dayTransactionsCard;
-}
-
-export const checkTransactionsChanged = (
-  recentTransactions: Transaction[],
-  storeTransactions: Transaction[]
-) => {
-  // if length is same then check if values have changed
-  // fields of transaction can be changed by doing edit operation
-  if (recentTransactions.length === storeTransactions.length) {
-    for (let i = 0; i < storeTransactions.length; i += 1) {
-      for (const key of Object.keys(storeTransactions[i])) {
-        if (storeTransactions[i][key] !== recentTransactions[i][key]) {
-          return true;
+function TransactionsGroupedByDate({
+  transactionsGroupedByDate,
+  isNoTransactionsDateVisible
+}: ITransactionsGroupedByDateUIProps): null | JSX.Element {
+  if (Object.entries(transactionsGroupedByDate).length === 0) return null;
+  return (
+    <div>
+      {Object.entries(transactionsGroupedByDate).map(
+        ([dateString, transactions]) => {
+          const title = new Date(dateString).toDateString();
+          // don't show dates greater than today's date
+          if (new Date(dateString).getTime() > new Date().getTime())
+            return null;
+          return (
+            <TransactionsGroupedByDateCard
+              key={title}
+              title={title}
+              transactions={transactions}
+              totalAmount={getDebitAmount(
+                transactionsGroupedByDate[dateString]
+              )}
+              isNoTransactionsDateVisible={isNoTransactionsDateVisible}
+            />
+          );
         }
-      }
-    }
-    return false;
-  }
-  // if length is different implies new transactions have been added
-  return true;
-};
+      )}
+    </div>
+  );
+}
 export default Transactions;

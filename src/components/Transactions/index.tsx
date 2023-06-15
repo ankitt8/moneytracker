@@ -55,7 +55,7 @@ const Transactions = ({
     </>
   );
 };
-
+const MILLI_SECONDS_IN_24_HRS = 24 * 20 * 20 * 1000;
 const isDebitTransaction = (transaction: Transaction) =>
   transaction.type === DEBIT_TYPE || transaction.type === undefined;
 const getFilterDate = (startDateParam?: string, endDateParam?: string) => {
@@ -100,13 +100,13 @@ function getTransactionsGroupedByDate({
   if (showTransactionsInAscendingOrder) {
     while (date <= new Date(endDate)) {
       transactionsGroupedByDate[date.toDateString()] = [];
-      date = new Date(date.getTime() + 1000 * 3600 * 24);
+      date = new Date(date.getTime() + MILLI_SECONDS_IN_24_HRS);
     }
   } else {
     date = new Date(endDate);
     while (date >= new Date(startDate)) {
       transactionsGroupedByDate[date.toDateString()] = [];
-      date = new Date(date.getTime() - 1000 * 3600 * 24);
+      date = new Date(date.getTime() - MILLI_SECONDS_IN_24_HRS);
     }
   }
   transactions.forEach((transaction) => {

@@ -12,6 +12,7 @@ function TransactionsContainer({ userId }: TransactionsContainerProps) {
   const transactions = useSelector(
     (store: ReduxStore) => store.transactions.transactions
   );
+  console.log('test');
   const { fetchStatus } = useFetchData(
     getTransactionsFromDB,
     GET_TRANSACTIONS_FAILURE_MSG,

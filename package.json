@@ -1,7 +1,10 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "moneytracker",
+  "version": "1.0.0",
   "private": true,
+  "workspaces": {
+    "packages": ["packages/*", "apps/*"]
+  },
   "dependencies": {
     "@date-io/date-fns": "1.x",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
@@ -26,6 +29,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "web:dev": "yarn workspace @moneytracker/web dev",
     "dev": "webpack serve --config webpack.dev.js",
     "build": "rm -rf build &&  webpack --config webpack.prod.js",
     "_lint": "eslint './src/**/*.{js,jsx,ts,tsx}' --config ./.eslintrc.json",

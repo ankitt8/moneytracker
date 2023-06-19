@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="chore: removing console.log">
+    <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="feat: fix the date issue,&#10;controlling whether to show the no transactions ui based on props&#10;fixed sorting issue">
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/EditTransactionModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/EditTransactionModal/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TransactionCard/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Transactions/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Transactions/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/History/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/History/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/TransactionCards.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/TransactionCards.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,13 +42,14 @@
   "keyToString": {
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/ankit.tiwari5/Desktop/personal/money_tracker_frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
     "prettierjs.PrettierConfiguration.Package": "/Users/ankit.tiwari5/Documents/personal/money_tracker_frontend/node_modules/prettier",
     "settings.editor.selected.configurable": "preferences.keymap",
-    "ts.external.directory.path": "/Users/ankit.tiwari5/Documents/personal/money_tracker_frontend/node_modules/typescript/lib",
+    "ts.external.directory.path": "/Users/ankit.tiwari5/Desktop/personal/money_tracker_frontend/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -87,6 +82,7 @@
       <workItem from="1627713208819" duration="15021000" />
       <workItem from="1627798722726" duration="1980000" />
       <workItem from="1680321428574" duration="27152000" />
+      <workItem from="1687214837989" duration="2617000" />
     </task>
     <task id="LOCAL-00001" summary="Added Responsiveness&#10;- Made Header a HOC, which renders the children props&#10;- refactoring">
       <created>1627724054956</created>

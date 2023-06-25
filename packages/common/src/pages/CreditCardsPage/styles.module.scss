@@ -1,0 +1,10 @@
+@import '@moneytracker/common/src/styles/mixins';
+
+.bankAccountsPage {
+  @include page;
+}
+
+.bankRow {
+  display: flex;
+  justify-content: space-between;
+}

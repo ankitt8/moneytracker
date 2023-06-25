@@ -1,0 +1,5 @@
+@import "@moneytracker/common/src/styles/mixins";
+
+.transactionsList {
+  @include page;
+}

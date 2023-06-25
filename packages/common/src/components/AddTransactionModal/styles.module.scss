@@ -1,0 +1,42 @@
+@import '@moneytracker/common/src/styles/mixins';
+@import '@moneytracker/common/src/styles/colors';
+@import '@moneytracker/common/src/styles/spacing';
+@import '@moneytracker/common/src/styles/fonts';
+.modalWrapper {
+  padding: $spacing-2;
+}
+
+.modalTitle {
+  margin: $spacing-2 0;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+.fieldSet {
+  display: flex;
+  justify-content: space-between;
+  height: $spacing-8;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.fieldSetLabel {
+  font-size: 16px;
+  color: $gray;
+}
+
+.radioGroupWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.button {
+  @include button;
+}

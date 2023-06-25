@@ -1,3 +1,4 @@
+import HomePage from "@moneytracker/common/src/pages/HomePage";
 export default function Page() {
-  return <p>hi</p>
+  return <HomePage userId={'1234'}/>
 }

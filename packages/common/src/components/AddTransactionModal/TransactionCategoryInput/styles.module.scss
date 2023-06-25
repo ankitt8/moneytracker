@@ -1,0 +1,44 @@
+@import '@moneytracker/common/src/styles/mixins';
+@import '@moneytracker/common/src/styles/colors';
+@import '@moneytracker/common/src/styles/fonts';
+@import '@moneytracker/common/src/styles/spacing';
+
+.transactionCategoryInput {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: $spacing-8;
+}
+
+.transactionCategoryInputLabel {
+  font-size: 16px;
+  color: $gray;
+}
+
+.transactionCategories {
+  border: 1px solid gray;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  max-height: 87px;
+  overflow: scroll;
+}
+
+.transactionCategory {
+  color: black;
+  padding: 5px;
+  border: 1px solid gray;
+  margin: 3px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.transactionCategorySelected {
+  background-color: lightgray;
+  border: none;
+}
+
+.noData {
+  @include noData;
+  width: 100vw;
+}

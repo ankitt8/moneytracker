@@ -32,7 +32,7 @@ jobs:
         if: steps.node-modules-cache.outputs.cache-hit != 'true'
         run: yarn install --prefer-offline --frozen-lockfile
       - name: Build
-        run: yarn build
+        run: yarn web:build
       - name: Run Lighthouse CI
         run: |
           npm install -g @lhci/cli@0.11.x

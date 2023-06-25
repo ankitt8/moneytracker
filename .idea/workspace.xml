@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/.eslintrc.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/next.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/_app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/_app.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/bank.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/bank.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/credit-cards.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/credit-cards.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/history.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/history.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/investment.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/investment.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/spend-analysis.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/spend-analysis.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/transaction-categories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/transaction-categories.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/common/src/AppProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/AppProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/common/src/api-services/api.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/api-services/api.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/lighthouse-checks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/lighthouse-checks.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +89,7 @@
       <workItem from="1627713208819" duration="15021000" />
       <workItem from="1627798722726" duration="1980000" />
       <workItem from="1680321428574" duration="27152000" />
-      <workItem from="1687214837989" duration="26843000" />
+      <workItem from="1687214837989" duration="26925000" />
     </task>
     <task id="LOCAL-00001" summary="Added Responsiveness&#10;- Made Header a HOC, which renders the children props&#10;- refactoring">
       <created>1627724054956</created>
@@ -188,7 +175,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687705556340</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="feat: typescript fixes,&#10;allowing build ot happen even if typescript errors">
+      <created>1687707127442</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1687707127443</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,6 +214,7 @@
     <MESSAGE value="chore: refactoring delete not required code" />
     <MESSAGE value="feat: lint:fix" />
     <MESSAGE value="feat: run lighthouse pr checks on pr request" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: run lighthouse pr checks on pr request" />
+    <MESSAGE value="feat: typescript fixes,&#10;allowing build ot happen even if typescript errors" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: typescript fixes,&#10;allowing build ot happen even if typescript errors" />
   </component>
 </project>

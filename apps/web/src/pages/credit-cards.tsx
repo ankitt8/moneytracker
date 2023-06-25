@@ -1,4 +1,7 @@
 import CreditCardsPage from '@moneytracker/common/src/pages/CreditCardsPage';
-export default function  Page({ userId }){
+interface ICreditCardsPageProps {
+  userId: string;
+}
+export default function  Page({ userId }: ICreditCardsPageProps){
   return <CreditCardsPage userId={userId}/>
 }

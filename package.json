@@ -7,6 +7,7 @@
   },
   "scripts": {
     "web:dev": "yarn workspace @moneytracker/web dev",
+    "web:build": "yarn workspace @moneytracker/web build",
     "dev": "webpack serve --config packages/common/webpack.dev.js",
     "build": "rm -rf build &&  webpack --config packages/common/webpack.prod.js",
     "_lint": "eslint 'packages/common/src/**/*.{js,jsx,ts,tsx}' --config packages/common/.eslintrc.json",

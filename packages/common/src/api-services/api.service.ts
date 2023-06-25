@@ -134,15 +134,6 @@ export const addPaymentInstrumentDB = async (
     return null;
   }
 };
-export const editBankAccountDB = async (bankAccountId: string) => {
-  return await fetch(url.API_URL_EDIT_BANK_ACCOUNT, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ bankAccountId: bankAccountId })
-  });
-};
 
 export const deletePaymentInstrumentDB = async (
   flag: PaymentInstruments,

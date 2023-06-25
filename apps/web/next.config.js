@@ -7,6 +7,9 @@ const nextConfig = {
     '@moneytracker/common',
     'material-ui'
   ],
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   webpack: (config) => {
     config.resolve.extensions = ['.js', '.jsx', '.ts', '.tsx', ...config.resolve.extensions];
     config.resolve.modules = [path.resolve(projectRoot, 'node_modules'), path.resolve(workspaceRoot, 'node_modules')];

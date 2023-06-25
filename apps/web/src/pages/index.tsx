@@ -7,7 +7,7 @@ export default function Page({ transactions }: { transactions: ITransactions}) {
 }
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
-  const userId = req.cookies.userId;
+  const userId = req.cookies.userId as string;
   const transactions = await getTransactionsFromDB({userId});
   return { props: { transactions } };
 }

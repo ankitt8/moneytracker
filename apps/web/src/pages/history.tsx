@@ -1,4 +1,7 @@
 import History from '@moneytracker/common/src/pages/History';
-export default function  Page({ userId }){
+interface IHistoryPageProps {
+  userId: string;
+}
+export default function  Page({ userId }:IHistoryPageProps){
   return <History userId={userId}/>
 }

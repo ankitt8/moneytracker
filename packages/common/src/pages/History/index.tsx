@@ -11,7 +11,7 @@ import Transactions from '../../components/Transactions';
 interface IHistoryPageProps {
   userId: string;
 }
-function History({ userId }: IHistoryPageProps) {
+export default function History({ userId }: IHistoryPageProps) {
   const [transactions, setTransactions] = useState([]);
   const [groupByDate, setGroupByDate] = useState(false);
   const transactionTypes: TRANSACTION_TYPE[] = [
@@ -106,4 +106,3 @@ function History({ userId }: IHistoryPageProps) {
     </div>
   );
 }
-export { History };

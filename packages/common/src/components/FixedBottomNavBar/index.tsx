@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import styles from './style.module.scss';
 import { ROUTES, bottomNavBarText } from '@moneytracker/common/src/Constants';
 import { FixedBottomNavBarItem } from '../FixedBottomNavBarItem';
 import { icons } from '@moneytracker/common/src/icons';
 import { AddTransactionButton } from '../AddTransactionButton';
+import { useRouter } from 'next/router';
 const FixedBottomNavBar = ({ userId }: { userId: string }) => {
   // const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
   //   useState(false);
   // const handleClose = () => setIsAddTransactionModalOpen(false);
   const [activeItem, setActiveItem] = useState<string>(bottomNavBarText.home);
-  const history = useHistory();
+  const router = useRouter();
   const fixedBottomNavBarItemList = [
     {
       text: bottomNavBarText.home,
       component: <div className={styles.icon}>{icons.home}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.home);
-        history.push(ROUTES.HOME);
+        router.push(ROUTES.HOME);
       }
     },
     {
@@ -25,7 +25,7 @@ const FixedBottomNavBar = ({ userId }: { userId: string }) => {
       component: <div className={styles.icon}>{icons.analysis}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.analysis);
-        history.push(ROUTES.SPEND_ANALYSIS);
+        router.push(ROUTES.SPEND_ANALYSIS);
       }
     },
     {
@@ -38,7 +38,7 @@ const FixedBottomNavBar = ({ userId }: { userId: string }) => {
       component: <div className={styles.icon}>{icons.filter}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.categories);
-        history.push(ROUTES.TRANSACTION_CATEGORIES);
+        router.push(ROUTES.TRANSACTION_CATEGORIES);
       }
     },
     {
@@ -46,7 +46,7 @@ const FixedBottomNavBar = ({ userId }: { userId: string }) => {
       component: <div className={styles.icon}>{icons.hamburger}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.other);
-        history.push(ROUTES.OTHERS);
+        router.push(ROUTES.OTHERS);
       }
     }
     // {

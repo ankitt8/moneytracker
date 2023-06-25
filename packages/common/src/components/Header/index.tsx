@@ -19,7 +19,7 @@ import FastfoodIcon from '@material-ui/icons/Fastfood';
 import { IDrawerItem } from './interface';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { useHistory } from 'react-router-dom';
+import { useRouter } from 'next/link';
 import { HeaderProps } from './interface';
 
 import styles from './styles.module.scss';
@@ -88,7 +88,7 @@ const Header = ({ username, children }: HeaderProps) => {
     window.deferredPrompt = null;
     document.getElementById('installBtn')?.classList.toggle('hidden', true);
   };
-  const history = useHistory();
+  const router = useRouter();
   // const drawer = ;
   const container =
     window !== undefined ? () => window.document.body : undefined;

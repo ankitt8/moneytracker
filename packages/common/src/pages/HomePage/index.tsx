@@ -1,10 +1,17 @@
 import { TransactionsContainer } from '@moneytracker/common/src/components/Transactions/TransactionsContainer';
 import TransactionSummary from '@moneytracker/common/src/components/TransactionSummary';
-const HomePage = ({ userId }: { userId: string }) => {
+import { ITransactions } from '@moneytracker/common/src/components/Transactions/interface';
+const HomePage = ({
+  userId,
+  transactions
+}: {
+  userId?: string;
+  transactions: ITransactions;
+}) => {
   return (
     <>
-      <TransactionSummary />
-      <TransactionsContainer userId={userId} />
+      <TransactionSummary transactions={transactions} />
+      <TransactionsContainer transactions={transactions} userId={userId} />
     </>
   );
 };

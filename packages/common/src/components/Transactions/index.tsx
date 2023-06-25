@@ -20,7 +20,6 @@ const Transactions = ({
   showTransactionsInAscendingOrder = false,
   isNoTransactionsDateVisible = false
 }: TransactionsProps) => {
-  console.log({ transactions });
   let componentToRender;
   useEffect(() => {
     return () => {
@@ -111,7 +110,6 @@ function getTransactionsGroupedByDate({
   }
   transactions.forEach((transaction) => {
     const transactionDate = new Date(transaction.date);
-    console.log(transaction.date);
     if (transactionDate.getTime() > new Date().getTime()) return;
     const isTransactionDateInCurrentYear =
       transactionDate.getFullYear() === new Date().getFullYear();

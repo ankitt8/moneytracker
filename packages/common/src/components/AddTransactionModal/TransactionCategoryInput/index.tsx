@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import styles from './styles.module.scss';
 import cn from 'classnames';
 import { TransactionCategoryInputProps } from './interface';
@@ -28,7 +28,7 @@ const TransactionCategoryInput = ({
     <>
       <div className={styles.transactionCategoryInput}>
         <div className={styles.transactionCategoryInputLabel}>Category</div>
-        <Link to={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
+        <Link href={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
       </div>
       <div className={styles.transactionCategories}>
         {categories?.length !== 0 ? (

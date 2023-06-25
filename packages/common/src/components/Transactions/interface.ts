@@ -9,6 +9,7 @@ export interface TransactionsProps {
   isNoTransactionsDateVisible?: boolean;
 }
 
+export type ITransactions = Transaction[];
 export interface IArgs {
   transactions: Transaction[];
   startDateParam?: string;

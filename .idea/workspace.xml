@@ -5,133 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/_app.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/common/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/packages/common/src/components/AppProvider.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.babelrc" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/.babelrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.eslintrc.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/.eslintrc.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/bank.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/budget.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/credit-cards.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/food-tracker.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/history.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/investment.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/login.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/others.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/spend-analysis.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/web/src/pages/transaction-categories.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/common/src/AppProvider.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/common/src/utility/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.npmrc" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/.npmrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.nvmrc" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/.nvmrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.prettierrc" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/.prettierrc" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/web/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/next.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/_app.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/_app.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/web/src/pages/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/App.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/Constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions/actionCreator.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/actions/actionCreator.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/actions/actionTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/actions/actionTypes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api-services/api.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/api-services/api.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddCategory/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddCategory/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddCategory/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddCategory/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddCategory/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddCategory/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionButton/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionButton/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionButton/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionButton/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionButton/style.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionButton/style.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionModal/TransactionCategoryInput/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/TransactionCategoryInput/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionModal/TransactionCategoryInput/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/TransactionCategoryInput/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionModal/TransactionCategoryInput/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/TransactionCategoryInput/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionModal/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddTransactionModal/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DisplayCategories/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/DisplayCategories/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DisplayCategories/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/DisplayCategories/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DisplayCategories/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/DisplayCategories/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/EditTransactionModal/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/EditTransactionModal/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/EditTransactionModal/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/EditTransactionModal/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/EditTransactionModal/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/EditTransactionModal/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ErrorBoundary/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/ErrorBoundary/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FeedBack/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FeedBack/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FeedBack/style.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FeedBack/style.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FixedBottomNavBar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBar/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FixedBottomNavBar/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBar/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FixedBottomNavBar/style.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBar/style.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FixedBottomNavBarItem/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBarItem/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FixedBottomNavBarItem/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBarItem/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FixedBottomNavBarItem/style.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBarItem/style.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Header/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Header/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Header/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Header/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Loader/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Loader/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Loader/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Loader/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PaymentInstrument/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/PaymentInstrument/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/PaymentInstrument/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/PaymentInstrument/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideNavBar/SideNavBarDrawer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/SideNavBar/SideNavBarDrawer/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideNavBar/SideNavBarDrawer/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/SideNavBar/SideNavBarDrawer/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideNavBar/SideNavBarDrawer/style.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/SideNavBar/SideNavBarDrawer/style.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideNavBar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/SideNavBar/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SideNavBar/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/SideNavBar/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCard/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionCard/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCard/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionCard/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCard/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionCard/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCardWrapper/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionCardWrapper/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCardWrapper/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionCardWrapper/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionCardWrapper/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionCardWrapper/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionSummary/CreditDebitSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/CreditDebitSummary/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionSummary/CreditDebitSummary/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/CreditDebitSummary/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionSummary/CreditDebitSummary/styles.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/CreditDebitSummary/styles.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TransactionSummary/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/TransactionsContainer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/TransactionsContainer/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/TransactionsContainer/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/TransactionsContainer/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Transactions/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/customHooks/useApi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/customHooks/useApi.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/customHooks/useFetchData.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/customHooks/useFetchData.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/declaration.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/declaration.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/helper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/icons.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/interfaces/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/interfaces/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/logo.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/BankAccountsPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/BankAccountsPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/BankAccountsPage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/BankAccountsPage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/CreditCardsPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/CreditCardsPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/CreditCardsPage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/CreditCardsPage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/History/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/History/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/History/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/History/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/History/style.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/History/style.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/HomePage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/HomePage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/LoginPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/LoginPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/LoginPage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/LoginPage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OthersPage/constants.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/OthersPage/constants.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OthersPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/OthersPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/OthersPage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/OthersPage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/TransactionCards.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionAnalysisPage/TransactionCards.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionAnalysisPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionAnalysisPage/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionAnalysisPage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionAnalysisPage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionCategoriesPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionCategoriesPage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionCategoriesPage/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionCategoriesPage/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/TransactionCategoriesPage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionCategoriesPage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/UpcomingFeaturePage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/UpcomingFeaturePage/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/UpcomingFeaturePage/styles.module.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/UpcomingFeaturePage/styles.module.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/react-app-env.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/react-app-env.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/DataReducer/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/DataReducer/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/DataReducer/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/DataReducer/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/transactions/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/transactions/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/transactions/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/transactions/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/user/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/user/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reducers/user/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/user/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reportWebVitals.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reportWebVitals.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rupee.png" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/rupee.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/setupTests.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/setupTests.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/_colors.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/styles/_colors.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/_fonts.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/styles/_fonts.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/_mixins.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/styles/_mixins.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styles/_spacing.scss" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/styles/_spacing.scss" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/sw.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/sw.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.common.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/webpack.common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.dev.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/webpack.dev.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.prod.js" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/webpack.prod.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/TransactionCategoryInput/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/AddTransactionModal/TransactionCategoryInput/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBar/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/FixedBottomNavBar/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/Header/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Header/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/Transactions/TransactionsContainer/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/TransactionsContainer/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/Transactions/TransactionsContainer/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/TransactionsContainer/interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/Transactions/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/Transactions/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/Transactions/interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/pages/History/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/History/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/pages/HomePage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/HomePage/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/pages/LoginPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/LoginPage/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/pages/OthersPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/OthersPage/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/pages/TransactionAnalysisPage/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/TransactionAnalysisPage/index.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/reducers/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/reducers/index.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -211,7 +115,7 @@
       <workItem from="1627713208819" duration="15021000" />
       <workItem from="1627798722726" duration="1980000" />
       <workItem from="1680321428574" duration="27152000" />
-      <workItem from="1687214837989" duration="10317000" />
+      <workItem from="1687214837989" duration="24340000" />
     </task>
     <task id="LOCAL-00001" summary="Added Responsiveness&#10;- Made Header a HOC, which renders the children props&#10;- refactoring">
       <created>1627724054956</created>
@@ -262,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1687217528304</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="feat: nextjs setup wip">
+      <created>1687666331407</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1687666331408</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -289,6 +200,7 @@
     <MESSAGE value="feat: add transaction showoing paymetn instruments and keeping categories same" />
     <MESSAGE value="feat: showing payment instruemtn mode and fix on edittransaction modal similar to add transaction modal" />
     <MESSAGE value="feat: nextjs setup in yarn monorepo" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: nextjs setup in yarn monorepo" />
+    <MESSAGE value="feat: nextjs setup wip" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: nextjs setup wip" />
   </component>
 </project>

@@ -7,20 +7,27 @@ import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 
 import Transactions from '../index';
 import { TransactionsContainerProps } from './interface';
+import { FETCH_STATES } from '../../../reducers/DataReducer';
 
-function TransactionsContainer({ userId }: TransactionsContainerProps) {
-  const transactions = useSelector(
-    (store: ReduxStore) => store.transactions.transactions
-  );
-  const { fetchStatus } = useFetchData(
-    getTransactionsFromDB,
-    GET_TRANSACTIONS_FAILURE_MSG,
-    getTransactionsAction,
-    null,
-    { userId }
-  );
+function TransactionsContainer({
+  userId,
+  transactions
+}: TransactionsContainerProps) {
+  // const transactions = useSelector(
+  //   (store: ReduxStore) => store.transactions.transactions
+  // );
+  // const { fetchStatus } = useFetchData(
+  //   getTransactionsFromDB,
+  //   GET_TRANSACTIONS_FAILURE_MSG,
+  //   getTransactionsAction,
+  //   null,
+  //   { userId }
+  // );
   return (
-    <Transactions transactions={transactions} fetching={fetchStatus.fetching} />
+    <Transactions
+      transactions={transactions}
+      fetching={FETCH_STATES.RESOLVED}
+    />
   );
 }
 export { TransactionsContainer };

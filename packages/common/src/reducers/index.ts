@@ -28,9 +28,7 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
-const composeEnhancers =
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
-  composeWithDevTools({ trace: true, traceLimit: 25 });
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
 
 const storeCreator = () => {
   const store = createStore(persistedReducer, composeEnhancers());

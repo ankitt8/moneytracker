@@ -31,10 +31,13 @@ const CreditCardsPage = lazy(() => import('@moneytracker/common/src/pages/Credit
 const SnackBarFeedback = lazy(() => import('@moneytracker/common/src/components/FeedBack'));
 const Header = lazy(() => import('@moneytracker/common/src/components/Header'));
 const FixedBottomNavBar = lazy(() => import('@moneytracker/common/src/components/FixedBottomNavBar'));
-
+import { useRouter as useNextRouter } from 'next/router';
 function App() {
   const userId = useSelector((state) => state.user.userId);
   const username = useSelector((state) => state.user.username);
+  const router = useNextRouter();
+  const currentPath = router.pathname;
+  console.log({currentPath});
   if (userId === '') {
     return <LoginPage />;
   }

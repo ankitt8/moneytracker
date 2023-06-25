@@ -5,8 +5,10 @@ import { PASSWORD_REQUIREMENT, url } from '@moneytracker/common/src/Constants';
 import { useDispatch } from 'react-redux';
 import { newUserLoggedIn } from '@moneytracker/common/src/actions/actionCreator';
 import Loader from '@moneytracker/common/src/components/Loader';
+import { useRouter } from 'next/router';
 
 import styles from './styles.module.scss';
+import { setCookies } from '../../utility';
 
 const eyeOpen = <FontAwesomeIcon icon={faEye} />;
 const eyeClosed = <FontAwesomeIcon icon={faEyeSlash} />;
@@ -17,6 +19,7 @@ interface UserObject {
 }
 
 const Login = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
   const [error, setError] = useState('');
   const userNameRef = useRef<HTMLInputElement>(null);
@@ -38,10 +41,15 @@ const Login = () => {
       (userSavedDetails) => {
         setSignInLoader(false);
         const { userId, username } = userSavedDetails;
+        setCookies([
+          { name: 'userId', value: userId },
+          { name: 'username', value: username }
+        ]);
         if (userSavedDetails.error) {
           setError(userSavedDetails.error);
         } else {
           dispatch(newUserLoggedIn(userId, username));
+          router.push('/');
         }
       },
       (err) => {
@@ -50,6 +58,7 @@ const Login = () => {
       }
     );
   };
+
   const handleSignUp = (e: any) => {
     e.preventDefault();
     const username = userNameRef?.current?.value;
@@ -63,11 +72,16 @@ const Login = () => {
     signup({ username, password }).then(
       (userSavedDetails) => {
         const { userId, username } = userSavedDetails;
+        setCookies([
+          { name: 'userId', value: userId },
+          { name: 'username', value: username }
+        ]);
         setSignUpLoader(false);
         if (userSavedDetails.error) {
           setError(userSavedDetails.error);
         } else {
           dispatch(newUserLoggedIn(userId, username));
+          router.push('/');
         }
       },
       (err) => {

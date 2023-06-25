@@ -34,7 +34,6 @@ const TransactionAnalysisPage = ({
       (store: ReduxStore) => store.transactions.transactions
     );
   }
-  console.log({transactions});
   const creditCards = useSelector(
     (store: ReduxStore) => store.user.creditCards
   );

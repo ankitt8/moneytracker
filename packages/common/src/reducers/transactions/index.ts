@@ -15,7 +15,11 @@ import {
   GET_TRANSACTION_CATEGORIES,
   UPDATE_STATUS
 } from '@moneytracker/common/src/actions/actionTypes';
-import { CREDIT_TYPE, DEBIT_TYPE, BORROWED_TYPE } from '@moneytracker/common/src/Constants';
+import {
+  CREDIT_TYPE,
+  DEBIT_TYPE,
+  BORROWED_TYPE
+} from '@moneytracker/common/src/Constants';
 import { TransactionsStoreInitialState, Action, Status } from './interface';
 
 const initialState: TransactionsStoreInitialState = {

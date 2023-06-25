@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { OFFLINE_ERROR, SEVERITY_ERROR } from '@moneytracker/common/src/Constants';
+import {
+  OFFLINE_ERROR,
+  SEVERITY_ERROR
+} from '@moneytracker/common/src/Constants';
 import { updateStatusAction } from '@moneytracker/common/src/actions/actionCreator';
 import styles from './style.module.scss';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';

@@ -2,7 +2,11 @@ import { useReducer, useEffect, useState } from 'react';
 import { updateStatusAction } from '@moneytracker/common/src/actions/actionCreator';
 import { SEVERITY_ERROR } from '@moneytracker/common/src/Constants';
 import { useDispatch } from 'react-redux';
-import { dataReducer, initialState, ACTION_TYPES } from '@moneytracker/common/src/reducers/DataReducer';
+import {
+  dataReducer,
+  initialState,
+  ACTION_TYPES
+} from '@moneytracker/common/src/reducers/DataReducer';
 
 /**
  *

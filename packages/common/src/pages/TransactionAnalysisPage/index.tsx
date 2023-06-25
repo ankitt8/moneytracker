@@ -1,5 +1,9 @@
 import { useSelector } from 'react-redux';
-import { BORROWED_TYPE, CREDIT_TYPE, DEBIT_TYPE } from '@moneytracker/common/src/Constants';
+import {
+  BORROWED_TYPE,
+  CREDIT_TYPE,
+  DEBIT_TYPE
+} from '@moneytracker/common/src/Constants';
 import { TransactionAnalysisPageProps } from './interface';
 
 import styles from './styles.module.scss';

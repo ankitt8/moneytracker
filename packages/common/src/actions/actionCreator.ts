@@ -2,7 +2,10 @@ import {
   TransactionCategories,
   TransactionCategory
 } from '@moneytracker/common/src/components/AddTransactionModal/TransactionCategoryInput/interface';
-import { PaymentInstruments, Transaction } from '@moneytracker/common/src/interfaces';
+import {
+  PaymentInstruments,
+  Transaction
+} from '@moneytracker/common/src/interfaces';
 import { Status } from '@moneytracker/common/src/reducers/transactions/interface';
 import {
   ADD_TRANSACTION,

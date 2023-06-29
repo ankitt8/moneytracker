@@ -13,6 +13,8 @@ apps/web/node_modules
 # production
 /build
 
+.lighthouseci
+
 .idea/
 # misc
 .DS_Store

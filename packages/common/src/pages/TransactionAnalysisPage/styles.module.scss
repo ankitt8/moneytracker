@@ -1,0 +1,10 @@
+@import "@moneytracker/common/src/styles/mixins";
+
+.transactionAnalysisPage {
+  @include page;
+}
+
+.noData {
+  @include noData;
+  height: 80vh;
+}

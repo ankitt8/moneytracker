@@ -1,0 +1,9 @@
+@import "@moneytracker/common/src/styles/mixins";
+
+.transactionCategoriesPage {
+  @include page;
+}
+
+.transactionCategoryCard {
+  padding: 10px;
+}

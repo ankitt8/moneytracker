@@ -1,0 +1,12 @@
+@import '@moneytracker/common/src/styles/mixins';
+.container {
+  @include page;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dropdown {
+  height: 30px;
+}

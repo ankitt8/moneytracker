@@ -1,0 +1,29 @@
+@import '@moneytracker/common/src/styles/mixins';
+
+.transactionCardWrapper {
+  margin-top: 20px;
+}
+
+.transactionCardHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  font-size: 16px;
+  font-weight: 500;
+
+  > p {
+    margin: 0;
+  }
+}
+
+.noData {
+  @include noData;
+  font-size: 10px;
+}
+
+.list {
+  margin: 0 5px;
+  padding: 0;
+}

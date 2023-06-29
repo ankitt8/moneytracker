@@ -1,0 +1,32 @@
+@import '@moneytracker/common/src/styles/mixins';
+
+.headerLink {
+  text-decoration: none;
+  color: black;
+}
+
+.flexWrapper {
+  display: flex;
+  flex-direction: column;
+  padding-left: 16px;
+  justify-content: space-around;
+  margin-bottom: 26px;
+}
+
+.username {
+  font-size: 20px;
+}
+
+.installBtn {
+  @include button;
+  height: 40px;
+  width: fit-content;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  height: 100vh;
+}

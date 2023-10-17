@@ -1,6 +1,5 @@
 import { createStore, combineReducers } from 'redux';
 import { persistReducer, persistStore } from 'redux-persist';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import storage from 'redux-persist/lib/storage';
 import transactions from './transactions';
 import user from './user';
@@ -28,10 +27,10 @@ const rootReducer = combineReducers({
 });
 
 const persistedReducer = persistReducer(rootPersistConfig, rootReducer);
-const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
+// const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 25 });
 
 const storeCreator = () => {
-  const store = createStore(persistedReducer, composeEnhancers());
+  const store = createStore(persistedReducer);
   const persistor = persistStore(store);
   return { store, persistor };
 };

@@ -10,8 +10,6 @@ import { Status } from '@moneytracker/common/src/reducers/transactions/interface
 import {
   ADD_TRANSACTION,
   ADD_TRANSACTION_CATEGORY,
-  ADD_USER_BANK_ACCOUNT,
-  ADD_USER_CREDIT_CARD,
   ADD_USER_PAYMENT_INSTRUMENT,
   DELETE_TRANSACTION,
   DELETE_TRANSACTION_CATEGORY,

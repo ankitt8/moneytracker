@@ -8,6 +8,9 @@ jobs:
   update:
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Git pr having base branch master
         run: |
           node ./autoupdate.ts

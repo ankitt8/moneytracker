@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.github/workflows/update-prs-against-master.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/update-prs-against-master.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/autoupdate.js" beforeDir="false" afterPath="$PROJECT_DIR$/autoupdate.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -328,7 +328,15 @@
       <option name="project" value="LOCAL" />
       <updated>1697817699141</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="feat: wip auto  update prs with base branch master">
+      <option name="closed" value="true" />
+      <created>1697817772568</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1697817772568</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

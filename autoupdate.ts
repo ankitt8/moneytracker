@@ -8,11 +8,11 @@ import ensureError from "ensure-error";
 const unupdatablePullRequestCommentBody =
     "Cannot auto-update because of conflicts.";
 
-type PullRequest =
-    PaginatingEndpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"][number];
+// type PullRequest =
+//     PaginatingEndpoints["GET /repos/{owner}/{repo}/pulls"]["response"]["data"][number];
 
 const handleUnupdatablePullRequest = async (
-    pullRequest: PullRequest,
+    pullRequest,
     {
         octokit,
     }: Readonly<{
@@ -80,7 +80,7 @@ const handleUnupdatablePullRequest = async (
 };
 
 const handlePullRequest = async (
-    pullRequest: PullRequest,
+    pullRequest,
     {
         eventPayload,
         octokit,
@@ -138,7 +138,7 @@ const run = async () => {
 
         info(`Fetching pull requests based on "${base}"`);
 
-        const pullRequests: readonly PullRequest[] = await octokit.paginate(
+        const pullRequests = await octokit.paginate(
             "GET /repos/{owner}/{repo}/pulls",
             {
                 ...context.repo,

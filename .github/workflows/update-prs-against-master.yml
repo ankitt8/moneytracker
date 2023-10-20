@@ -13,18 +13,18 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
-      - name: Install hub
+      - name: Install gh
         run: |
-          curl -L https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz -o hub.tgz
-          tar -xzf hub.tgz
-          sudo mv hub-linux-amd64-2.14.2/bin/hub /usr/local/bin/hub
-          rm -rf hub.tgz hub-linux-amd64-2.14.2
+          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+          sudo apt-add-repository https://cli.github.com/packages
+          sudo apt-get update
+          sudo apt-get install gh
         shell: bash
 
       - name: List open pull requests
         id: list_prs
         run: |
-          prs=$(hub pr list -b master -s open -f "%I%n")
+          prs=$(gh pr list -B master -s open -q '.number' -L)
           echo "::set-output name=prs::$prs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +33,7 @@ jobs:
         run: |
           prs=${{ steps.list_prs.outputs.prs }}
           for pr in $prs; do
-            hub pr merge "$pr"
+            gh pr merge "$pr" --auto --squash
           done
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,39 +1,16 @@
-name: Update Pull Requests on Master Push
-
+name: autoupdate
 on:
-  push:
-    branches:
-      - master
-
+  # This will trigger on all pushes to all branches.
+  #  push: {}
+  # Alternatively, you can only trigger if commits are pushed to certain branches, e.g.:
+   push:
+     branches:
+       - master
 jobs:
-  update-prs:
-    runs-on: ubuntu-latest
-
+  autoupdate:
+    name: autoupdate
+    runs-on: ubuntu-22.04
     steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-
-      - name: Install gh
-        run: |
-          sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
-          sudo apt-add-repository https://cli.github.com/packages
-          sudo apt-get update
-          sudo apt-get install gh
-        shell: bash
-
-      - name: List open pull requests
-        id: list_prs
-        run: |
-          prs=$(gh pr list -B master -s open -q '.number' -L)
-          echo "::set-output name=prs::$prs"
+      - uses: docker://chinthakagodawita/autoupdate-action:v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update pull requests
-        run: |
-          prs=${{ steps.list_prs.outputs.prs }}
-          for pr in $prs; do
-            gh pr merge "$pr" --auto --squash
-          done
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'

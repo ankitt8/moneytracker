@@ -1,8 +1,5 @@
 import { getInput, group, info, setFailed, warning } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
-import type { GitHub } from "@actions/github/lib/utils.js";
-import type { PaginatingEndpoints } from "@octokit/plugin-paginate-rest";
-import type { PushEvent } from "@octokit/webhooks-definitions/schema.js";
 import ensureError from "ensure-error";
 
 const unupdatablePullRequestCommentBody =
@@ -15,10 +12,8 @@ const handleUnupdatablePullRequest = async (
     pullRequest,
     {
         octokit,
-    }: Readonly<{
-    octokit: InstanceType<typeof GitHub>;
-}>,
-): Promise<void> => {
+    },
+) => {
     try {
         const {
             head: {
@@ -74,7 +69,7 @@ const handleUnupdatablePullRequest = async (
         );
 
         info(`Commented: ${newComment.html_url}`);
-    } catch (error: unknown) {
+    } catch (error) {
         warning(ensureError(error));
     }
 };
@@ -84,11 +79,8 @@ const handlePullRequest = async (
     {
         eventPayload,
         octokit,
-    }: Readonly<{
-    eventPayload: PushEvent;
-    octokit: InstanceType<typeof GitHub>;
-}>,
-): Promise<void> => {
+    },
+) => {
     if (!pullRequest.auto_merge) {
         info(
             `Pull request #${pullRequest.number} does not have auto-merge enabled`,
@@ -113,7 +105,7 @@ const handlePullRequest = async (
                     },
                 );
                 info("Updated!");
-            } catch (error: unknown) {
+            } catch (error) {
                 warning(ensureError(error));
                 await handleUnupdatablePullRequest(pullRequest, { octokit });
             }
@@ -132,7 +124,7 @@ const run = async () => {
             );
         }
 
-        const eventPayload = context.payload as PushEvent;
+        const eventPayload = context.payload;
         // See https://docs.github.com/en/free-pro-team@latest/developers/webhooks-and-events/webhook-events-and-payloads#webhook-payload-object-34.
         const base = eventPayload.ref.slice("refs/heads/".length);
 
@@ -158,7 +150,7 @@ const run = async () => {
             // eslint-disable-next-line no-await-in-loop
             await handlePullRequest(pullRequest, { eventPayload, octokit });
         }
-    } catch (error: unknown) {
+    } catch (error) {
         setFailed(ensureError(error));
     }
 };

@@ -13,4 +13,4 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Git pr having base branch master
         run: |
-          node ./autoupdate.ts
+          node ./autoupdate.js

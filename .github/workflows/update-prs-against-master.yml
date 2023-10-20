@@ -13,6 +13,14 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v2
 
+      - name: Install hub
+        run: |
+          curl -L https://github.com/github/hub/releases/download/v2.14.2/hub-linux-amd64-2.14.2.tgz -o hub.tgz
+          tar -xzf hub.tgz
+          sudo mv hub-linux-amd64-2.14.2/bin/hub /usr/local/bin/hub
+          rm -rf hub.tgz hub-linux-amd64-2.14.2
+        shell: bash
+
       - name: List open pull requests
         id: list_prs
         run: |

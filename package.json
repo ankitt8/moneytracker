@@ -1,9 +1,11 @@
 {
   "name": "moneytracker",
-  "version": "1.0.0",
-  "private": true,
+  "version": "2.0.1",
   "workspaces": {
-    "packages": ["packages/*", "apps/*"]
+    "packages": [
+      "packages/*",
+      "apps/*"
+    ]
   },
   "scripts": {
     "web:dev": "yarn workspace @moneytracker/web dev",
@@ -19,5 +21,9 @@
     "build-report": "webpack-bundle-analyzer build/stats.json",
     "web:next:output": "yarn workspace @moneytracker/web export",
     "serve:lhci": "yarn web:dev"
+  },
+  "publishConfig": {
+    "registry":"https://ankittiwari.jfrog.io/artifactory/api/npm/npm/"
   }
+
 }

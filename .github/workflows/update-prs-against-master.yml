@@ -1,0 +1,31 @@
+name: Update Pull Requests on Master Push
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  update-prs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: List open pull requests
+        id: list_prs
+        run: |
+          prs=$(hub pr list -b master -s open -f "%I%n")
+          echo "::set-output name=prs::$prs"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update pull requests
+        run: |
+          prs=${{ steps.list_prs.outputs.prs }}
+          for pr in $prs; do
+            hub pr merge "$pr"
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

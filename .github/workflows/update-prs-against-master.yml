@@ -4,6 +4,10 @@ on:
     branches:
       - master
 
-runs:
-  using: 'node18'
-  main: 'autoupdate.js'
+jobs:
+  update:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Update Git pr having base branch master
+        run: |
+          node ./autoupdate.js

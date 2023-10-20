@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.github/autoupdate.js" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/autoupdate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/update-prs-against-master.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/update-prs-against-master.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,9 +65,9 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/.github/workflows" />
       <recent name="$PROJECT_DIR$/apps/backend" />
-      <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/packages/common" />
     </key>
   </component>
@@ -272,7 +271,23 @@
       <option name="project" value="LOCAL" />
       <updated>1697816029011</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="feat: wip auto  update prs with base branch master">
+      <option name="closed" value="true" />
+      <created>1697816166168</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1697816166168</updated>
+    </task>
+    <task id="LOCAL-00025" summary="feat: wip auto  update prs with base branch master">
+      <option name="closed" value="true" />
+      <created>1697816226149</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1697816226149</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -315,6 +330,7 @@
     <MESSAGE value="feat: backend app running" />
     <MESSAGE value="feat: adding backend project" />
     <MESSAGE value="feat: update lightouserc start command" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: update lightouserc start command" />
+    <MESSAGE value="feat: wip auto  update prs with base branch master" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: wip auto  update prs with base branch master" />
   </component>
 </project>

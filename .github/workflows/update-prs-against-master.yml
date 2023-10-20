@@ -22,7 +22,7 @@ jobs:
           fetch-depth: 0
           # use a personal access token to commit
           # the merged code and trigger CI actions
-          token: ${{ secrets.GH_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update Git branch X
         run: |
           git config user.name "Update branch"

@@ -19,6 +19,8 @@
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
+    "redux-devtools": "^3.7.0",
+    "redux-devtools-extension": "^2.13.8",
     "redux-persist": "^6.0.0",
     "web-vitals": "^0.2.4"
   },
@@ -29,6 +31,7 @@
     "lint": "yarn _lint",
     "lint:fix": "yarn lint -- --fix",
     "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc",
+    "prepare": "husky install",
     "build-report": "webpack-bundle-analyzer build/stats.json"
   },
   "devDependencies": {
@@ -52,7 +55,7 @@
     "babel-loader": "^8.2.3",
     "copy-webpack-plugin": "^10.2.4",
     "css-loader": "^6.6.0",
-    "eslint": "^7.2.0",
+    "eslint": "^8.11.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-config-prettier": "^8.5.0",

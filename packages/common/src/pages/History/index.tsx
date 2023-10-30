@@ -40,7 +40,7 @@ export default function History({ userId }: IHistoryPageProps) {
     return temp;
   }, [selectedTransactionTypes]);
   console.log(selectedTransactionTypesArray);
-  const [categorySelected, setCategorySelected] = useState('');
+  const [categoriesSelected, setCategorySelected] = useState<string[]>([]);
   const formValues = {
     startDate: null,
     endDate: null
@@ -57,7 +57,7 @@ export default function History({ userId }: IHistoryPageProps) {
     getTransactionsApi(() =>
       getTransactionsFromDB({
         userId,
-        category: categorySelected,
+        categories: categoriesSelected,
         transactionTypes: selectedTransactionTypesArray,
         ...formValues
       })
@@ -121,8 +121,22 @@ export default function History({ userId }: IHistoryPageProps) {
               (acc, curr) => [...acc, ...categoriesStore[curr]],
               []
             )}
-            categorySelected={categorySelected}
-            handleCategoryChange={(category) => setCategorySelected(category)}
+            categoriesSelected={categoriesSelected}
+            handleCategoryChange={(category) => {
+              if (categoriesSelected.includes(category)) {
+                const updatedCategoriesSelected = [...categoriesSelected];
+                updatedCategoriesSelected.splice(
+                  categoriesSelected.findIndex((val) => val === category),
+                  1
+                );
+                setCategorySelected(updatedCategoriesSelected);
+              } else {
+                setCategorySelected((prevCategoriesSelected) => [
+                  ...prevCategoriesSelected,
+                  category
+                ]);
+              }
+            }}
           />
         </fieldset>
         <button>Go</button>

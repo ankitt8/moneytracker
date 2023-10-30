@@ -260,7 +260,8 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
     startDate: requestStartDateString,
     endDate: requestEndDateString,
     transactionTypes,
-    category
+    category,
+      categories,
   } = req.body;
 
   if (userId == "" || userId == undefined) {
@@ -279,6 +280,9 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
   }
   if (category) {
     filterObj.category = category;
+  }
+  if(categories && categories.length > 0) {
+    filterObj.category = {$in: categories}
   }
 
   Transaction.find(filterObj).sort('-date').exec(function (err, transactions) {

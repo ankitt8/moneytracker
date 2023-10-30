@@ -12,18 +12,11 @@ import { ReduxStore } from '../../../reducers/interface';
   The component shows different transaction categories and allows user to select one of them
 */
 const TransactionCategoryInput = ({
-  type,
-  categories: categoriesProps,
+  categories,
   categorySelected,
+  categoriesSelected,
   handleCategoryChange
 }: TransactionCategoryInputProps) => {
-  let categories = categoriesProps;
-  if (!categories && type) {
-    const categoriesStore = useSelector(
-      (store: ReduxStore) => store.transactions.categories
-    );
-    categories = categoriesStore[type];
-  }
   return (
     <>
       <div className={styles.transactionCategoryInput}>
@@ -37,16 +30,20 @@ const TransactionCategoryInput = ({
               ? category?.category
               : category;
             return (
-              <p
-                key={category}
+              <button
+                key={categoryParsed}
+                type="button"
                 className={cn(styles.transactionCategory, {
-                  [styles.transactionCategorySelected]:
-                    categoryParsed === categorySelected
+                  [styles.transactionCategorySelected]: categorySelected
+                    ? categoryParsed === categorySelected
+                    : categoriesSelected?.includes(categoryParsed)
                 })}
-                onClick={() => handleCategoryChange(categoryParsed)}
+                onClick={() => {
+                  handleCategoryChange(categoryParsed);
+                }}
               >
                 {categoryParsed}
-              </p>
+              </button>
             );
           })
         ) : (

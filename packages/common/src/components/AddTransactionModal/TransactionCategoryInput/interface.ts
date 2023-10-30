@@ -6,9 +6,9 @@ export enum TRANSACTION_TYPE {
   borrowed = 'borrowed'
 }
 export interface TransactionCategoryInputProps {
-  type?: TRANSACTION_TYPE;
   categories?: string[];
-  categorySelected: string;
+  categorySelected?: string;
+  categoriesSelected?: string[];
   handleCategoryChange: (category: TransactionCategory) => void;
 }
 

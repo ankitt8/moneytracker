@@ -9,7 +9,7 @@ export async function getTransactionsFromDB({
   month,
   year,
   category,
-  transactionType
+  transactionTypes
 }: {
   userId: string;
   startDate?: string;
@@ -17,7 +17,7 @@ export async function getTransactionsFromDB({
   month?: string;
   year?: string;
   category?: string;
-  transactionType?: string;
+  transactionTypes?: string[];
 }): Promise<any> {
   try {
     const res = await fetch(url.API_URL_GET_TRANSACTIONS, {
@@ -31,7 +31,7 @@ export async function getTransactionsFromDB({
         endDate,
         month,
         year,
-        transactionType,
+        transactionTypes,
         category
       })
     });

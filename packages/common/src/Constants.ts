@@ -1,3 +1,5 @@
+import { TRANSACTION_TYPE } from './components/AddTransactionModal/TransactionCategoryInput/interface';
+
 const devUrl = 'http://127.0.0.1:8080';
 const dev = {
   url: {
@@ -115,3 +117,9 @@ export const bottomNavBarText = {
   add: 'Add',
   other: 'Other'
 };
+
+export const TRANSACTION_TYPES: TRANSACTION_TYPE[] = [
+  TRANSACTION_TYPE.credit,
+  TRANSACTION_TYPE.debit,
+  TRANSACTION_TYPE.borrowed
+];

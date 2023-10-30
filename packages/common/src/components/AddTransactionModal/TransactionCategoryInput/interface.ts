@@ -12,10 +12,6 @@ export interface TransactionCategoryInputProps {
   handleCategoryChange: (category: TransactionCategory) => void;
 }
 
-export interface TransactionCategories {
-  credit: string[];
-  debit: string[];
-  borrowed: string[];
-}
+export type TransactionCategories = Record<TRANSACTION_TYPE, string[]>;
 
 export type TransactionCategory = string;

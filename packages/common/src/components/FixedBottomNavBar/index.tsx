@@ -5,7 +5,7 @@ import { FixedBottomNavBarItem } from '../FixedBottomNavBarItem';
 import { icons } from '@moneytracker/common/src/icons';
 import { AddTransactionButton } from '../AddTransactionButton';
 import { useRouter } from 'next/router';
-const FixedBottomNavBar = ({ userId }: { userId: string }) => {
+const FixedBottomNavBar = () => {
   // const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
   //   useState(false);
   // const handleClose = () => setIsAddTransactionModalOpen(false);
@@ -30,7 +30,7 @@ const FixedBottomNavBar = ({ userId }: { userId: string }) => {
     },
     {
       text: bottomNavBarText.add,
-      component: <AddTransactionButton userId={userId} />,
+      component: <AddTransactionButton userId={window?.userId} />,
       handleClick: null
     },
     {

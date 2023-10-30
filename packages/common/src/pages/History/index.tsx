@@ -2,37 +2,63 @@ import { LinearProgress } from '@material-ui/core';
 import { getTransactionsFromDB } from '@moneytracker/common/src/api-services/api.service';
 import TransactionSummary from '@moneytracker/common/src/components/TransactionSummary';
 import TransactionAnalysisPage from '@moneytracker/common/src/pages/TransactionAnalysisPage';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import styles from './style.module.scss';
 import useApi from '../../customHooks/useApi';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
 import Transactions from '../../components/Transactions';
+import { TRANSACTION_TYPES } from '../../Constants';
+import { useSelector } from 'react-redux';
+import { ReduxStore } from '../../reducers/interface';
 interface IHistoryPageProps {
   userId: string;
 }
 export default function History({ userId }: IHistoryPageProps) {
+  console.log('History', userId);
+  const categoriesStore = useSelector(
+    (store: ReduxStore) => store.transactions.categories
+  );
   const [transactions, setTransactions] = useState([]);
-  const [groupByDate, setGroupByDate] = useState(false);
-  const transactionTypes: TRANSACTION_TYPE[] = [
-    TRANSACTION_TYPE.credit,
-    TRANSACTION_TYPE.debit,
-    TRANSACTION_TYPE.borrowed
-  ];
+  const [filters, setFilters] = useState({
+    groupByDate: false,
+    groupByCategory: true
+  });
+  const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<
+    Record<TRANSACTION_TYPE, boolean>
+  >(() => {
+    return TRANSACTION_TYPES.reduce((acc, curr) => {
+      return { ...acc, [curr]: true };
+    }, {});
+  });
+  const selectedTransactionTypesArray = useMemo(() => {
+    console.log('useMemo', selectedTransactionTypes);
+    const temp = [];
+    for (const key in selectedTransactionTypes) {
+      if (selectedTransactionTypes[key]) temp.push(key);
+    }
+    return temp;
+  }, [selectedTransactionTypes]);
+  console.log(selectedTransactionTypesArray);
+  const [categorySelected, setCategorySelected] = useState('');
   const formValues = {
     startDate: null,
     endDate: null
   };
   const transactionHistoryFormSubmitHandler = (e) => {
     e.preventDefault();
+    console.log(e);
     const formData = new FormData(e.target);
+    console.log(formData);
     for (const [key, value] of formData) {
       formValues[key] = value;
     }
+    console.log(formValues);
     getTransactionsApi(() =>
       getTransactionsFromDB({
         userId,
         category: categorySelected,
+        transactionTypes: selectedTransactionTypesArray,
         ...formValues
       })
     );
@@ -44,49 +70,82 @@ export default function History({ userId }: IHistoryPageProps) {
     getTransactionsSuccessHandler
   );
 
-  const [type, setType] = useState<TRANSACTION_TYPE>(TRANSACTION_TYPE.debit);
-  const [categorySelected, setCategorySelected] = useState('');
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <form onSubmit={transactionHistoryFormSubmitHandler}>
-          <label htmlFor="startDate">From</label>
-          <input type="date" id="startDate" name="startDate" />
-          <label htmlFor="endDate">To</label>
-          <input type="date" id="endDate" name="endDate" />
-          <fieldset>
-            <legend>Transaction Type</legend>
-            <div>
-              {transactionTypes.map((transactionType) => (
-                <label key={transactionType}>
-                  <input
-                    type="checkbox"
-                    id={transactionType}
-                    name="transactionType"
-                    value={transactionType}
-                    onChange={(e) => setType(transactionType)}
-                  />
-                  {transactionType}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>Category</legend>
-            <TransactionCategoryInput
-              type={type}
-              categorySelected={categorySelected}
-              handleCategoryChange={(category) => setCategorySelected(category)}
-            />
-          </fieldset>
-          <button>Go</button>
-        </form>
-      </div>
-      <button onClick={() => setGroupByDate(true)}>Group By Date</button>
-      <button onClick={() => setGroupByDate(false)}>Group By Categories</button>
+      <form
+        onSubmit={transactionHistoryFormSubmitHandler}
+        className={styles.formContainer}
+      >
+        <div>
+          <label htmlFor="startDate">
+            From
+            <input type="date" name="startDate" />
+          </label>
+
+          <label htmlFor="endDate">
+            To
+            <input type="date" name="endDate" />
+          </label>
+        </div>
+        <fieldset>
+          <legend>Transaction Type</legend>
+          <div>
+            {TRANSACTION_TYPES.map((transactionType) => (
+              <label key={transactionType}>
+                <input
+                  type="checkbox"
+                  name="transactionType"
+                  value={transactionType}
+                  checked={selectedTransactionTypes[transactionType]}
+                  onChange={() => {
+                    setSelectedTransactionTypes(
+                      (prevSelectedTransactionTypes) => {
+                        return {
+                          ...prevSelectedTransactionTypes,
+                          [transactionType]:
+                            !prevSelectedTransactionTypes[transactionType]
+                        };
+                      }
+                    );
+                  }}
+                />
+                {transactionType}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Category</legend>
+          <TransactionCategoryInput
+            categories={selectedTransactionTypesArray.reduce(
+              (acc, curr) => [...acc, ...categoriesStore[curr]],
+              []
+            )}
+            categorySelected={categorySelected}
+            handleCategoryChange={(category) => setCategorySelected(category)}
+          />
+        </fieldset>
+        <button>Go</button>
+        {/*<input type="submit"/>*/}
+      </form>
+      <button
+        onClick={() =>
+          setFilters({ groupByDate: true, groupByCategory: false })
+        }
+      >
+        Group By Date
+      </button>
+      <button
+        onClick={() => {
+          console.log('hi');
+          setFilters({ groupByDate: false, groupByCategory: true });
+        }}
+      >
+        Group By Categories
+      </button>
       {state.loading && <LinearProgress />}
       {transactions && <TransactionSummary transactions={transactions} />}
-      {groupByDate && transactions.length > 0 ? (
+      {filters.groupByDate && transactions.length > 0 ? (
         <Transactions
           transactions={transactions || []}
           showTransactionsInAscendingOrder={false}
@@ -97,7 +156,7 @@ export default function History({ userId }: IHistoryPageProps) {
           isNoTransactionsDateVisible={true}
         />
       ) : null}
-      {!groupByDate && transactions?.length > 0 ? (
+      {filters.groupByCategory && transactions?.length > 0 ? (
         <TransactionAnalysisPage
           userId={userId}
           transactionsProps={transactions}

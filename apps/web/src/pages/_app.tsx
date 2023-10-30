@@ -5,20 +5,20 @@ import FixedBottomNavBar from '@moneytracker/common/src/components/FixedBottomNa
 import { getCookie } from 'cookies-next';
 import { useEffect, useState } from "react";
 export default function App({Component, pageProps}: AppProps) {
+  console.log(pageProps)
   const router = useRouter();
   const isLoginPage = router.pathname === '/login';
-  const [userId, setUserId] = useState("");
+  console.log(getCookie('userId'));
   useEffect(() => {
     const userId = getCookie('userId') as string;
     if(typeof window !== undefined) {
       (window as any).userId = userId;
     }
-    setUserId(userId);
   },[]);
   return <AppProvider>
     <>
-      <Component {...pageProps} userId={userId} />
-      {!isLoginPage ? <FixedBottomNavBar userId={userId} /> : null}
+      <Component {...pageProps} />
+      {!isLoginPage ? <FixedBottomNavBar /> : null}
     </>
   </AppProvider>
 }

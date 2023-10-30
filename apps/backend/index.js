@@ -259,7 +259,7 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
     userId,
     startDate: requestStartDateString,
     endDate: requestEndDateString,
-    transactionType,
+    transactionTypes,
     category
   } = req.body;
 
@@ -273,10 +273,9 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
   let filterEndDate = new Date(currentYear, currentMonth + 1, 0);
   if (requestStartDateString) filterStartDate = new Date(requestStartDateString);
   if (requestEndDateString) filterEndDate = new Date(requestEndDateString);
-
   let filterObj = {userId: userId, "date": {$gte: filterStartDate.toISOString(), $lte: filterEndDate.toISOString()}};
-  if (transactionType) {
-    filterObj.type = transactionType;
+  if (transactionTypes) {
+    filterObj.type = {$in: transactionTypes};
   }
   if (category) {
     filterObj.category = category;

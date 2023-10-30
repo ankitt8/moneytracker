@@ -5,7 +5,7 @@ const HomePage = ({
   userId,
   transactions
 }: {
-  userId?: string;
+  userId: string;
   transactions: ITransactions;
 }) => {
   return (

@@ -5,3 +5,11 @@ interface ICreditCardsPageProps {
 export default function  Page({ userId }: ICreditCardsPageProps){
   return <CreditCardsPage userId={userId}/>
 }
+
+export async function getServerSideProps({ req }) {
+  return {
+    props: {
+      userId: req.cookies.userId
+    }
+  }
+}

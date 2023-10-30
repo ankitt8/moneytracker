@@ -39,7 +39,7 @@ import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
 
 const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
-
+const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
 const AddTransactionModal = ({
   userId,
   handleClose
@@ -48,10 +48,11 @@ const AddTransactionModal = ({
   const [heading, setHeading] = useState('');
   const [amount, setAmount] = useState('');
   const [date, setDate] = useState(constructTodayDate());
-  const [category, setCategory] = useState('');
+
   const [mode, setMode] = useState(ONLINE_MODE);
-  const [selectedPaymentInstrument, setSelectedPaymentInstrument] =
-    useState('');
+  const [selectedPaymentInstrument, setSelectedPaymentInstrument] = useState(
+    DEFAULT_PAYMENT_INSTRUMENT
+  );
   const [type, setType] = useState(DEBIT_TYPE);
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
@@ -67,7 +68,9 @@ const AddTransactionModal = ({
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
 
   const mostRecentCategories = getMostRecentCategories(categories, type);
-
+  const [category, setCategory] = useState(() =>
+    mostRecentCategories.length > 0 ? mostRecentCategories[0] : ''
+  );
   useEffect(() => {
     return function setFieldsEmpty() {
       setHeading('');
@@ -76,6 +79,9 @@ const AddTransactionModal = ({
       setCategory('');
     };
   }, []);
+  useEffect(() => {
+    setCategory(mostRecentCategories.length > 0 ? mostRecentCategories[0] : '');
+  }, [type]);
   const addTransactionSuccessHandler = (transactionResponse: Transaction) => {
     const localStorageMostRecentTransactionCategories = localStorage.getItem(
       MOST_RECENT_TRANSACTION_CATEGORIES

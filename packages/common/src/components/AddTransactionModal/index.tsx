@@ -4,7 +4,12 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from '@moneytracker/common/src/components/Loader';
 import TransactionCategoryInput from './TransactionCategoryInput';
-import { AddTransaction, AddTransactionModalProps } from './interface';
+import {
+  AddTransaction,
+  AddTransactionModalProps,
+  ILocalStorageAddTransactionState,
+  IUpdateLatestTransactionCategoriesLocalStorage
+} from './interface';
 import styles from './styles.module.scss';
 
 import {
@@ -37,9 +42,129 @@ import { addTransactionDB } from '@moneytracker/common/src/api-services/api.serv
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
+import { ITransactions } from '../Transactions/interface';
 
-const MOST_RECENT_TRANSACTION_CATEGORIES = 'most-recent-transaction-categories';
+const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
+
+function constructTodayDate(): string {
+  const todayDate = new Date();
+  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
+  const appendMonth = (str: string) => {
+    const month = todayDate.getMonth();
+    const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
+    return str + result;
+  };
+  const appendSeperator = (str: string) => str + '-';
+  const appendDate = (str: string) => {
+    const date = todayDate.getDate();
+    const result = date < 10 ? `0${date}` : date.toString();
+    return str + result;
+  };
+  const pipe =
+    (...fns: ((str: string) => any)[]) =>
+    (x: string) =>
+      fns.reduce((currVal, currFunc) => currFunc(currVal), x);
+  return pipe(
+    appendYear,
+    appendSeperator,
+    appendMonth,
+    appendSeperator,
+    appendDate
+  )('');
+}
+
+function getCategoriesToDisplay(categoriesFromDB: string[]) {
+  try {
+    const localStorageLatestAddTransactionStateString = localStorage.getItem(
+      LATEST_ADD_TRANSACTION_STATE
+    );
+    if (!localStorageLatestAddTransactionStateString) return categoriesFromDB;
+    let localStorageLatestAddTransactionState: ILocalStorageAddTransactionState =
+      {};
+    localStorageLatestAddTransactionState = JSON.parse(
+      localStorageLatestAddTransactionStateString
+    );
+    const localStorageLatestCategoriesToDisplay =
+      localStorageLatestAddTransactionState.categories;
+    const categoriesFromDBNotInLatestCategories = categoriesFromDB.filter(
+      (categoryFromDB) => {
+        return !localStorageLatestCategoriesToDisplay.includes(categoryFromDB);
+      }
+    );
+    return [
+      ...localStorageLatestCategoriesToDisplay,
+      ...categoriesFromDBNotInLatestCategories
+    ];
+  } catch (e) {
+    return categoriesFromDB;
+  }
+}
+function getLocalStorageAddTransactionStateToStore(
+  newInput: Transaction
+): ILocalStorageAddTransactionState {
+  return {
+    categories: [newInput.category],
+    mode: newInput.mode,
+    type: newInput.type,
+    bankAccount: newInput.bankAccount,
+    creditCard: newInput.creditCard
+  };
+}
+function updateLatestTransactionCategoriesLocalStorage(newInput: Transaction) {
+  // ls implies LocalStorage
+  const localStorageLatestAddTransactionStateString = localStorage.getItem(
+    LATEST_ADD_TRANSACTION_STATE
+  );
+  const newLocalStorageAddTransactionState =
+    getLocalStorageAddTransactionStateToStore(newInput);
+  if (!localStorageLatestAddTransactionStateString) {
+    localStorage.setItem(
+      LATEST_ADD_TRANSACTION_STATE,
+      JSON.stringify(newLocalStorageAddTransactionState)
+    );
+    return;
+  }
+  let localStorageLatestAddTransactionState: ILocalStorageAddTransactionState =
+    {};
+  if (localStorageLatestAddTransactionStateString) {
+    localStorageLatestAddTransactionState = JSON.parse(
+      localStorageLatestAddTransactionStateString
+    );
+  }
+  const LATEST_CATEGORIES_LIMIT = 10;
+
+  const isLatestCategoriesLocalStorageLimitReached =
+    localStorageLatestAddTransactionState.categories.length >=
+    LATEST_CATEGORIES_LIMIT;
+  if (isLatestCategoriesLocalStorageLimitReached) {
+    const newLatestCategoriesLocalStorage = [
+      newInput.category,
+      ...localStorageLatestAddTransactionState.categories.slice(1)
+    ];
+    localStorage.setItem(
+      LATEST_ADD_TRANSACTION_STATE,
+      JSON.stringify({
+        ...newLocalStorageAddTransactionState,
+        categories: newLatestCategoriesLocalStorage
+      })
+    );
+    return;
+  }
+  localStorage.setItem(
+    LATEST_ADD_TRANSACTION_STATE,
+    JSON.stringify({
+      ...newLocalStorageAddTransactionState,
+      categories: [
+        newInput.category,
+        ...localStorageLatestAddTransactionState.categories.filter(
+          (categoryLocalStorage) => categoryLocalStorage !== newInput.category
+        )
+      ]
+    })
+  );
+}
+
 const AddTransactionModal = ({
   userId,
   handleClose
@@ -47,13 +172,26 @@ const AddTransactionModal = ({
   const dispatch = useDispatch();
   const [heading, setHeading] = useState('');
   const [amount, setAmount] = useState('');
+  const localStorageLatestAddTransactionStateString = localStorage.getItem(
+    LATEST_ADD_TRANSACTION_STATE
+  );
+  const localStorageLatestAddTransactionState = JSON.parse(
+    localStorageLatestAddTransactionStateString
+  );
   const [date, setDate] = useState(constructTodayDate());
 
-  const [mode, setMode] = useState(ONLINE_MODE);
+  const [mode, setMode] = useState(() => {
+    return localStorageLatestAddTransactionState?.mode ?? ONLINE_MODE;
+  });
   const [selectedPaymentInstrument, setSelectedPaymentInstrument] = useState(
-    DEFAULT_PAYMENT_INSTRUMENT
+    () =>
+      localStorageLatestAddTransactionState?.bankAccount ||
+      localStorageLatestAddTransactionState?.creditCard ||
+      DEFAULT_PAYMENT_INSTRUMENT
   );
-  const [type, setType] = useState(DEBIT_TYPE);
+  const [type, setType] = useState(
+    () => localStorageLatestAddTransactionState?.type ?? DEBIT_TYPE
+  );
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
@@ -67,9 +205,9 @@ const AddTransactionModal = ({
   let categories = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
 
-  const mostRecentCategories = getMostRecentCategories(categories, type);
+  const categoriesToDisplay = getCategoriesToDisplay(categories, type);
   const [category, setCategory] = useState(() =>
-    mostRecentCategories.length > 0 ? mostRecentCategories[0] : ''
+    categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : ''
   );
   useEffect(() => {
     return function setFieldsEmpty() {
@@ -80,59 +218,11 @@ const AddTransactionModal = ({
     };
   }, []);
   useEffect(() => {
-    setCategory(mostRecentCategories.length > 0 ? mostRecentCategories[0] : '');
+    setCategory(categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : '');
   }, [type]);
   const addTransactionSuccessHandler = (transactionResponse: Transaction) => {
-    const localStorageMostRecentTransactionCategories = localStorage.getItem(
-      MOST_RECENT_TRANSACTION_CATEGORIES
-    );
-    let mostRecentCategoriesLocalStorage: {
-      category: string;
-      type: string;
-    }[] = [];
-    if (localStorageMostRecentTransactionCategories) {
-      mostRecentCategoriesLocalStorage = JSON.parse(
-        localStorageMostRecentTransactionCategories
-      );
-    }
-    const MOST_RECENT_CATEGORIES_NUM = 10;
-    if (!mostRecentCategoriesLocalStorage) {
-      localStorage.setItem(
-        MOST_RECENT_TRANSACTION_CATEGORIES,
-        JSON.stringify([{ category, type }])
-      );
-    }
-    if (mostRecentCategoriesLocalStorage) {
-      if (
-        mostRecentCategoriesLocalStorage.length < MOST_RECENT_CATEGORIES_NUM
-      ) {
-        localStorage.setItem(
-          MOST_RECENT_TRANSACTION_CATEGORIES,
-          JSON.stringify([
-            { category, type },
-            ...mostRecentCategoriesLocalStorage.filter(
-              (categoryLocalStorage) =>
-                categoryLocalStorage?.category !== category
-            )
-          ])
-        );
-      } else {
-        const newMostRecentCategoriesLocalStorage = [];
-        for (let i = 1; i < MOST_RECENT_CATEGORIES_NUM; i++) {
-          newMostRecentCategoriesLocalStorage.push(
-            mostRecentCategoriesLocalStorage[i]
-          );
-        }
-        newMostRecentCategoriesLocalStorage[0] = {
-          category,
-          type
-        };
-        localStorage.setItem(
-          MOST_RECENT_TRANSACTION_CATEGORIES,
-          JSON.stringify(newMostRecentCategoriesLocalStorage)
-        );
-      }
-    }
+    console.log(transactionResponse);
+    updateLatestTransactionCategoriesLocalStorage(transactionResponse);
     dispatch(addTransactionAction(transactionResponse));
     const { amount, mode } = transactionResponse;
     if (type === DEBIT_TYPE) {
@@ -239,7 +329,7 @@ const AddTransactionModal = ({
         <form onSubmit={handleTransactionSubmit}>
           {/* Categories */}
           <TransactionCategoryInput
-            categories={mostRecentCategories || []}
+            categories={categoriesToDisplay || []}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
           />
@@ -383,76 +473,4 @@ const AddTransactionModal = ({
   );
 };
 
-function constructTodayDate(): string {
-  const todayDate = new Date();
-  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
-  const appendMonth = (str: string) => {
-    const month = todayDate.getMonth();
-    const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
-    return str + result;
-  };
-  const appendSeperator = (str: string) => str + '-';
-  const appendDate = (str: string) => {
-    const date = todayDate.getDate();
-    const result = date < 10 ? `0${date}` : date.toString();
-    return str + result;
-  };
-  const pipe =
-    (...fns: ((str: string) => any)[]) =>
-    (x: string) =>
-      fns.reduce((currVal, currFunc) => currFunc(currVal), x);
-  return pipe(
-    appendYear,
-    appendSeperator,
-    appendMonth,
-    appendSeperator,
-    appendDate
-  )('');
-}
-
-function getMostRecentCategories(categoriesFromDB: string[], type: string) {
-  try {
-    const localStorageMostRecentTransactionCategories = localStorage.getItem(
-      MOST_RECENT_TRANSACTION_CATEGORIES
-    );
-    let mostRecentCategoriesLocalStorage: { category: string; type: string }[] =
-      [];
-    if (localStorageMostRecentTransactionCategories) {
-      mostRecentCategoriesLocalStorage = JSON.parse(
-        localStorageMostRecentTransactionCategories
-      );
-    }
-    const mostRecentCategoriesLocalStorageFilteredByType =
-      mostRecentCategoriesLocalStorage
-        .filter((mostRecentCategoryLocalStorage) => {
-          return mostRecentCategoryLocalStorage?.type === type;
-        })
-        .map((categoryLocalStorage) => categoryLocalStorage?.category);
-    // don't show the category from db which is in mostRecentCategoriesLocalStorage
-    // DB = database
-
-    let mostRecentCategories: string[];
-    if (
-      mostRecentCategoriesLocalStorageFilteredByType &&
-      mostRecentCategoriesLocalStorageFilteredByType.length > 0
-    ) {
-      const categoriesFromDBNotInMostRecentCategories = categoriesFromDB.filter(
-        (categoryFromDB) => {
-          return !mostRecentCategoriesLocalStorageFilteredByType.includes(
-            categoryFromDB
-          );
-        }
-      );
-      mostRecentCategories = [
-        ...mostRecentCategoriesLocalStorageFilteredByType,
-        ...categoriesFromDBNotInMostRecentCategories
-      ];
-    } else {
-      mostRecentCategories = categoriesFromDB;
-    }
-    return mostRecentCategories;
-  } catch (e) {
-    return categoriesFromDB;
-  }
-}
 export default AddTransactionModal;

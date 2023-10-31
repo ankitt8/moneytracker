@@ -2,15 +2,7 @@ import { AddTransaction } from '@moneytracker/common/src/components/AddTransacti
 import { url } from '@moneytracker/common/src/Constants';
 import { PaymentInstruments } from '../interfaces';
 
-export async function getTransactionsFromDB({
-  userId,
-  startDate,
-  endDate,
-  month,
-  year,
-  categories,
-  transactionTypes
-}: {
+export async function getTransactionsFromDB(getTransactionsFilter: {
   userId: string;
   startDate?: string;
   endDate?: string;
@@ -18,6 +10,8 @@ export async function getTransactionsFromDB({
   year?: string;
   categories: string[] | null;
   transactionTypes?: string[];
+  selectedBankAccounts?: string[];
+  selectedCreditCards?: string[];
 }): Promise<any> {
   try {
     const res = await fetch(url.API_URL_GET_TRANSACTIONS, {
@@ -25,15 +19,7 @@ export async function getTransactionsFromDB({
       headers: {
         'Content-type': 'application/json'
       },
-      body: JSON.stringify({
-        userId,
-        startDate,
-        endDate,
-        month,
-        year,
-        transactionTypes,
-        categories
-      })
+      body: JSON.stringify(getTransactionsFilter)
     });
     return await res.json();
   } catch (error) {

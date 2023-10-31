@@ -261,7 +261,9 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
     endDate: requestEndDateString,
     transactionTypes,
     category,
-      categories,
+    categories,
+    selectedBankAccounts,
+    selectedCreditCards,
   } = req.body;
 
   if (userId == "" || userId == undefined) {
@@ -284,6 +286,13 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
   if(categories && categories.length > 0) {
     filterObj.category = {$in: categories}
   }
+  if(selectedBankAccounts?.length > 0) {
+    filterObj.bankAccount = { $in: selectedBankAccounts }
+  }
+  if(selectedCreditCards?.length > 0) {
+    filterObj.creditCard = { $in: selectedCreditCards }
+  }
+
 
   Transaction.find(filterObj).sort('-date').exec(function (err, transactions) {
     if (err) {

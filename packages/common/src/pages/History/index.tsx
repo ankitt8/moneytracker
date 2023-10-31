@@ -11,6 +11,7 @@ import Transactions from '../../components/Transactions';
 import { TRANSACTION_TYPES } from '../../Constants';
 import { useSelector } from 'react-redux';
 import { ReduxStore } from '../../reducers/interface';
+import paymentInstrument from '../../components/PaymentInstrument';
 interface IHistoryPageProps {
   userId: string;
 }
@@ -18,6 +19,12 @@ export default function History({ userId }: IHistoryPageProps) {
   console.log('History', userId);
   const categoriesStore = useSelector(
     (store: ReduxStore) => store.transactions.categories
+  );
+  const bankAccounts = useSelector(
+    (store: ReduxStore) => store.user.bankAccounts
+  );
+  const creditCards = useSelector(
+    (store: ReduxStore) => store.user.creditCards
   );
   const [transactions, setTransactions] = useState([]);
   const [filters, setFilters] = useState({
@@ -31,6 +38,10 @@ export default function History({ userId }: IHistoryPageProps) {
       return { ...acc, [curr]: true };
     }, {});
   });
+  const PAYMENT_INSTRUMENTS = [...bankAccounts, ...creditCards];
+  const [selectedPaymentInstruments, setSelectedPaymentInstruments] =
+    useState(PAYMENT_INSTRUMENTS);
+  console.log({ selectedPaymentInstruments });
   const selectedTransactionTypesArray = useMemo(() => {
     console.log('useMemo', selectedTransactionTypes);
     const temp = [];
@@ -54,14 +65,29 @@ export default function History({ userId }: IHistoryPageProps) {
       formValues[key] = value;
     }
     console.log(formValues);
-    getTransactionsApi(() =>
-      getTransactionsFromDB({
+    getTransactionsApi(() => {
+      const getTransactionsFilter = {
         userId,
         categories: categoriesSelected,
         transactionTypes: selectedTransactionTypesArray,
+        selectedBankAccounts: [],
+        selectedCreditCards: [],
         ...formValues
-      })
-    );
+      };
+      selectedPaymentInstruments.forEach((selectedPaymentInstrument) => {
+        if (bankAccounts.includes(selectedPaymentInstrument)) {
+          getTransactionsFilter.selectedBankAccounts.push(
+            selectedPaymentInstrument
+          );
+        }
+        if (creditCards.includes(selectedPaymentInstrument)) {
+          getTransactionsFilter.selectedCreditCards.push(
+            selectedPaymentInstrument
+          );
+        }
+      });
+      return getTransactionsFromDB(getTransactionsFilter);
+    });
   };
   const getTransactionsSuccessHandler = (transactions) => {
     setTransactions(transactions);
@@ -110,6 +136,52 @@ export default function History({ userId }: IHistoryPageProps) {
                   }}
                 />
                 {transactionType}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Payment Instrument</legend>
+          <div>
+            {PAYMENT_INSTRUMENTS.map((paymentInstrument) => (
+              <label key={paymentInstrument}>
+                <input
+                  type="checkbox"
+                  name="paymentInstrument"
+                  value={paymentInstrument}
+                  checked={selectedPaymentInstruments.includes(
+                    paymentInstrument
+                  )}
+                  onChange={() => {
+                    setSelectedPaymentInstruments(
+                      (prevSelectedPaymentInstruments) => {
+                        // if current payment instrument clicked is already checked
+                        // remove from selected Payment instruments state
+                        if (
+                          prevSelectedPaymentInstruments.includes(
+                            paymentInstrument
+                          )
+                        ) {
+                          const temp = [...prevSelectedPaymentInstruments];
+                          temp.splice(
+                            temp.findIndex((t) => t === paymentInstrument),
+                            1
+                          );
+                          console.log(temp);
+                          return temp;
+                        } else {
+                          // if current payment instrument clicked is not checked
+                          // add in selected Payment instruments state
+                          return [
+                            ...prevSelectedPaymentInstruments,
+                            paymentInstrument
+                          ];
+                        }
+                      }
+                    );
+                  }}
+                />
+                {paymentInstrument}
               </label>
             ))}
           </div>

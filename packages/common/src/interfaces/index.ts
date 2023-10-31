@@ -7,6 +7,7 @@ export interface Transaction {
   bankAccount?: string;
   type?: string;
   category?: string;
+  creditCard?: string;
 }
 
 export interface CategoryAmountArray {

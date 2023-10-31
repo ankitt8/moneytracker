@@ -7,7 +7,6 @@ import styles from './style.module.scss';
 import useApi from '../../customHooks/useApi';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
-import Transactions from '../../components/Transactions';
 import { TRANSACTION_TYPES } from '../../Constants';
 import { useSelector } from 'react-redux';
 import { ReduxStore } from '../../reducers/interface';
@@ -15,6 +14,16 @@ import paymentInstrument from '../../components/PaymentInstrument';
 interface IHistoryPageProps {
   userId: string;
 }
+const FILTERS = {
+  groupByDate: false,
+  groupByPaymentType: false,
+  groupByCategory: false
+};
+const getFilterDisplayName = (filterKey) => {
+  if (filterKey === 'groupByDate') return 'Group by date';
+  if (filterKey === 'groupByPaymentType') return 'Group by payment type';
+  if (filterKey === 'groupByCategory') return 'Group by category';
+};
 export default function History({ userId }: IHistoryPageProps) {
   console.log('History', userId);
   const categoriesStore = useSelector(
@@ -27,9 +36,10 @@ export default function History({ userId }: IHistoryPageProps) {
     (store: ReduxStore) => store.user.creditCards
   );
   const [transactions, setTransactions] = useState([]);
+
   const [filters, setFilters] = useState({
-    groupByDate: false,
-    groupByCategory: true
+    ...FILTERS,
+    groupByPaymentType: true
   });
   const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<
     Record<TRANSACTION_TYPE, boolean>
@@ -85,6 +95,18 @@ export default function History({ userId }: IHistoryPageProps) {
             selectedPaymentInstrument
           );
         }
+        if (
+          getTransactionsFilter.selectedBankAccounts.length ===
+          bankAccounts.length
+        ) {
+          getTransactionsFilter.selectedBankAccounts = [];
+        }
+        if (
+          getTransactionsFilter.selectedCreditCards.length ===
+          bankAccounts.length
+        ) {
+          getTransactionsFilter.selectedCreditCards = [];
+        }
       });
       return getTransactionsFromDB(getTransactionsFilter);
     });
@@ -95,6 +117,9 @@ export default function History({ userId }: IHistoryPageProps) {
   const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
   );
+  const handleFilterClick = (updatedFilters) => {
+    setFilters({ ...FILTERS, ...updatedFilters });
+  };
 
   return (
     <div className={styles.container}>
@@ -212,42 +237,44 @@ export default function History({ userId }: IHistoryPageProps) {
           />
         </fieldset>
         <button>Go</button>
-        {/*<input type="submit"/>*/}
       </form>
-      <button
-        onClick={() =>
-          setFilters({ groupByDate: true, groupByCategory: false })
-        }
-      >
-        Group By Date
-      </button>
-      <button
-        onClick={() => {
-          console.log('hi');
-          setFilters({ groupByDate: false, groupByCategory: true });
-        }}
-      >
-        Group By Categories
-      </button>
+      {Object.entries(FILTERS).map(([filterKey]) => {
+        return (
+          <label key={filterKey}>
+            <input
+              type="radio"
+              checked={filters[filterKey]}
+              onChange={() =>
+                handleFilterClick({ [filterKey]: !filters[filterKey] })
+              }
+            />
+            {getFilterDisplayName(filterKey)}
+          </label>
+        );
+      })}
       {state.loading && <LinearProgress />}
       {transactions && <TransactionSummary transactions={transactions} />}
-      {filters.groupByDate && transactions.length > 0 ? (
-        <Transactions
-          transactions={transactions || []}
-          showTransactionsInAscendingOrder={false}
-          endDateParam={new Date(
-            transactions[transactions.length - 1].date
-          ).toDateString()}
-          startDateParam={new Date(transactions[0].date).toDateString()}
-          isNoTransactionsDateVisible={true}
-        />
-      ) : null}
-      {filters.groupByCategory && transactions?.length > 0 ? (
-        <TransactionAnalysisPage
-          userId={userId}
-          transactionsProps={transactions}
-        />
-      ) : null}
+      <TransactionAnalysisPage
+        userId={userId}
+        transactionsProps={transactions}
+        groupByPaymentType={filters.groupByPaymentType}
+        groupByCategory={filters.groupByCategory}
+        groupByDate={filters.groupByDate}
+        showTransactionsInAscendingOrder={false}
+        endDateParam={
+          transactions?.length > 0
+            ? new Date(
+                transactions[transactions.length - 1].date
+              ).toDateString()
+            : ''
+        }
+        startDateParam={
+          transactions?.length > 0
+            ? new Date(transactions[0].date).toDateString()
+            : ''
+        }
+        isNoTransactionsDateVisible={true}
+      />
     </div>
   );
 }

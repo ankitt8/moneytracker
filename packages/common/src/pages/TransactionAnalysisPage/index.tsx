@@ -2,20 +2,28 @@ import { useSelector } from 'react-redux';
 import {
   BORROWED_TYPE,
   CREDIT_TYPE,
-  DEBIT_TYPE
+  DEBIT_TYPE,
+  TRANSACTION_TYPES
 } from '@moneytracker/common/src/Constants';
 import { TransactionAnalysisPageProps } from './interface';
 
 import styles from './styles.module.scss';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
-import { TransactionCards } from './TransactionCards';
-import TransactionsGroupedByDateCard from '../../components/TransactionCardWrapper';
+import { TransactionsGroupedByCategory } from '../../components/TransactionsGroupedByCategory';
+import TransactionCardWrapper from '../../components/TransactionCardWrapper';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
+import Transactions from '../../components/TransactionsGroupedByDate';
+import TransactionsGroupedByDate from '../../components/TransactionsGroupedByDate';
 
 const TransactionAnalysisPage = ({
-  userId,
   transactionsProps,
-  groupByDate
+  groupByDate = true,
+  groupByPaymentType,
+  groupByCategory,
+  isNoTransactionsDateVisible = true,
+  startDateParam,
+  endDateParam,
+  showTransactionsInAscendingOrder = false
 }: TransactionAnalysisPageProps) => {
   // const { fetchStatus: getTransactionState } = useFetchData(
   //   getTransactionsFromDB,
@@ -44,9 +52,8 @@ const TransactionAnalysisPage = ({
   const transactionCategories = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
-
   // in future will give filters where based on filter applied type will be chosen
-  const getTransactionTypeCard = (type: string) => {
+  const getTransactionsGroupedByPaymentTypeContainer = (type: string) => {
     const transactionsFilteredByPaymentType = transactions.filter(
       (transaction) => transaction.type === type
     );
@@ -71,7 +78,7 @@ const TransactionAnalysisPage = ({
                   transactionCreditCard === creditCard
               );
             return (
-              <TransactionsGroupedByDateCard
+              <TransactionCardWrapper
                 title={creditCard}
                 transactions={transactionsGroupedByCreditCard}
                 totalAmount={transactionsGroupedByCreditCard.reduce(
@@ -84,7 +91,7 @@ const TransactionAnalysisPage = ({
             );
           })
         ) : (
-          <TransactionsGroupedByDateCard
+          <TransactionCardWrapper
             title={type}
             transactions={transactionsFilteredByPaymentType}
             totalAmount={transactionsFilteredByPaymentType.reduce(
@@ -98,28 +105,41 @@ const TransactionAnalysisPage = ({
       </>
     );
   };
-  return (
-    <div className={styles.transactionAnalysisPage}>
-      {/*{(getTransactionState.fetching === FETCH_STATES.PENDING ||*/}
-      {/*  getTransactionCategoriesState.fetching === FETCH_STATES.PENDING) && (*/}
-      {/*  <LinearProgress />*/}
-      {/*)}*/}
-      {[CREDIT_TYPE, BORROWED_TYPE, DEBIT_TYPE].map((type) => {
-        return getTransactionTypeCard(type);
-      })}
-
-      {groupByDate ? (
+  if (groupByPaymentType) {
+    return (
+      <div className={styles.transactionAnalysisPage}>
+        {TRANSACTION_TYPES.map((type) => {
+          return getTransactionsGroupedByPaymentTypeContainer(type);
+        })}
+      </div>
+    );
+  }
+  if (groupByCategory) {
+    return (
+      <div className={styles.transactionAnalysisPage}>
         <>
           <h3>All Transactions</h3>
-          <TransactionCards
+          <TransactionsGroupedByCategory
             transactions={transactions}
             transactionCategories={transactionCategories}
             showDate={true}
           />
         </>
-      ) : null}
-    </div>
-  );
+      </div>
+    );
+  }
+  if (groupByDate) {
+    return (
+      <TransactionsGroupedByDate
+        transactions={transactions}
+        showTransactionsInAscendingOrder={showTransactionsInAscendingOrder}
+        endDateParam={endDateParam}
+        startDateParam={startDateParam}
+        isNoTransactionsDateVisible={isNoTransactionsDateVisible}
+      />
+    );
+  }
+  return null;
 };
 
 export default TransactionAnalysisPage;

@@ -42,7 +42,6 @@ import { addTransactionDB } from '@moneytracker/common/src/api-services/api.serv
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
-import { ITransactions } from '../Transactions/interface';
 
 const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';

@@ -12,7 +12,7 @@ import {
 import { FETCH_STATES } from '@moneytracker/common/src/reducers/DataReducer';
 import { useEffect } from 'react';
 
-const Transactions = ({
+const TransactionsGroupedByDate = ({
   transactions,
   fetching,
   startDateParam,
@@ -36,10 +36,27 @@ const Transactions = ({
 
     componentToRender = (
       <ul className={styles.transactionsList}>
-        <TransactionsGroupedByDate
-          transactionsGroupedByDate={transactionsGroupedByDate}
-          isNoTransactionsDateVisible={isNoTransactionsDateVisible}
-        />
+        <div>
+          {Object.entries(transactionsGroupedByDate).map(
+            ([dateString, transactions]) => {
+              const title = new Date(dateString).toDateString();
+              // don't show dates greater than today's date
+              if (new Date(dateString).getTime() > new Date().getTime())
+                return null;
+              return (
+                <TransactionsGroupedByDateCard
+                  key={title}
+                  title={title}
+                  transactions={transactions}
+                  totalAmount={getDebitAmount(
+                    transactionsGroupedByDate[dateString]
+                  )}
+                  isNoTransactionsDateVisible={isNoTransactionsDateVisible}
+                />
+              );
+            }
+          )}
+        </div>
       </ul>
     );
   } catch (error) {
@@ -125,34 +142,4 @@ function getDebitAmount(individualDayTransactions: Transaction[]) {
     .filter(isDebitTransaction)
     .reduce((acc: number, curr: Transaction) => acc + curr.amount, 0);
 }
-
-function TransactionsGroupedByDate({
-  transactionsGroupedByDate,
-  isNoTransactionsDateVisible
-}: ITransactionsGroupedByDateUIProps): null | JSX.Element {
-  if (Object.entries(transactionsGroupedByDate).length === 0) return null;
-  return (
-    <div>
-      {Object.entries(transactionsGroupedByDate).map(
-        ([dateString, transactions]) => {
-          const title = new Date(dateString).toDateString();
-          // don't show dates greater than today's date
-          if (new Date(dateString).getTime() > new Date().getTime())
-            return null;
-          return (
-            <TransactionsGroupedByDateCard
-              key={title}
-              title={title}
-              transactions={transactions}
-              totalAmount={getDebitAmount(
-                transactionsGroupedByDate[dateString]
-              )}
-              isNoTransactionsDateVisible={isNoTransactionsDateVisible}
-            />
-          );
-        }
-      )}
-    </div>
-  );
-}
-export default Transactions;
+export default TransactionsGroupedByDate;

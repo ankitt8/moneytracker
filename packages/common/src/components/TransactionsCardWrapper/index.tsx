@@ -1,7 +1,6 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import TransactionCard from '@moneytracker/common/src/components/TransactionCard';
 import { TransactionCardWrapperProps } from './interface';
-import { motion } from 'framer-motion';
 import styles from './styles.module.scss';
 const areEqual = (prevProps: any, nextProps: any) => {
   if (prevProps.transactions.length !== nextProps.transactions.length)
@@ -11,13 +10,14 @@ const areEqual = (prevProps: any, nextProps: any) => {
   }
   return true;
 };
-const TransactionCardWrapper = ({
+const TransactionsCardWrapper = ({
   transactions,
   title,
   totalAmount,
   showDate,
   isNoTransactionsDateVisible
 }: TransactionCardWrapperProps): null | JSX.Element => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const transactionsList = transactions.map((transaction) => {
     const { _id: transactionId } = transaction;
     return (
@@ -27,22 +27,29 @@ const TransactionCardWrapper = ({
     );
   });
   if (transactions?.length === 0 && isNoTransactionsDateVisible) return null;
-
+  const getExpandedView = () => {
+    if (!isExpanded) return null;
+    return transactions.length === 0 ? (
+      <p className={styles.noData}>!!No Transactions Found!!</p>
+    ) : (
+      <ul className={styles.list}>{transactionsList}</ul>
+    );
+  };
   return (
-    <motion.li layout>
-      <div className={styles.transactionCardWrapper}>
-        <div className={styles.transactionCardHeading}>
-          <p>{title}</p>
-          <p>{totalAmount}</p>
-        </div>
-        {transactions.length === 0 ? (
-          <p className={styles.noData}>!!No Transactions Found!!</p>
-        ) : (
-          <ul className={styles.list}>{transactionsList}</ul>
-        )}
+    <div
+      onClick={(e) => {
+        console.log(e);
+        setIsExpanded((prev) => !prev);
+      }}
+      className={styles.transactionCardWrapper}
+    >
+      <div className={styles.transactionCardHeading}>
+        <p>{title}</p>
+        <p>{totalAmount}</p>
       </div>
-    </motion.li>
+      {getExpandedView()}
+    </div>
   );
 };
 
-export default memo(TransactionCardWrapper, areEqual);
+export default memo(TransactionsCardWrapper, areEqual);

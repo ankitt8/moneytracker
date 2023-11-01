@@ -15,7 +15,10 @@ const TransactionCard = ({
 }: TransactionCardProps) => {
   const [open, setOpen] = useState(false);
   const { heading, amount } = transaction;
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = (e) => {
+    e.stopPropagation();
+    setOpen(true);
+  };
   const handleCloseProps = () => setOpen(false);
   let date = '';
   if (showDate) {
@@ -37,7 +40,7 @@ const TransactionCard = ({
         <p className={styles.title}>
           {`${date} ${heading} ${
             transaction?.bankAccount || transaction?.creditCard || ''
-          }`}
+          } ${transaction?.category}`}
         </p>
         <p className={styles.amount}>{amount}</p>
       </div>

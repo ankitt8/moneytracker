@@ -223,6 +223,9 @@ const EditTransactionModal = ({
       open={isOpen}
       onClose={handleClose}
       aria-labelledby="max-width-dialog-heading"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
     >
       <DialogTitle id="max-width-dialog-heading">Edit Transaction</DialogTitle>
       <DialogContent>

@@ -120,6 +120,6 @@ export const bottomNavBarText = {
 
 export const TRANSACTION_TYPES: TRANSACTION_TYPE[] = [
   TRANSACTION_TYPE.credit,
-  TRANSACTION_TYPE.debit,
-  TRANSACTION_TYPE.borrowed
+  TRANSACTION_TYPE.borrowed,
+  TRANSACTION_TYPE.debit
 ];

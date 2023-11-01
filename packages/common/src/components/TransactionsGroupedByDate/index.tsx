@@ -1,14 +1,10 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { DEBIT_TYPE } from '@moneytracker/common/src/Constants';
-import TransactionsGroupedByDateCard from '@moneytracker/common/src/components/TransactionCardWrapper';
+import TransactionsGroupedByDateCard from '@moneytracker/common/src/components/TransactionsCardWrapper';
 import { Transaction } from '@moneytracker/common/src/interfaces';
 import styles from './styles.module.scss';
-import {
-  IArgs,
-  ITransactionsGroupedByDateUIProps,
-  TransactionsProps
-} from './interface';
+import { IArgs, TransactionsProps } from './interface';
 import { FETCH_STATES } from '@moneytracker/common/src/reducers/DataReducer';
 import { useEffect } from 'react';
 

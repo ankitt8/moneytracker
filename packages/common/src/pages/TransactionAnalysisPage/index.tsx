@@ -10,7 +10,7 @@ import { TransactionAnalysisPageProps } from './interface';
 import styles from './styles.module.scss';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import { TransactionsGroupedByCategory } from '../../components/TransactionsGroupedByCategory';
-import TransactionCardWrapper from '../../components/TransactionCardWrapper';
+import TransactionsCardWrapper from '../../components/TransactionsCardWrapper';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
 import Transactions from '../../components/TransactionsGroupedByDate';
 import TransactionsGroupedByDate from '../../components/TransactionsGroupedByDate';
@@ -78,7 +78,7 @@ const TransactionAnalysisPage = ({
                   transactionCreditCard === creditCard
               );
             return (
-              <TransactionCardWrapper
+              <TransactionsCardWrapper
                 title={creditCard}
                 transactions={transactionsGroupedByCreditCard}
                 totalAmount={transactionsGroupedByCreditCard.reduce(
@@ -91,7 +91,7 @@ const TransactionAnalysisPage = ({
             );
           })
         ) : (
-          <TransactionCardWrapper
+          <TransactionsCardWrapper
             title={type}
             transactions={transactionsFilteredByPaymentType}
             totalAmount={transactionsFilteredByPaymentType.reduce(

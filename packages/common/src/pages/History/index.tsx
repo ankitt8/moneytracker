@@ -25,7 +25,6 @@ const getFilterDisplayName = (filterKey) => {
   if (filterKey === 'groupByCategory') return 'Group by category';
 };
 export default function History({ userId }: IHistoryPageProps) {
-  console.log('History', userId);
   const categoriesStore = useSelector(
     (store: ReduxStore) => store.transactions.categories
   );
@@ -51,16 +50,13 @@ export default function History({ userId }: IHistoryPageProps) {
   const PAYMENT_INSTRUMENTS = [...bankAccounts, ...creditCards];
   const [selectedPaymentInstruments, setSelectedPaymentInstruments] =
     useState(PAYMENT_INSTRUMENTS);
-  console.log({ selectedPaymentInstruments });
   const selectedTransactionTypesArray = useMemo(() => {
-    console.log('useMemo', selectedTransactionTypes);
     const temp = [];
     for (const key in selectedTransactionTypes) {
       if (selectedTransactionTypes[key]) temp.push(key);
     }
     return temp;
   }, [selectedTransactionTypes]);
-  console.log(selectedTransactionTypesArray);
   const [categoriesSelected, setCategorySelected] = useState<string[]>([]);
   const formValues = {
     startDate: null,
@@ -68,13 +64,10 @@ export default function History({ userId }: IHistoryPageProps) {
   };
   const transactionHistoryFormSubmitHandler = (e) => {
     e.preventDefault();
-    console.log(e);
     const formData = new FormData(e.target);
-    console.log(formData);
     for (const [key, value] of formData) {
       formValues[key] = value;
     }
-    console.log(formValues);
     getTransactionsApi(() => {
       const getTransactionsFilter = {
         userId,
@@ -149,6 +142,7 @@ export default function History({ userId }: IHistoryPageProps) {
                   value={transactionType}
                   checked={selectedTransactionTypes[transactionType]}
                   onChange={() => {
+                    setCategorySelected([]);
                     setSelectedTransactionTypes(
                       (prevSelectedTransactionTypes) => {
                         return {
@@ -192,7 +186,6 @@ export default function History({ userId }: IHistoryPageProps) {
                             temp.findIndex((t) => t === paymentInstrument),
                             1
                           );
-                          console.log(temp);
                           return temp;
                         } else {
                           // if current payment instrument clicked is not checked

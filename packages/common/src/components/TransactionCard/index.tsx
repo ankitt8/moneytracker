@@ -36,7 +36,7 @@ const TransactionCard = ({
       >
         <p className={styles.title}>
           {`${date} ${heading} ${
-            transaction.bankAccount ?? transaction.creditCard ?? ''
+            transaction?.bankAccount || transaction?.creditCard || ''
           }`}
         </p>
         <p className={styles.amount}>{amount}</p>

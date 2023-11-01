@@ -26,9 +26,7 @@ const TransactionCategoryInput = ({
       <div className={styles.transactionCategories}>
         {categories?.length !== 0 ? (
           categories?.map((category) => {
-            const categoryParsed = category?.category
-              ? category?.category
-              : category;
+            const categoryParsed = category?.category || category;
             return (
               <button
                 key={categoryParsed}

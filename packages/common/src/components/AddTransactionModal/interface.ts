@@ -28,4 +28,5 @@ export interface ILocalStorageAddTransactionState {
   type: string;
   bankAccount: string;
   creditCard: string;
+  date: Date;
 }

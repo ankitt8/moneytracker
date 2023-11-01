@@ -286,11 +286,16 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
   if(categories && categories.length > 0) {
     filterObj.category = {$in: categories}
   }
-  if(selectedBankAccounts?.length > 0) {
+  const selectedCreditCardsLen = selectedCreditCards?.length ?? 0;
+  const selectedBankAccountsLen = selectedBankAccounts?.length ?? 0;
+  if(selectedBankAccountsLen  > 0 && selectedCreditCardsLen === 0) {
     filterObj.bankAccount = { $in: selectedBankAccounts }
   }
-  if(selectedCreditCards?.length > 0) {
+  if(selectedCreditCardsLen > 0 && selectedBankAccountsLen  === 0) {
     filterObj.creditCard = { $in: selectedCreditCards }
+  }
+  if(selectedBankAccountsLen > 0 && selectedCreditCardsLen > 0) {
+    filterObj['$or'] = [{bankAccount: { $in: selectedBankAccounts }},{creditCard: { $in: selectedCreditCards }}]
   }
 
 

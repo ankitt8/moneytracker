@@ -46,8 +46,11 @@ import { Transaction } from '../../interfaces';
 const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
 
-function constructTodayDate(): string {
-  const todayDate = new Date();
+function constructTodayDate(dateString?: Date): string {
+  let todayDate = new Date();
+  if (dateString) {
+    todayDate = new Date(dateString);
+  }
   const appendYear = (str: string) => str + todayDate.getFullYear().toString();
   const appendMonth = (str: string) => {
     const month = todayDate.getMonth();
@@ -107,7 +110,8 @@ function getLocalStorageAddTransactionStateToStore(
     mode: newInput.mode,
     type: newInput.type,
     bankAccount: newInput.bankAccount,
-    creditCard: newInput.creditCard
+    creditCard: newInput.creditCard,
+    date: newInput.date
   };
 }
 function updateLatestTransactionCategoriesLocalStorage(newInput: Transaction) {
@@ -177,7 +181,18 @@ const AddTransactionModal = ({
   const localStorageLatestAddTransactionState = JSON.parse(
     localStorageLatestAddTransactionStateString
   );
-  const [date, setDate] = useState(constructTodayDate());
+  const [date, setDate] = useState(() => {
+    try {
+      const localStorageLatestAddTransactionStateDate =
+        localStorageLatestAddTransactionState?.date;
+      if (localStorageLatestAddTransactionState?.date) {
+        return constructTodayDate(localStorageLatestAddTransactionStateDate);
+      }
+      return constructTodayDate();
+    } catch (e) {
+      return constructTodayDate();
+    }
+  });
 
   const [mode, setMode] = useState(() => {
     return localStorageLatestAddTransactionState?.mode ?? ONLINE_MODE;
@@ -212,8 +227,6 @@ const AddTransactionModal = ({
     return function setFieldsEmpty() {
       setHeading('');
       setAmount('');
-      setDate(constructTodayDate());
-      setCategory('');
     };
   }, []);
   useEffect(() => {
@@ -447,7 +460,7 @@ const AddTransactionModal = ({
             <input
               type="date"
               id="transactionDate"
-              defaultValue={constructTodayDate()}
+              defaultValue={date}
               onChange={handleDateChange}
             />
           </div>

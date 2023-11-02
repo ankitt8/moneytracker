@@ -35,7 +35,8 @@ import {
   ONLINE_MODE,
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
-  SEVERITY_WARNING
+  SEVERITY_WARNING,
+  CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY
 } from '@moneytracker/common/src/Constants';
 
 import { addTransactionDB } from '@moneytracker/common/src/api-services/api.service';
@@ -246,7 +247,12 @@ const AddTransactionModal = ({
     } else {
       if (mode === CASH_MODE) {
         dispatch(editCashCreditAction(amount));
-      } else if (mode === ONLINE_MODE) {
+      } else if (
+        mode === ONLINE_MODE &&
+        CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY.includes(
+          transactionResponse.category
+        )
+      ) {
         dispatch(editBankCreditAction(amount));
       }
     }

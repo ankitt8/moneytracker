@@ -9,7 +9,9 @@ export interface TransactionCategoryInputProps {
   categories?: string[];
   categorySelected?: string;
   categoriesSelected?: string[];
-  handleCategoryChange: (category: TransactionCategory) => void;
+  handleCategoryChange: (
+    category: TransactionCategory | TransactionCategory[]
+  ) => void;
 }
 
 export type TransactionCategories = Record<TRANSACTION_TYPE, string[]>;

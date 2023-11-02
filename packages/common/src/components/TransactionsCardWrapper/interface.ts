@@ -6,4 +6,5 @@ export interface TransactionCardWrapperProps {
   title: string;
   showDate?: boolean;
   isNoTransactionsDateVisible?: boolean;
+  isTransactionsCardWrapperExpanded?: boolean;
 }

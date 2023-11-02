@@ -123,3 +123,8 @@ export const TRANSACTION_TYPES: TRANSACTION_TYPE[] = [
   TRANSACTION_TYPE.borrowed,
   TRANSACTION_TYPE.debit
 ];
+
+export const CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY = [
+  'Lent Ankita Fraud',
+  'Credit'
+];

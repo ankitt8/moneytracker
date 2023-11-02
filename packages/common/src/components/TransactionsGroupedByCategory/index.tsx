@@ -29,7 +29,12 @@ export function TransactionsGroupedByCategory({
   type,
   showDate
 }: ITransactionGroupedByCategoryProps) {
-  const filteredTransactions = getFilteredTransactions(transactions, type);
+  let filteredTransactions = transactions;
+  if (type) {
+    filteredTransactions = getFilteredTransactions(transactions, {
+      type: type
+    });
+  }
   let categories: string[] = transactionCategories.debit;
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
   if (!type) {

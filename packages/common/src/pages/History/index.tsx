@@ -2,7 +2,7 @@ import { LinearProgress } from '@material-ui/core';
 import { getTransactionsFromDB } from '@moneytracker/common/src/api-services/api.service';
 import TransactionSummary from '@moneytracker/common/src/components/TransactionSummary';
 import TransactionAnalysisPage from '@moneytracker/common/src/pages/TransactionAnalysisPage';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './style.module.scss';
 import useApi from '../../customHooks/useApi';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
@@ -11,6 +11,7 @@ import { TRANSACTION_TYPES } from '../../Constants';
 import { useSelector } from 'react-redux';
 import { ReduxStore } from '../../reducers/interface';
 import paymentInstrument from '../../components/PaymentInstrument';
+import { getFilteredTransactions } from '../../helper';
 interface IHistoryPageProps {
   userId: string;
 }
@@ -34,7 +35,10 @@ export default function History({ userId }: IHistoryPageProps) {
   const creditCards = useSelector(
     (store: ReduxStore) => store.user.creditCards
   );
-  const [transactions, setTransactions] = useState([]);
+  const transactionsFromApiRef = useRef([]);
+  const [transactionsToDisplay, setTransactionsToDisplay] = useState(
+    transactionsFromApiRef.current
+  );
 
   const [filters, setFilters] = useState({
     ...FILTERS,
@@ -57,7 +61,7 @@ export default function History({ userId }: IHistoryPageProps) {
     }
     return temp;
   }, [selectedTransactionTypes]);
-  const [categoriesSelected, setCategorySelected] = useState<string[]>([]);
+  const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
   const formValues = {
     startDate: null,
     endDate: null
@@ -105,7 +109,8 @@ export default function History({ userId }: IHistoryPageProps) {
     });
   };
   const getTransactionsSuccessHandler = (transactions) => {
-    setTransactions(transactions);
+    transactionsFromApiRef.current = transactions;
+    setTransactionsToDisplay(transactions);
   };
   const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
@@ -113,7 +118,25 @@ export default function History({ userId }: IHistoryPageProps) {
   const handleFilterClick = (updatedFilters) => {
     setFilters({ ...FILTERS, ...updatedFilters });
   };
-
+  useEffect(() => {
+    console.log('useEffect', categoriesSelected);
+    setTransactionsToDisplay(
+      getFilteredTransactions(transactionsFromApiRef.current, {
+        category: categoriesSelected
+      })
+    );
+    // if (transactions.length > 0) {
+    //   // console.log({
+    //   //   categoriesSelected,
+    //   //   temp: getFilteredTransactions(transactions, {
+    //   //     category: categoriesSelected
+    //   //   })
+    //   // });
+    //   setTransactions(
+    //     getFilteredTransactions(transactions, { category: categoriesSelected })
+    //   );
+    // }
+  }, [categoriesSelected]);
   return (
     <div className={styles.container}>
       <form
@@ -142,7 +165,7 @@ export default function History({ userId }: IHistoryPageProps) {
                   value={transactionType}
                   checked={selectedTransactionTypes[transactionType]}
                   onChange={() => {
-                    setCategorySelected([]);
+                    setCategoriesSelected([]);
                     setSelectedTransactionTypes(
                       (prevSelectedTransactionTypes) => {
                         return {
@@ -213,15 +236,19 @@ export default function History({ userId }: IHistoryPageProps) {
             )}
             categoriesSelected={categoriesSelected}
             handleCategoryChange={(category) => {
+              if (Array.isArray(category)) {
+                setCategoriesSelected(category);
+                return;
+              }
               if (categoriesSelected.includes(category)) {
                 const updatedCategoriesSelected = [...categoriesSelected];
                 updatedCategoriesSelected.splice(
                   categoriesSelected.findIndex((val) => val === category),
                   1
                 );
-                setCategorySelected(updatedCategoriesSelected);
+                setCategoriesSelected(updatedCategoriesSelected);
               } else {
-                setCategorySelected((prevCategoriesSelected) => [
+                setCategoriesSelected((prevCategoriesSelected) => [
                   ...prevCategoriesSelected,
                   category
                 ]);
@@ -246,24 +273,26 @@ export default function History({ userId }: IHistoryPageProps) {
         );
       })}
       {state.loading && <LinearProgress />}
-      {transactions && <TransactionSummary transactions={transactions} />}
+      {transactionsToDisplay && (
+        <TransactionSummary transactions={transactionsToDisplay} />
+      )}
       <TransactionAnalysisPage
         userId={userId}
-        transactionsProps={transactions}
+        transactionsProps={transactionsToDisplay}
         groupByPaymentType={filters.groupByPaymentType}
         groupByCategory={filters.groupByCategory}
         groupByDate={filters.groupByDate}
         showTransactionsInAscendingOrder={false}
         endDateParam={
-          transactions?.length > 0
+          transactionsToDisplay?.length > 0
             ? new Date(
-                transactions[transactions.length - 1].date
+                transactionsToDisplay[transactionsToDisplay.length - 1].date
               ).toDateString()
             : ''
         }
         startDateParam={
-          transactions?.length > 0
-            ? new Date(transactions[0].date).toDateString()
+          transactionsToDisplay?.length > 0
+            ? new Date(transactionsToDisplay[0].date).toDateString()
             : ''
         }
         isNoTransactionsDateVisible={true}

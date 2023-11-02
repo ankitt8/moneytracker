@@ -14,6 +14,10 @@ import TransactionsCardWrapper from '../../components/TransactionsCardWrapper';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
 import Transactions from '../../components/TransactionsGroupedByDate';
 import TransactionsGroupedByDate from '../../components/TransactionsGroupedByDate';
+import {
+  getAmountToBeShownTransactionsCardWrapper,
+  getFilteredTransactions
+} from '../../helper';
 
 const TransactionAnalysisPage = ({
   transactionsProps,
@@ -41,6 +45,7 @@ const TransactionAnalysisPage = ({
   //   userId
   // );
   let transactions = transactionsProps;
+  console.log(transactions);
   if (!transactions) {
     transactions = useSelector(
       (store: ReduxStore) => store.transactions.transactions
@@ -54,17 +59,18 @@ const TransactionAnalysisPage = ({
   );
   // in future will give filters where based on filter applied type will be chosen
   const getTransactionsGroupedByPaymentTypeContainer = (type: string) => {
-    const transactionsFilteredByPaymentType = transactions.filter(
-      (transaction) => transaction.type === type
+    const transactionsFilteredByPaymentType = getFilteredTransactions(
+      transactions,
+      { type }
     );
+    console.log(transactionsFilteredByPaymentType)
     return (
       <>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <h3>{type.toUpperCase()} Transactions</h3>
           <h3>
             {transactionsFilteredByPaymentType.reduce(
-              (totalAmount, currentTransactionObj) =>
-                totalAmount + currentTransactionObj.amount,
+              getAmountToBeShownTransactionsCardWrapper,
               0
             )}
           </h3>
@@ -82,7 +88,7 @@ const TransactionAnalysisPage = ({
                 title={creditCard}
                 transactions={transactionsGroupedByCreditCard}
                 totalAmount={transactionsGroupedByCreditCard.reduce(
-                  (totalAmount, curr) => totalAmount + curr.amount,
+                  getAmountToBeShownTransactionsCardWrapper,
                   0
                 )}
                 key={creditCard}
@@ -95,7 +101,7 @@ const TransactionAnalysisPage = ({
             title={type}
             transactions={transactionsFilteredByPaymentType}
             totalAmount={transactionsFilteredByPaymentType.reduce(
-              (totalAmount, curr) => totalAmount + curr.amount,
+              getAmountToBeShownTransactionsCardWrapper,
               0
             )}
             key={type}

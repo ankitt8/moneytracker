@@ -1,12 +1,13 @@
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 import { DEBIT_TYPE } from '@moneytracker/common/src/Constants';
-import TransactionsGroupedByDateCard from '@moneytracker/common/src/components/TransactionsCardWrapper';
+import TransactionsCardWrapper from '@moneytracker/common/src/components/TransactionsCardWrapper';
 import { Transaction } from '@moneytracker/common/src/interfaces';
 import styles from './styles.module.scss';
 import { IArgs, TransactionsProps } from './interface';
 import { FETCH_STATES } from '@moneytracker/common/src/reducers/DataReducer';
 import { useEffect } from 'react';
+import { getAmountToBeShownTransactionsCardWrapper } from '../../helper';
 
 const TransactionsGroupedByDate = ({
   transactions,
@@ -40,14 +41,16 @@ const TransactionsGroupedByDate = ({
               if (new Date(dateString).getTime() > new Date().getTime())
                 return null;
               return (
-                <TransactionsGroupedByDateCard
+                <TransactionsCardWrapper
                   key={title}
                   title={title}
                   transactions={transactions}
-                  totalAmount={getDebitAmount(
-                    transactionsGroupedByDate[dateString]
+                  totalAmount={transactionsGroupedByDate[dateString].reduce(
+                    getAmountToBeShownTransactionsCardWrapper,
+                    0
                   )}
                   isNoTransactionsDateVisible={isNoTransactionsDateVisible}
+                  isTransactionsCardWrapperExpanded={true}
                 />
               );
             }

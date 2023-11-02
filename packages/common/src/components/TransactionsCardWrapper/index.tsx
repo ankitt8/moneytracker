@@ -15,9 +15,12 @@ const TransactionsCardWrapper = ({
   title,
   totalAmount,
   showDate,
-  isNoTransactionsDateVisible
+  isNoTransactionsDateVisible,
+  isTransactionsCardWrapperExpanded = false
 }: TransactionCardWrapperProps): null | JSX.Element => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(
+    isTransactionsCardWrapperExpanded
+  );
   const transactionsList = transactions.map((transaction) => {
     const { _id: transactionId } = transaction;
     return (
@@ -38,7 +41,6 @@ const TransactionsCardWrapper = ({
   return (
     <div
       onClick={(e) => {
-        console.log(e);
         setIsExpanded((prev) => !prev);
       }}
       className={styles.transactionCardWrapper}

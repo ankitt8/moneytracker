@@ -1,9 +1,14 @@
-import { DEBIT_TYPE } from '@moneytracker/common/src/Constants';
-import { Transaction } from 'interfaces/index.interface';
+import {
+  BORROWED_TYPE,
+  DEBIT_TYPE,
+  TRANSACTION_TYPES
+} from '@moneytracker/common/src/Constants';
+import { Transaction } from './interfaces';
 import {
   CategoryAmount,
   TransactionsGroupedByCategories
 } from './pages/TransactionAnalysisPage/interface';
+import { TRANSACTION_TYPE } from './components/AddTransactionModal/TransactionCategoryInput/interface';
 
 export function getNoOfDaysMonth(
   month = new Date().getMonth(),
@@ -28,14 +33,38 @@ export const isDebitTypeTransaction = (transaction: Transaction) => {
   // adding undefined match also
   return transaction.type === DEBIT_TYPE || transaction.type === undefined;
 };
+export const isBorrowedTypeTransaction = (transaction: Transaction) => {
+  // to handle the transactions where type debit or credit is not stored
+  // adding undefined match also
+  return transaction.type === BORROWED_TYPE;
+};
 
-// TODO use here enum
+export const isObjectEmpty = (obj) => {
+  if (!obj) return true;
+  return Object.keys(obj).length === 0;
+};
 export const getFilteredTransactions = (
   transactions: Transaction[],
-  type?: string
+  filters: Record<string, string | string[]>
 ) => {
-  if (!type) return transactions;
-  return transactions.filter((transaction) => transaction?.type === type);
+  // code is buggy
+  // every transaction souuld satisfy all the filters
+  console.log('getFilteredTransactions');
+  console.log(transactions, filters);
+  if (isObjectEmpty(filters)) return transactions;
+  return transactions.filter((transaction) => {
+    // traverse over all the filter
+    // and transaction should satisfy all the filter values
+    for (const [filterName, filterValue] of Object.entries(filters)) {
+      console.log(filterValue, transaction, transaction[filterName]);
+      if (Array.isArray(filterValue)) {
+        if (!filterValue.includes(transaction[filterName])) return false;
+      } else {
+        if (transaction[filterName] != filterValue) return false;
+      }
+    }
+    return true;
+  });
 };
 
 export const createTransactionsGroupedByCategories = (
@@ -58,21 +87,18 @@ export const createTransactionsGroupedByCategories = (
     });
 
   transactions.forEach((transaction) => {
-    const { category, amount } = transaction;
-    if (!category) {
-      transactionsGroupedByCategories['No Category']['transactions'].push(
+    const { category = 'No Category', amount } = transaction;
+    const currTotalAmount =
+      transactionsGroupedByCategories[category]?.totalAmount ?? 0;
+
+    // for now user can add transaction without category
+    // reason have not yet made category required
+    if (transactionsGroupedByCategories[category]) {
+      transactionsGroupedByCategories[category]['transactions'].push(
         transaction
       );
-      transactionsGroupedByCategories['No Category'].totalAmount += amount;
-    } else {
-      // for now user can add transaction without category
-      // reason have not yet made category required
-      if (transactionsGroupedByCategories[category]) {
-        transactionsGroupedByCategories[category]['transactions'].push(
-          transaction
-        );
-        transactionsGroupedByCategories[category].totalAmount += amount;
-      }
+      transactionsGroupedByCategories[category].totalAmount =
+        getAmountToBeShownTransactionsCardWrapper(currTotalAmount, transaction);
     }
   });
 
@@ -90,4 +116,14 @@ export const getCategoryNamesSortedByTotalAmount = (
   }));
   categoryTotalAmountObjectArray.sort((a, b) => b.totalAmount - a.totalAmount);
   return categoryTotalAmountObjectArray.map(({ category }) => category);
+};
+
+export const getAmountToBeShownTransactionsCardWrapper = (
+  totalAmount: number,
+  curr: Transaction
+) => {
+  if (curr.type === TRANSACTION_TYPE.credit) {
+    return totalAmount + curr.amount;
+  }
+  return totalAmount - curr.amount;
 };

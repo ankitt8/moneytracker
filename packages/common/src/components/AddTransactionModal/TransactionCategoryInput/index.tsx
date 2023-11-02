@@ -19,9 +19,28 @@ const TransactionCategoryInput = ({
 }: TransactionCategoryInputProps) => {
   return (
     <>
-      <div className={styles.transactionCategoryInput}>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        className={styles.transactionCategoryInput}
+      >
         <div className={styles.transactionCategoryInputLabel}>Category</div>
-        <Link href={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
+        <div>
+          <button
+            type="button"
+            onClick={() => {
+              handleCategoryChange(
+                categoriesSelected.length === categories.length
+                  ? []
+                  : categories
+              );
+            }}
+          >
+            Select all categories
+          </button>
+          <Link href={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
+        </div>
       </div>
       <div className={styles.transactionCategories}>
         {categories?.length !== 0 ? (

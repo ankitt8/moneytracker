@@ -18,7 +18,10 @@ interface UserObject {
   password: string | undefined;
 }
 
-const Login = () => {
+interface ILoginProps {
+  callbackUrl?: string;
+}
+const Login = ({ callbackUrl }: ILoginProps) => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [error, setError] = useState('');
@@ -49,7 +52,7 @@ const Login = () => {
           setError(userSavedDetails.error);
         } else {
           dispatch(newUserLoggedIn(userId, username));
-          router.push('/');
+          router.replace(callbackUrl ?? '/');
         }
       },
       (err) => {

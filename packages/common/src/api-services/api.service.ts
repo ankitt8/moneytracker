@@ -8,7 +8,7 @@ export async function getTransactionsFromDB(getTransactionsFilter: {
   endDate?: string;
   month?: string;
   year?: string;
-  categories: string[] | null;
+  categories?: string[] | null;
   transactionTypes?: string[];
   selectedBankAccounts?: string[];
   selectedCreditCards?: string[];

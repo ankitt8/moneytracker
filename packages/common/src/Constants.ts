@@ -128,3 +128,7 @@ export const CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY = [
   'Lent Ankita Fraud',
   'Credit'
 ];
+
+export const COOKIE_NAMES = {
+  userId: 'userId'
+};

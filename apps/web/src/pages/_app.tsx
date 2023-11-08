@@ -4,6 +4,7 @@ import AppProvider from '@moneytracker/common/src/AppProvider';
 import FixedBottomNavBar from '@moneytracker/common/src/components/FixedBottomNavBar';
 import { useEffect } from "react";
 import { COOKIE_NAMES } from '@moneytracker/common/src/Constants';
+import '../styles/global.css';
 export default function App({Component, pageProps}: AppProps) {
   const router = useRouter();
   const isLoginPage = router.pathname === '/login';

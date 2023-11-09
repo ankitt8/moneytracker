@@ -63,7 +63,7 @@ export default function History({ userId }: IHistoryPageProps) {
   const PAYMENT_INSTRUMENTS = [...bankAccounts, ...creditCards];
   const [filters, setFilters] = useState<any>(() => ({
     ...FILTERS,
-    groupByPaymentType: true,
+    groupByDate: true,
     selectedTransactionTypes: getInitialSelectedTransactionTypes(),
     selectedPaymentInstruments: PAYMENT_INSTRUMENTS,
     categoriesSelected: [],

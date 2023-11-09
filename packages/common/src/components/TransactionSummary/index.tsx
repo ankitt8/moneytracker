@@ -56,13 +56,13 @@ const TransactionSummary = ({ transactions: transactionsProps }) => {
   const processTransactions = useCallback(() => {
     dispatch(setCreditDebitZero());
     const debitTransactions = transactions
-      .filter(isDebitTypeTransaction)
+      ?.filter(isDebitTypeTransaction)
       .filter(isNotExcludedCategory);
     const borrowedTransactions = transactions
-      .filter(isBorrowedTypeTransaction)
+      ?.filter(isBorrowedTypeTransaction)
       .filter(isNotExcludedCategory);
     const creditTransactions = transactions
-      .filter(isCreditTypeTransaction)
+      ?.filter(isCreditTypeTransaction)
       .filter(isNotExcludedCategory);
 
     const bankCreditTransactions = creditTransactions.filter(

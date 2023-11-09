@@ -6,9 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="e13dca18-8be5-4c70-ac77-2e2828d62514" name="Default Changelist" comment="feat:">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/apps/backend/config/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/apps/backend/config/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/web/src/pages/history.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/web/src/pages/history.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/components/TransactionSummary/index.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/common/src/pages/History/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/pages/History/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/common/src/utility/index.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/common/src/utility/index.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

@@ -11,7 +11,9 @@ export default function  Page({ userId }:IHistoryPageProps){
 }
 
 export async function getServerSideProps({req, query}: GetServerSidePropsContext) {
-  const userId= getCookieValue(req?.cookies, COOKIE_NAMES.userId) ?? query[COOKIE_NAMES.userId] ?? null;
+  let userId= getCookieValue(req?.cookies, COOKIE_NAMES.userId);
+  const queryParamUserId = query[COOKIE_NAMES.userId];
+  if(!userId && queryParamUserId && typeof queryParamUserId === 'string') { userId =  JSON.parse(queryParamUserId) ;}
   if(!userId) {
     const temp = {
       userId, redirectUrl : ROUTES.LOGIN, currentUrl: ROUTES.HISTORY, query

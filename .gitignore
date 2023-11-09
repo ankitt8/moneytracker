@@ -1,5 +1,5 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-.idea
+.idea/
 # dependencies
 /node_modules
 packages/common/node_modules
@@ -35,4 +35,6 @@ node_modules/
 apps/web/node_modules/
 apps/backend/node_modules/
 packages/common/node_modules/
-apps/backend/config/config-local.env
+apps/backend/config/
+/apps/backend/config/config-local.env
+apps/backend/.env

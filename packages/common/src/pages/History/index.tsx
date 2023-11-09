@@ -94,7 +94,7 @@ export default function History({ userId }: IHistoryPageProps) {
     setFilters((prevFilters) => {
       return { ...prevFilters, ...temp };
     });
-    const getTransactionsFilter = { userId, ...temp };
+    const getTransactionsFilter = { ...temp, userId };
     if (Object.keys(getTransactionsFilter).length > 0) {
       getTransactionsApi(() =>
         getTransactionsApiCallback({ ...getTransactionsFilter })
@@ -157,13 +157,13 @@ export default function History({ userId }: IHistoryPageProps) {
       formValues[key] = value;
     }
     const getTransactionsFilter = {
-      userId,
       categories: removeDuplicateFromArray(categoriesSelected),
       transactionTypes: selectedTransactionTypesArray,
       selectedBankAccounts: [],
       selectedCreditCards: [],
       startDate: formValues.startDate,
-      endDate: formValues.endDate
+      endDate: formValues.endDate,
+      userId
     };
 
     getTransactionsApi(async () => {

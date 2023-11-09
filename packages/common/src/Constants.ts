@@ -110,6 +110,7 @@ export const PASSWORD_REQUIREMENT =
   'Password must be between 7 to 15 characters ' +
   'which contain at least one numeric digit and a special character.';
 
+export const NO_CATEGORIES_FOUND = 'No categories found';
 export const bottomNavBarText = {
   home: 'Home',
   analysis: 'Analysis',

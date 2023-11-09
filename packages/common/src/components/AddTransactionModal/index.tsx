@@ -43,39 +43,10 @@ import { addTransactionDB } from '@moneytracker/common/src/api-services/api.serv
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
+import { constructTodayDate } from '../../utility';
 
 const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
-
-function constructTodayDate(dateString?: Date): string {
-  let todayDate = new Date();
-  if (dateString) {
-    todayDate = new Date(dateString);
-  }
-  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
-  const appendMonth = (str: string) => {
-    const month = todayDate.getMonth();
-    const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
-    return str + result;
-  };
-  const appendSeperator = (str: string) => str + '-';
-  const appendDate = (str: string) => {
-    const date = todayDate.getDate();
-    const result = date < 10 ? `0${date}` : date.toString();
-    return str + result;
-  };
-  const pipe =
-    (...fns: ((str: string) => any)[]) =>
-    (x: string) =>
-      fns.reduce((currVal, currFunc) => currFunc(currVal), x);
-  return pipe(
-    appendYear,
-    appendSeperator,
-    appendMonth,
-    appendSeperator,
-    appendDate
-  )('');
-}
 
 function getCategoriesToDisplay(categoriesFromDB: string[]) {
   try {

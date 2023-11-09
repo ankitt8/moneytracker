@@ -84,7 +84,6 @@ const TransactionSummary = ({ transactions: transactionsProps }) => {
     const cashDebit = calculateTransactionsTotalAmount(cashDebitTransactions);
     const borrowedAmount =
       calculateTransactionsTotalAmount(borrowedTransactions);
-    console.log(borrowedAmount)
 
     dispatch(editBankCreditAction(bankCredit));
     dispatch(editBankDebitAction(bankDebit + borrowedAmount));

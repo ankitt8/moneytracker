@@ -45,7 +45,6 @@ const TransactionAnalysisPage = ({
   //   userId
   // );
   let transactions = transactionsProps;
-  console.log(transactions);
   if (!transactions) {
     transactions = useSelector(
       (store: ReduxStore) => store.transactions.transactions
@@ -63,7 +62,6 @@ const TransactionAnalysisPage = ({
       transactions,
       { type }
     );
-    console.log(transactionsFilteredByPaymentType)
     return (
       <>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>

@@ -3,13 +3,14 @@ import styles from './styles.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
+import { NO_CATEGORIES_FOUND } from '../../Constants';
 
 const DisplayCategories = ({
   categories,
   handleDeleteCategory
 }: DisplayCategoriesProps) => {
   if (!categories || categories.length === 0) {
-    return <p className={styles.noData}>!!No Categories Found!!</p>;
+    return <p className={styles.noData}>!!{NO_CATEGORIES_FOUND}!!</p>;
   }
   return (
     <div className={styles.categoriesWrapper}>

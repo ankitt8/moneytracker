@@ -140,7 +140,7 @@ app.post(URL.API_URL_GET_PAYMENT_INSTRUMENTS, (req, res) => {
     if (err) {
       res.status(404).json({error: err});
     } else {
-      res.status(201).json(flag === 'bankAccounts' ? doc.bankAccounts : doc.creditCards);
+      res.status(201).json(flag === 'bankAccounts' ? doc?.bankAccounts : doc?.creditCards);
     }
   });
 });
@@ -277,7 +277,7 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
   if (requestStartDateString) filterStartDate = new Date(requestStartDateString);
   if (requestEndDateString) filterEndDate = new Date(requestEndDateString);
   let filterObj = {userId: userId, "date": {$gte: filterStartDate.toISOString(), $lte: filterEndDate.toISOString()}};
-  if (transactionTypes) {
+  if (transactionTypes && transactionTypes.length > 0) {
     filterObj.type = {$in: transactionTypes};
   }
   if (category) {

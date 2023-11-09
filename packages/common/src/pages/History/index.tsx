@@ -1,5 +1,8 @@
 import { LinearProgress } from '@material-ui/core';
-import { getTransactionsFromDB } from '@moneytracker/common/src/api-services/api.service';
+import {
+  getPaymentInstrumentsFromDB,
+  getTransactionsFromDB
+} from '@moneytracker/common/src/api-services/api.service';
 import TransactionSummary from '@moneytracker/common/src/components/TransactionSummary';
 import TransactionAnalysisPage from '@moneytracker/common/src/pages/TransactionAnalysisPage';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -7,11 +10,19 @@ import styles from './style.module.scss';
 import useApi from '../../customHooks/useApi';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
-import { TRANSACTION_TYPES } from '../../Constants';
+import {
+  GET_BANK_ACCOUNTS_FAILURE_MSG,
+  TRANSACTION_TYPES
+} from '../../Constants';
 import { useSelector } from 'react-redux';
 import { ReduxStore } from '../../reducers/interface';
 import paymentInstrument from '../../components/PaymentInstrument';
 import { getFilteredTransactions } from '../../helper';
+import { useRouter } from 'next/router';
+import useFetchData from '../../customHooks/useFetchData';
+import { setUserPaymentInstrumentsAction } from '../../actions/actionCreator';
+import { PaymentInstruments } from '../../interfaces';
+import { constructStartDateOfYear, constructTodayDate } from '../../utility';
 interface IHistoryPageProps {
   userId: string;
 }
@@ -19,6 +30,11 @@ const FILTERS = {
   groupByDate: false,
   groupByPaymentType: false,
   groupByCategory: false
+};
+const getInitialSelectedTransactionTypes = () => {
+  return TRANSACTION_TYPES.reduce((acc, curr) => {
+    return { ...acc, [curr]: true };
+  }, {});
 };
 const getFilterDisplayName = (filterKey) => {
   if (filterKey === 'groupByDate') return 'Group by date';
@@ -35,25 +51,23 @@ export default function History({ userId }: IHistoryPageProps) {
   const creditCards = useSelector(
     (store: ReduxStore) => store.user.creditCards
   );
+  const router = useRouter();
   const transactionsFromApiRef = useRef([]);
   const [transactionsToDisplay, setTransactionsToDisplay] = useState(
     transactionsFromApiRef.current
   );
-
-  const [filters, setFilters] = useState({
-    ...FILTERS,
-    groupByPaymentType: true
-  });
-  const [selectedTransactionTypes, setSelectedTransactionTypes] = useState<
-    Record<TRANSACTION_TYPE, boolean>
-  >(() => {
-    return TRANSACTION_TYPES.reduce((acc, curr) => {
-      return { ...acc, [curr]: true };
-    }, {});
-  });
   const PAYMENT_INSTRUMENTS = [...bankAccounts, ...creditCards];
-  const [selectedPaymentInstruments, setSelectedPaymentInstruments] =
-    useState(PAYMENT_INSTRUMENTS);
+  const [filters, setFilters] = useState<any>(() => ({
+    ...FILTERS,
+    groupByPaymentType: true,
+    selectedTransactionTypes: getInitialSelectedTransactionTypes(),
+    selectedPaymentInstruments: PAYMENT_INSTRUMENTS,
+    categoriesSelected: [],
+    startDate: constructStartDateOfYear(),
+    endDate: constructTodayDate()
+  }));
+  const selectedTransactionTypes = filters.selectedTransactionTypes ?? {};
+  const selectedPaymentInstruments = filters.selectedPaymentInstruments;
   const selectedTransactionTypesArray = useMemo(() => {
     const temp = [];
     for (const key in selectedTransactionTypes) {
@@ -61,10 +75,60 @@ export default function History({ userId }: IHistoryPageProps) {
     }
     return temp;
   }, [selectedTransactionTypes]);
-  const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
-  const formValues = {
-    startDate: null,
-    endDate: null
+  const categoriesSelected = filters.categoriesSelected;
+  const formValues = filters;
+  useEffect(() => {
+    const routerQueryParams = router.query;
+    const temp = { ...filters };
+    for (const [key, value] of Object.entries(routerQueryParams)) {
+      if (key && value && typeof value === 'string') {
+        temp[key] = JSON.parse(value);
+      }
+    }
+    setFilters((prevFilters) => {
+      return { ...prevFilters, ...temp };
+    });
+    const getTransactionsFilter = { userId, ...temp };
+    if (Object.keys(getTransactionsFilter).length > 0) {
+      getTransactionsApi(() =>
+        getTransactionsApiCallback({ ...getTransactionsFilter })
+      );
+    }
+  }, []);
+  useEffect(() => {
+    setTransactionsToDisplay(
+      getFilteredTransactions(transactionsFromApiRef.current, {
+        category: categoriesSelected
+      })
+    );
+  }, [filters.categoriesSelected]);
+  const getTransactionsApiCallback = (getTransactionsFilter) => {
+    const updatedGetTransactionsFilter = { ...getTransactionsFilter };
+    selectedPaymentInstruments?.forEach((selectedPaymentInstrument) => {
+      if (bankAccounts?.includes(selectedPaymentInstrument)) {
+        updatedGetTransactionsFilter?.selectedBankAccounts?.push(
+          selectedPaymentInstrument
+        );
+      }
+      if (creditCards?.includes(selectedPaymentInstrument)) {
+        updatedGetTransactionsFilter?.selectedCreditCards?.push(
+          selectedPaymentInstrument
+        );
+      }
+      if (
+        updatedGetTransactionsFilter?.selectedBankAccounts?.length ===
+        bankAccounts.length
+      ) {
+        updatedGetTransactionsFilter.selectedBankAccounts = [];
+      }
+      if (
+        updatedGetTransactionsFilter?.selectedCreditCards?.length ===
+        bankAccounts.length
+      ) {
+        updatedGetTransactionsFilter.selectedCreditCards = [];
+      }
+    });
+    return getTransactionsFromDB(updatedGetTransactionsFilter);
   };
   const transactionHistoryFormSubmitHandler = (e) => {
     e.preventDefault();
@@ -72,41 +136,30 @@ export default function History({ userId }: IHistoryPageProps) {
     for (const [key, value] of formData) {
       formValues[key] = value;
     }
-    getTransactionsApi(() => {
-      const getTransactionsFilter = {
-        userId,
-        categories: categoriesSelected,
-        transactionTypes: selectedTransactionTypesArray,
-        selectedBankAccounts: [],
-        selectedCreditCards: [],
-        ...formValues
-      };
-      selectedPaymentInstruments.forEach((selectedPaymentInstrument) => {
-        if (bankAccounts.includes(selectedPaymentInstrument)) {
-          getTransactionsFilter.selectedBankAccounts.push(
-            selectedPaymentInstrument
-          );
+    const getTransactionsFilter = {
+      userId,
+      categories: categoriesSelected,
+      transactionTypes: selectedTransactionTypesArray,
+      selectedBankAccounts: [],
+      selectedCreditCards: [],
+      ...formValues
+    };
+    let newUrl = '/history?';
+    const getTransactionsFilterEntries = Object.entries(getTransactionsFilter);
+    for (let i = 0; i < getTransactionsFilterEntries.length; i++) {
+      const [key, value] = getTransactionsFilterEntries[i];
+      if (value) {
+        newUrl += `${key}=${JSON.stringify(value)}`;
+        if (i !== getTransactionsFilterEntries.length - 1) {
+          newUrl += '&';
         }
-        if (creditCards.includes(selectedPaymentInstrument)) {
-          getTransactionsFilter.selectedCreditCards.push(
-            selectedPaymentInstrument
-          );
-        }
-        if (
-          getTransactionsFilter.selectedBankAccounts.length ===
-          bankAccounts.length
-        ) {
-          getTransactionsFilter.selectedBankAccounts = [];
-        }
-        if (
-          getTransactionsFilter.selectedCreditCards.length ===
-          bankAccounts.length
-        ) {
-          getTransactionsFilter.selectedCreditCards = [];
-        }
-      });
-      return getTransactionsFromDB(getTransactionsFilter);
+      }
+    }
+
+    getTransactionsApi(async () => {
+      return getTransactionsApiCallback(getTransactionsFilter);
     });
+    window.history.pushState({}, '', `${newUrl}`);
   };
   const getTransactionsSuccessHandler = (transactions) => {
     transactionsFromApiRef.current = transactions;
@@ -116,27 +169,9 @@ export default function History({ userId }: IHistoryPageProps) {
     getTransactionsSuccessHandler
   );
   const handleFilterClick = (updatedFilters) => {
-    setFilters({ ...FILTERS, ...updatedFilters });
+    setFilters({ ...filters, ...FILTERS, ...updatedFilters });
   };
-  useEffect(() => {
-    console.log('useEffect', categoriesSelected);
-    setTransactionsToDisplay(
-      getFilteredTransactions(transactionsFromApiRef.current, {
-        category: categoriesSelected
-      })
-    );
-    // if (transactions.length > 0) {
-    //   // console.log({
-    //   //   categoriesSelected,
-    //   //   temp: getFilteredTransactions(transactions, {
-    //   //     category: categoriesSelected
-    //   //   })
-    //   // });
-    //   setTransactions(
-    //     getFilteredTransactions(transactions, { category: categoriesSelected })
-    //   );
-    // }
-  }, [categoriesSelected]);
+  console.log(filters.startDate, filters.endDate)
   return (
     <div className={styles.container}>
       <form
@@ -146,12 +181,30 @@ export default function History({ userId }: IHistoryPageProps) {
         <div>
           <label htmlFor="startDate">
             From
-            <input type="date" name="startDate" />
+            <input
+              type="date"
+              name="startDate"
+              value={filters.startDate}
+              onChange={(e) => {
+                setFilters((prevFilters) => {
+                  return { ...prevFilters, startDate: e.target.value };
+                });
+              }}
+            />
           </label>
 
           <label htmlFor="endDate">
             To
-            <input type="date" name="endDate" />
+            <input
+              type="date"
+              name="endDate"
+              value={filters.endDate}
+              onChange={(e) => {
+                setFilters((prevFilters) => {
+                  return { ...prevFilters, endDate: e.target.value };
+                });
+              }}
+            />
           </label>
         </div>
         <fieldset>
@@ -165,16 +218,23 @@ export default function History({ userId }: IHistoryPageProps) {
                   value={transactionType}
                   checked={selectedTransactionTypes[transactionType]}
                   onChange={() => {
-                    setCategoriesSelected([]);
-                    setSelectedTransactionTypes(
-                      (prevSelectedTransactionTypes) => {
-                        return {
+                    setFilters((prevFilters) => ({
+                      ...prevFilters,
+                      categoriesSelected: []
+                    }));
+                    setFilters((prevFilters) => {
+                      const {
+                        selectedTransactionTypes: prevSelectedTransactionTypes
+                      } = prevFilters;
+                      return {
+                        ...prevFilters,
+                        selectedTransactionTypes: {
                           ...prevSelectedTransactionTypes,
                           [transactionType]:
                             !prevSelectedTransactionTypes[transactionType]
-                        };
-                      }
-                    );
+                        }
+                      };
+                    });
                   }}
                 />
                 {transactionType}
@@ -191,35 +251,43 @@ export default function History({ userId }: IHistoryPageProps) {
                   type="checkbox"
                   name="paymentInstrument"
                   value={paymentInstrument}
-                  checked={selectedPaymentInstruments.includes(
+                  checked={selectedPaymentInstruments?.includes(
                     paymentInstrument
                   )}
                   onChange={() => {
-                    setSelectedPaymentInstruments(
-                      (prevSelectedPaymentInstruments) => {
-                        // if current payment instrument clicked is already checked
-                        // remove from selected Payment instruments state
-                        if (
-                          prevSelectedPaymentInstruments.includes(
-                            paymentInstrument
-                          )
-                        ) {
-                          const temp = [...prevSelectedPaymentInstruments];
-                          temp.splice(
-                            temp.findIndex((t) => t === paymentInstrument),
-                            1
-                          );
-                          return temp;
-                        } else {
-                          // if current payment instrument clicked is not checked
-                          // add in selected Payment instruments state
-                          return [
+                    setFilters((prevFilters) => {
+                      const {
+                        selectedPaymentInstruments:
+                          prevSelectedPaymentInstruments
+                      } = prevFilters;
+                      // if current payment instrument clicked is already checked
+                      // remove from selected Payment instruments state
+                      if (
+                        prevSelectedPaymentInstruments.includes(
+                          paymentInstrument
+                        )
+                      ) {
+                        const temp = [...prevSelectedPaymentInstruments];
+                        temp.splice(
+                          temp.findIndex((t) => t === paymentInstrument),
+                          1
+                        );
+                        return {
+                          ...prevFilters,
+                          selectedPaymentInstruments: temp
+                        };
+                      } else {
+                        // if current payment instrument clicked is not checked
+                        // add in selected Payment instruments state
+                        return {
+                          ...prevFilters,
+                          selectedPaymentInstruments: [
                             ...prevSelectedPaymentInstruments,
                             paymentInstrument
-                          ];
-                        }
+                          ]
+                        };
                       }
-                    );
+                    });
                   }}
                 />
                 {paymentInstrument}
@@ -237,7 +305,10 @@ export default function History({ userId }: IHistoryPageProps) {
             categoriesSelected={categoriesSelected}
             handleCategoryChange={(category) => {
               if (Array.isArray(category)) {
-                setCategoriesSelected(category);
+                setFilters((prevFilters) => ({
+                  ...prevFilters,
+                  categoriesSelected: category
+                }));
                 return;
               }
               if (categoriesSelected.includes(category)) {
@@ -246,12 +317,25 @@ export default function History({ userId }: IHistoryPageProps) {
                   categoriesSelected.findIndex((val) => val === category),
                   1
                 );
-                setCategoriesSelected(updatedCategoriesSelected);
+                setFilters((prevFilters) => ({
+                  ...prevFilters,
+                  categoriesSelected: updatedCategoriesSelected
+                }));
               } else {
-                setCategoriesSelected((prevCategoriesSelected) => [
-                  ...prevCategoriesSelected,
-                  category
-                ]);
+                setFilters((prevFilters) => ({
+                  ...prevFilters,
+                  categoriesSelected: [
+                    ...prevFilters.categoriesSelected,
+                    category
+                  ]
+                }));
+                setFilters((prevFilters) => ({
+                  ...prevFilters,
+                  categoriesSelected: [
+                    ...prevFilters.categoriesSelected,
+                    category
+                  ]
+                }));
               }
             }}
           />

@@ -2,7 +2,10 @@ import Link from 'next/link';
 import styles from './styles.module.scss';
 import cn from 'classnames';
 import { TransactionCategoryInputProps } from './interface';
-import { ROUTES } from '@moneytracker/common/src/Constants';
+import {
+  NO_CATEGORIES_FOUND,
+  ROUTES
+} from '@moneytracker/common/src/Constants';
 import { useSelector } from 'react-redux';
 import { ReduxStore } from '../../../reducers/interface';
 
@@ -64,7 +67,7 @@ const TransactionCategoryInput = ({
             );
           })
         ) : (
-          <div className={styles.noData}>!!No Categoires Found!!</div>
+          <div className={styles.noData}>!!{NO_CATEGORIES_FOUND}!!</div>
         )}
       </div>
     </>

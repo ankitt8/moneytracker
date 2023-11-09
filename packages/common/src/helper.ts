@@ -49,14 +49,11 @@ export const getFilteredTransactions = (
 ) => {
   // code is buggy
   // every transaction souuld satisfy all the filters
-  console.log('getFilteredTransactions');
-  console.log(transactions, filters);
   if (isObjectEmpty(filters)) return transactions;
-  return transactions.filter((transaction) => {
+  return transactions?.filter((transaction) => {
     // traverse over all the filter
     // and transaction should satisfy all the filter values
     for (const [filterName, filterValue] of Object.entries(filters)) {
-      console.log(filterValue, transaction, transaction[filterName]);
       if (Array.isArray(filterValue)) {
         if (!filterValue.includes(transaction[filterName])) return false;
       } else {

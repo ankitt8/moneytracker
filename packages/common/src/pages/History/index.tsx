@@ -22,7 +22,11 @@ import { useRouter } from 'next/router';
 import useFetchData from '../../customHooks/useFetchData';
 import { setUserPaymentInstrumentsAction } from '../../actions/actionCreator';
 import { PaymentInstruments } from '../../interfaces';
-import { constructStartDateOfYear, constructTodayDate } from '../../utility';
+import {
+  constructStartDateOfYear,
+  constructTodayDate,
+  removeDuplicateFromArray
+} from '../../utility';
 interface IHistoryPageProps {
   userId: string;
 }
@@ -75,7 +79,9 @@ export default function History({ userId }: IHistoryPageProps) {
     }
     return temp;
   }, [selectedTransactionTypes]);
-  const categoriesSelected = filters.categoriesSelected;
+  const categoriesSelected = removeDuplicateFromArray(
+    filters.categoriesSelected
+  );
   const formValues = filters;
   useEffect(() => {
     const routerQueryParams = router.query;
@@ -98,7 +104,7 @@ export default function History({ userId }: IHistoryPageProps) {
   useEffect(() => {
     setTransactionsToDisplay(
       getFilteredTransactions(transactionsFromApiRef.current, {
-        category: categoriesSelected
+        category: removeDuplicateFromArray(categoriesSelected)
       })
     );
   }, [filters.categoriesSelected]);
@@ -128,6 +134,20 @@ export default function History({ userId }: IHistoryPageProps) {
         updatedGetTransactionsFilter.selectedCreditCards = [];
       }
     });
+    let newUrl = '/history?';
+    const getTransactionsFilterEntries = Object.entries(
+      updatedGetTransactionsFilter
+    );
+    for (let i = 0; i < getTransactionsFilterEntries.length; i++) {
+      const [key, value] = getTransactionsFilterEntries[i];
+      if (value) {
+        newUrl += `${key}=${JSON.stringify(value)}`;
+        if (i !== getTransactionsFilterEntries.length - 1) {
+          newUrl += '&';
+        }
+      }
+    }
+    window.history.pushState({}, '', `${newUrl}`);
     return getTransactionsFromDB(updatedGetTransactionsFilter);
   };
   const transactionHistoryFormSubmitHandler = (e) => {
@@ -138,28 +158,17 @@ export default function History({ userId }: IHistoryPageProps) {
     }
     const getTransactionsFilter = {
       userId,
-      categories: categoriesSelected,
+      categories: removeDuplicateFromArray(categoriesSelected),
       transactionTypes: selectedTransactionTypesArray,
       selectedBankAccounts: [],
       selectedCreditCards: [],
-      ...formValues
+      startDate: formValues.startDate,
+      endDate: formValues.endDate
     };
-    let newUrl = '/history?';
-    const getTransactionsFilterEntries = Object.entries(getTransactionsFilter);
-    for (let i = 0; i < getTransactionsFilterEntries.length; i++) {
-      const [key, value] = getTransactionsFilterEntries[i];
-      if (value) {
-        newUrl += `${key}=${JSON.stringify(value)}`;
-        if (i !== getTransactionsFilterEntries.length - 1) {
-          newUrl += '&';
-        }
-      }
-    }
 
     getTransactionsApi(async () => {
       return getTransactionsApiCallback(getTransactionsFilter);
     });
-    window.history.pushState({}, '', `${newUrl}`);
   };
   const getTransactionsSuccessHandler = (transactions) => {
     transactionsFromApiRef.current = transactions;
@@ -171,7 +180,6 @@ export default function History({ userId }: IHistoryPageProps) {
   const handleFilterClick = (updatedFilters) => {
     setFilters({ ...filters, ...FILTERS, ...updatedFilters });
   };
-  console.log(filters.startDate, filters.endDate)
   return (
     <div className={styles.container}>
       <form
@@ -249,7 +257,6 @@ export default function History({ userId }: IHistoryPageProps) {
               <label key={paymentInstrument}>
                 <input
                   type="checkbox"
-                  name="paymentInstrument"
                   value={paymentInstrument}
                   checked={selectedPaymentInstruments?.includes(
                     paymentInstrument
@@ -298,16 +305,18 @@ export default function History({ userId }: IHistoryPageProps) {
         <fieldset>
           <legend>Category</legend>
           <TransactionCategoryInput
-            categories={selectedTransactionTypesArray.reduce(
-              (acc, curr) => [...acc, ...categoriesStore[curr]],
-              []
+            categories={removeDuplicateFromArray(
+              selectedTransactionTypesArray.reduce(
+                (acc, curr) => [...acc, ...categoriesStore[curr]],
+                []
+              )
             )}
             categoriesSelected={categoriesSelected}
             handleCategoryChange={(category) => {
               if (Array.isArray(category)) {
                 setFilters((prevFilters) => ({
                   ...prevFilters,
-                  categoriesSelected: category
+                  categoriesSelected: removeDuplicateFromArray(category)
                 }));
                 return;
               }
@@ -319,22 +328,24 @@ export default function History({ userId }: IHistoryPageProps) {
                 );
                 setFilters((prevFilters) => ({
                   ...prevFilters,
-                  categoriesSelected: updatedCategoriesSelected
+                  categoriesSelected: removeDuplicateFromArray(
+                    updatedCategoriesSelected
+                  )
                 }));
               } else {
                 setFilters((prevFilters) => ({
                   ...prevFilters,
-                  categoriesSelected: [
+                  categoriesSelected: removeDuplicateFromArray([
                     ...prevFilters.categoriesSelected,
                     category
-                  ]
+                  ])
                 }));
                 setFilters((prevFilters) => ({
                   ...prevFilters,
-                  categoriesSelected: [
+                  categoriesSelected: removeDuplicateFromArray([
                     ...prevFilters.categoriesSelected,
                     category
-                  ]
+                  ])
                 }));
               }
             }}

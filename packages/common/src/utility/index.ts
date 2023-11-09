@@ -35,4 +35,12 @@ function constructTodayDate(dateString?: Date): string {
 function constructStartDateOfYear() {
   return `${new Date().getFullYear()}-01-01`;
 }
-export { setCookies, constructTodayDate, constructStartDateOfYear };
+function removeDuplicateFromArray(arr: Array<any>) {
+  return [...new Set(arr)];
+}
+export {
+  setCookies,
+  constructTodayDate,
+  constructStartDateOfYear,
+  removeDuplicateFromArray
+};

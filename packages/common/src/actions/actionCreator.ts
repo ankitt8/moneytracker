@@ -128,7 +128,6 @@ export function setUserPaymentInstrumentsAction(
   flag: PaymentInstruments,
   paymentInstruments: string[]
 ) {
-  console.log(flag);
   return {
     type: SET_USER_PAYMENT_INSTRUMENTS,
     payload: { flag, paymentInstruments }

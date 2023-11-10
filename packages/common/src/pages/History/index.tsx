@@ -1,6 +1,7 @@
 import { LinearProgress } from '@material-ui/core';
 import {
   getPaymentInstrumentsFromDB,
+  getTransactionCategoriesFromDB,
   getTransactionsFromDB
 } from '@moneytracker/common/src/api-services/api.service';
 import TransactionSummary from '@moneytracker/common/src/components/TransactionSummary';
@@ -12,6 +13,7 @@ import TransactionCategoryInput from '../../components/AddTransactionModal/Trans
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
 import {
   GET_BANK_ACCOUNTS_FAILURE_MSG,
+  GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   TRANSACTION_TYPES
 } from '../../Constants';
 import { useSelector } from 'react-redux';
@@ -20,7 +22,10 @@ import paymentInstrument from '../../components/PaymentInstrument';
 import { getFilteredTransactions } from '../../helper';
 import { useRouter } from 'next/router';
 import useFetchData from '../../customHooks/useFetchData';
-import { setUserPaymentInstrumentsAction } from '../../actions/actionCreator';
+import {
+  getTransactionCategories,
+  setUserPaymentInstrumentsAction
+} from '../../actions/actionCreator';
 import { PaymentInstruments } from '../../interfaces';
 import {
   constructStartDateOfYear,
@@ -55,6 +60,37 @@ export default function History({ userId }: IHistoryPageProps) {
   );
   const creditCards = useSelector(
     (store: ReduxStore) => store.user.creditCards
+  );
+  useFetchData(
+    getTransactionCategoriesFromDB,
+    GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
+    getTransactionCategories,
+    null,
+    userId
+  );
+  useFetchData(
+    getPaymentInstrumentsFromDB,
+    GET_BANK_ACCOUNTS_FAILURE_MSG,
+    (paymentInstruments: string[]) =>
+      setUserPaymentInstrumentsAction(
+        PaymentInstruments.bankAccounts,
+        paymentInstruments
+      ),
+    null,
+    userId,
+    PaymentInstruments.bankAccounts
+  );
+  useFetchData(
+    getPaymentInstrumentsFromDB,
+    GET_BANK_ACCOUNTS_FAILURE_MSG,
+    (paymentInstruments: string[]) =>
+      setUserPaymentInstrumentsAction(
+        PaymentInstruments.creditCards,
+        paymentInstruments
+      ),
+    null,
+    userId,
+    PaymentInstruments.creditCards
   );
   const router = useRouter();
   const transactionsFromApiRef = useRef([]);
@@ -372,8 +408,8 @@ export default function History({ userId }: IHistoryPageProps) {
           );
         })}
       </div>
-      {state.loading && <LinearProgress />}
-      {!state.loading && transactionsToDisplay && (
+      {state?.loading && <LinearProgress />}
+      {!state?.loading && transactionsToDisplay && (
         <TransactionSummary transactions={transactionsToDisplay} />
       )}
       <TransactionAnalysisPage

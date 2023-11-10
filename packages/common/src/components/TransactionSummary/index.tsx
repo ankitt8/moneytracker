@@ -27,8 +27,8 @@ import {
 
 const isCreditTypeTransaction = (transaction: Transaction) =>
   transaction.type === CREDIT_TYPE;
-const isNotExcludedCategory = (transaction: Transaction) => {
-  return !CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY.includes(transaction.category);
+const isExcludedCategory = (transaction: Transaction): boolean => {
+  return CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY.includes(transaction.category);
 };
 const isOnlineModeTransaction = (transaction: Transaction) =>
   transaction.mode === ONLINE_MODE;
@@ -55,15 +55,12 @@ const TransactionSummary = ({ transactions: transactionsProps }) => {
   const daysRemaining = getNoOfDaysRemainingCurrentMonth();
   const processTransactions = useCallback(() => {
     dispatch(setCreditDebitZero());
-    const debitTransactions = transactions
-      ?.filter(isDebitTypeTransaction)
-      .filter(isNotExcludedCategory);
-    const borrowedTransactions = transactions
-      ?.filter(isBorrowedTypeTransaction)
-      .filter(isNotExcludedCategory);
-    const creditTransactions = transactions
-      ?.filter(isCreditTypeTransaction)
-      .filter(isNotExcludedCategory);
+    // removed isExcludedCategory filter
+    const debitTransactions = transactions?.filter(isDebitTypeTransaction);
+    const borrowedTransactions = transactions?.filter(
+      isBorrowedTypeTransaction
+    );
+    const creditTransactions = transactions?.filter(isCreditTypeTransaction);
 
     const bankCreditTransactions = creditTransactions.filter(
       isOnlineModeTransaction

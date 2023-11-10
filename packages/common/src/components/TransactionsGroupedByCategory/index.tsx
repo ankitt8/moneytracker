@@ -53,19 +53,19 @@ export function TransactionsGroupedByCategory({
     createTransactionsGroupedByCategories(filteredTransactions, categories);
   const categoryNamesSortedByTotalAmountDescending =
     getCategoryNamesSortedByTotalAmount(transactionsGroupedByCategories);
-  const TransactionAnalysisCards =
-    categoryNamesSortedByTotalAmountDescending.map((category) => (
-      <TransactionsCardWrapper
-        title={category}
-        transactions={transactionsGroupedByCategories[category]['transactions']}
-        totalAmount={transactionsGroupedByCategories[category]['totalAmount']}
-        key={category}
-        showDate={showDate}
-      />
-    ));
   return (
-    <ul className={styles.transactionAnalysisPage}>
-      {TransactionAnalysisCards}
-    </ul>
+    <>
+      {categoryNamesSortedByTotalAmountDescending.map((category) => (
+        <TransactionsCardWrapper
+          title={category}
+          transactions={
+            transactionsGroupedByCategories[category]['transactions']
+          }
+          totalAmount={transactionsGroupedByCategories[category]['totalAmount']}
+          key={category}
+          showDate={showDate}
+        />
+      ))}
+    </>
   );
 }

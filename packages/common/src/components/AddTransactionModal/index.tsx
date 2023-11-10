@@ -36,14 +36,15 @@ import {
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
-  CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY
+  CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY,
+  ADD_TRANSACTION_MODAL_COMPONENT_NAME
 } from '@moneytracker/common/src/Constants';
 
 import { addTransactionDB } from '@moneytracker/common/src/api-services/api.service';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
-import { constructTodayDate } from '../../utility';
+import { constructTodayDate, removeDuplicateFromArray } from '../../utility';
 
 const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
@@ -66,10 +67,10 @@ function getCategoriesToDisplay(categoriesFromDB: string[]) {
         return !localStorageLatestCategoriesToDisplay.includes(categoryFromDB);
       }
     );
-    return [
+    return removeDuplicateFromArray([
       ...localStorageLatestCategoriesToDisplay,
       ...categoriesFromDBNotInLatestCategories
-    ];
+    ]);
   } catch (e) {
     return categoriesFromDB;
   }
@@ -321,6 +322,7 @@ const AddTransactionModal = ({
             categories={categoriesToDisplay || []}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
+            renderedByComponentName={ADD_TRANSACTION_MODAL_COMPONENT_NAME}
           />
           {/* Mode */}
           <div className={styles.fieldSet}>

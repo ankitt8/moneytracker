@@ -1,3 +1,5 @@
+import { TransactionCategories } from '../components/AddTransactionModal/TransactionCategoryInput/interface';
+
 function setCookies(cookies: { name: string; value: string }[]) {
   cookies.forEach(({ name, value }) => {
     document.cookie = `${name}=${value};`;
@@ -38,9 +40,16 @@ function constructStartDateOfYear() {
 function removeDuplicateFromArray(arr: Array<any>) {
   return [...new Set(arr)];
 }
+
+function getFlattenedCategories(categories: TransactionCategories) {
+  return Object.entries(categories).reduce((acc: string[], [, value]) => {
+    return [...acc, ...value];
+  }, []);
+}
 export {
   setCookies,
   constructTodayDate,
   constructStartDateOfYear,
-  removeDuplicateFromArray
+  removeDuplicateFromArray,
+  getFlattenedCategories
 };

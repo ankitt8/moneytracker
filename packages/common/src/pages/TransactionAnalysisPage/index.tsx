@@ -120,16 +120,14 @@ const TransactionAnalysisPage = ({
   }
   if (groupByCategory) {
     return (
-      <div className={styles.transactionAnalysisPage}>
-        <>
-          <h3>All Transactions</h3>
-          <TransactionsGroupedByCategory
-            transactions={transactions}
-            transactionCategories={transactionCategories}
-            showDate={true}
-          />
-        </>
-      </div>
+      <>
+        <h3>All Transactions</h3>
+        <TransactionsGroupedByCategory
+          transactions={transactions}
+          transactionCategories={transactionCategories}
+          showDate={true}
+        />
+      </>
     );
   }
   if (groupByDate) {

@@ -25,6 +25,7 @@ import { PaymentInstruments } from '../../interfaces';
 import {
   constructStartDateOfYear,
   constructTodayDate,
+  getFlattenedCategories,
   removeDuplicateFromArray
 } from '../../utility';
 interface IHistoryPageProps {
@@ -66,19 +67,25 @@ export default function History({ userId }: IHistoryPageProps) {
     groupByDate: true,
     selectedTransactionTypes: getInitialSelectedTransactionTypes(),
     selectedPaymentInstruments: PAYMENT_INSTRUMENTS,
-    categoriesSelected: [],
+    categoriesSelected: getFlattenedCategories(categoriesStore),
     startDate: constructStartDateOfYear(),
     endDate: constructTodayDate()
   }));
   const selectedTransactionTypes = filters.selectedTransactionTypes ?? {};
   const selectedPaymentInstruments = filters.selectedPaymentInstruments;
-  const selectedTransactionTypesArray = useMemo(() => {
+  const selectedTransactionTypesArray: TRANSACTION_TYPE[] = useMemo(() => {
     const temp = [];
     for (const key in selectedTransactionTypes) {
       if (selectedTransactionTypes[key]) temp.push(key);
     }
     return temp;
   }, [selectedTransactionTypes]);
+  const categoriesToDisplay = removeDuplicateFromArray(
+    selectedTransactionTypesArray.reduce(
+      (acc: string[], curr) => [...acc, ...categoriesStore[curr]],
+      []
+    )
+  );
   const categoriesSelected = removeDuplicateFromArray(
     filters.categoriesSelected
   );
@@ -157,7 +164,7 @@ export default function History({ userId }: IHistoryPageProps) {
       formValues[key] = value;
     }
     const getTransactionsFilter = {
-      categories: removeDuplicateFromArray(categoriesSelected),
+      categoriesSelected: removeDuplicateFromArray(categoriesSelected),
       transactionTypes: selectedTransactionTypesArray,
       selectedBankAccounts: [],
       selectedCreditCards: [],
@@ -177,9 +184,6 @@ export default function History({ userId }: IHistoryPageProps) {
   const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
   );
-  const handleFilterClick = (updatedFilters) => {
-    setFilters({ ...filters, ...FILTERS, ...updatedFilters });
-  };
   return (
     <div className={styles.container}>
       <form
@@ -305,12 +309,7 @@ export default function History({ userId }: IHistoryPageProps) {
         <fieldset>
           <legend>Category</legend>
           <TransactionCategoryInput
-            categories={removeDuplicateFromArray(
-              selectedTransactionTypesArray.reduce(
-                (acc, curr) => [...acc, ...categoriesStore[curr]],
-                []
-              )
-            )}
+            categories={categoriesToDisplay}
             categoriesSelected={categoriesSelected}
             handleCategoryChange={(category) => {
               if (Array.isArray(category)) {
@@ -353,22 +352,28 @@ export default function History({ userId }: IHistoryPageProps) {
         </fieldset>
         <button>Go</button>
       </form>
-      {Object.entries(FILTERS).map(([filterKey]) => {
-        return (
-          <label key={filterKey}>
-            <input
-              type="radio"
-              checked={filters[filterKey]}
-              onChange={() =>
-                handleFilterClick({ [filterKey]: !filters[filterKey] })
-              }
-            />
-            {getFilterDisplayName(filterKey)}
-          </label>
-        );
-      })}
+      <div style={{ paddingTop: 10 }}>
+        {Object.entries(FILTERS).map(([filterKey]) => {
+          return (
+            <label key={filterKey}>
+              <input
+                type="radio"
+                checked={filters[filterKey]}
+                onChange={() => {
+                  setFilters((prevFilters) => ({
+                    ...prevFilters,
+                    ...FILTERS,
+                    ...{ [filterKey]: !prevFilters[filterKey] }
+                  }));
+                }}
+              />
+              {getFilterDisplayName(filterKey)}
+            </label>
+          );
+        })}
+      </div>
       {state.loading && <LinearProgress />}
-      {transactionsToDisplay && (
+      {!state.loading && transactionsToDisplay && (
         <TransactionSummary transactions={transactionsToDisplay} />
       )}
       <TransactionAnalysisPage

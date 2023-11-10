@@ -24,11 +24,9 @@ export default function useApi(
     setApiAddDataState({ loading: true, result: null, error: '' });
     try {
       const res = await addDataApiCallback();
-      console.log({res})
       setApiAddDataState({ loading: false, result: res, error: '' });
       addDataApiSuccessHandler && addDataApiSuccessHandler(res);
     } catch (error: any) {
-      console.log(error)
       if (typeof error === 'string') {
         setApiAddDataState({ loading: false, result: null, error });
       } else {

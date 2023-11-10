@@ -261,7 +261,7 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
     endDate: requestEndDateString,
     transactionTypes,
     category,
-    categories,
+    categoriesSelected,
     selectedBankAccounts,
     selectedCreditCards,
   } = req.body;
@@ -283,8 +283,8 @@ app.post(URL.API_URL_GET_TRANSACTIONS, (req, res) => {
   if (category) {
     filterObj.category = category;
   }
-  if(categories && categories.length > 0) {
-    filterObj.category = {$in: categories}
+  if(categoriesSelected) {
+    filterObj.category = {$in: categoriesSelected}
   }
   const selectedCreditCardsLen = selectedCreditCards?.length ?? 0;
   const selectedBankAccountsLen = selectedBankAccounts?.length ?? 0;

@@ -133,3 +133,6 @@ export const CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY = [
 export const COOKIE_NAMES = {
   userId: 'userId'
 };
+
+export const ADD_TRANSACTION_MODAL_COMPONENT_NAME = 'AddTransactionModal';
+export const EDIT_TRANSACTION_MODAL_COMPONENT_NAME = 'EditTransactionModal';

@@ -3,6 +3,8 @@ import styles from './styles.module.scss';
 import cn from 'classnames';
 import { TransactionCategoryInputProps } from './interface';
 import {
+  ADD_TRANSACTION_MODAL_COMPONENT_NAME,
+  EDIT_TRANSACTION_MODAL_COMPONENT_NAME,
   NO_CATEGORIES_FOUND,
   ROUTES
 } from '@moneytracker/common/src/Constants';
@@ -14,12 +16,21 @@ import { ReduxStore } from '../../../reducers/interface';
   The component provides AddCategory link
   The component shows different transaction categories and allows user to select one of them
 */
+const selectAllCategoriesBtnComponentsNotVisible = [
+  ADD_TRANSACTION_MODAL_COMPONENT_NAME,
+  EDIT_TRANSACTION_MODAL_COMPONENT_NAME
+];
 const TransactionCategoryInput = ({
   categories,
   categorySelected,
   categoriesSelected,
-  handleCategoryChange
+  handleCategoryChange,
+  renderedByComponentName
 }: TransactionCategoryInputProps) => {
+  const isSelectAllCategoriesBtnVisible =
+    selectAllCategoriesBtnComponentsNotVisible.includes(
+      renderedByComponentName
+    );
   return (
     <>
       <div
@@ -30,18 +41,20 @@ const TransactionCategoryInput = ({
       >
         <div className={styles.transactionCategoryInputLabel}>Category</div>
         <div>
-          <button
-            type="button"
-            onClick={() => {
-              handleCategoryChange(
-                categoriesSelected.length === categories.length
-                  ? []
-                  : categories
-              );
-            }}
-          >
-            Select all categories
-          </button>
+          {!isSelectAllCategoriesBtnVisible ? (
+            <button
+              type="button"
+              onClick={() => {
+                handleCategoryChange(
+                  categoriesSelected.length === categories.length
+                    ? []
+                    : categories
+                );
+              }}
+            >
+              Select all categories
+            </button>
+          ) : null}
           <Link href={ROUTES.TRANSACTION_CATEGORIES}> Add Category </Link>
         </div>
       </div>

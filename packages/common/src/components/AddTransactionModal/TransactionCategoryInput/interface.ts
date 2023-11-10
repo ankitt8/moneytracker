@@ -12,6 +12,7 @@ export interface TransactionCategoryInputProps {
   handleCategoryChange: (
     category: TransactionCategory | TransactionCategory[]
   ) => void;
+  renderedByComponentName?: string;
 }
 
 export type TransactionCategories = Record<TRANSACTION_TYPE, string[]>;

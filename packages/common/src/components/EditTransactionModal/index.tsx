@@ -30,7 +30,8 @@ import {
   SEVERITY_ERROR,
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
-  url
+  url,
+  EDIT_TRANSACTION_MODAL_COMPONENT_NAME
 } from '@moneytracker/common/src/Constants';
 import {
   deleteTransactionAction,
@@ -340,6 +341,7 @@ const EditTransactionModal = ({
             categories={categories}
             categorySelected={editedTransaction.category || ''}
             handleCategoryChange={handleCategoryChange}
+            renderedByComponentName={EDIT_TRANSACTION_MODAL_COMPONENT_NAME}
           />
         </form>
         <div className={styles.buttonWrapper}>

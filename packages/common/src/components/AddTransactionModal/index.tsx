@@ -206,7 +206,6 @@ const AddTransactionModal = ({
     setCategory(categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : '');
   }, [type]);
   const addTransactionSuccessHandler = (transactionResponse: Transaction) => {
-    console.log(transactionResponse);
     updateLatestTransactionCategoriesLocalStorage(transactionResponse);
     dispatch(addTransactionAction(transactionResponse));
     const { amount, mode } = transactionResponse;

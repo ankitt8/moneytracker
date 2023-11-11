@@ -111,7 +111,9 @@ export const getCategoryNamesSortedByTotalAmount = (
     category,
     totalAmount: transactionsGroupedByCategories[category]['totalAmount']
   }));
-  categoryTotalAmountObjectArray.sort((a, b) => b.totalAmount - a.totalAmount);
+  categoryTotalAmountObjectArray.sort((a, b) => {
+    return Math.abs(b.totalAmount) - Math.abs(a.totalAmount);
+  });
   return categoryTotalAmountObjectArray.map(({ category }) => category);
 };
 
@@ -119,9 +121,9 @@ export const getAmountToBeShownTransactionsCardWrapper = (
   totalAmount: number,
   curr: Transaction
 ) => {
-  return totalAmount + curr.amount;
-  // if (curr.type === TRANSACTION_TYPE.credit) {
-  //   return totalAmount + curr.amount;
-  // }
-  // return totalAmount - curr.amount;
+  // return totalAmount + curr.amount;
+  if (curr.type === TRANSACTION_TYPE.credit) {
+    return totalAmount + curr.amount;
+  }
+  return totalAmount - curr.amount;
 };

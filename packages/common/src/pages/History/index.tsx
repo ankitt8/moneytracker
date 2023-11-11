@@ -28,6 +28,7 @@ import {
 } from '../../actions/actionCreator';
 import { PaymentInstruments } from '../../interfaces';
 import {
+  constructStartDateOfMonth,
   constructStartDateOfYear,
   constructTodayDate,
   getFlattenedCategories,
@@ -51,6 +52,10 @@ const getFilterDisplayName = (filterKey) => {
   if (filterKey === 'groupByPaymentType') return 'Group by payment type';
   if (filterKey === 'groupByCategory') return 'Group by category';
 };
+enum DateFilters {
+  currMonth = 'currMonth',
+  currYear = 'currYear'
+}
 export default function History({ userId }: IHistoryPageProps) {
   const categoriesStore = useSelector(
     (store: ReduxStore) => store.transactions.categories
@@ -128,6 +133,7 @@ export default function History({ userId }: IHistoryPageProps) {
   const formValues = filters;
   useEffect(() => {
     const routerQueryParams = router.query;
+    if (Object.keys(routerQueryParams).length === 0) return;
     const temp = { ...filters };
     for (const [key, value] of Object.entries(routerQueryParams)) {
       if (key && value && typeof value === 'string') {
@@ -193,8 +199,8 @@ export default function History({ userId }: IHistoryPageProps) {
     window.history.pushState({}, '', `${newUrl}`);
     return getTransactionsFromDB(updatedGetTransactionsFilter);
   };
-  const transactionHistoryFormSubmitHandler = (e) => {
-    e.preventDefault();
+  const transactionHistoryFormSubmitHandler = (e?: any) => {
+    e?.preventDefault();
     const formData = new FormData(e.target);
     for (const [key, value] of formData) {
       formValues[key] = value;
@@ -220,15 +226,33 @@ export default function History({ userId }: IHistoryPageProps) {
   const { apiCall: getTransactionsApi, state } = useApi(
     getTransactionsSuccessHandler
   );
+  const handleDateFilterClick = (type: DateFilters) => {
+    let startDate = '';
+    if (type === DateFilters.currMonth) {
+      startDate = constructStartDateOfMonth();
+    } else {
+      startDate = constructStartDateOfYear();
+    }
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      startDate
+    }));
+    getTransactionsApi(() =>
+      getTransactionsApiCallback({
+        ...filters,
+        startDate,
+        userId
+      })
+    );
+  };
   return (
     <div className={styles.container}>
       <form
         onSubmit={transactionHistoryFormSubmitHandler}
         className={styles.formContainer}
       >
-        <div>
+        <fieldset style={{ marginTop: 5 }}>
           <label htmlFor="startDate">
-            From
             <input
               type="date"
               name="startDate"
@@ -240,7 +264,6 @@ export default function History({ userId }: IHistoryPageProps) {
               }}
             />
           </label>
-
           <label htmlFor="endDate">
             To
             <input
@@ -254,7 +277,23 @@ export default function History({ userId }: IHistoryPageProps) {
               }}
             />
           </label>
-        </div>
+          <button
+            type="button"
+            onClick={() => {
+              handleDateFilterClick(DateFilters.currMonth);
+            }}
+          >
+            Current Month
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              handleDateFilterClick(DateFilters.currYear);
+            }}
+          >
+            Current Year
+          </button>
+        </fieldset>
         <fieldset>
           <legend>Transaction Type</legend>
           <div>

@@ -5,37 +5,59 @@ function setCookies(cookies: { name: string; value: string }[]) {
     document.cookie = `${name}=${value};`;
   });
 }
+const appendSeperator = (str: string) => str + '-';
+
+const appendYear = (str: string, date = new Date()) =>
+  str + date.getFullYear().toString();
+
+const appendDay = (str: string, date = new Date()) => {
+  const day = date.getDate();
+  const result = day < 10 ? `0${day}` : day.toString();
+  return str + result;
+};
+
+const appendMonth = (str: string, date = new Date()) => {
+  const month = date.getMonth();
+  const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
+  return str + result;
+};
 function constructTodayDate(dateString?: Date): string {
   let todayDate = new Date();
   if (dateString) {
     todayDate = new Date(dateString);
   }
-  const appendYear = (str: string) => str + todayDate.getFullYear().toString();
-  const appendMonth = (str: string) => {
-    const month = todayDate.getMonth();
-    const result = month + 1 < 10 ? `0${month + 1}` : `${month + 1}`;
-    return str + result;
-  };
-  const appendSeperator = (str: string) => str + '-';
-  const appendDate = (str: string) => {
-    const date = todayDate.getDate();
-    const result = date < 10 ? `0${date}` : date.toString();
-    return str + result;
-  };
   const pipe =
-    (...fns: ((str: string) => any)[]) =>
+    (...fns: ((str: string, date: Date) => any)[]) =>
     (x: string) =>
-      fns.reduce((currVal, currFunc) => currFunc(currVal), x);
+      fns.reduce((currVal, currFunc) => currFunc(currVal, todayDate), x);
   return pipe(
     appendYear,
     appendSeperator,
     appendMonth,
     appendSeperator,
-    appendDate
+    appendDay
   )('');
 }
 function constructStartDateOfYear() {
   return `${new Date().getFullYear()}-01-01`;
+}
+
+function constructStartDateOfMonth(dateString?: Date) {
+  let todayDate = new Date();
+  if (dateString) {
+    todayDate = new Date(dateString);
+  }
+  const pipe =
+    (...fns: ((str: string, date: Date) => any)[]) =>
+    (x: string) =>
+      fns.reduce((currVal, currFunc) => currFunc(currVal, todayDate), x);
+  return pipe(
+    appendYear,
+    appendSeperator,
+    appendMonth,
+    appendSeperator,
+    (result) => result + '01'
+  )('');
 }
 function removeDuplicateFromArray(arr: Array<any>) {
   return [...new Set(arr)];
@@ -50,6 +72,7 @@ export {
   setCookies,
   constructTodayDate,
   constructStartDateOfYear,
+  constructStartDateOfMonth,
   removeDuplicateFromArray,
   getFlattenedCategories
 };

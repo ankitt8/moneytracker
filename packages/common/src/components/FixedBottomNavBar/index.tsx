@@ -25,7 +25,7 @@ const FixedBottomNavBar = () => {
       component: <div className={styles.icon}>{icons.analysis}</div>,
       handleClick: () => {
         setActiveItem(bottomNavBarText.analysis);
-        router.push(ROUTES.SPEND_ANALYSIS);
+        router.push(ROUTES.HISTORY);
       }
     },
     {

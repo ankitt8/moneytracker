@@ -119,8 +119,9 @@ export const getAmountToBeShownTransactionsCardWrapper = (
   totalAmount: number,
   curr: Transaction
 ) => {
-  if (curr.type === TRANSACTION_TYPE.credit) {
-    return totalAmount + curr.amount;
-  }
-  return totalAmount - curr.amount;
+  return totalAmount + curr.amount;
+  // if (curr.type === TRANSACTION_TYPE.credit) {
+  //   return totalAmount + curr.amount;
+  // }
+  // return totalAmount - curr.amount;
 };

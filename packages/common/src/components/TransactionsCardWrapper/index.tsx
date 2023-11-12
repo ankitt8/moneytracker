@@ -40,20 +40,23 @@ const TransactionsCardWrapper = ({
     );
   };
   return (
-    <div
-      onClick={() => {
-        setIsExpanded((prev) => !prev);
-      }}
-      className={styles.transactionCardWrapper}
-    >
-      <div className={styles.transactionCardHeading}>
+    <>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsExpanded((prev) => !prev);
+        }}
+        className={styles.transactionCardWrapper}
+      >
         <p>{title}</p>
+
         <p className={totalAmount > 0 ? styles.transactionCredit : ''}>
           {getFormattedAmount(totalAmount)}
         </p>
-      </div>
-      {getExpandedView()}
-    </div>
+      </button>
+      {isExpanded ? getExpandedView() : null}
+    </>
   );
 };
 

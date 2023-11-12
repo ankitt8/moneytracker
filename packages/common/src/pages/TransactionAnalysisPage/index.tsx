@@ -14,6 +14,7 @@ import {
   getAmountToBeShownTransactionsCardWrapper,
   getFilteredTransactions
 } from '../../helper';
+import { getFormattedAmount } from '../../utility';
 
 const TransactionAnalysisPage = ({
   transactionsProps,
@@ -63,9 +64,11 @@ const TransactionAnalysisPage = ({
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <h3>{type.toUpperCase()} Transactions</h3>
           <h3>
-            {transactionsFilteredByPaymentType.reduce(
-              getAmountToBeShownTransactionsCardWrapper,
-              0
+            {getFormattedAmount(
+              transactionsFilteredByPaymentType.reduce(
+                getAmountToBeShownTransactionsCardWrapper,
+                0
+              )
             )}
           </h3>
         </div>

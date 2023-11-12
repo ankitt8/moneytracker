@@ -237,27 +237,29 @@ export default function History({ userId }: IHistoryPageProps) {
       {!state?.loading && transactionsToDisplay && (
         <TransactionSummary transactions={transactionsToDisplay} />
       )}
-      <TransactionAnalysisPage
-        userId={userId}
-        transactionsProps={transactionsToDisplay}
-        groupByPaymentType={filters.groupByPaymentType}
-        groupByCategory={filters.groupByCategory}
-        groupByDate={filters.groupByDate}
-        showTransactionsInAscendingOrder={false}
-        endDateParam={
-          transactionsToDisplay?.length > 0
-            ? new Date(
-                transactionsToDisplay[transactionsToDisplay.length - 1]?.date
-              )?.toDateString()
-            : ''
-        }
-        startDateParam={
-          transactionsToDisplay?.length > 0
-            ? new Date(transactionsToDisplay[0]?.date)?.toDateString()
-            : ''
-        }
-        isNoTransactionsDateVisible={true}
-      />
+      {!state?.loading ? (
+        <TransactionAnalysisPage
+          userId={userId}
+          transactionsProps={transactionsToDisplay}
+          groupByPaymentType={filters.groupByPaymentType}
+          groupByCategory={filters.groupByCategory}
+          groupByDate={filters.groupByDate}
+          showTransactionsInAscendingOrder={false}
+          endDateParam={
+            transactionsToDisplay?.length > 0
+              ? new Date(
+                  transactionsToDisplay[transactionsToDisplay.length - 1]?.date
+                )?.toDateString()
+              : ''
+          }
+          startDateParam={
+            transactionsToDisplay?.length > 0
+              ? new Date(transactionsToDisplay[0]?.date)?.toDateString()
+              : ''
+          }
+          isNoTransactionsDateVisible={true}
+        />
+      ) : null}
     </div>
   );
 }

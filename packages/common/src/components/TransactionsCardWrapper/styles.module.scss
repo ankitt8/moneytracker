@@ -1,7 +1,15 @@
 @import '@moneytracker/common/src/styles/mixins';
 
 .transactionCardWrapper {
+  width: 100%;
   margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .transactionCardHeading {
@@ -17,7 +25,14 @@
     margin: 0;
   }
 }
+.transactionCardHeadingCollapsed {
+  border-bottom: 1px solid grey;
+}
 
+.transactionCardWrapperHeaderButton {
+  margin-right: 5px;
+  padding: 0 0;
+}
 .noData {
   @include noData;
   font-size: 10px;

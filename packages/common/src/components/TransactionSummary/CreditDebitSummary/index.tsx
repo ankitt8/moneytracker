@@ -1,5 +1,6 @@
 import './styles.scss';
 import { CreditDebitSummaryProps } from './interface';
+import { getFormattedAmount } from '../../../utility';
 
 const CreditDebitSummary = ({
   title,
@@ -11,13 +12,11 @@ const CreditDebitSummary = ({
       <div className="credit-debit-summary">
         <p>{title}</p>
         <div className="summary">
-          <p>{new Intl.NumberFormat('en-IN').format(creditAmount)}</p>
+          <p>{getFormattedAmount(creditAmount)}</p>
           <p>-</p>
-          <p>{new Intl.NumberFormat('en-IN').format(debitAmount)}</p>
+          <p>{getFormattedAmount(debitAmount)}</p>
           <p>=</p>
-          <p>
-            {new Intl.NumberFormat('en-IN').format(creditAmount - debitAmount)}
-          </p>
+          <p>{getFormattedAmount(creditAmount - debitAmount)}</p>
         </div>
       </div>
     </>

@@ -68,11 +68,16 @@ function getFlattenedCategories(categories: TransactionCategories) {
     return [...acc, ...value];
   }, []);
 }
+
+function getFormattedAmount(amount: number) {
+  return new Intl.NumberFormat('en-IN').format(amount);
+}
 export {
   setCookies,
   constructTodayDate,
   constructStartDateOfYear,
   constructStartDateOfMonth,
   removeDuplicateFromArray,
-  getFlattenedCategories
+  getFlattenedCategories,
+  getFormattedAmount
 };

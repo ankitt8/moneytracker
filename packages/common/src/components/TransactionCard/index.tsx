@@ -4,6 +4,7 @@ import { CREDIT_TYPE } from '@moneytracker/common/src/Constants';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 import { TransactionCardProps } from './interface';
+import { getFormattedAmount } from '../../utility';
 
 const EditTransactionModal = lazy(
   () => import('@moneytracker/common/src/components/EditTransactionModal')
@@ -42,7 +43,7 @@ const TransactionCard = ({
             transaction?.bankAccount || transaction?.creditCard || ''
           } ${transaction?.category}`}
         </p>
-        <p className={styles.amount}>{amount}</p>
+        <p className={styles.amount}>{getFormattedAmount(amount)}</p>
       </div>
       {open && (
         <EditTransactionModal

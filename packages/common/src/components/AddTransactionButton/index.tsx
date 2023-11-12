@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styles from './style.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import AddTransactionModal from '@moneytracker/common/src/components/AddTransactionModal';
+const AddTransactionModal = React.lazy(
+  () => import('@moneytracker/common/src/components/AddTransactionModal')
+);
 import { IAddTransactionButtonProps } from './interface';
 function AddTransactionButton({ userId }: IAddTransactionButtonProps) {
   const [isAddTransactionModalOpen, setIsAddTransactionModalOpen] =
     useState(false);
-  const icon = <FontAwesomeIcon icon="plus" size="lg" />;
+  const icon = null;
   const handleClick = () => {
     setIsAddTransactionModalOpen(true);
   };
@@ -18,9 +19,9 @@ function AddTransactionButton({ userId }: IAddTransactionButtonProps) {
     <div className={styles.addTransactionButtonWrapper}>
       <button onClick={handleClick} className={styles.addTransactionButton}>
         <div className={styles.icon}>{icon}</div>
-        {isAddTransactionModalOpen && (
+        {isAddTransactionModalOpen ? (
           <AddTransactionModal userId={userId} handleClose={handleClose} />
-        )}
+        ) : null}
       </button>
     </div>
   );

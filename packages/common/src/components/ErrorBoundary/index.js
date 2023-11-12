@@ -10,7 +10,7 @@ class ErrorBoundary extends React.Component {
     return { hasError: true };
   }
   handleRefresh = () => {
-    window.location.reload();
+    window?.location?.reload();
   };
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service

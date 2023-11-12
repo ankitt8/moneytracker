@@ -8,8 +8,9 @@ import '../styles/global.css';
 export default function App({Component, pageProps}: AppProps) {
   const router = useRouter();
   const isLoginPage = router.pathname === '/login';
+  const userId = pageProps[COOKIE_NAMES.userId];
   useEffect(() => {
-    const userId = pageProps[COOKIE_NAMES.userId];
+
     if(typeof window !== undefined) {
       (window as any).userId = userId;
     }
@@ -17,7 +18,7 @@ export default function App({Component, pageProps}: AppProps) {
   return <AppProvider>
     <>
       <Component {...pageProps} />
-      {!isLoginPage ? <FixedBottomNavBar /> : null}
+      {!isLoginPage ? <FixedBottomNavBar userId={userId} /> : null}
     </>
   </AppProvider>
 }

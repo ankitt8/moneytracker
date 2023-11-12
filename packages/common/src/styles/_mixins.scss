@@ -21,4 +21,8 @@
   align-items: center;
 }
 
+@mixin transactionCredit {
+  font-size: 16px;
+  color: green;
+}
 

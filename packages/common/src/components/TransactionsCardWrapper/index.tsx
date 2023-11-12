@@ -2,6 +2,8 @@ import { memo, useState } from 'react';
 import TransactionCard from '@moneytracker/common/src/components/TransactionCard';
 import { TransactionCardWrapperProps } from './interface';
 import styles from './styles.module.scss';
+import { CREDIT_TYPE } from '../../Constants';
+import cn from 'classnames';
 const areEqual = (prevProps: any, nextProps: any) => {
   if (prevProps.transactions.length !== nextProps.transactions.length)
     return false;
@@ -40,14 +42,16 @@ const TransactionsCardWrapper = ({
   };
   return (
     <div
-      onClick={(e) => {
+      onClick={() => {
         setIsExpanded((prev) => !prev);
       }}
       className={styles.transactionCardWrapper}
     >
       <div className={styles.transactionCardHeading}>
         <p>{title}</p>
-        <p>{totalAmount}</p>
+        <p className={totalAmount > 0 ? styles.transactionCredit : ''}>
+          {totalAmount}
+        </p>
       </div>
       {getExpandedView()}
     </div>

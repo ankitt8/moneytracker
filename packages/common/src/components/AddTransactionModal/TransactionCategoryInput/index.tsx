@@ -8,8 +8,6 @@ import {
   NO_CATEGORIES_FOUND,
   ROUTES
 } from '@moneytracker/common/src/Constants';
-import { useSelector } from 'react-redux';
-import { ReduxStore } from '../../../reducers/interface';
 
 /*
   TransactionCategoryInput Component is rendered in AddTransactionModal

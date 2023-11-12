@@ -1,39 +1,11 @@
 import { LinearProgress } from '@material-ui/core';
-import {
-  getPaymentInstrumentsFromDB,
-  getTransactionCategoriesFromDB,
-  getTransactionsFromDB
-} from '@moneytracker/common/src/api-services/api.service';
+
 import TransactionSummary from '@moneytracker/common/src/components/TransactionSummary';
 import TransactionAnalysisPage from '@moneytracker/common/src/pages/TransactionAnalysisPage';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import styles from './style.module.scss';
-import useApi from '../../customHooks/useApi';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
-import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
-import {
-  GET_BANK_ACCOUNTS_FAILURE_MSG,
-  GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-  TRANSACTION_TYPES
-} from '../../Constants';
-import { useSelector } from 'react-redux';
-import { ReduxStore } from '../../reducers/interface';
-import paymentInstrument from '../../components/PaymentInstrument';
-import { getFilteredTransactions } from '../../helper';
-import { useRouter } from 'next/router';
-import useFetchData from '../../customHooks/useFetchData';
-import {
-  getTransactionCategories,
-  setUserPaymentInstrumentsAction
-} from '../../actions/actionCreator';
-import { PaymentInstruments } from '../../interfaces';
-import {
-  constructStartDateOfMonth,
-  constructStartDateOfYear,
-  constructTodayDate,
-  getFlattenedCategories,
-  removeDuplicateFromArray
-} from '../../utility';
+import { TRANSACTION_TYPES } from '../../Constants';
+import { removeDuplicateFromArray } from '../../utility';
 import { useHistoy } from './useHistoy';
 interface IHistoryPageProps {
   userId: string;

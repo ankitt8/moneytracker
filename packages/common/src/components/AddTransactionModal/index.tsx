@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import LinearProgress from '@material-ui/core/LinearProgress';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from '@moneytracker/common/src/components/Loader';
 import TransactionCategoryInput from './TransactionCategoryInput';
 import {
   AddTransaction,
   AddTransactionModalProps,
-  ILocalStorageAddTransactionState,
-  IUpdateLatestTransactionCategoriesLocalStorage
+  ILocalStorageAddTransactionState
 } from './interface';
 import styles from './styles.module.scss';
 
@@ -18,7 +16,6 @@ import {
   editBankDebitAction,
   editCashCreditAction,
   editCashDebitAction,
-  getTransactionCategories,
   updateStatusAction
 } from '@moneytracker/common/src/actions/actionCreator';
 
@@ -28,7 +25,6 @@ import {
   CASH_MODE,
   CREDIT_TYPE,
   DEBIT_TYPE,
-  GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   INVALID_AMOUNT_WARNING,
   INVALID_TITLE_WARNING,
   BORROWED_TYPE,

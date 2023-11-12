@@ -1,5 +1,4 @@
-import { CREDIT_TYPE, BORROWED_TYPE } from '../../Constants';
-import styles from './styles.module.scss';
+import { CREDIT_TYPE } from '../../Constants';
 
 import TransactionsCardWrapper from '../TransactionsCardWrapper';
 import {

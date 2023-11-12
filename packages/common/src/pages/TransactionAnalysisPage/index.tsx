@@ -1,8 +1,6 @@
 import { useSelector } from 'react-redux';
 import {
   BORROWED_TYPE,
-  CREDIT_TYPE,
-  DEBIT_TYPE,
   TRANSACTION_TYPES
 } from '@moneytracker/common/src/Constants';
 import { TransactionAnalysisPageProps } from './interface';
@@ -11,8 +9,6 @@ import styles from './styles.module.scss';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import { TransactionsGroupedByCategory } from '../../components/TransactionsGroupedByCategory';
 import TransactionsCardWrapper from '../../components/TransactionsCardWrapper';
-import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
-import Transactions from '../../components/TransactionsGroupedByDate';
 import TransactionsGroupedByDate from '../../components/TransactionsGroupedByDate';
 import {
   getAmountToBeShownTransactionsCardWrapper,

@@ -19,7 +19,6 @@ import CreditDebitSummary from './CreditDebitSummary';
 import styles from './styles.module.scss';
 import {
   CREDIT_TYPE,
-  DEBIT_TYPE,
   ONLINE_MODE,
   CASH_MODE,
   CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY

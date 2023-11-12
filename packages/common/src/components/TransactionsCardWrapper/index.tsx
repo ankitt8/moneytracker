@@ -2,8 +2,6 @@ import { memo, useState } from 'react';
 import TransactionCard from '@moneytracker/common/src/components/TransactionCard';
 import { TransactionCardWrapperProps } from './interface';
 import styles from './styles.module.scss';
-import { CREDIT_TYPE } from '../../Constants';
-import cn from 'classnames';
 import { getFormattedAmount } from '../../utility';
 const areEqual = (prevProps: any, nextProps: any) => {
   if (prevProps.transactions.length !== nextProps.transactions.length)

@@ -21,7 +21,8 @@
     "plugins": [
         "react",
         "@typescript-eslint",
-        "prettier"
+        "prettier",
+        "unused-imports"
     ],
     "rules": {
         "react/react-in-jsx-scope": "off",
@@ -30,7 +31,8 @@
         "prefer-arrow-callback": "off",
         "react/prop-types": "off",
         "no-console": "error",
-        "no-unused-vars": "error"
+        "no-unused-vars": "error",
+        "unused-imports/no-unused-imports": "error"
 
     },
     "globals": {

@@ -1,5 +1,3 @@
-import { BORROWED_TYPE, CREDIT_TYPE, DEBIT_TYPE } from '../../../Constants';
-
 export enum TRANSACTION_TYPE {
   credit = 'credit',
   debit = 'debit',

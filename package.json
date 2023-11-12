@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": {
-    "packages": ["packages/*", "apps/*"]
+    "packages": [
+      "packages/*",
+      "apps/*"
+    ]
   },
   "scripts": {
     "web:dev": "yarn workspace @moneytracker/web dev",
@@ -27,5 +30,8 @@
     "packages/common/src/**/*.{json,css,scss,md}": [
       "prettier --write"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-unused-imports": "^3.0.0"
   }
 }

@@ -1,8 +1,4 @@
-import {
-  BORROWED_TYPE,
-  DEBIT_TYPE,
-  TRANSACTION_TYPES
-} from '@moneytracker/common/src/Constants';
+import { BORROWED_TYPE, DEBIT_TYPE } from '@moneytracker/common/src/Constants';
 import { Transaction } from './interfaces';
 import {
   CategoryAmount,

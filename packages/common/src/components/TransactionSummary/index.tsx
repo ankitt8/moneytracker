@@ -23,6 +23,7 @@ import {
   CASH_MODE,
   CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY
 } from '@moneytracker/common/src/Constants';
+import {getFormattedAmount} from "../../utility";
 
 const isCreditTypeTransaction = (transaction: Transaction) =>
   transaction.type === CREDIT_TYPE;
@@ -105,7 +106,7 @@ const TransactionSummary = ({ transactions: transactionsProps }) => {
         debitAmount={cashDebit}
       />
       <div className={styles.transactionSummaryTitle}>
-        <p>Spent {bankDebit + cashDebit}</p>
+        <p>Spent {getFormattedAmount(bankDebit + cashDebit)}</p>
         <p>Days Left {daysRemaining}</p>
       </div>
     </div>

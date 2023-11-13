@@ -14,10 +14,10 @@
     "web:build": "yarn workspace @moneytracker/web build",
     "dev": "webpack serve --config packages/common/webpack.dev.js",
     "build": "rm -rf build &&  webpack --config packages/common/webpack.prod.js",
-    "_lint": "eslint 'packages/common/src/**/*.{js,jsx,ts,tsx}' --config packages/common/.eslintrc.json",
+    "_lint": "eslint 'packages/common/src/**/*.{js,jsx,ts,tsx}' --config ./.eslintrc.json",
     "lint": "yarn _lint",
     "lint:fix": "yarn lint -- --fix",
-    "format": "prettier --write 'packages/common/src/**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config packages/common/.prettierrc",
+    "format": "prettier --write './src/**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc",
     "prepare": "husky install",
     "build-report": "webpack-bundle-analyzer build/stats.json",
     "web:next:output": "yarn workspace @moneytracker/web export",
@@ -32,6 +32,17 @@
     ]
   },
   "devDependencies": {
-    "eslint-plugin-unused-imports": "^3.0.0"
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-typescript": "^16.1.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-unused-imports": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0"
   }
 }

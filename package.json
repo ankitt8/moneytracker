@@ -49,6 +49,7 @@
     "budget": 92160,
     "budgetPercentIncreaseRed": 20,
     "minimumChangeThreshold": 0,
-    "showDetails": true
+    "showDetails": true,
+    "buildOutputDirectory": "apps/web/.next"
   }
 }

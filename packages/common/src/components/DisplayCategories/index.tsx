@@ -1,5 +1,6 @@
 import { DisplayCategoriesProps } from './interface';
 import styles from './styles.module.scss';
+import { motion } from 'framer-motion';
 import { NO_CATEGORIES_FOUND } from '../../Constants';
 import { Cross } from '../Icons/Cross';
 
@@ -14,12 +15,18 @@ const DisplayCategories = ({
     <div className={styles.categoriesWrapper}>
       {categories.map((category) => {
         return (
-          <div key={category} className={styles.categoryWrapper}>
+          <motion.div
+            initial={{ opacity: 0, y: -5 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2, delay: 0 }}
+            key={category}
+            className={styles.categoryWrapper}
+          >
             <div>{category}</div>
             <button onClick={() => handleDeleteCategory(category)}>
               <Cross />
             </button>
-          </div>
+          </motion.div>
         );
       })}
     </div>

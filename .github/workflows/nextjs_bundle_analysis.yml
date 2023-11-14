@@ -54,7 +54,7 @@ jobs:
         id: get-comment-body
         if: success() && github.event.number
         run: |
-          body=$(cat .next/analyze/bundle-sizes.txt)
+          body=$(cat apps/web/.next/analyze/bundle-sizes.txt)
           body="${body//'%'/'%25'}"
           body="${body//$'\n'/'%0A'}"
           body="${body//$'\r'/'%0D'}"

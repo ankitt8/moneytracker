@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 
-const bundle = require('../.next/build-manifest.json');
+const bundle = require('../apps/web/.next/build-manifest.json');
 
-const prefix = '.next';
+const prefix = 'apps/web/.next';
 const outdir = path.join(process.cwd(), prefix, 'analyze');
 const outfile = path.join(outdir, 'bundle-sizes.txt');
 

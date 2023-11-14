@@ -67,7 +67,7 @@ jobs:
           npx -p nextjs-bundle-analysis@0.5.0 report
 
       - name: Upload bundle
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: bundle
           path: apps/web/.next/analyze/__bundle_analysis.json
@@ -79,8 +79,6 @@ jobs:
           workflow: nextjs-bundle-analysis.yml
           branch: ${{ github.event.pull_request.base.ref }}
           path: apps/web/.next/analyze/base
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          name: bundle
 
           # And here's the second place - this runs after we have both the current and
       # base branch bundle stats, and will compare them to determine what changed.

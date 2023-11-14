@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-      "build": "next build",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}' --config ../../.eslintrc.json",
+    "lint:fix": "yarn lint -- --fix",
     "export": "next export"
   },
   "dependencies": {

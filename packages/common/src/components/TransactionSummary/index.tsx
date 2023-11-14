@@ -23,7 +23,7 @@ import {
   CASH_MODE,
   CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY
 } from '@moneytracker/common/src/Constants';
-import {getFormattedAmount} from "../../utility";
+import { getFormattedAmount } from '../../utility';
 
 const isCreditTypeTransaction = (transaction: Transaction) =>
   transaction.type === CREDIT_TYPE;

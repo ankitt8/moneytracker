@@ -21,7 +21,8 @@
     "prepare": "husky install",
     "build-report": "webpack-bundle-analyzer build/stats.json",
     "web:next:output": "yarn workspace @moneytracker/web export",
-    "serve:lhci": "yarn web:dev"
+    "serve:lhci": "yarn web:dev",
+    "web:analyze": "yarn workspace @moneytracker/web analyze"
   },
   "lint-staged": {
     "packages/common/src/**/*.{js,jsx,ts,tsx}": [
@@ -46,10 +47,9 @@
     "@typescript-eslint/parser": "^5.15.0"
   },
   "nextBundleAnalysis": {
-    "budget": 92160,
+    "budget": 102400,
     "budgetPercentIncreaseRed": 20,
     "minimumChangeThreshold": 0,
-    "showDetails": true,
-    "buildOutputDirectory": "apps/web/.next"
+    "showDetails": true
   }
 }

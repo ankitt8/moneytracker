@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint './**/*.{js,jsx,ts,tsx}' --config ../../.eslintrc.json",
     "lint:fix": "yarn lint -- --fix",
-    "export": "next export"
+    "export": "next export",
+    "analyze": "npx -p nextjs-bundle-analysis report"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.2",

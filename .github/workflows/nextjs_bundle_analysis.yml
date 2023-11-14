@@ -11,10 +11,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-defaults:
-  run:
-    # change this if your nextjs app does not live at the root of the repo
-    working-directory: apps/web
+#defaults:
+#  run:
+#    # change this if your nextjs app does not live at the root of the repo
+#    working-directory: apps/web
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -39,15 +39,15 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Build & analyze
-        run: mkdir -p .next/analyze/master && npm run analyze | tee .next/analyze/output.txt
+        run: mkdir -p apps/web/.next/analyze/master && npm run analyze | tee apps/web/.next/analyze/output.txt
 
       - name: Upload bundle
         uses: actions/upload-artifact@v2
         with:
           name: bundle
           path: |
-            .next/analyze/client.html
-            .next/analyze/bundle.json
+            apps/web/.next/analyze/client.html
+            apps/web/.next/analyze/bundle.json
 
       # A bit of find & replace on our output text for displaying properly. Save this to an Action variable.
       - name: Get comment body

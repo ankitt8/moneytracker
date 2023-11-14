@@ -21,8 +21,7 @@
     "prepare": "husky install",
     "build-report": "webpack-bundle-analyzer build/stats.json",
     "web:next:output": "yarn workspace @moneytracker/web export",
-    "serve:lhci": "yarn web:dev",
-    "analyze": "ANALYZE=true NODE_ENV=production && yarn web:build  && node scripts/analyze-bundles.js"
+    "serve:lhci": "yarn web:dev"
   },
   "lint-staged": {
     "packages/common/src/**/*.{js,jsx,ts,tsx}": [

@@ -31,7 +31,7 @@ export default function History({ userId }: IHistoryPageProps) {
     FILTERS,
     getFilterDisplayName
   } = useHistoy({ userId });
-  console.log('hi');
+  console.log('hi1');
   return (
     <div className={styles.container}>
       <form

@@ -1,9 +1,8 @@
 import { DisplayCategoriesProps } from './interface';
 import styles from './styles.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import { motion } from 'framer-motion';
 import { NO_CATEGORIES_FOUND } from '../../Constants';
+import { Cross } from '../Icons/Cross';
 
 const DisplayCategories = ({
   categories,
@@ -28,11 +27,9 @@ const DisplayCategories = ({
             className={styles.categoryWrapper}
           >
             <div>{category}</div>
-            {/* <div>|</div> */}
-            <FontAwesomeIcon
-              icon={faWindowClose}
-              onClick={() => handleDeleteCategory(category)}
-            />
+            <button onClick={() => handleDeleteCategory(category)}>
+              <Cross />
+            </button>
           </motion.div>
         );
       })}

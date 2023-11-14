@@ -24,8 +24,8 @@ import useFetchData from '@moneytracker/common/src/customHooks/useFetchData';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import { TransactionCategoriesPageProps } from './interface';
-import Loader from '../../components/Loader';
-import { FETCH_STATES } from '../../reducers/DataReducer';
+import { FETCH_STATES } from '@moneytracker/common/src/reducers/DataReducer';
+import { LinearProgress } from '@material-ui/core';
 
 const TransactionCategoriesPage = ({
   userId
@@ -82,16 +82,14 @@ const TransactionCategoriesPage = ({
       );
     };
   };
-  const isLoaderVisible =
-    state?.fetchStatus?.fetching !== FETCH_STATES.RESOLVED;
   return (
     <div className={styles.transactionCategoriesPage}>
+      {state.fetching === FETCH_STATES.PENDING && <LinearProgress />}
       <div className={styles.transactionCategoryCard}>
         <AddCategory title="Credit Transaction Category" type={CREDIT_TYPE} />
         <DisplayCategories
           categories={creditCategories}
           handleDeleteCategory={handleDeleteCategory(CREDIT_TYPE)}
-          isLoaderVisible={isLoaderVisible}
         />
       </div>
 
@@ -100,7 +98,6 @@ const TransactionCategoriesPage = ({
         <DisplayCategories
           categories={debitCategories}
           handleDeleteCategory={handleDeleteCategory(DEBIT_TYPE)}
-          isLoaderVisible={isLoaderVisible}
         />
       </div>
 
@@ -112,7 +109,6 @@ const TransactionCategoriesPage = ({
         <DisplayCategories
           categories={borrowedCategories}
           handleDeleteCategory={handleDeleteCategory(BORROWED_TYPE)}
-          isLoaderVisible={isLoaderVisible}
         />
       </div>
     </div>

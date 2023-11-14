@@ -27,7 +27,9 @@
   "scripts": {
     "web:dev": "webpack serve --config webpack.dev.js",
     "build": "rm -rf build &&  webpack --config webpack.prod.js",
-    "build-report": "webpack-bundle-analyzer build/stats.json"
+    "build-report": "webpack-bundle-analyzer build/stats.json",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}' --config ../../.eslintrc.json",
+    "lint:fix": "yarn lint -- --fix"
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",

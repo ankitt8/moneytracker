@@ -62,7 +62,9 @@ jobs:
       # Here's the first place where next-bundle-analysis' own script is used
       # This step pulls the raw bundle stats for the current bundle
       - name: Analyze bundle
-        run: yarn analyze
+        run: |
+          cd apps/web
+          npx -p nextjs-bundle-analysis report
 
       - name: Upload bundle
         uses: actions/upload-artifact@v3
@@ -92,7 +94,9 @@ jobs:
       # entry in your package.json file.
       - name: Compare with base branch bundle
         if: success() && github.event.number
-        run: ls -laR apps/web/.next/analyze/base && npx -p nextjs-bundle-analysis compare
+        run: |
+          cd apps/web
+          ls -laR .next/analyze/base && npx -p nextjs-bundle-analysis compare
 
       - name: Get Comment Body
         id: get-comment-body

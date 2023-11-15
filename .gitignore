@@ -14,8 +14,8 @@ apps/web/node_modules
 
 .lighthouseci
 
-/.idea
-/.idea/workspace.xml
+.idea
+.idea/workspace.xml
 # misc
 .DS_Store
 .env.local

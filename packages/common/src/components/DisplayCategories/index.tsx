@@ -5,8 +5,12 @@ import { Cross } from '../Icons/Cross';
 
 const DisplayCategories = ({
   categories,
-  handleDeleteCategory
+  handleDeleteCategory,
+  isLoaderVisible = false
 }: DisplayCategoriesProps) => {
+  if (isLoaderVisible) {
+    return <p className={styles.noData}>Loading categories...</p>;
+  }
   if (!categories || categories.length === 0) {
     return <p className={styles.noData}>!!{NO_CATEGORIES_FOUND}!!</p>;
   }

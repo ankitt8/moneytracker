@@ -16,6 +16,7 @@ enum DateFilters {
   currYear = 'currYear'
 }
 export default function History({ userId }: IHistoryPageProps) {
+  console.log('History1');
   const {
     transactionHistoryFormSubmitHandler,
     filters,

@@ -8,11 +8,11 @@ import cn from 'classnames';
 import styles from './styles.module.scss';
 import { TransactionCardProps } from './interface';
 import { getFormattedAmount } from '../../utility';
-import AddTransactionModal from '../AddTransactionModal';
+// import AddTransactionModal from '../AddTransactionModal';
 
-// const AddTransactionModal = lazy(
-//   () => import('@moneytracker/common/src/components/AddTransactionModal')
-// );
+const AddTransactionModal = lazy(
+  () => import('@moneytracker/common/src/components/AddTransactionModal')
+);
 
 const TransactionCard = ({
   transaction,

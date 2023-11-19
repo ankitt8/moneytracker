@@ -1,6 +1,6 @@
 import { AddTransaction } from '@moneytracker/common/src/components/AddTransactionModal/interface';
 import { url } from '@moneytracker/common/src/Constants';
-import { PaymentInstruments } from '../interfaces';
+import { PaymentInstruments, Transaction } from '../interfaces';
 
 export async function getTransactionsFromDB(getTransactionsFilter: {
   userId: string;
@@ -57,6 +57,32 @@ export const addTransactionDB = async (transaction: AddTransaction) => {
   return await addTransactionResponse.json();
 };
 
+export const editTransactionDB = async (
+  transactionId: string,
+  updatedTransaction: Transaction
+) => {
+  const updatedTransactionResponse = await fetch(
+    `${url.API_URL_EDIT_TRANSACTION}/?id=${transactionId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedTransaction)
+    }
+  );
+  const updatedTransactionObject = await updatedTransactionResponse.json();
+  return Promise.resolve(updatedTransactionObject);
+};
+export const deleteTransactionDB = async (transactionId: string) => {
+  const response = await fetch(
+    `${url.API_URL_DELETE_TRANSACTION}/?id=${transactionId}`,
+    {
+      method: 'POST'
+    }
+  );
+  return await response.json();
+};
 export const addTransactionCategoryToDB = async (
   userId: string,
   category: string,

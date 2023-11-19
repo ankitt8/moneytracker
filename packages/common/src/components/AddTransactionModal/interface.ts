@@ -3,6 +3,9 @@ import { TRANSACTION_TYPE } from './TransactionCategoryInput/interface';
 export interface AddTransactionModalProps {
   userId: string;
   handleClose: (e?: any) => void;
+  transaction?: AddTransaction;
+  buttonName?: string;
+  renderedByComponentName?: string;
 }
 
 export interface AddTransaction {

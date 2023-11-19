@@ -1,13 +1,17 @@
-import { memo, useState, lazy } from 'react';
+import { lazy, memo, useState } from 'react';
 
-import { CREDIT_TYPE } from '@moneytracker/common/src/Constants';
+import {
+  CREDIT_TYPE,
+  EDIT_TRANSACTION_MODAL_COMPONENT_NAME
+} from '@moneytracker/common/src/Constants';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 import { TransactionCardProps } from './interface';
 import { getFormattedAmount } from '../../utility';
+// import AddTransactionModal from '../AddTransactionModal';
 
-const EditTransactionModal = lazy(
-  () => import('@moneytracker/common/src/components/EditTransactionModal')
+const AddTransactionModal = lazy(
+  () => import('@moneytracker/common/src/components/AddTransactionModal')
 );
 
 const TransactionCard = ({
@@ -46,9 +50,12 @@ const TransactionCard = ({
         <p className={styles.amount}>{getFormattedAmount(amount)}</p>
       </div>
       {open && (
-        <EditTransactionModal
+        <AddTransactionModal
+          userId={window?.userId}
           transaction={transaction}
-          handleCloseProps={handleCloseProps}
+          handleClose={handleCloseProps}
+          buttonName={'Edit'}
+          renderedByComponentName={EDIT_TRANSACTION_MODAL_COMPONENT_NAME}
         />
       )}
     </>

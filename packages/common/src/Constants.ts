@@ -91,6 +91,7 @@ export const INVALID_CATEGORY_WARNING = 'Category Addition Failed ):';
 export const CASH_MODE = 'cash';
 export const ONLINE_MODE = 'online';
 export const CREDIT_TYPE = 'credit';
+export const TRANSACTION_MODES = ['Online', 'Cash'];
 export const DEBIT_TYPE = 'debit';
 export const BORROWED_TYPE = 'borrowed';
 

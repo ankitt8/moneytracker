@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { lazy, memo, useState } from 'react';
 
 import {
   CREDIT_TYPE,

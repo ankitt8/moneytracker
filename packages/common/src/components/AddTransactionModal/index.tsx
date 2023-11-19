@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from '@moneytracker/common/src/components/Loader';
@@ -12,10 +12,12 @@ import styles from './styles.module.scss';
 
 import {
   addTransactionAction,
+  deleteTransactionAction,
   editBankCreditAction,
   editBankDebitAction,
   editCashCreditAction,
   editCashDebitAction,
+  editTransactionAction,
   updateStatusAction
 } from '@moneytracker/common/src/actions/actionCreator';
 
@@ -33,10 +35,20 @@ import {
   SEVERITY_SUCCESS,
   SEVERITY_WARNING,
   CATEGORIES_TO_NOT_INCLUDE_IN_SUMMARY,
-  ADD_TRANSACTION_MODAL_COMPONENT_NAME
+  TRANSACTION_MODES,
+  EDIT_TRANSACTION_SUCCESS_MSG,
+  EDIT_TRANSACTION_FAIL_ERROR,
+  ADD_TRANSACTION_MODAL_COMPONENT_NAME,
+  EDIT_TRANSACTION_MODAL_COMPONENT_NAME,
+  DELETE_TRANSACTION_SUCCESS_MSG,
+  DELETE_TRANSACTION_FAIL_ERROR
 } from '@moneytracker/common/src/Constants';
 
-import { addTransactionDB } from '@moneytracker/common/src/api-services/api.service';
+import {
+  addTransactionDB,
+  deleteTransactionDB,
+  editTransactionDB
+} from '@moneytracker/common/src/api-services/api.service';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
@@ -139,18 +151,35 @@ function updateLatestTransactionCategoriesLocalStorage(newInput: Transaction) {
 
 const AddTransactionModal = ({
   userId,
-  handleClose
+  handleClose,
+  transaction: transactionProps,
+  buttonName = 'Add',
+  renderedByComponentName = ADD_TRANSACTION_MODAL_COMPONENT_NAME
 }: AddTransactionModalProps) => {
   const dispatch = useDispatch();
-  const [heading, setHeading] = useState('');
-  const [amount, setAmount] = useState('');
+  const isEditTransactionModal =
+    renderedByComponentName === EDIT_TRANSACTION_MODAL_COMPONENT_NAME;
+  const bankAccounts = useSelector(
+    (store: ReduxStore) => store.user.bankAccounts
+  );
+  const creditCards = useSelector(
+    (store: ReduxStore) => store.user.creditCards
+  );
+  const transactionCategories = useSelector(
+    (store: ReduxStore) => store.transactions.categories
+  );
+  const paymentInstruments = [...bankAccounts, ...creditCards];
+  let categories = transactionCategories.debit;
+
   const localStorageLatestAddTransactionStateString = localStorage.getItem(
     LATEST_ADD_TRANSACTION_STATE
   );
-  const localStorageLatestAddTransactionState = JSON.parse(
-    localStorageLatestAddTransactionStateString
-  );
-  const [date, setDate] = useState(() => {
+  const localStorageLatestAddTransactionState = {};
+  if (localStorageLatestAddTransactionStateString) {
+    JSON.parse(localStorageLatestAddTransactionStateString);
+  }
+  let categoriesToDisplay = getCategoriesToDisplay(categories);
+  const getInitialDate = () => {
     try {
       const localStorageLatestAddTransactionStateDate =
         localStorageLatestAddTransactionState?.date;
@@ -161,46 +190,68 @@ const AddTransactionModal = ({
     } catch (e) {
       return constructTodayDate();
     }
+  };
+  const getInitialMode = () =>
+    localStorageLatestAddTransactionState?.mode ?? ONLINE_MODE;
+  const getInitialType = () =>
+    localStorageLatestAddTransactionState?.type ?? DEBIT_TYPE;
+  const getInitialPaymentInstrument = () =>
+    localStorageLatestAddTransactionState?.bankAccount ||
+    localStorageLatestAddTransactionState?.creditCard ||
+    DEFAULT_PAYMENT_INSTRUMENT;
+  const getInitialCategory = () =>
+    categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : '';
+  const [transaction, setTransaction] = useState(() => {
+    console.log(transactionProps);
+    if (transactionProps)
+      return {
+        ...transactionProps,
+        date: constructTodayDate(transactionProps.date),
+        selectedPaymentInstrument:
+          transactionProps?.bankAccount ||
+          transactionProps?.creditCard ||
+          DEFAULT_PAYMENT_INSTRUMENT
+      };
+    return {
+      heading: '',
+      amount: '',
+      date: getInitialDate(),
+      mode: getInitialMode(),
+      type: getInitialType(),
+      selectedPaymentInstrument: getInitialPaymentInstrument(),
+      category: getInitialCategory()
+    };
   });
-
-  const [mode, setMode] = useState(() => {
-    return localStorageLatestAddTransactionState?.mode ?? ONLINE_MODE;
-  });
-  const [selectedPaymentInstrument, setSelectedPaymentInstrument] = useState(
-    () =>
-      localStorageLatestAddTransactionState?.bankAccount ||
-      localStorageLatestAddTransactionState?.creditCard ||
-      DEFAULT_PAYMENT_INSTRUMENT
-  );
-  const [type, setType] = useState(
-    () => localStorageLatestAddTransactionState?.type ?? DEBIT_TYPE
-  );
-  const transactionCategories = useSelector(
-    (store: ReduxStore) => store.transactions.categories
-  );
-  const bankAccounts = useSelector(
-    (store: ReduxStore) => store.user.bankAccounts
-  );
-  const creditCards = useSelector(
-    (store: ReduxStore) => store.user.creditCards
-  );
-  const paymentInstruments = [...bankAccounts, ...creditCards];
-  let categories = transactionCategories.debit;
+  const heading = transaction.heading;
+  const amount = transaction.amount;
+  const date = transaction.date;
+  const mode = transaction.mode;
+  const type = transaction.type;
+  const selectedPaymentInstrument = transaction?.selectedPaymentInstrument;
+  const category = transaction.category;
+  console.log(transaction);
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
-
-  const categoriesToDisplay = getCategoriesToDisplay(categories, type);
-  const [category, setCategory] = useState(() =>
-    categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : ''
-  );
-  useEffect(() => {
+  categoriesToDisplay = getCategoriesToDisplay(categories);
+  const isMountedRef = useRef(false);
+  useEffect(function cleanUp() {
     return function setFieldsEmpty() {
-      setHeading('');
-      setAmount('');
+      setTransaction((prev) => ({ ...prev, heading: '', amount: '' }));
     };
   }, []);
-  useEffect(() => {
-    setCategory(categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : '');
-  }, [type]);
+  useEffect(
+    function updateCategoryOnTypeChange() {
+      if (!isMountedRef.current) {
+        isMountedRef.current = true;
+        return;
+      }
+      console.log(isMountedRef);
+      setTransaction((prev) => ({
+        ...prev,
+        category: categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : ''
+      }));
+    },
+    [type]
+  );
   const addTransactionSuccessHandler = (transactionResponse: Transaction) => {
     updateLatestTransactionCategoriesLocalStorage(transactionResponse);
     dispatch(addTransactionAction(transactionResponse));
@@ -231,6 +282,59 @@ const AddTransactionModal = ({
       })
     );
   };
+  const editTransactionSuccessHandler = (transactionResponse: Transaction) => {
+    dispatch(
+      editTransactionAction(transactionResponse._id, transactionResponse)
+    );
+    const { type: editedType, mode: editedMode } = transactionResponse;
+    const changedAmount = transactionResponse.amount - transaction.amount;
+    if (editedType === DEBIT_TYPE) {
+      //if changedAmount negative implies less spent, increase in balance
+      if (editedMode === CASH_MODE) {
+        dispatch(editCashDebitAction(changedAmount));
+      } else if (editedMode === ONLINE_MODE) {
+        dispatch(editBankDebitAction(changedAmount));
+      }
+    } else {
+      if (editedMode === CASH_MODE) {
+        dispatch(editCashCreditAction(changedAmount));
+      } else if (editedMode === ONLINE_MODE) {
+        dispatch(editBankCreditAction(changedAmount));
+      }
+    }
+    dispatch(
+      updateStatusAction({
+        showFeedBack: true,
+        msg: EDIT_TRANSACTION_SUCCESS_MSG,
+        severity: SEVERITY_SUCCESS
+      })
+    );
+  };
+  const deleteTransactionSuccessHandler = (res) => {
+    const { transactionId } = res;
+    if (type === DEBIT_TYPE) {
+      if (mode === ONLINE_MODE || mode === undefined) {
+        // while deleting edited values should not be taken
+        dispatch(editBankDebitAction(-1 * amount));
+      } else {
+        dispatch(editCashDebitAction(-1 * amount));
+      }
+    } else {
+      if (mode === ONLINE_MODE) {
+        dispatch(editBankCreditAction(-1 * amount));
+      } else {
+        dispatch(editCashCreditAction(-1 * amount));
+      }
+    }
+    dispatch(deleteTransactionAction(transactionId));
+    dispatch(
+      updateStatusAction({
+        showFeedBack: true,
+        msg: DELETE_TRANSACTION_SUCCESS_MSG,
+        severity: SEVERITY_SUCCESS
+      })
+    );
+  };
   const addTransactionApiErrorHandler = (error: any) => {
     console.error(error);
     dispatch(
@@ -241,40 +345,77 @@ const AddTransactionModal = ({
       })
     );
   };
-  const { apiCall: addTransactionApiCall, state } = useApi(
+
+  const editTransactionApiErrorHandler = (error: any) => {
+    console.error(error);
+    dispatch(
+      updateStatusAction({
+        showFeedBack: true,
+        msg: EDIT_TRANSACTION_FAIL_ERROR,
+        severity: SEVERITY_ERROR
+      })
+    );
+  };
+  const deleteTransactionApiErrorHandler = (error: any) => {
+    console.error(error);
+    dispatch(
+      updateStatusAction({
+        showFeedBack: true,
+        msg: DELETE_TRANSACTION_FAIL_ERROR,
+        severity: SEVERITY_ERROR
+      })
+    );
+  };
+  const { apiCall: addTransactionApiCall, state: addTransactionState } = useApi(
     addTransactionSuccessHandler,
     addTransactionApiErrorHandler,
     handleClose
   );
+
+  const { apiCall: editTransactionApiCall, state: editTransactionState } =
+    useApi(
+      editTransactionSuccessHandler,
+      editTransactionApiErrorHandler,
+      handleClose
+    );
+
+  const { apiCall: deleteTransactionApiCall, state: deleteTransactionState } =
+    useApi(
+      deleteTransactionSuccessHandler,
+      deleteTransactionApiErrorHandler,
+      handleClose
+    );
   const isRadioModeChecked = (value: string) => {
     if (mode === '') return value === ONLINE_MODE;
     return mode === value;
   };
   const handleModeChange = (event: any) => {
-    setMode(event.target.value);
+    setTransaction((prev) => ({ ...prev, mode: event.target.value }));
   };
   const isRadioTypeChecked = (value: string) => {
     if (type === '') return value === DEBIT_TYPE;
     return type === value;
   };
   const handleTypeChange = (event: any) => {
-    setType(event.target.value);
+    setTransaction((prev) => ({ ...prev, type: event.target.value }));
   };
   const handleHeadingChange = (event: any) => {
-    setHeading(event.target.value);
+    setTransaction((prev) => ({ ...prev, heading: event.target.value }));
   };
   const handleAmountChange = (event: any) => {
-    setAmount(event.target.value);
+    setTransaction((prev) => ({ ...prev, amount: event.target.value }));
   };
   const handleDateChange = (event: any) => {
-    setDate(event.target.value);
+    setTransaction((prev) => ({ ...prev, date: event.target.value }));
   };
   const handleCategoryChange = (category: string) => {
-    setCategory(category);
+    setTransaction((prev) => ({ ...prev, category: category }));
   };
   const handleTransactionSubmit = async (event: any) => {
     event.preventDefault();
+    console.log(amount);
     if (amount === '' || parseInt(amount) <= 0 || heading === '') {
+      console.log('hi');
       const msg =
         heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
       dispatch(
@@ -297,8 +438,19 @@ const AddTransactionModal = ({
       type,
       category
     };
+    if (renderedByComponentName === EDIT_TRANSACTION_MODAL_COMPONENT_NAME) {
+      editTransactionApiCall(() =>
+        editTransactionDB(transactionProps._id, transaction)
+      );
+      return;
+    }
     addTransactionApiCall(() => addTransactionDB(transaction));
   };
+  const handleDeleteTransactionClick = () => {
+    deleteTransactionApiCall(() => deleteTransactionDB(transaction._id));
+  };
+  const showFormSubmitLoader =
+    addTransactionState.loading || editTransactionState.loading;
   return (
     <Dialog
       maxWidth={'sm'}
@@ -317,35 +469,30 @@ const AddTransactionModal = ({
             categories={categoriesToDisplay || []}
             categorySelected={category}
             handleCategoryChange={handleCategoryChange}
-            renderedByComponentName={ADD_TRANSACTION_MODAL_COMPONENT_NAME}
+            renderedByComponentName={renderedByComponentName}
           />
           {/* Mode */}
           <div className={styles.fieldSet}>
             <div className={styles.fieldSetLabel}>Mode</div>
             {/* Mode radio group */}
             <div className={styles.radioGroupWrapper}>
-              <div>
-                <input
-                  type="radio"
-                  name="transactionMode"
-                  id="bankmode"
-                  value={ONLINE_MODE}
-                  checked={isRadioModeChecked('online')}
-                  onChange={handleModeChange}
-                />
-                <label htmlFor="bankmode">Bank</label>
-              </div>
-              <div>
-                <input
-                  type="radio"
-                  name="transactionMode"
-                  id="cashmode"
-                  value={CASH_MODE}
-                  checked={isRadioModeChecked('cash')}
-                  onChange={handleModeChange}
-                />
-                <label htmlFor="cashmode">Cash</label>
-              </div>
+              {TRANSACTION_MODES.map((transactionMode) => {
+                return (
+                  <div key={transactionMode}>
+                    <input
+                      type="radio"
+                      name="transactionMode"
+                      id={transactionMode}
+                      value={transactionMode.toLowerCase()}
+                      checked={isRadioModeChecked(
+                        transactionMode.toLowerCase()
+                      )}
+                      onChange={handleModeChange}
+                    />
+                    <label htmlFor={transactionMode}>{transactionMode}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
           {/*BANK ACCOUNT */}
@@ -365,7 +512,10 @@ const AddTransactionModal = ({
                           paymentInstrument === selectedPaymentInstrument
                         }
                         onChange={(e) =>
-                          setSelectedPaymentInstrument(e.target.value)
+                          setTransaction((prev) => ({
+                            ...prev,
+                            selectedPaymentInstrument: e.target.value
+                          }))
                         }
                       />
                       <label htmlFor={paymentInstrument}>
@@ -439,18 +589,37 @@ const AddTransactionModal = ({
             />
           </div>
           <div className={styles.buttonWrapper}>
-            <button
-              // why type="button" added https://github.com/redux-form/redux-form/issues/2679#issuecomment-286153902
-              type="button"
-              className={styles.button}
-              onClick={handleClose}
-            >
-              Close
-            </button>
-            {state.loading ? (
+            {isEditTransactionModal ? (
+              deleteTransactionState.loading ? (
+                <Loader />
+              ) : (
+                <button
+                  // why type="button" added https://github.com/redux-form/redux-form/issues/2679#issuecomment-286153902
+                  type="button"
+                  className={styles.button}
+                  onClick={handleDeleteTransactionClick}
+                >
+                  Delete
+                </button>
+              )
+            ) : (
+              <button
+                // why type="button" added https://github.com/redux-form/redux-form/issues/2679#issuecomment-286153902
+                type="button"
+                className={styles.button}
+                onClick={handleClose}
+              >
+                Close
+              </button>
+            )}
+            {showFormSubmitLoader ? (
               <Loader />
             ) : (
-              <input type="submit" className={styles.button} value="Add" />
+              <input
+                type="submit"
+                className={styles.button}
+                value={buttonName}
+              />
             )}
           </div>
         </form>

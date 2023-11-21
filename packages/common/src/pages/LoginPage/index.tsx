@@ -1,6 +1,4 @@
 import { useRef, useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { PASSWORD_REQUIREMENT, url } from '@moneytracker/common/src/Constants';
 import { useDispatch } from 'react-redux';
 import { newUserLoggedIn } from '@moneytracker/common/src/actions/actionCreator';
@@ -9,9 +7,8 @@ import { useRouter } from 'next/router';
 
 import styles from './styles.module.scss';
 import { setCookies } from '../../utility';
-
-const eyeOpen = <FontAwesomeIcon icon={faEye} />;
-const eyeClosed = <FontAwesomeIcon icon={faEyeSlash} />;
+import { EyeOpen } from '../../components/Icons/EyeOpen';
+import { EyeClosed } from '../../components/Icons/EyeClosed';
 
 interface UserObject {
   username: string | undefined;
@@ -125,7 +122,7 @@ const Login = ({ callbackUrl }: ILoginProps) => {
               setPasswordVisible((passwordVisible) => !passwordVisible)
             }
           >
-            {passwordVisible ? eyeOpen : eyeClosed}
+            {passwordVisible ? <EyeOpen /> : <EyeClosed />}
           </div>
         </div>
 

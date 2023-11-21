@@ -29,34 +29,24 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '16.x'
+          cache: 'yarn'
+          cache-dependency-path: 'yarn.lock'
 
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: yarn install --prefer-offline --frozen-lockfile
 
-      # If pnpm is used, you need to switch the previous step with the following one. pnpm does not create a package-lock.json
-      # so the step above will fail to pull dependencies
-      # - uses: pnpm/action-setup@v2
-      #   name: Install pnpm
-      #   id: pnpm-install
-      #   with:
-      #     version: 7
-      #     run_install: true
-
-      - name: Restore next build
+      - name: Restore previous next js build
         uses: actions/cache@v3
         id: restore-build-cache
         env:
           cache-name: cache-next-build
         with:
-          # if you use a custom build directory, replace all instances of `apps/web/.next` in this file with your build directory
-          # ex: if your app builds to `dist`, replace `apps/web/.next` with `dist`
           path: apps/web/.next/cache
           # change this if you prefer a more strict cache
           key: ${{ runner.os }}-build-${{ env.cache-name }}
 
       - name: Build next.js app
-        # change this if your site requires a custom build command
         run: yarn web:build
 
       # Here's the first place where next-bundle-analysis' own script is used

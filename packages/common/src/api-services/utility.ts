@@ -27,9 +27,31 @@ const handleGetCreditCardsApiResponse = (creditCards: string[]) => {
   );
 };
 
-const getPersistedData = (key: string) => {
+const getPersistedBankAccounts = () => {
   try {
-    return JSON.parse(localStorage.getItem(key));
+    const temp = localStorage.getItem(localStorageKeys.bankAccounts);
+    if (temp) return JSON.parse(temp);
+    return [];
+  } catch (e) {
+    return [];
+  }
+};
+
+const getPersistedCreditCards = () => {
+  try {
+    const temp = localStorage.getItem(localStorageKeys.creditCards);
+    if (temp) return JSON.parse(temp);
+    return [];
+  } catch (e) {
+    return [];
+  }
+};
+
+const getPersistedTransactionCategories = () => {
+  try {
+    const temp = localStorage.getItem(localStorageKeys.transactionCategories);
+    if (temp) return JSON.parse(temp);
+    return {};
   } catch (e) {
     return {};
   }
@@ -37,7 +59,9 @@ const getPersistedData = (key: string) => {
 
 export {
   handleGetTransactionCategoriesResponse,
-  getPersistedData,
+  getPersistedBankAccounts,
+  getPersistedCreditCards,
+  getPersistedTransactionCategories,
   handleGetBankAccountsApiResponse,
   handleGetCreditCardsApiResponse,
   localStorageKeys

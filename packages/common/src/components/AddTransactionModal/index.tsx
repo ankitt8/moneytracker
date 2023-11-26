@@ -52,7 +52,11 @@ import {
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
 import { constructTodayDate, removeDuplicateFromArray } from '../../utility';
-import { getPersistedData, localStorageKeys } from '../../api-services/utility';
+import {
+  getPersistedBankAccounts,
+  getPersistedCreditCards,
+  getPersistedTransactionCategories
+} from '../../api-services/utility';
 
 const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
@@ -159,11 +163,9 @@ const AddTransactionModal = ({
   const dispatch = useDispatch();
   const isEditTransactionModal =
     renderedByComponentName === EDIT_TRANSACTION_MODAL_COMPONENT_NAME;
-  const bankAccounts = getPersistedData(localStorageKeys.bankAccounts);
-  const creditCards = getPersistedData(localStorageKeys.creditCards);
-  const transactionCategories = getPersistedData(
-    localStorageKeys.transactionCategories
-  );
+  const bankAccounts = getPersistedBankAccounts();
+  const creditCards = getPersistedCreditCards();
+  const transactionCategories = getPersistedTransactionCategories();
   const paymentInstruments = [...bankAccounts, ...creditCards];
   let categories = transactionCategories?.debit ?? [];
 

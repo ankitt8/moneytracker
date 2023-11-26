@@ -1,4 +1,5 @@
 import { TransactionCategories } from '@moneytracker/common/src/components/AddTransactionModal/TransactionCategoryInput/interface';
+import { TRANSACTION_TYPES } from '../Constants';
 const localStorageKeys = {
   transactionCategories: 'transactionCategories',
   bankAccounts: 'bankAccounts',
@@ -48,12 +49,15 @@ const getPersistedCreditCards = () => {
 };
 
 const getPersistedTransactionCategories = () => {
+  const defaultState = TRANSACTION_TYPES.reduce((acc, curr) => {
+    return { ...acc, [curr]: [] };
+  }, {});
   try {
     const temp = localStorage.getItem(localStorageKeys.transactionCategories);
     if (temp) return JSON.parse(temp);
-    return {};
+    return defaultState;
   } catch (e) {
-    return {};
+    return defaultState;
   }
 };
 

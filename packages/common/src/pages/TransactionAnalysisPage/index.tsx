@@ -15,6 +15,10 @@ import {
   getFilteredTransactions
 } from '../../helper';
 import { getFormattedAmount } from '../../utility';
+import {
+  getPersistedCreditCards,
+  getPersistedTransactionCategories
+} from '../../api-services/utility';
 
 const TransactionAnalysisPage = ({
   transactionsProps,
@@ -47,12 +51,8 @@ const TransactionAnalysisPage = ({
       (store: ReduxStore) => store.transactions.transactions
     );
   }
-  const creditCards = useSelector(
-    (store: ReduxStore) => store.user.creditCards
-  );
-  const transactionCategories = useSelector(
-    (store: ReduxStore) => store.transactions.categories
-  );
+  const creditCards = getPersistedCreditCards();
+  const transactionCategories = getPersistedTransactionCategories();
   // in future will give filters where based on filter applied type will be chosen
   const getTransactionsGroupedByPaymentTypeContainer = (type: string) => {
     const transactionsFilteredByPaymentType = getFilteredTransactions(

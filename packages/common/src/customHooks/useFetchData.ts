@@ -48,7 +48,7 @@ const useFetchData = (
       dataReducerDispatch({
         type: ACTION_TYPES.FETCH_DATA_RESOLVED
       });
-      actionToDispatchOnResolved && dispatch(actionToDispatchOnResolved(data));
+      actionToDispatchOnResolved && actionToDispatchOnResolved(data);
     } catch (e) {
       handleErrorCase(e);
     }

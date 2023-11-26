@@ -1,5 +1,3 @@
-import { useSelector } from 'react-redux';
-import { ReduxStore } from '../../reducers/interface';
 import useFetchData from '../../customHooks/useFetchData';
 import {
   getPaymentInstrumentsFromDB,
@@ -9,13 +7,11 @@ import {
 import { useRouter } from 'next/router';
 import {
   GET_BANK_ACCOUNTS_FAILURE_MSG,
+  GET_CREDIT_CARDS_FAILURE_MSG,
   GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
   TRANSACTION_TYPES
 } from '../../Constants';
-import {
-  getTransactionCategories,
-  setUserPaymentInstrumentsAction
-} from '../../actions/actionCreator';
+
 import { PaymentInstruments } from '../../interfaces';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -28,6 +24,14 @@ import {
 import { TRANSACTION_TYPE } from '../../components/AddTransactionModal/TransactionCategoryInput/interface';
 import { getFilteredTransactions } from '../../helper';
 import useApi from '../../customHooks/useApi';
+import {
+  getPersistedBankAccounts,
+  getPersistedCreditCards,
+  getPersistedTransactionCategories,
+  handleGetBankAccountsApiResponse,
+  handleGetCreditCardsApiResponse,
+  handleGetTransactionCategoriesResponse
+} from '../../api-services/utility';
 const FILTERS = {
   groupByDate: false,
   groupByPaymentType: false,
@@ -48,43 +52,38 @@ enum DateFilters {
   currYear = 'currYear'
 }
 export function useHistoy({ userId }) {
-  const categoriesStore = useSelector(
-    (store: ReduxStore) => store.transactions.categories
+  const [categoriesStore, setCategoriesStore] = useState(() =>
+    getPersistedTransactionCategories()
   );
-  const bankAccounts = useSelector(
-    (store: ReduxStore) => store.user.bankAccounts
+  const [bankAccounts, setBankAccounts] = useState(() =>
+    getPersistedBankAccounts()
   );
-  const creditCards = useSelector(
-    (store: ReduxStore) => store.user.creditCards
+  const [creditCards, setCreditCards] = useState(() =>
+    getPersistedCreditCards()
   );
   useFetchData(
     getTransactionCategoriesFromDB,
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-    getTransactionCategories,
+    (res) => setCategoriesStore(res.transactionCategories),
     null,
+    handleGetTransactionCategoriesResponse,
     userId
   );
   useFetchData(
     getPaymentInstrumentsFromDB,
     GET_BANK_ACCOUNTS_FAILURE_MSG,
-    (paymentInstruments: string[]) =>
-      setUserPaymentInstrumentsAction(
-        PaymentInstruments.bankAccounts,
-        paymentInstruments
-      ),
+    (paymentInstruments: string[]) => setBankAccounts(paymentInstruments),
     null,
+    handleGetBankAccountsApiResponse,
     userId,
     PaymentInstruments.bankAccounts
   );
   useFetchData(
     getPaymentInstrumentsFromDB,
-    GET_BANK_ACCOUNTS_FAILURE_MSG,
-    (paymentInstruments: string[]) =>
-      setUserPaymentInstrumentsAction(
-        PaymentInstruments.creditCards,
-        paymentInstruments
-      ),
+    GET_CREDIT_CARDS_FAILURE_MSG,
+    (paymentInstruments: string[]) => setCreditCards(paymentInstruments),
     null,
+    handleGetCreditCardsApiResponse,
     userId,
     PaymentInstruments.creditCards
   );

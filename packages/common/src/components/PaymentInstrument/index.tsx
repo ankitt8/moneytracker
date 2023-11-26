@@ -10,10 +10,11 @@ import {
   addUserPaymentInstrumentAction,
   setUserPaymentInstrumentsAction
 } from '../../actions/actionCreator';
-import { useDispatch, useSelector } from 'react-redux';
-import { ReduxStore } from '../../reducers/interface';
+import { useDispatch } from 'react-redux';
 import { PaymentInstruments } from '../../interfaces';
 import {
+  getPersistedBankAccounts,
+  getPersistedCreditCards,
   handleGetBankAccountsApiResponse,
   handleGetCreditCardsApiResponse
 } from '../../api-services/utility';
@@ -21,6 +22,7 @@ import {
   GET_BANK_ACCOUNTS_FAILURE_MSG,
   GET_CREDIT_CARDS_FAILURE_MSG
 } from '../../Constants';
+import { useState } from 'react';
 
 interface IPaymentInstrument {
   userId: string;
@@ -28,11 +30,11 @@ interface IPaymentInstrument {
 }
 const PaymentInstrument = ({ userId, type }: IPaymentInstrument) => {
   const dispatch = useDispatch();
-  const paymentInstruments = useSelector((store: ReduxStore) =>
-    type === PaymentInstruments.bankAccounts
-      ? store.user.bankAccounts
-      : store.user.creditCards
-  );
+  const [paymentInstruments, setPaymentInstruments] = useState(() => {
+    return type === PaymentInstruments.bankAccounts
+      ? getPersistedBankAccounts()
+      : getPersistedCreditCards();
+  });
   const handleApiResponse = (res: string[]) => {
     if (type === PaymentInstruments.creditCards) {
       handleGetCreditCardsApiResponse(res);
@@ -48,8 +50,9 @@ const PaymentInstrument = ({ userId, type }: IPaymentInstrument) => {
     type === PaymentInstruments.creditCards
       ? GET_CREDIT_CARDS_FAILURE_MSG
       : GET_BANK_ACCOUNTS_FAILURE_MSG,
-    (paymentInstruments: string[]) =>
-      setUserPaymentInstrumentsAction(type, paymentInstruments),
+    (paymentInstruments: string[]) => {
+      setPaymentInstruments(paymentInstruments);
+    },
     null,
     handleApiResponse,
     userId,

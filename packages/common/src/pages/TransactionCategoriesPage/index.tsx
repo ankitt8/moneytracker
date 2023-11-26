@@ -13,7 +13,6 @@ import DisplayCategories from '@moneytracker/common/src/components/DisplayCatego
 import styles from './styles.module.scss';
 import {
   deleteTransactionCategory,
-  getTransactionCategories,
   updateStatusAction
 } from '@moneytracker/common/src/actions/actionCreator';
 import {
@@ -21,23 +20,28 @@ import {
   getTransactionCategoriesFromDB
 } from '@moneytracker/common/src/api-services/api.service';
 import useFetchData from '@moneytracker/common/src/customHooks/useFetchData';
-import { useSelector, useDispatch } from 'react-redux';
-import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
+import { useDispatch } from 'react-redux';
 import { TransactionCategoriesPageProps } from './interface';
 import { FETCH_STATES } from '../../reducers/DataReducer';
-import { handleGetTransactionCategoriesResponse } from '../../api-services/utility';
+import {
+  getPersistedTransactionCategories,
+  handleGetTransactionCategoriesResponse
+} from '../../api-services/utility';
+import { useState } from 'react';
 
 const TransactionCategoriesPage = ({
   userId
 }: TransactionCategoriesPageProps) => {
   const dispatch = useDispatch();
-  const transactionCategories = useSelector(
-    (store: ReduxStore) => store.transactions.categories
-  );
+  const [transactionCategories, setTransactionCategories] = useState(() => {
+    return getPersistedTransactionCategories();
+  });
   const state = useFetchData(
     getTransactionCategoriesFromDB,
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
-    getTransactionCategories,
+    (res) => {
+      setTransactionCategories(res.transactionCategories);
+    },
     null,
     handleGetTransactionCategoriesResponse,
     userId
@@ -83,8 +87,13 @@ const TransactionCategoriesPage = ({
       );
     };
   };
-  const isLoaderVisible =
-    state?.fetchStatus?.fetching !== FETCH_STATES.RESOLVED;
+  let isLoaderVisible = false;
+  if (
+    state?.fetchStatus?.fetching !== FETCH_STATES.RESOLVED &&
+    !transactionCategories
+  ) {
+    isLoaderVisible = true;
+  }
   return (
     <div className={styles.transactionCategoriesPage}>
       <div className={styles.transactionCategoryCard}>

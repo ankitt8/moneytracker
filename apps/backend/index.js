@@ -67,6 +67,15 @@ app.post(URL.API_URL_SIGNIN, (req, res) => {
       if (user.password === password) {
         const userId = user._id;
         const username = user.username;
+        const expiryDate = new Date();
+        // expiryDate.setMonth(expiryDate.getMonth() + 1);
+        //
+        // res.cookie('userId', '123', {
+        //   expires: expiryDate,
+        //   secure: false,
+        //   httpOnly: false,
+        //   // Add other cookie options if needed
+        // });
         res
             .status(200)
             .json({ success: "Userlogged in successfully!", userId, username });

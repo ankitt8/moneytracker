@@ -1,6 +1,9 @@
 import { AddTransaction } from '@moneytracker/common/src/components/AddTransactionModal/interface';
 import { url } from '@moneytracker/common/src/Constants';
-import { PaymentInstruments, Transaction } from '../interfaces';
+import {
+  PaymentInstruments,
+  Transaction
+} from '@moneytracker/common/src/interfaces';
 
 export async function getTransactionsFromDB(getTransactionsFilter: {
   userId: string;

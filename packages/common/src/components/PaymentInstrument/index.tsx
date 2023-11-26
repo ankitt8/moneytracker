@@ -6,7 +6,6 @@ import {
   getPaymentInstrumentsFromDB
 } from '../../api-services/api.service';
 import useFetchData from '../../customHooks/useFetchData';
-import { GET_BANK_ACCOUNTS_FAILURE_MSG } from '../../Constants';
 import {
   addUserPaymentInstrumentAction,
   setUserPaymentInstrumentsAction
@@ -14,6 +13,14 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxStore } from '../../reducers/interface';
 import { PaymentInstruments } from '../../interfaces';
+import {
+  handleGetBankAccountsApiResponse,
+  handleGetCreditCardsApiResponse
+} from '../../api-services/utility';
+import {
+  GET_BANK_ACCOUNTS_FAILURE_MSG,
+  GET_CREDIT_CARDS_FAILURE_MSG
+} from '../../Constants';
 
 interface IPaymentInstrument {
   userId: string;
@@ -26,15 +33,25 @@ const PaymentInstrument = ({ userId, type }: IPaymentInstrument) => {
       ? store.user.bankAccounts
       : store.user.creditCards
   );
-  // for(const bankAccount of bankAccounts) {
-  //   console.log(bankAccount);
-  // }
+  const handleApiResponse = (res: string[]) => {
+    if (type === PaymentInstruments.creditCards) {
+      handleGetCreditCardsApiResponse(res);
+      return;
+    }
+    if (type === PaymentInstruments.bankAccounts) {
+      handleGetBankAccountsApiResponse(res);
+      return;
+    }
+  };
   useFetchData(
     getPaymentInstrumentsFromDB,
-    GET_BANK_ACCOUNTS_FAILURE_MSG,
+    type === PaymentInstruments.creditCards
+      ? GET_CREDIT_CARDS_FAILURE_MSG
+      : GET_BANK_ACCOUNTS_FAILURE_MSG,
     (paymentInstruments: string[]) =>
       setUserPaymentInstrumentsAction(type, paymentInstruments),
     null,
+    handleApiResponse,
     userId,
     type
   );

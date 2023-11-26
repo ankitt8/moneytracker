@@ -13,6 +13,8 @@ import {
  * @param fetchCallback function which perform asyc operation and returns response
  * @param messageOnRejected message to show when fetch is rejected
  * @param actionToDispatchOnResolved action to be dispatched when fetch is resolved
+ * @param refetchData
+ * @param handleFetchResponse
  * @param fetchCallbackArgs argument taken by fetchCallback
  * @returns void
  */
@@ -21,6 +23,7 @@ const useFetchData = (
   messageOnRejected: string,
   actionToDispatchOnResolved: () => { type: string; payload: any },
   refetchData = null,
+  handleFetchResponse: (data: any) => Promise<any>,
   ...fetchCallbackArgs: string[]
 ) => {
   const dispatch = useDispatch();
@@ -41,6 +44,7 @@ const useFetchData = (
         return;
       }
       setData(data);
+      if (handleFetchResponse) await handleFetchResponse(data);
       dataReducerDispatch({
         type: ACTION_TYPES.FETCH_DATA_RESOLVED
       });

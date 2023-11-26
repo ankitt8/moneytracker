@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_ERROR_GENERIC_MSG } from '../Constants';
 
 interface IApiAddDataState {
   loading: boolean;
@@ -30,7 +31,11 @@ export default function useApi(
       if (typeof error === 'string') {
         setApiAddDataState({ loading: false, result: null, error });
       } else {
-        setApiAddDataState({ loading: false, result: null, error: '' });
+        setApiAddDataState({
+          loading: false,
+          result: null,
+          error: API_ERROR_GENERIC_MSG
+        });
       }
       addDataApiErrorHandler && addDataApiErrorHandler(error);
     } finally {

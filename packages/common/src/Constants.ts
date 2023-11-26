@@ -102,8 +102,7 @@ export const GET_TRANSACTIONS_FAILURE_MSG = 'Failed to get latest transactions';
 export const GET_TRANSACTION_CATEGORIES_FAILURE_MSG =
   'Failed to get latest categories';
 
-export const GET_BANK_ACCOUNTS_FAILURE_MSG =
-  'Failed to get latest bank accounts';
+export const GET_BANK_ACCOUNTS_FAILURE_MSG = 'Failed to get bank accounts';
 
 export const GET_CREDIT_CARDS_FAILURE_MSG = 'Failed to get credit cards';
 
@@ -137,3 +136,4 @@ export const COOKIE_NAMES = {
 
 export const ADD_TRANSACTION_MODAL_COMPONENT_NAME = 'AddTransactionModal';
 export const EDIT_TRANSACTION_MODAL_COMPONENT_NAME = 'EditTransactionModal';
+export const API_ERROR_GENERIC_MSG = 'Something went wrong';

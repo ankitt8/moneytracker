@@ -24,8 +24,8 @@ import useFetchData from '@moneytracker/common/src/customHooks/useFetchData';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import { TransactionCategoriesPageProps } from './interface';
-import Loader from '../../components/Loader';
 import { FETCH_STATES } from '../../reducers/DataReducer';
+import { handleGetTransactionCategoriesResponse } from '../../api-services/utility';
 
 const TransactionCategoriesPage = ({
   userId
@@ -39,6 +39,7 @@ const TransactionCategoriesPage = ({
     GET_TRANSACTION_CATEGORIES_FAILURE_MSG,
     getTransactionCategories,
     null,
+    handleGetTransactionCategoriesResponse,
     userId
   );
   const debitCategories = transactionCategories.debit;

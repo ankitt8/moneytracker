@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import Loader from '@moneytracker/common/src/components/Loader';
 import TransactionCategoryInput from './TransactionCategoryInput';
@@ -49,10 +49,10 @@ import {
   deleteTransactionDB,
   editTransactionDB
 } from '@moneytracker/common/src/api-services/api.service';
-import { ReduxStore } from '@moneytracker/common/src/reducers/interface';
 import useApi from '@moneytracker/common/src/customHooks/useApi';
 import { Transaction } from '../../interfaces';
 import { constructTodayDate, removeDuplicateFromArray } from '../../utility';
+import { getPersistedData, localStorageKeys } from '../../api-services/utility';
 
 const LATEST_ADD_TRANSACTION_STATE = 'latest_add_transaction_state';
 const DEFAULT_PAYMENT_INSTRUMENT = 'HDFC';
@@ -159,17 +159,13 @@ const AddTransactionModal = ({
   const dispatch = useDispatch();
   const isEditTransactionModal =
     renderedByComponentName === EDIT_TRANSACTION_MODAL_COMPONENT_NAME;
-  const bankAccounts = useSelector(
-    (store: ReduxStore) => store.user.bankAccounts
-  );
-  const creditCards = useSelector(
-    (store: ReduxStore) => store.user.creditCards
-  );
-  const transactionCategories = useSelector(
-    (store: ReduxStore) => store.transactions.categories
+  const bankAccounts = getPersistedData(localStorageKeys.bankAccounts);
+  const creditCards = getPersistedData(localStorageKeys.creditCards);
+  const transactionCategories = getPersistedData(
+    localStorageKeys.transactionCategories
   );
   const paymentInstruments = [...bankAccounts, ...creditCards];
-  let categories = transactionCategories.debit;
+  let categories = transactionCategories?.debit ?? [];
 
   const localStorageLatestAddTransactionStateString = localStorage.getItem(
     LATEST_ADD_TRANSACTION_STATE
@@ -200,7 +196,7 @@ const AddTransactionModal = ({
     localStorageLatestAddTransactionState?.creditCard ||
     DEFAULT_PAYMENT_INSTRUMENT;
   const getInitialCategory = () =>
-    categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : '';
+    categoriesToDisplay?.length > 0 ? categoriesToDisplay[0] : '';
   const [transaction, setTransaction] = useState(() => {
     console.log(transactionProps);
     if (transactionProps)

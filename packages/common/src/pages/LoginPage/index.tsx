@@ -27,6 +27,22 @@ const Login = ({ callbackUrl }: ILoginProps) => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [signInLoader, setSignInLoader] = useState(false);
   const [signUpLoader, setSignUpLoader] = useState(false);
+  const addCookies = (userId: string, username: string) => {
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 30);
+    setCookies([
+      {
+        name: 'userId',
+        value: userId,
+        expiry: expirationDate.toUTCString()
+      },
+      {
+        name: 'username',
+        value: username,
+        expiry: expirationDate.toUTCString()
+      }
+    ]);
+  };
   const handleSignIn = (e: any) => {
     e.preventDefault();
     const username = userNameRef?.current?.value;
@@ -41,10 +57,8 @@ const Login = ({ callbackUrl }: ILoginProps) => {
       (userSavedDetails) => {
         setSignInLoader(false);
         const { userId, username } = userSavedDetails;
-        setCookies([
-          { name: 'userId', value: userId },
-          { name: 'username', value: username }
-        ]);
+
+        addCookies(userId, username);
         if (userSavedDetails.error) {
           setError(userSavedDetails.error);
         } else {
@@ -72,10 +86,7 @@ const Login = ({ callbackUrl }: ILoginProps) => {
     signup({ username, password }).then(
       (userSavedDetails) => {
         const { userId, username } = userSavedDetails;
-        setCookies([
-          { name: 'userId', value: userId },
-          { name: 'username', value: username }
-        ]);
+        addCookies(userId, username);
         setSignUpLoader(false);
         if (userSavedDetails.error) {
           setError(userSavedDetails.error);

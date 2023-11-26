@@ -1,8 +1,10 @@
 import { TransactionCategories } from '../components/AddTransactionModal/TransactionCategoryInput/interface';
 
-function setCookies(cookies: { name: string; value: string }[]) {
-  cookies.forEach(({ name, value }) => {
-    document.cookie = `${name}=${value};`;
+function setCookies(
+  cookies: { name: string; value: string; expiry: string }[]
+) {
+  cookies.forEach(({ name, value, expiry }) => {
+    document.cookie = `${name}=${value}; expires=${expiry}`;
   });
 }
 const appendSeperator = (str: string) => str + '-';

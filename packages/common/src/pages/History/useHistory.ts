@@ -51,7 +51,7 @@ enum DateFilters {
   currMonth = 'currMonth',
   currYear = 'currYear'
 }
-export function useHistoy({ userId }) {
+export function useHistory({ userId }) {
   const [categoriesStore, setCategoriesStore] = useState(() =>
     getPersistedTransactionCategories()
   );

@@ -6,7 +6,7 @@ import styles from './style.module.scss';
 import TransactionCategoryInput from '../../components/AddTransactionModal/TransactionCategoryInput';
 import { TRANSACTION_TYPES } from '../../Constants';
 import { removeDuplicateFromArray } from '../../utility';
-import { useHistoy } from './useHistoy';
+import { useHistory } from './useHistory';
 interface IHistoryPageProps {
   userId: string;
 }
@@ -30,7 +30,7 @@ export default function History({ userId }: IHistoryPageProps) {
     transactionsToDisplay,
     FILTERS,
     getFilterDisplayName
-  } = useHistoy({ userId });
+  } = useHistory({ userId });
   return (
     <div className={styles.container}>
       <form

@@ -39,9 +39,9 @@ import {
   EDIT_TRANSACTION_SUCCESS_MSG,
   EDIT_TRANSACTION_FAIL_ERROR,
   ADD_TRANSACTION_MODAL_COMPONENT_NAME,
-  EDIT_TRANSACTION_MODAL_COMPONENT_NAME,
   DELETE_TRANSACTION_SUCCESS_MSG,
-  DELETE_TRANSACTION_FAIL_ERROR
+  DELETE_TRANSACTION_FAIL_ERROR,
+  EDIT_TRANSACTION_MODAL_COMPONENT_NAME
 } from '@moneytracker/common/src/Constants';
 
 import {
@@ -200,7 +200,6 @@ const AddTransactionModal = ({
   const getInitialCategory = () =>
     categoriesToDisplay?.length > 0 ? categoriesToDisplay[0] : '';
   const [transaction, setTransaction] = useState(() => {
-    console.log(transactionProps);
     if (transactionProps)
       return {
         ...transactionProps,
@@ -227,7 +226,6 @@ const AddTransactionModal = ({
   const type = transaction.type;
   const selectedPaymentInstrument = transaction?.selectedPaymentInstrument;
   const category = transaction.category;
-  console.log(transaction);
   if (type === CREDIT_TYPE) categories = transactionCategories.credit;
   categoriesToDisplay = getCategoriesToDisplay(categories);
   const isMountedRef = useRef(false);
@@ -242,7 +240,6 @@ const AddTransactionModal = ({
         isMountedRef.current = true;
         return;
       }
-      console.log(isMountedRef);
       setTransaction((prev) => ({
         ...prev,
         category: categoriesToDisplay.length > 0 ? categoriesToDisplay[0] : ''
@@ -411,9 +408,7 @@ const AddTransactionModal = ({
   };
   const handleTransactionSubmit = async (event: any) => {
     event.preventDefault();
-    console.log(amount);
     if (amount === '' || parseInt(amount) <= 0 || heading === '') {
-      console.log('hi');
       const msg =
         heading === '' ? INVALID_TITLE_WARNING : INVALID_AMOUNT_WARNING;
       dispatch(
@@ -436,7 +431,7 @@ const AddTransactionModal = ({
       type,
       category
     };
-    if (renderedByComponentName === EDIT_TRANSACTION_MODAL_COMPONENT_NAME) {
+    if (isEditTransactionModal) {
       editTransactionApiCall(() =>
         editTransactionDB(transactionProps._id, transaction)
       );
@@ -460,7 +455,9 @@ const AddTransactionModal = ({
     >
       {/*{fetchStatus.fetching === FETCH_STATES.PENDING && <LinearProgress />}*/}
       <div className={styles.modalWrapper}>
-        <h3 className={styles.modalTitle}>Add Transaction</h3>
+        <h3 className={styles.modalTitle}>
+          {isEditTransactionModal ? 'Edit' : 'Add'} Transaction
+        </h3>
         <form onSubmit={handleTransactionSubmit}>
           {/* Categories */}
           <TransactionCategoryInput

@@ -336,8 +336,7 @@ app.post(URL.API_URL_DELETE_TRANSACTION, (req, res) => {
 });
 
 app.post(URL.API_URL_ADD_BALANCE, (req, res) => {
-  const body = req.body;
-  console.log(body);
+
   const NewBalance = new Balance(req.body);
   NewBalance.save()
       .then((balanceSavedDetails) => {

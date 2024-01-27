@@ -34,30 +34,36 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Fetch PR comments
+        id: fetch-comments
+        run: |
+          COMMENTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.number }}/comments")
+          echo "::set-output name=comments::${COMMENTS}"
+
+      - name: Echo Comments
+        run: |
+          echo "Fetched Comments:"
+          echo "${{ steps.fetch-comments.outputs.comments }}"
+
       - name: Check PR conversation
         run: |
-
-          # Fetch comments on the pull request
-          COMMENTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                        -H "Accept: application/vnd.github.v3+json" \
-                        "https://api.github.com/repos/${{github.repository}}/issues/${{github.event.number}}/comments")
-
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")
-
+          
           checkboxes_found=true
-
+          
           for checkbox in "${checkboxes[@]}"; do
             if ! echo "$COMMENTS" | jq -e ".[] | select(.body | contains(\"[x] $checkbox\"))" >/dev/null; then
               checkboxes_found=false
               break
             fi
           done
-
+          
           if $checkboxes_found; then
             echo "All required checkboxes are ticked. Proceeding..."
           else
             echo "Some required checkboxes are not ticked. Please update the PR conversation."
             exit 1
           fi
-  

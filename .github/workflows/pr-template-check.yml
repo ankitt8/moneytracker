@@ -36,11 +36,13 @@ jobs:
 
       - name: Check PR conversation
         run: |
+          REPOSITORY=${GITHUB_REPOSITORY}
+          PR_NUMBER=${{ github.event.number }}
+
           # Fetch comments on the pull request
           COMMENTS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-                      -H "Accept: application/vnd.github.v3+json" \
-                      "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${{ github.event.number }}/comments" | \
-                      jq -r '.[].body')
+                        -H "Accept: application/vnd.github.v3+json" \
+                        "https://api.github.com/repos/${REPOSITORY}/issues/${PR_NUMBER}/comments")
 
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")
@@ -48,7 +50,7 @@ jobs:
           checkboxes_found=true
 
           for checkbox in "${checkboxes[@]}"; do
-            if ! echo "$COMMENTS" | grep -q "\[x\] $checkbox"; then
+            if ! echo "$COMMENTS" | jq -r '.[].body' | grep -q "\[x\] $checkbox"; then
               checkboxes_found=false
               break
             fi
@@ -60,7 +62,4 @@ jobs:
             echo "Some required checkboxes are not ticked. Please update the PR conversation."
             exit 1
           fi
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
-
+  

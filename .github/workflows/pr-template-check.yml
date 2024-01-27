@@ -31,17 +31,19 @@ jobs:
           # Extract the body from PR_DETAILS and store it in a variable
           PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
           echo "PR_BODY=${PR_BODY}" # This line is optional but can help debug
-
-      
+          
+          
           checkboxes_found=true
-
+  
           for checkbox in "${checkboxes[@]}"; do
-            if ! echo "$PR_BODY" | grep -q "\[x\] $checkbox"; then
+            if ! echo "$PR_BODY" | grep -q "\- \[x\] $checkbox"; then
               checkboxes_found=false
               break
             fi
           done
-
+  
+  
+  
           if $checkboxes_found; then
             echo "All required checkboxes are ticked. Proceeding..."
           else

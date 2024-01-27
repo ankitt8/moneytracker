@@ -1,0 +1,25 @@
+name: Pull Request Checks
+
+on:
+  pull_request:
+    branches:
+      - master # You can customize this based on your branch naming convention
+
+jobs:
+  checklist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check PR template
+        run: |
+          # Add your custom script here to check the checkboxes in the PR template
+          # For example, you could use grep to check if all checkboxes are ticked
+          if grep -q -E '\[x\]' .github/PULL_REQUEST_TEMPLATE.md; then
+            echo "All checkboxes are ticked. Proceeding..."
+          else
+            echo "Some checkboxes are not ticked. Please update the PR template."
+            exit 1
+          fi

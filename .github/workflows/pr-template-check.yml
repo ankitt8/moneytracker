@@ -60,4 +60,7 @@ jobs:
             echo "Some required checkboxes are not ticked. Please update the PR conversation."
             exit 1
           fi
-  
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ secrets.GITHUB_REPOSITORY }}
+

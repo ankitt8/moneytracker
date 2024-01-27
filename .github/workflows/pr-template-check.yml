@@ -36,21 +36,24 @@ jobs:
           PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
           # echo "PR_BODY=${PR_BODY}"
           
+          unchecked_checkboxes=()
           checkboxes=("Tested the code locally" "Not added any image locally")
-          checkboxes_found=true
   
           for checkbox in "${checkboxes[@]}"; do
             if ! echo "$PR_BODY" | grep -q "\- \[x\] $checkbox"; then
-              checkboxes_found=false
+              unchecked_checkboxes+=("$checkbox")
               break
             fi
           done
-  
-  
-  
-          if $checkboxes_found; then
+          
+          
+          
+          if [ ${#unchecked_checkboxes[@]} -eq 0 ]; then
             echo "All required checkboxes are ticked. Proceeding..."
           else
-            echo "Some required checkboxes are not ticked. Please update the PR body."
+            echo "Some required checkboxes are not ticked. Please update the PR conversation:"
+            for unchecked_checkbox in "${unchecked_checkboxes[@]}"; do
+              echo "- $unchecked_checkbox is not checked."
+            done
             exit 1
           fi

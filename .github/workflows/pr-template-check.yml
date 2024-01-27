@@ -36,41 +36,25 @@ jobs:
 
       - name: Check PR conversation
         run: |
-          const { context, getOctokit } = require('@actions/github');
+          const { execSync } = require('child_process');
           
-          async function run() {
-            const prNumber = context.payload.pull_request.number;
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
+          // Fetch comments on the pull request
+          const comments = execSync('git log --format="%B" -n 5').toString();
           
-            const octokit = getOctokit(process.env.GITHUB_TOKEN);
+          // Check if specific checkboxes are marked in the comments
+          const checkboxesToCheck = [
+            'Tested the code locally',
+            'Not added any image locally',
+            // Add more checkbox labels as needed
+          ];
           
-            // Fetch comments on the pull request
-            const { data: comments } = await octokit.issues.listComments({
-              owner,
-              repo,
-              issue_number: prNumber,
-            });
+          const checkboxesFound = checkboxesToCheck.every(checkboxLabel =>
+            comments.includes(`- [x] ${checkboxLabel}`)
+          );
           
-            // Check if specific checkboxes are marked in the comments
-            const checkboxesToCheck = [
-              'Tested the code locally',
-              'Not added any image locally',
-              // Add more checkbox labels as needed
-            ];
-          
-            const checkboxesFound = checkboxesToCheck.every(checkboxLabel =>
-              comments.some(comment => comment.body.includes(`- [x] ${checkboxLabel}`))
-            );
-          
-            if (checkboxesFound) {
-              console.log('All required checkboxes are ticked. Proceeding...');
-            } else {
-              console.log('Some required checkboxes are not ticked. Please update the PR conversation.');
-              process.exit(1);
-            }
+          if (checkboxesFound) {
+            console.log('All required checkboxes are ticked. Proceeding...');
+          } else {
+            console.log('Some required checkboxes are not ticked. Please update the PR conversation.');
+            process.exit(1);
           }
-          
-          run();
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

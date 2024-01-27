@@ -40,7 +40,7 @@ jobs:
           # Fetch comments on the pull request
           COMMENTS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
                         -H "Accept: application/vnd.github.v3+json" \
-                        "https://api.github.com/repos/${{GITHUB_REPOSITORY}}/issues/${{github.event.number}}/comments")
+                        "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${{github.event.number}}/comments")
 
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")

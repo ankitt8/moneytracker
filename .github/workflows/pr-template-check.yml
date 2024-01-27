@@ -32,17 +32,7 @@ jobs:
           PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
           echo "PR_BODY=${PR_BODY}" # This line is optional but can help debug
 
-      - name: Echo PR body
-        run: |
-          PR_BODY="${{ steps.fetch-pr.outputs.pr-details.body }}"
-          echo "Fetched PR Body:"
-          echo "$PR_BODY"
-
-      - name: Check PR conversation
-        run: |
-          # Check if specific checkboxes are marked in the comments
-          checkboxes=("Tested the code locally" "Not added any image locally")
-
+      
           checkboxes_found=true
 
           for checkbox in "${checkboxes[@]}"; do

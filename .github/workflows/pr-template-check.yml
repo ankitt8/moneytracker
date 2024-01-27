@@ -49,9 +49,9 @@ jobs:
           
           
           if [ ${#unchecked_checkboxes[@]} -eq 0 ]; then
-            echo "All required checkboxes are ticked. Proceeding..."
+            echo "All required checkboxes are checked. Proceeding..."
           else
-            echo "Some required checkboxes are not ticked. Please update the PR conversation:"
+            echo "Below required checkboxes are not checked. Please update the PR body:"
             for unchecked_checkbox in "${unchecked_checkboxes[@]}"; do
               echo "- $unchecked_checkbox is not checked."
             done

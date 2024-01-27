@@ -1,2 +1,2 @@
-- [x] Tested the code locally
-- [x] Not added any image locally
+- [ ] Tested the code locally
+- [ ] Not added any image locally

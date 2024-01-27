@@ -3,23 +3,74 @@ name: Pull Request Checks
 on:
   pull_request:
     branches:
-      - master # You can customize this based on your branch naming convention
+      - main # You can customize this based on your branch naming convention
 
 jobs:
-  checklist:
+  comment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const body = "Please make sure to mark the checkboxes in the conversation.";
+            
+            await github.issues.createComment({
+              owner,
+              repo,
+              issue_number: prNumber,
+              body,
+            });
+
+  check:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check PR template
+      - name: Check PR conversation
         run: |
-          if grep -q -E '^\s*- \[x\] Tested the code locally' .github/PULL_REQUEST_TEMPLATE.md &&
-            grep -q -E '^\s*- \[x\] Not added any image locally' .github/PULL_REQUEST_TEMPLATE.md; then
-          echo "All required checkboxes are ticked. Proceeding..."
-          else
-          echo "Some required checkboxes are not ticked. Please update the PR template."
-          exit 1
-          fi
-
+          const { context, getOctokit } = require('@actions/github');
+          
+          async function run() {
+            const prNumber = context.payload.pull_request.number;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+          
+            const octokit = getOctokit(process.env.GITHUB_TOKEN);
+          
+            // Fetch comments on the pull request
+            const { data: comments } = await octokit.issues.listComments({
+              owner,
+              repo,
+              issue_number: prNumber,
+            });
+          
+            // Check if specific checkboxes are marked in the comments
+            const checkboxesToCheck = [
+              'Tested the code locally',
+              'Not added any image locally',
+              // Add more checkbox labels as needed
+            ];
+          
+            const checkboxesFound = checkboxesToCheck.every(checkboxLabel =>
+              comments.some(comment => comment.body.includes(`- [x] ${checkboxLabel}`))
+            );
+          
+            if (checkboxesFound) {
+              console.log('All required checkboxes are ticked. Proceeding...');
+            } else {
+              console.log('Some required checkboxes are not ticked. Please update the PR conversation.');
+              process.exit(1);
+            }
+          }
+          
+          run();
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

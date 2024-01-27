@@ -42,7 +42,6 @@ jobs:
           for checkbox in "${checkboxes[@]}"; do
             if ! echo "$PR_BODY" | grep -q "\- \[x\] $checkbox"; then
               unchecked_checkboxes+=("$checkbox")
-              break
             fi
           done
           

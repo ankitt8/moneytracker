@@ -28,10 +28,8 @@ jobs:
             echo "${PR_DETAILS}"
           fi
 
-#          echo "PR_DETAILS=${PR_DETAILS}" >> $GITHUB_ENV
+          echo "PR_DETAILS=${PR_DETAILS}" >> $GITHUB_ENV
           echo "PR_DETAILS=${PR_DETAILS}" # This line is optional but can help debug
-
-          # Now, you can use $PR_DETAILS in subsequent steps if needed
 
       - name: Echo PR details
         run: |
@@ -43,7 +41,6 @@ jobs:
           else
             echo "$PR_DETAILS" | jq .
           fi
-      
 
       - name: Check PR conversation
         run: |
@@ -59,12 +56,3 @@ jobs:
             if ! echo "$PR_BODY" | grep -q "\[x\] $checkbox"; then
               checkboxes_found=false
               break
-            fi
-          done
-
-          if $checkboxes_found; then
-            echo "All required checkboxes are ticked. Proceeding..."
-          else
-            echo "Some required checkboxes are not ticked. Please update the PR conversation."
-            exit 1
-          fi

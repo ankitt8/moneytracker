@@ -38,7 +38,7 @@ jobs:
         run: |
 
           # Fetch comments on the pull request
-          COMMENTS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+          COMMENTS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
                         -H "Accept: application/vnd.github.v3+json" \
                         "https://api.github.com/repos/${{github.repository}}/issues/${{github.event.number}}/comments")
 

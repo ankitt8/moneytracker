@@ -53,7 +53,7 @@ jobs:
           PR_BODY=$(echo "${{ steps.fetch-pr.outputs.pr-details }}" | jq -r .body)
           
           # Fetch comments on the pull request
-          echo "${{ COMMENTS }}"
+          echo "${{ PR_BODY }}"
           
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")

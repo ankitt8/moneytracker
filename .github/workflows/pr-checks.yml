@@ -12,6 +12,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Check PR template
+        run: |
+          if grep -q -E '\[x\]' .github/PULL_REQUEST_TEMPLATE.md; then
+            echo "All checkboxes are ticked. Proceeding..."
+          else
+            echo "Some checkboxes are not ticked. Please update the PR template."
+            exit 1
+          fi
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

@@ -45,7 +45,7 @@ jobs:
       - name: Echo PR details
         run: |
           echo "Fetched PR Details:"
-          echo "${{ steps.fetch-pr.outputs.pr-details }}"
+          echo "${{ steps.fetch-pr.outputs.pr-details }}" | jq .
 
       - name: Check PR conversation
         run: |

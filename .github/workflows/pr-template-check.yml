@@ -45,7 +45,14 @@ jobs:
       - name: Echo PR details
         run: |
           echo "Fetched PR Details:"
-          echo "${{ steps.fetch-pr.outputs.pr-details }}" | jq .
+          PR_DETAILS="${{ steps.fetch-pr.outputs.pr-details }}"
+          if [ -z "$PR_DETAILS" ]; then
+            echo "Error: Failed to fetch PR details."
+            exit 1
+          else
+            echo "$PR_DETAILS" | jq .
+          fi
+      
 
       - name: Check PR conversation
         run: |

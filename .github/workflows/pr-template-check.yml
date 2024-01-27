@@ -3,7 +3,7 @@ name: Pull Request Checks
 on:
   pull_request:
     branches:
-      - master # You can customize this based on your branch naming convention
+      - master
 
 jobs:
   check:
@@ -28,24 +28,17 @@ jobs:
             echo "${PR_DETAILS}"
           fi
 
-          echo "PR_DETAILS=${PR_DETAILS}" # This line is optional but can help debug
+          # Extract the body from PR_DETAILS and store it in a variable
+          PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
+          echo "PR_BODY=${PR_BODY}" # This line is optional but can help debug
 
-      - name: Echo PR details
+      - name: Echo PR body
         run: |
-          echo "Fetched PR Details:"
-          PR_DETAILS="${{ steps.fetch-pr.outputs.PR_DETAILS }}"
-          if [ -z "$PR_DETAILS" ]; then
-            echo "Error: Failed to fetch PR details."
-            exit 1
-          else
-            echo "$PR_DETAILS" | jq .
-          fi
+          echo "Fetched PR Body:"
+          echo "$PR_BODY"
 
       - name: Check PR conversation
         run: |
-          # Extract the main body of the pull request
-          PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
-
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")
 
@@ -55,3 +48,12 @@ jobs:
             if ! echo "$PR_BODY" | grep -q "\[x\] $checkbox"; then
               checkboxes_found=false
               break
+            fi
+          done
+
+          if $checkboxes_found; then
+            echo "All required checkboxes are ticked. Proceeding..."
+          else
+            echo "Some required checkboxes are not ticked. Please update the PR conversation."
+            exit 1
+          fi

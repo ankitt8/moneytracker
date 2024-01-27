@@ -3,7 +3,7 @@ name: Pull Request Checks
 on:
   pull_request:
     branches:
-      - main # You can customize this based on your branch naming convention
+      - master # You can customize this based on your branch naming convention
 
 jobs:
   comment:

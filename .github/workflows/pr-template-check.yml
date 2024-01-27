@@ -36,25 +36,28 @@ jobs:
 
       - name: Check PR conversation
         run: |
-          const { execSync } = require('child_process');
-          
-          // Fetch comments on the pull request
-          const comments = execSync('git log --format="%B" -n 5').toString();
-          
-          // Check if specific checkboxes are marked in the comments
-          const checkboxesToCheck = [
-            'Tested the code locally',
-            'Not added any image locally',
-            // Add more checkbox labels as needed
-          ];
-          
-          const checkboxesFound = checkboxesToCheck.every(checkboxLabel =>
-            comments.includes(`- [x] ${checkboxLabel}`)
-          );
-          
-          if (checkboxesFound) {
-            console.log('All required checkboxes are ticked. Proceeding...');
-          } else {
-            console.log('Some required checkboxes are not ticked. Please update the PR conversation.');
-            process.exit(1);
-          }
+          # Fetch comments on the pull request
+          COMMENTS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
+                      -H "Accept: application/vnd.github.v3+json" \
+                      "https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${{ github.event.number }}/comments" | \
+                      jq -r '.[].body')
+
+          # Check if specific checkboxes are marked in the comments
+          checkboxes=("Tested the code locally" "Not added any image locally")
+
+          checkboxes_found=true
+
+          for checkbox in "${checkboxes[@]}"; do
+            if ! echo "$COMMENTS" | grep -q "\[x\] $checkbox"; then
+              checkboxes_found=false
+              break
+            fi
+          done
+
+          if $checkboxes_found; then
+            echo "All required checkboxes are ticked. Proceeding..."
+          else
+            echo "Some required checkboxes are not ticked. Please update the PR conversation."
+            exit 1
+          fi
+  

@@ -36,7 +36,7 @@ jobs:
       - name: Echo PR details
         run: |
           echo "Fetched PR Details:"
-          PR_DETAILS="${{ steps.fetch-pr.outputs.pr-details }}"
+          PR_DETAILS="${{ steps.fetch-pr.outputs.PR_DETAILS }}"
           if [ -z "$PR_DETAILS" ]; then
             echo "Error: Failed to fetch PR details."
             exit 1

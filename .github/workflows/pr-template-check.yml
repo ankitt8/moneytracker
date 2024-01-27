@@ -25,14 +25,14 @@ jobs:
             exit 1
           else
             echo "Fetched PR Details:"
-            echo "${PR_DETAILS}"
+          #  echo "${PR_DETAILS}"
           fi
 
           # Extract the body from PR_DETAILS and store it in a variable
           PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
-          echo "PR_BODY=${PR_BODY}" # This line is optional but can help debug
+          # echo "PR_BODY=${PR_BODY}" # This line is optional but can help debug
           
-          
+          checkboxes=("Tested the code locally" "Not added any image locally")
           checkboxes_found=true
   
           for checkbox in "${checkboxes[@]}"; do

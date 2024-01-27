@@ -6,8 +6,8 @@ on:
       - master # You can customize this based on your branch naming convention
 
 jobs:
-  comment:
-    runs-on: ubuntu-latest
+#  comment:
+#    runs-on: ubuntu-latest
 
 #    steps:
 #      - name: Comment on PR
@@ -53,7 +53,6 @@ jobs:
           echo "PR_DETAILS=${PR_DETAILS}" # This line is optional but can help debug
 
           # Now, you can use $PR_DETAILS in subsequent steps if needed
-      
 
       - name: Echo PR details
         run: |

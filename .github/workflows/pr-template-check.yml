@@ -53,7 +53,8 @@ jobs:
           PR_BODY=$(echo "${{ steps.fetch-pr.outputs.pr-details }}" | jq -r .body)
           
           # Fetch comments on the pull request
-          echo "${{ PR_BODY }}"
+          PR_BODY_VARIABLE="${PR_BODY}"
+          echo "${{ PR_BODY_VARIABLE }}"
           
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")
@@ -61,7 +62,7 @@ jobs:
           checkboxes_found=true
           
           for checkbox in "${checkboxes[@]}"; do
-            if ! echo "PR_BODY" | grep -q "\[x\] $checkbox"; then
+            if ! echo "$PR_BODY_VARIABLE" | grep -q "\[x\] $checkbox"; then
               checkboxes_found=false
               break
             fi

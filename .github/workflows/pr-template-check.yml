@@ -28,7 +28,7 @@ jobs:
             echo "${PR_DETAILS}"
           fi
 
-          echo "PR_DETAILS=${PR_DETAILS}" >> $GITHUB_ENV
+#          echo "PR_DETAILS=${PR_DETAILS}" >> $GITHUB_ENV
           echo "PR_DETAILS=${PR_DETAILS}" # This line is optional but can help debug
 
       - name: Echo PR details

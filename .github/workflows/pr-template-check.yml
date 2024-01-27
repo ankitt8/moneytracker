@@ -34,7 +34,7 @@ jobs:
 
       - name: Echo PR body
         run: |
-          PR_BODY="${{ steps.fetch-pr.outputs.pr-details | fromJSON | .body }}"
+          PR_BODY="${{ steps.fetch-pr.outputs.pr-details.body }}"
           echo "Fetched PR Body:"
           echo "$PR_BODY"
 

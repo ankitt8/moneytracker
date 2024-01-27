@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const isLoginPage = router.pathname === '/login';
   const userId = pageProps[COOKIE_NAMES.userId];
   useEffect(() => {
-    if (typeof window !== undefined) {
+    if (typeof window !== 'undefined') {
       (window as any).userId = userId;
     }
   }, []);

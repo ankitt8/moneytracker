@@ -2,25 +2,57 @@ name: Pull Request Checks
 
 on:
   pull_request:
-    branches:
-      - master # You can customize this based on your branch naming convention
+    branches: [master]
+    types:
+      - 'opened'
+      - 'edited'
+      - 'synchronize'
+      - 'reopened'
 
 jobs:
-  checklist:
+  check:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Check PR template
+      - name: Fetch pr body and check if mandatory checkboxes are checked
+        id: fetch-pr
         run: |
-          # Add your custom script here to check the checkboxes in the PR template
-          # For example, you could use grep to check if all checkboxes are ticked
-          if grep -q -E '\[x\]' .github/PULL_REQUEST_TEMPLATE.md; then
-            echo "All checkboxes are ticked. Proceeding..."
+          PR_DETAILS=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.number }}")
+
+          if [ -z "${PR_DETAILS}" ]; then
+            echo "Failed to fetch PR details."
+            exit 1
           else
-            echo "Some checkboxes are not ticked. Please update the PR template."
-            grep -E '\[x\]' .github/PULL_REQUEST_TEMPLATE.md
+            echo "Fetched PR Details:"
+          #  echo "${PR_DETAILS}"
+          fi
+
+          # Extract the body from PR_DETAILS and store it in a variable
+          PR_BODY=$(echo "$PR_DETAILS" | jq -r .body)
+          # echo "PR_BODY=${PR_BODY}"
+          
+          unchecked_checkboxes=()
+          checkboxes=("Tested the code locally" "Not added any image locally")
+  
+          for checkbox in "${checkboxes[@]}"; do
+            if ! echo "$PR_BODY" | grep -q "\- \[x\] $checkbox"; then
+              unchecked_checkboxes+=("$checkbox")
+            fi
+          done
+          
+          
+          
+          if [ ${#unchecked_checkboxes[@]} -eq 0 ]; then
+            echo "All required checkboxes are checked. Proceeding..."
+          else
+            echo "Below required checkboxes are not checked. Please update the PR body:"
+            for unchecked_checkbox in "${unchecked_checkboxes[@]}"; do
+              echo "- $unchecked_checkbox is not checked."
+            done
             exit 1
           fi

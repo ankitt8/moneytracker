@@ -54,7 +54,6 @@ jobs:
           
           # Fetch comments on the pull request
           PR_BODY_VARIABLE="${PR_BODY}"
-          echo "${{ PR_BODY_VARIABLE }}"
           
           # Check if specific checkboxes are marked in the comments
           checkboxes=("Tested the code locally" "Not added any image locally")

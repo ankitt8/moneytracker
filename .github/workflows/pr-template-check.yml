@@ -15,12 +15,11 @@ jobs:
 
       - name: Check PR template
         run: |
-          # Add your custom script here to check the checkboxes in the PR template
-          # For example, you could use grep to check if all checkboxes are ticked
-          if grep -q -E '\[x\]' .github/PULL_REQUEST_TEMPLATE.md; then
-            echo "All checkboxes are ticked. Proceeding..."
+          if grep -q -E '^\s*- \[x\] Tested the code locally' .github/PULL_REQUEST_TEMPLATE.md &&
+            grep -q -E '^\s*- \[x\] Not added any image locally' .github/PULL_REQUEST_TEMPLATE.md; then
+          echo "All required checkboxes are ticked. Proceeding..."
           else
-            echo "Some checkboxes are not ticked. Please update the PR template."
-            grep -E '\[x\]' .github/PULL_REQUEST_TEMPLATE.md
-            exit 1
+          echo "Some required checkboxes are not ticked. Please update the PR template."
+          exit 1
           fi
+

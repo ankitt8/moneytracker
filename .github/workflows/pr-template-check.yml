@@ -48,7 +48,7 @@ jobs:
           checkboxes_found=true
 
           for checkbox in "${checkboxes[@]}"; do
-            if ! echo "$COMMENTS" | jq -r '.[].body' | grep -q "\[x\] $checkbox"; then
+            if ! echo "$COMMENTS" | jq -e ".[] | select(.body | contains(\"[x] $checkbox\"))" >/dev/null; then
               checkboxes_found=false
               break
             fi

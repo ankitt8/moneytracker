@@ -49,7 +49,7 @@ jobs:
             echo "${PR_DETAILS}"
           fi
 
-          echo "PR_DETAILS=${PR_DETAILS}" >> $GITHUB_ENV
+#          echo "PR_DETAILS=${PR_DETAILS}" >> $GITHUB_ENV
           echo "PR_DETAILS=${PR_DETAILS}" # This line is optional but can help debug
 
           # Now, you can use $PR_DETAILS in subsequent steps if needed

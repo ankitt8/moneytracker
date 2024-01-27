@@ -6,27 +6,6 @@ on:
       - master # You can customize this based on your branch naming convention
 
 jobs:
-#  comment:
-#    runs-on: ubuntu-latest
-
-#    steps:
-#      - name: Comment on PR
-#        uses: actions/github-script@v4
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#          script: |
-#            const prNumber = context.payload.pull_request.number;
-#            const owner = context.repo.owner;
-#            const repo = context.repo.repo;
-#            const body = "Please make sure to mark the checkboxes in the conversation.";
-#
-#            await github.issues.createComment({
-#              owner,
-#              repo,
-#              issue_number: prNumber,
-#              body,
-#            });
-
   check:
     runs-on: ubuntu-latest
 
